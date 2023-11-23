@@ -1,0 +1,11 @@
+version: '3'
+services:
+  ma6-main:
+    image: 2swo/ma6-main-back
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+    restart: always
+    environment:
+      - TZ=Asia/Seoul
