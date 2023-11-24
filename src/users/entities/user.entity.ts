@@ -10,6 +10,7 @@ import {
 import { UserImage } from './user-image.entity';
 import { Token } from 'src/auth/entities/token.entity';
 import { Board } from 'src/boards/entities/board.entity';
+import { UserReview } from './user-review.entity';
 
 @Entity({
   name: 'user',
@@ -20,6 +21,12 @@ export class User {
 
   @OneToOne(() => UserImage, (userImage) => userImage.user)
   userImage: UserImage;
+
+  @OneToOne(() => UserReview, (userReview) => userReview.mentor)
+  mentor: UserReview;
+
+  @OneToOne(() => UserReview, (userReview) => userReview.mentee)
+  mentee: UserReview;
 
   @Column({ length: 10 })
   provider: string;
