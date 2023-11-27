@@ -1,5 +1,5 @@
 import { EntityManager } from 'typeorm';
-import { Board } from '../entities/board.entity';
+import { Board } from '../entities/mentor-board.entity';
 import { CreateBoardDto } from '../dto/create.board.dto';
 import { Injectable } from '@nestjs/common';
 

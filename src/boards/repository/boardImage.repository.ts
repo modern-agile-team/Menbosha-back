@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
-import { BoardImage } from '../entities/board-image.entity';
+import { BoardImage } from '../entities/mentor-board-image.entity';
 import { CreateBoardImageDto } from '../dto/create.board-image.dto';
 
 @Injectable()

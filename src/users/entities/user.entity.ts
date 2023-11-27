@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { UserImage } from './user-image.entity';
 import { Token } from 'src/auth/entities/token.entity';
-import { Board } from 'src/boards/entities/board.entity';
+import { Board } from 'src/boards/entities/mentor-board.entity';
 import { UserReview } from './user-review.entity';
 
 @Entity({

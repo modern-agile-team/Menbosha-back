@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { BoardImage } from 'src/boards/entities/board-image.entity';
-import { Board } from 'src/boards/entities/board.entity';
+import { BoardImage } from 'src/boards/entities/mentor-board-image.entity';
+import { Board } from 'src/boards/entities/mentor-board.entity';
 import { User } from 'src/users/entities/user.entity';
 import { EntityManager } from 'typeorm';
 

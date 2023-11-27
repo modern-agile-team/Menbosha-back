@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BoardRepository } from '../repository/boards.repository';
 import { CreateBoardDto } from '../dto/create.board.dto';
-import { Board } from '../entities/board.entity';
+import { Board } from '../entities/mentor-board.entity';
 import { BoardResponseDTO } from '../dto/boards.response.dto';
 import { oneBoardResponseDTO } from '../dto/boards.one.response.dto';
 

@@ -11,7 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BoardsService } from '../services/Boards.service';
-import { Board } from '../entities/board.entity';
+import { Board } from '../entities/mentor-board.entity';
 import { CreateBoardDto } from '../dto/create.board.dto';
 import { BoardImagesService } from '../services/BoardImage.service';
 import { FilesInterceptor } from '@nestjs/platform-express';

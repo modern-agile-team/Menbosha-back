@@ -1,5 +1,5 @@
 import { User } from 'src/users/entities/user.entity';
-import { BoardImage } from './board-image.entity';
+import { HelpMeBoardImage } from './help-me-board-image.entity';
 import {
   Column,
   CreateDateColumn,
@@ -11,12 +11,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { BoardNotification } from 'src/common/notice/entities/board-notice.entity';
 
 @Entity({
-  name: 'board',
+  name: 'help_me_board',
 })
-export class Board {
+export class HelpMeBoard {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -29,14 +28,11 @@ export class Board {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @OneToMany(() => BoardImage, (boardImages) => boardImages.board)
-  boardImages: BoardImage[];
-
   @OneToMany(
-    () => BoardNotification,
-    (BoardNotification) => BoardNotification.board,
+    () => HelpMeBoardImage,
+    (helpMeBoardImages) => helpMeBoardImages.helpMeBoard,
   )
-  boardNotification: BoardNotification;
+  helpMeBoardImages: HelpMeBoardImage[];
 
   @Index({ fulltext: true })
   @Column('varchar')
