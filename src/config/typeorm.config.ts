@@ -3,7 +3,7 @@ import * as dotenv from 'dotenv';
 import { Token } from 'src/auth/entities/token.entity';
 import { BoardImage } from 'src/boards/entities/mentor-board-image.entity';
 import { Board } from 'src/boards/entities/mentor-board.entity';
-import { Comment } from 'src/comments/entities/comment.entity';
+import { Comment } from 'src/comments/entities/help-you-comment.entity';
 import { UserImage } from 'src/users/entities/user-image.entity';
 import { User } from 'src/users/entities/user.entity';
 

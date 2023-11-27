@@ -8,7 +8,7 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import { Comment } from '../entities/comment.entity';
+import { Comment } from '../entities/help-you-comment.entity';
 import { ApiTags } from '@nestjs/swagger';
 import { CommentsService } from '../services/comments.services';
 import { CreateCommentDto } from '../dto/create-comment-dto';

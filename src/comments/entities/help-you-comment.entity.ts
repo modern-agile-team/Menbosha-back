@@ -1,4 +1,4 @@
-import { Board } from 'src/boards/entities/mentor-board.entity';
+import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
@@ -10,9 +10,9 @@ import {
 } from 'typeorm';
 
 @Entity({
-  name: 'comment',
+  name: 'help_you_comment',
 })
-export class Comment {
+export class HelpYouComment {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -25,14 +25,14 @@ export class Comment {
   @Column({ name: 'user_id' })
   userId: number;
 
-  @ManyToOne(() => Board, {
+  @ManyToOne(() => HelpMeBoard, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'board_id' })
-  board: Board;
+  @JoinColumn({ name: 'help_me_board_id' })
+  helpMeBoard: HelpMeBoard;
 
-  @Column({ name: 'board_id' })
-  boardId: number;
+  @Column({ name: 'help_me_board_id' })
+  helpMeBoardId: number;
 
   @Column()
   content: string;
