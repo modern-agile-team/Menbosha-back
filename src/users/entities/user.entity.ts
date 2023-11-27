@@ -9,7 +9,8 @@ import {
 } from 'typeorm';
 import { UserImage } from './user-image.entity';
 import { Token } from 'src/auth/entities/token.entity';
-import { Board } from 'src/boards/entities/mentor-board.entity';
+import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
+import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
 import { UserReview } from './user-review.entity';
 
 @Entity({
@@ -50,9 +51,17 @@ export class User {
   @Column({ length: 10 })
   rank: number;
 
-  @OneToMany(() => Board, (board) => board.user)
-  @JoinColumn({ name: 'board_id' })
-  board: Board;
+  // @OneToMany(() => Board, (board) => board.user)
+  // @JoinColumn({ name: 'board_id' })
+  // board: Board;
+
+  @OneToMany(() => MentorBoard, (mentorBoard) => mentorBoard.user)
+  @JoinColumn({ name: 'mentor_board_id' })
+  mentorBoard: MentorBoard;
+
+  @OneToMany(() => HelpMeBoard, (helpMeBoard) => helpMeBoard.user)
+  @JoinColumn({ name: 'help_me_board_id' })
+  helpMeBoard: HelpMeBoard;
 
   @OneToOne(() => Token, (token) => token.user, {
     onDelete: 'CASCADE',

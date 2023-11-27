@@ -2,18 +2,26 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BoardsController } from './controllers/Boards.controller';
 import { BoardsService } from './services/Boards.service';
-import { Board } from './entities/mentor-board.entity';
+import { HelpMeBoard } from './entities/help-me-board.entity';
 import { BoardImagesService } from './services/BoardImage.service';
 import { S3Service } from 'src/common/s3/s3.service';
-import { BoardImage } from './entities/mentor-board-image.entity';
+import { MentorBoard } from './entities/mentor-board.entity';
 import { BoardRepository } from './repository/boards.repository';
 import { BoardImageRepository } from './repository/boardImage.repository';
 import { TokenService } from 'src/auth/services/token.service';
 import { TokenRepository } from 'src/auth/repositories/token.repository';
-import { NoticeModule } from 'src/common/notice/notice.module';
+import { MentorBoardImage } from './entities/mentor-board-image.entity';
+import { HelpMeBoardImage } from './entities/help-me-board-image.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Board, BoardImage]), NoticeModule],
+  imports: [
+    TypeOrmModule.forFeature([
+      MentorBoard,
+      HelpMeBoard,
+      MentorBoardImage,
+      HelpMeBoardImage,
+    ]),
+  ],
   controllers: [BoardsController],
   providers: [
     BoardsService,

@@ -22,7 +22,7 @@ export class MentorBoard {
   @Column({ name: 'user_id' })
   userId: number;
 
-  @ManyToOne(() => User, (user) => user.board, {
+  @ManyToOne(() => User, (user) => user.mentorBoard, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'user_id' })
