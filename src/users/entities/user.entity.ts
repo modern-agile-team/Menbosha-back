@@ -48,12 +48,14 @@ export class User {
   @Column({ length: 20 })
   badge: string;
 
-  @Column({ length: 10 })
+  @Column({ default: 10 })
   rank: number;
 
-  // @OneToMany(() => Board, (board) => board.user)
-  // @JoinColumn({ name: 'board_id' })
-  // board: Board;
+  @Column({ length: 20 })
+  phone: string;
+
+  @Column({ length: 30 })
+  company: string;
 
   @OneToMany(() => MentorBoard, (mentorBoard) => mentorBoard.user)
   @JoinColumn({ name: 'mentor_board_id' })
