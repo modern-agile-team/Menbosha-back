@@ -1,7 +1,7 @@
 version: '3'
 services:
   ma6-main:
-    image: 2swo/ma6-main-back
+    image: 2swo/ma6-menbosha-back
     ports:
       - '3000:3000'
     env_file:
