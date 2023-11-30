@@ -4,6 +4,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { setupSwagger } from './config/swagger';
 import { AsyncApiDocumentBuilder, AsyncApiModule } from 'nestjs-asyncapi';
 import * as cookieParser from 'cookie-parser';
+import { HttpBadRequestExceptionFilter } from './http-exceptions/exception-filters/http-bad-request.exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -30,6 +31,8 @@ async function bootstrap() {
   );
   await AsyncApiModule.setup('asyncapi', app, asyncapiDocument);
   app.useLogger(logger);
+
+  app.useGlobalFilters(app.get(HttpBadRequestExceptionFilter));
 
   await app.listen(3000);
 }
