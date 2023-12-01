@@ -6,6 +6,7 @@ import { HttpForbiddenExceptionFilter } from './exception-filters/http-forbidden
 import { HttpNotFoundExceptionFilter } from './exception-filters/http-not-found-exception';
 import { HttpPathNotFoundExceptionFilter } from './exception-filters/http-path-not-found-exception';
 import { HttpConflictExceptionFilter } from './exception-filters/http-conflict-exception.filter';
+import { HttpInternalServerErrorExceptionFilter } from './exception-filters/http-internal-server-error-exception.filter';
 
 @Module({
   providers: [
@@ -16,6 +17,7 @@ import { HttpConflictExceptionFilter } from './exception-filters/http-conflict-e
     HttpNotFoundExceptionFilter,
     HttpPathNotFoundExceptionFilter,
     HttpConflictExceptionFilter,
+    HttpInternalServerErrorExceptionFilter,
   ],
 })
 export class ExceptionsModule {}
