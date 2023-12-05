@@ -12,7 +12,8 @@ import { Token } from 'src/auth/entities/token.entity';
 import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
 import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
 import { UserReview } from './user-review.entity';
-import { UserBadgeMapping } from './user-badge.entity';
+import { UserBadge } from './user-badge.entity';
+import { CategoryList } from '../../common/entity/category-list.entity';
 
 @Entity({
   name: 'user',
@@ -43,17 +44,14 @@ export class User {
   @Column({ default: false })
   admin: boolean;
 
-  @Column({ length: 20 })
-  category: string;
+  @Column({ name: 'category_list' })
+  categoryId: number;
 
   @Column({ default: 10 })
   rank: number;
 
   @Column({ length: 20 })
   phone: string;
-
-  @Column({ length: 30 })
-  company: string;
 
   @OneToMany(() => MentorBoard, (mentorBoard) => mentorBoard.user)
   @JoinColumn({ name: 'mentor_board_id' })
@@ -63,15 +61,16 @@ export class User {
   @JoinColumn({ name: 'help_me_board_id' })
   helpMeBoard: HelpMeBoard;
 
-  @OneToMany(
-    () => UserBadgeMapping,
-    (userBadgeMapping) => userBadgeMapping.user,
-  )
-  @JoinColumn({ name: 'userBadgeMapping_id' })
-  userBadge: UserBadgeMapping;
+  @OneToMany(() => UserBadge, (userBadge) => userBadge.user)
+  @JoinColumn({ name: 'user_badge_id' })
+  userBadge: UserBadge;
 
   @OneToOne(() => Token, (token) => token.user, {
     onDelete: 'CASCADE',
   })
   token: Token;
+
+  @OneToOne(() => CategoryList, (categoryList) => categoryList.user)
+  @JoinColumn({ name: 'category_list' })
+  categoryList: CategoryList;
 }

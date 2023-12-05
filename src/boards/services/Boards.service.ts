@@ -1,14 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { BoardRepository } from '../repository/boards.repository';
 import { CreateBoardDto } from '../dto/create.board.dto';
-import { Board } from '../entities/mentor-board.entity';
+// import { Board } from '../entities/mentor-board.entity';
+import { MentorBoard } from '../entities/mentor-board.entity';
 import { BoardResponseDTO } from '../dto/boards.response.dto';
 import { oneBoardResponseDTO } from '../dto/boards.one.response.dto';
 
 @Injectable()
 export class BoardsService {
   constructor(private boardRepository: BoardRepository) {}
-  async create(boardData: CreateBoardDto, userId: number): Promise<Board> {
+  async create(
+    boardData: CreateBoardDto,
+    userId: number,
+  ): Promise<MentorBoard> {
     try {
       return await this.boardRepository.createBoard(boardData, userId);
     } catch (error) {
@@ -31,16 +35,16 @@ export class BoardsService {
           id: board.id,
           head: board.head,
           body: board.body.substring(0, 30),
-          createAt: board.createAt,
-          updateAt: board.updateAt,
+          createAt: board.createdAt,
+          updateAt: board.updatedAt,
           userId: {
             name: board.user.name,
             userImage: board.user.userImage ? board.user.userImage : [],
           },
-          boardImages: board.boardImages.map((image) => ({
-            id: image.id,
-            imageUrl: image.imageUrl,
-          })),
+          // boardImages: board.boardImages.map((image) => ({
+          //   id: image.id,
+          //   imageUrl: image.imageUrl,
+          // })),
         };
       }),
     );
@@ -61,16 +65,16 @@ export class BoardsService {
       id: board.id,
       head: board.head,
       body: board.body,
-      createAt: board.createAt,
-      updateAt: board.updateAt,
+      createAt: board.createdAt,
+      updateAt: board.updatedAt,
       userId: {
         name: board.user.name,
         userImage: board.user.userImage ? board.user.userImage : [],
       },
-      boardImages: board.boardImages.map((image) => ({
-        id: image.id,
-        imageUrl: image.imageUrl,
-      })),
+      // boardImages: board.boardImages.map((image) => ({
+      //   id: image.id,
+      //   imageUrl: image.imageUrl,
+      // })),
       unitowner: unitowner,
     };
   }
@@ -78,7 +82,7 @@ export class BoardsService {
   async updateBoard(
     boardId: number,
     boardData: Partial<CreateBoardDto>,
-  ): Promise<Board | undefined> {
+  ): Promise<MentorBoard | undefined> {
     const existingBoard = await this.boardRepository.findBoardById(boardId);
     for (const key in boardData) {
       if (boardData.hasOwnProperty(key)) {

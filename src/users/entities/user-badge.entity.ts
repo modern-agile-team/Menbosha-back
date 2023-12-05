@@ -6,10 +6,10 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './user.entity';
-import { BadgeList } from './badge-list.entity';
+import { BadgeList } from '../../common/entity/badge-list.entity';
 
-@Entity({ name: 'user_badge_mapping' })
-export class UserBadgeMapping {
+@Entity({ name: 'user_badge' })
+export class UserBadge {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -20,7 +20,7 @@ export class UserBadgeMapping {
   badgeId: number;
 
   @Column({ name: 'created_at' })
-  creataedAt: Date;
+  createdAt: Date;
 
   @ManyToOne(() => User, (userId: User) => userId.id, {
     onDelete: 'CASCADE',

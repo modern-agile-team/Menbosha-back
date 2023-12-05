@@ -11,7 +11,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BoardsService } from '../services/Boards.service';
-import { Board } from '../entities/mentor-board.entity';
+// import { Board } from '../entities/mentor-board.entity';
+import { MentorBoard } from '../entities/mentor-board.entity';
 import { CreateBoardDto } from '../dto/create.board.dto';
 import { BoardImagesService } from '../services/BoardImage.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
@@ -43,7 +44,7 @@ export class BoardsController {
   async create(
     @GetUserId() userId: number,
     @Body() createBoardDto: CreateBoardDto,
-  ): Promise<Board> {
+  ): Promise<MentorBoard> {
     return await this.boardsService.create(createBoardDto, userId);
   }
 
@@ -86,8 +87,8 @@ export class BoardsController {
   @ApiUpdateBoard()
   async editBoard(
     @Query('boardId') boardId: number,
-    @Body() boardData: Partial<Board>,
-  ): Promise<Board> {
+    @Body() boardData: Partial<MentorBoard>,
+  ): Promise<MentorBoard> {
     return await this.boardsService.updateBoard(boardId, boardData);
   }
 

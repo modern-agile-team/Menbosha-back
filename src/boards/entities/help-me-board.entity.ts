@@ -8,9 +8,11 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { CategoryList } from 'src/common/entity/category-list.entity';
 
 @Entity({
   name: 'help_me_board',
@@ -42,9 +44,16 @@ export class HelpMeBoard {
   @Column('text')
   body: string;
 
-  @CreateDateColumn({ name: 'create_at' })
-  createAt: Date;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updateAt: Date;
+  updatedAt: Date;
+
+  @Column({ name: 'category_list' })
+  categoryId: number;
+
+  @OneToOne(() => CategoryList, (categoryList) => categoryList.helpMeBoard)
+  @JoinColumn({ name: 'category_list' })
+  categoryList: CategoryList;
 }

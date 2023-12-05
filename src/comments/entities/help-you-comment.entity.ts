@@ -37,6 +37,6 @@ export class HelpYouComment {
   @Column()
   content: string;
 
-  @CreateDateColumn({ name: 'create_at' })
-  createAt: Date;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 }
