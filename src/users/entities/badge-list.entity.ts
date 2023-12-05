@@ -5,7 +5,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { UserBadgeMapping } from './user-badge.entity';
+import { UserBadge } from './user-badge.entity';
 
 @Entity({ name: 'badge_list' })
 export class BadgeList {
@@ -18,10 +18,7 @@ export class BadgeList {
   @Column({ name: 'memo' })
   memo: string;
 
-  @OneToMany(
-    () => UserBadgeMapping,
-    (userBadgeMapping) => userBadgeMapping.badge,
-  )
+  @OneToMany(() => UserBadge, (userBadge) => userBadge.badge)
   @JoinColumn({ name: 'userBadgeMapping_id' })
-  userBadgeMapping: UserBadgeMapping;
+  userBadgeMapping: UserBadge;
 }

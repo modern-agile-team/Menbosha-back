@@ -8,8 +8,8 @@ import {
 import { User } from './user.entity';
 import { BadgeList } from './badge-list.entity';
 
-@Entity({ name: 'user_badge_mapping' })
-export class UserBadgeMapping {
+@Entity({ name: 'user_badge' })
+export class UserBadge {
   @PrimaryGeneratedColumn()
   id: number;
 
