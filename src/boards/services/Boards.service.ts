@@ -35,8 +35,8 @@ export class BoardsService {
           id: board.id,
           head: board.head,
           body: board.body.substring(0, 30),
-          createAt: board.createdAt,
-          updateAt: board.updatedAt,
+          createdAt: board.createdAt,
+          updatedAt: board.updatedAt,
           userId: {
             name: board.user.name,
             userImage: board.user.userImage ? board.user.userImage : [],
@@ -65,8 +65,8 @@ export class BoardsService {
       id: board.id,
       head: board.head,
       body: board.body,
-      createAt: board.createdAt,
-      updateAt: board.updatedAt,
+      createdAt: board.createdAt,
+      updatedAt: board.updatedAt,
       userId: {
         name: board.user.name,
         userImage: board.user.userImage ? board.user.userImage : [],

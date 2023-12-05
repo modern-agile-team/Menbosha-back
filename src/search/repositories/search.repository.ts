@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { BoardImage } from 'src/boards/entities/mentor-board-image.entity';
-import { Board } from 'src/boards/entities/mentor-board.entity';
+// import { BoardImage } from 'src/boards/entities/mentor-board-image.entity';
+import { HelpMeBoardImage } from 'src/boards/entities/help-me-board-image.entity';
+// import { Board } from 'src/boards/entities/mentor-board.entity';
+import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
 import { User } from 'src/users/entities/user.entity';
 import { EntityManager } from 'typeorm';
 
@@ -13,7 +15,7 @@ export class SearchRepository {
     skip: number,
     take: number,
   ) {
-    const boardRepository = this.entityManager.getRepository(Board);
+    const boardRepository = this.entityManager.getRepository(HelpMeBoard);
 
     if (category === '전체') {
       return boardRepository
@@ -30,7 +32,7 @@ export class SearchRepository {
         .leftJoinAndSelect('user.userImage', 'userImage')
         .leftJoinAndMapMany(
           'board.boardImages',
-          BoardImage,
+          HelpMeBoardImage,
           'boardImages',
           'boardImages.boardId = board.id',
         )
@@ -61,7 +63,7 @@ export class SearchRepository {
       .leftJoinAndSelect('user.userImage', 'userImage')
       .leftJoinAndMapMany(
         'board.boardImages',
-        BoardImage,
+        HelpMeBoardImage,
         'boardImages',
         'boardImages.boardId = board.id',
       )
@@ -89,7 +91,7 @@ export class SearchRepository {
     skip: number,
     take: number,
   ) {
-    const boardRepository = this.entityManager.getRepository(Board);
+    const boardRepository = this.entityManager.getRepository(HelpMeBoard);
 
     if (category === '전체') {
       return boardRepository
@@ -106,7 +108,7 @@ export class SearchRepository {
         .leftJoinAndSelect('user.userImage', 'userImage')
         .leftJoinAndMapMany(
           'board.boardImages',
-          BoardImage,
+          HelpMeBoardImage,
           'boardImages',
           'boardImages.boardId = board.id',
         )
@@ -137,7 +139,7 @@ export class SearchRepository {
       .leftJoinAndSelect('user.userImage', 'userImage')
       .leftJoinAndMapMany(
         'board.boardImages',
-        BoardImage,
+        HelpMeBoardImage,
         'boardImages',
         'boardImages.boardId = board.id',
       )
@@ -179,7 +181,7 @@ export class SearchRepository {
   ) {
     if (category === '전체') {
       return this.entityManager
-        .createQueryBuilder(Board, 'board')
+        .createQueryBuilder(HelpMeBoard, 'board')
         .leftJoinAndMapMany(
           'board.user',
           User,
@@ -189,7 +191,7 @@ export class SearchRepository {
         .leftJoinAndSelect('user.userImage', 'userImage')
         .leftJoinAndMapMany(
           'board.boardImages',
-          BoardImage,
+          HelpMeBoardImage,
           'boardImages',
           'boardImages.boardId = board.id',
         )
@@ -215,12 +217,12 @@ export class SearchRepository {
     }
 
     return this.entityManager
-      .createQueryBuilder(Board, 'board')
+      .createQueryBuilder(HelpMeBoard, 'board')
       .leftJoinAndMapMany('board.user', User, 'user', 'user.id = board.userId')
       .leftJoinAndSelect('user.userImage', 'userImage')
       .leftJoinAndMapMany(
         'board.boardImages',
-        BoardImage,
+        HelpMeBoardImage,
         'boardImages',
         'boardImages.boardId = board.id',
       )

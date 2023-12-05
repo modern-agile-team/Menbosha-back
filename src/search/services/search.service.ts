@@ -32,16 +32,16 @@ export class SearchService {
             id: board.id,
             head: board.head,
             body: board.body.substring(0, 30),
-            createAt: board.createAt,
-            updateAt: board.updateAt,
+            createdAt: board.createdAt,
+            updatedAt: board.updatedAt,
             userId: {
               name: board.user[0].name,
               userImage: board.user[0].userImage ? board.user[0].userImage : [],
             },
-            boardImages: board.boardImages.map((image) => ({
-              id: image.id,
-              imageUrl: image.imageUrl,
-            })),
+            // boardImages: board.boardImages.map((image) => ({
+            //   id: image.id,
+            //   imageUrl: image.imageUrl,
+            // })),
           };
         }),
       );
@@ -73,16 +73,16 @@ export class SearchService {
             id: board.id,
             head: board.head,
             body: board.body.substring(0, 30),
-            createAt: board.createAt,
-            updateAt: board.updateAt,
+            createdAt: board.createdAt,
+            updatedAt: board.updatedAt,
             userId: {
               name: board.user[0].name,
               userImage: board.user[0].userImage ? board.user[0].userImage : [],
             },
-            boardImages: board.boardImages.map((image) => ({
-              id: image.id,
-              imageUrl: image.imageUrl,
-            })),
+            // boardImages: board.boardImages.map((image) => ({
+            //   id: image.id,
+            //   imageUrl: image.imageUrl,
+            // })),
           };
         }),
       );
@@ -124,16 +124,16 @@ export class SearchService {
             id: board.id,
             head: board.head,
             body: board.body.substring(0, 30),
-            createAt: board.createAt,
-            updateAt: board.updateAt,
+            createdAt: board.createdAt,
+            updatedAt: board.updatedAt,
             userId: {
               name: board.user[0].name,
               userImage: board.user[0].userImage ? board.user[0].userImage : [],
             },
-            boardImages: board.boardImages.map((image) => ({
-              id: image.id,
-              imageUrl: image.imageUrl,
-            })),
+            // boardImages: board.boardImages.map((image) => ({
+            //   id: image.id,
+            //   imageUrl: image.imageUrl,
+            // })),
           };
         }),
       );
@@ -175,16 +175,16 @@ export class SearchService {
           id: board.id,
           head: board.head,
           body: board.body.substring(0, 30),
-          createAt: board.createAt,
-          updateAt: board.updateAt,
+          createdAt: board.createdAt,
+          updatedAt: board.updatedAt,
           userId: {
             name: board.user[0].name,
             userImage: board.user[0].userImage ? board.user[0].userImage : [],
           },
-          boardImages: board.boardImages.map((image) => ({
-            id: image.id,
-            imageUrl: image.imageUrl,
-          })),
+          // boardImages: board.boardImages.map((image) => ({
+          //   id: image.id,
+          //   imageUrl: image.imageUrl,
+          // })),
         };
       }),
     );
@@ -225,16 +225,16 @@ export class SearchService {
           id: board.id,
           head: board.head,
           body: board.body.substring(0, 30),
-          createAt: board.createAt,
-          updateAt: board.updateAt,
+          createdAt: board.createdAt,
+          updatedAt: board.updatedAt,
           userId: {
             name: board.user[0].name,
             userImage: board.user[0].userImage ? board.user[0].userImage : [],
           },
-          boardImages: board.boardImages.map((image) => ({
-            id: image.id,
-            imageUrl: image.imageUrl,
-          })),
+          // boardImages: board.boardImages.map((image) => ({
+          //   id: image.id,
+          //   imageUrl: image.imageUrl,
+          // })),
         };
       }),
     );
@@ -279,16 +279,16 @@ export class SearchService {
           id: board.id,
           head: board.head,
           body: board.body.substring(0, 30),
-          createAt: board.createAt,
-          updateAt: board.updateAt,
+          createdAt: board.createdAt,
+          updatedAt: board.updatedAt,
           userId: {
             name: board.user[0].name,
             userImage: board.user[0].userImage ? board.user[0].userImage : [],
           },
-          boardImages: board.boardImages.map((image) => ({
-            id: image.id,
-            imageUrl: image.imageUrl,
-          })),
+          // boardImages: board.boardImages.map((image) => ({
+          //   id: image.id,
+          //   imageUrl: image.imageUrl,
+          // })),
         };
       }),
     );

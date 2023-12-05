@@ -4,8 +4,8 @@ export class BoardResponseDTO {
   id: number;
   head: string;
   body: string;
-  createAt: Date;
-  updateAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
   userId: {
     name: string;
     userImage: UserImage | UserImage[];
