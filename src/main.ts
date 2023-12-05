@@ -33,11 +33,11 @@ async function bootstrap() {
     .setDefaultContentType('application/json')
     .build();
 
-  const asyncapiDocument = await AsyncApiModule.createDocument(
+  const asyncApiDocument = await AsyncApiModule.createDocument(
     app,
     asyncApiOptions,
   );
-  await AsyncApiModule.setup('asyncapi', app, asyncapiDocument);
+  await AsyncApiModule.setup('asyncapi', app, asyncApiDocument);
   app.useLogger(logger);
 
   app.useGlobalFilters(

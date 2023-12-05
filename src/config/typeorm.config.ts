@@ -2,7 +2,6 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
 import { Token } from 'src/auth/entities/token.entity';
 import { HelpMeBoardImage } from 'src/boards/entities/help-me-board-image.entity';
-import { MentorBoardImage } from 'src/boards/entities/mentor-board-image.entity';
 import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
 import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
 import { HelpYouComment } from 'src/comments/entities/help-you-comment.entity';
@@ -26,7 +25,6 @@ export const TypeORMconfig: TypeOrmModuleOptions = {
     MentorBoard,
     HelpMeBoard,
     HelpMeBoardImage,
-    MentorBoardImage,
     HelpYouComment,
   ], // 여기에 엔티티들을 추가해야 합니다.
   synchronize: process.env.NODE_ENV === 'false',
