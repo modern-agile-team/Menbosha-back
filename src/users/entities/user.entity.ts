@@ -53,9 +53,6 @@ export class User {
   @Column({ length: 20 })
   phone: string;
 
-  @Column({ length: 30 })
-  company: string;
-
   @OneToMany(() => MentorBoard, (mentorBoard) => mentorBoard.user)
   @JoinColumn({ name: 'mentor_board_id' })
   mentorBoard: MentorBoard;
