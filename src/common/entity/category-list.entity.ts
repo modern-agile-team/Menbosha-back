@@ -5,7 +5,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from './user.entity';
+import { User } from '../../users/entities/user.entity';
 import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
 import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
 

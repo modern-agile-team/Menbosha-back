@@ -5,7 +5,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { UserBadge } from './user-badge.entity';
+import { UserBadge } from '../../users/entities/user-badge.entity';
 
 @Entity({ name: 'badge_list' })
 export class BadgeList {

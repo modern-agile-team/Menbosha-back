@@ -12,7 +12,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { CategoryList } from 'src/users/entities/category-list.entity';
+import { CategoryList } from 'src/common/entity/category-list.entity';
 
 @Entity({
   name: 'mentor_board',

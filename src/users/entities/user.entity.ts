@@ -13,7 +13,7 @@ import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
 import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
 import { UserReview } from './user-review.entity';
 import { UserBadge } from './user-badge.entity';
-import { CategoryList } from './category-list.entity';
+import { CategoryList } from '../../common/entity/category-list.entity';
 
 @Entity({
   name: 'user',
