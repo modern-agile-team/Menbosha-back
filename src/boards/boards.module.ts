@@ -10,17 +10,11 @@ import { BoardRepository } from './repository/boards.repository';
 import { BoardImageRepository } from './repository/boardImage.repository';
 import { TokenService } from 'src/auth/services/token.service';
 import { TokenRepository } from 'src/auth/repositories/token.repository';
-import { MentorBoardImage } from './entities/mentor-board-image.entity';
 import { HelpMeBoardImage } from './entities/help-me-board-image.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      MentorBoard,
-      HelpMeBoard,
-      MentorBoardImage,
-      HelpMeBoardImage,
-    ]),
+    TypeOrmModule.forFeature([MentorBoard, HelpMeBoard, HelpMeBoardImage]),
   ],
   controllers: [BoardsController],
   providers: [

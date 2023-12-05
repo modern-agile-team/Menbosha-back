@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { BoardImageRepository } from '../repository/boardImage.repository';
 import { S3Service } from '../../common/s3/s3.service';
 import { CreateBoardImageDto } from '../dto/create.board-image.dto';
-import { BoardImage } from '../entities/mentor-board-image.entity';
+import { HelpMeBoardImage } from '../entities/help-me-board-image.entity';
 
 @Injectable()
 export class BoardImagesService {
@@ -21,10 +21,10 @@ export class BoardImagesService {
       const uploadedImage = await this.s3Service.uploadImage(
         file,
         userId,
-        'BoadImages',
+        'BoardImages',
       );
       const boardImage = new CreateBoardImageDto();
-      boardImage.boardId = boardId;
+      boardImage.helpMeBoardId = boardId;
       boardImage.imageUrl = uploadedImage.url;
       const savedImage =
         await this.boardImageRepository.saveBoardImage(boardImage);
@@ -57,7 +57,7 @@ export class BoardImagesService {
           'BoardImages',
         );
         const boardImage = new CreateBoardImageDto();
-        boardImage.boardId = boardId;
+        boardImage.helpMeBoardId = boardId;
         boardImage.imageUrl = uploadedImage.url;
         const savedImage =
           await this.boardImageRepository.saveBoardImage(boardImage);
@@ -70,7 +70,7 @@ export class BoardImagesService {
     };
   }
   // 이미지 삭제 수행
-  private async deleteImages(imagesToDelete: BoardImage[]) {
+  private async deleteImages(imagesToDelete: HelpMeBoardImage[]) {
     const s3ToDelete = imagesToDelete.map((image) => {
       const parts = image.imageUrl.split('/');
       const fileName = parts[parts.length - 1]; // S3에서 삭제할 이미지 파일명을 추출합니다.

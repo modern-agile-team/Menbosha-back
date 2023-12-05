@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { HelpMeBoard } from './help-me-board.entity';
 
-@Entity({ name: 'mentor_board_image' })
+@Entity({ name: 'help_me_board_image' })
 export class HelpMeBoardImage {
   @PrimaryGeneratedColumn()
   id: number;
@@ -19,11 +19,11 @@ export class HelpMeBoardImage {
       onDelete: 'CASCADE',
     },
   )
-  @JoinColumn({ name: 'mentor_board_id' })
+  @JoinColumn({ name: 'help_me_board_id' })
   helpMeBoard: HelpMeBoard;
 
-  @Column({ name: 'mentor_board_id' })
-  mentorBoardId: number;
+  @Column({ name: 'help_me_board_id' })
+  helpMeBoardId: number;
 
   @Column({ name: 'image_url' })
   imageUrl: string;

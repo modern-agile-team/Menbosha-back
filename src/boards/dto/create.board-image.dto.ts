@@ -5,7 +5,7 @@ export class CreateBoardImageDto {
   id: number;
 
   @IsNumber()
-  boardId: number;
+  helpMeBoardId: number;
 
   @IsString()
   imageUrl: string;
