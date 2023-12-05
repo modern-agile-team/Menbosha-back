@@ -20,7 +20,7 @@ export class UserBadge {
   badgeId: number;
 
   @Column({ name: 'created_at' })
-  creataedAt: Date;
+  createdAt: Date;
 
   @ManyToOne(() => User, (userId: User) => userId.id, {
     onDelete: 'CASCADE',

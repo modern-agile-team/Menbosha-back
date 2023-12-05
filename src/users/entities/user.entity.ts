@@ -65,7 +65,7 @@ export class User {
   helpMeBoard: HelpMeBoard;
 
   @OneToMany(() => UserBadge, (userBadge) => userBadge.user)
-  @JoinColumn({ name: 'userBadge_id' })
+  @JoinColumn({ name: 'user_badge_id' })
   userBadge: UserBadge;
 
   @OneToOne(() => Token, (token) => token.user, {

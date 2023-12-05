@@ -1,5 +1,4 @@
 import { User } from 'src/users/entities/user.entity';
-import { MentorBoardImage } from './mentor-board-image.entity';
 import {
   Column,
   CreateDateColumn,
@@ -8,7 +7,6 @@ import {
   JoinColumn,
   ManyToOne,
   OneToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -30,12 +28,6 @@ export class MentorBoard {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @OneToMany(
-    () => MentorBoardImage,
-    (mentorBoardImage) => mentorBoardImage.mentorBoard,
-  )
-  mentorBoardImages: MentorBoardImage[];
-
   @Index({ fulltext: true })
   @Column('varchar')
   head: string;
@@ -44,7 +36,7 @@ export class MentorBoard {
   @Column('text')
   body: string;
 
-  @CreateDateColumn({ name: 'create_at' })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })

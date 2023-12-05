@@ -45,10 +45,10 @@ export class HelpMeBoard {
   body: string;
 
   @CreateDateColumn({ name: 'create_at' })
-  createAt: Date;
+  createdAt: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updateAt: Date;
+  updatedAt: Date;
 
   @Column({ name: 'category_list' })
   categoryId: number;

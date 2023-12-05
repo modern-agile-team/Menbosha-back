@@ -12,22 +12,19 @@ export class UserReview {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'user_id' })
-  userId: number;
-
   @Column({ name: 'mentor_id' })
   mentorId: number;
 
-  @Column({ name: 'mentee' })
+  @Column({ name: 'mentee_id' })
   menteeId: number;
 
-  @OneToOne(() => User, (userId: User) => userId.mentor, {
+  @OneToOne(() => User, (user) => user.mentor, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'mentor_id' })
   mentor: User;
 
-  @OneToOne(() => User, (userId: User) => userId.mentee, {
+  @OneToOne(() => User, (user) => user.mentee, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'mentee_id' })
@@ -35,10 +32,4 @@ export class UserReview {
 
   @Column({ name: 'review' })
   review: string;
-
-  @OneToOne(() => User, (userId: User) => userId.userImage, {
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({ name: 'user_id' })
-  user: User;
 }
