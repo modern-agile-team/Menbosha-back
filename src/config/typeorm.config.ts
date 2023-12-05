@@ -7,6 +7,11 @@ import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
 import { HelpYouComment } from 'src/comments/entities/help-you-comment.entity';
 import { UserImage } from 'src/users/entities/user-image.entity';
 import { User } from 'src/users/entities/user.entity';
+import { CategoryList } from 'src/common/entity/category-list.entity';
+import { BadgeList } from 'src/common/entity/badge-list.entity';
+import { UserBadge } from 'src/users/entities/user-badge.entity';
+import { UserReview } from 'src/users/entities/user-review.entity';
+import { UserIntro } from 'src/users/entities/user-intro.entity';
 
 // .env 파일 로드
 dotenv.config();
@@ -26,6 +31,11 @@ export const TypeORMconfig: TypeOrmModuleOptions = {
     HelpMeBoard,
     HelpMeBoardImage,
     HelpYouComment,
+    CategoryList,
+    BadgeList,
+    UserBadge,
+    UserReview,
+    UserIntro,
   ], // 여기에 엔티티들을 추가해야 합니다.
-  synchronize: process.env.NODE_ENV === 'false',
+  synchronize: process.env.NODE_ENV === 'true',
 };

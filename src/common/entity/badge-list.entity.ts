@@ -20,5 +20,5 @@ export class BadgeList {
 
   @OneToMany(() => UserBadge, (userBadge) => userBadge.badge)
   @JoinColumn({ name: 'userBadgeMapping_id' })
-  userBadgeMapping: UserBadge;
+  userBadge: UserBadge;
 }
