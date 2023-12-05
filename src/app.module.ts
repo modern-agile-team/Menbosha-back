@@ -15,6 +15,7 @@ import * as mongoose from 'mongoose';
 import { UserImageRepository } from './users/repositories/user-image.repository';
 import { ScheduleModule } from '@nestjs/schedule';
 import { SearchModule } from './search/search.module';
+import { ExceptionsModule } from './http-exceptions/exceptions.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { SearchModule } from './search/search.module';
     S3Module,
     BoardsModule,
     SearchModule,
+    ExceptionsModule,
   ], //
   providers: [UserImageService, UserImageRepository, S3Service],
 })
