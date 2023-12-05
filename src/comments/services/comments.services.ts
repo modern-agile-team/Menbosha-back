@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { CommentsRepository } from '../repository/comments.repository';
 import { CreateCommentDto } from '../dto/create-comment-dto';
-import { Comment } from '../entities/help-you-comment.entity';
-import { commentResponseDTO } from '../dto/get-all-comment-dto';
+import { HelpYouComment } from '../entities/help-you-comment.entity';
+import { CommentResponseDTO } from '../dto/get-all-comment-dto';
 import { UpdateCommentDto } from '../dto/update-comment-dto';
 
 @Injectable()
 export class CommentsService {
-  constructor(private CommentRepository: CommentsRepository) {}
+  constructor(private commentRepository: CommentsRepository) {}
   async create(
     commentData: CreateCommentDto,
     userId: number,
     boardId: number,
-  ): Promise<Comment> {
+  ): Promise<HelpYouComment> {
     try {
-      return await this.CommentRepository.createComment(
+      return await this.commentRepository.createComment(
         commentData,
         userId,
         boardId,
@@ -27,16 +27,16 @@ export class CommentsService {
   async findAllComments(
     boardId: number,
     userId: number,
-  ): Promise<commentResponseDTO[]> {
+  ): Promise<CommentResponseDTO[]> {
     const comments =
-      await this.CommentRepository.findCommentsByBoardId(boardId);
+      await this.commentRepository.findCommentsByBoardId(boardId);
     if (!comments) {
       return []; // 에러 말고 리턴으로 빈 배열
     }
     return comments.map((comment) => ({
       id: comment.id,
       content: comment.content,
-      commentowner: comment.userId === userId,
+      commentOwner: comment.userId === userId,
       user: {
         name: comment.user.name,
         userImage: comment.user.userImage ? comment.user.userImage : [],
@@ -47,15 +47,15 @@ export class CommentsService {
   async updateComment(
     commentId: number,
     commentData: Partial<UpdateCommentDto>,
-  ): Promise<Comment | undefined> {
+  ): Promise<HelpYouComment | undefined> {
     const existingComment =
-      await this.CommentRepository.findOneComment(commentId);
+      await this.commentRepository.findOneComment(commentId);
     for (const key in commentData) {
       if (commentData.hasOwnProperty(key)) {
         existingComment[key] = commentData[key];
       }
     }
-    const updatedComment = await this.CommentRepository.updateComment(
+    const updatedComment = await this.commentRepository.updateComment(
       commentId,
       existingComment,
     );
@@ -63,7 +63,7 @@ export class CommentsService {
   }
 
   async deleteComment(commentId: number, userId: number): Promise<void> {
-    const comment = await this.CommentRepository.findOneComment(commentId);
+    const comment = await this.commentRepository.findOneComment(commentId);
 
     if (!comment) {
       throw new Error('존재하지 않는 댓글입니다.');
@@ -72,6 +72,6 @@ export class CommentsService {
     if (comment.userId !== userId) {
       throw new Error('작성한 댓글이 아닙니다.');
     }
-    await this.CommentRepository.deleteComment(comment);
+    await this.commentRepository.deleteComment(comment);
   }
 }

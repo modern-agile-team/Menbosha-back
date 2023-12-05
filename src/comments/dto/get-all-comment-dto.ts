@@ -1,9 +1,9 @@
 import { UserImage } from 'src/users/entities/user-image.entity';
 
-export class commentResponseDTO {
+export class CommentResponseDTO {
   id: number;
   content: string;
-  commentowner: boolean;
+  commentOwner: boolean;
   user: {
     name: string;
     userImage: UserImage | UserImage[];
