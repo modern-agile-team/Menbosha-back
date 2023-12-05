@@ -4,8 +4,8 @@ export class oneBoardResponseDTO {
   id: number;
   head: string;
   body: string;
-  createAt: Date;
-  updateAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
   unitowner: true | false;
   userId: {
     // id: number;
