@@ -43,8 +43,8 @@ export class MentorBoard {
   body: string;
 
   @CreateDateColumn({ name: 'create_at' })
-  createAt: Date;
+  createdAt: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updateAt: Date;
+  updatedAt: Date;
 }

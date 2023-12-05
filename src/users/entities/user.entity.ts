@@ -12,6 +12,7 @@ import { Token } from 'src/auth/entities/token.entity';
 import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
 import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
 import { UserReview } from './user-review.entity';
+import { UserBadgeMapping } from './user-badge.entity';
 
 @Entity({
   name: 'user',
@@ -45,9 +46,6 @@ export class User {
   @Column({ length: 20 })
   category: string;
 
-  @Column({ length: 20 })
-  badge: string;
-
   @Column({ default: 10 })
   rank: number;
 
@@ -64,6 +62,13 @@ export class User {
   @OneToMany(() => HelpMeBoard, (helpMeBoard) => helpMeBoard.user)
   @JoinColumn({ name: 'help_me_board_id' })
   helpMeBoard: HelpMeBoard;
+
+  @OneToMany(
+    () => UserBadgeMapping,
+    (userBadgeMapping) => userBadgeMapping.user,
+  )
+  @JoinColumn({ name: 'userBadgeMapping_id' })
+  userBadge: UserBadgeMapping;
 
   @OneToOne(() => Token, (token) => token.user, {
     onDelete: 'CASCADE',
