@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { BoardRepository } from '../repository/boards.repository';
-import { CreateBoardDto } from '../dto/create.board.dto';
+import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 // import { Board } from '../entities/mentor-board.entity';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { BoardResponseDTO } from '../dto/boards.response.dto';
@@ -10,7 +10,7 @@ import { oneBoardResponseDTO } from '../dto/boards.one.response.dto';
 export class BoardsService {
   constructor(private boardRepository: BoardRepository) {}
   async create(
-    boardData: CreateBoardDto,
+    boardData: CreateMentorBoardDto,
     userId: number,
   ): Promise<MentorBoard> {
     try {
@@ -81,7 +81,7 @@ export class BoardsService {
 
   async updateBoard(
     boardId: number,
-    boardData: Partial<CreateBoardDto>,
+    boardData: Partial<CreateMentorBoardDto>,
   ): Promise<MentorBoard | undefined> {
     const existingBoard = await this.boardRepository.findBoardById(boardId);
     for (const key in boardData) {
