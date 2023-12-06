@@ -37,7 +37,7 @@ export class BoardsController {
     private readonly boardImagesService: BoardImagesService,
   ) {}
 
-  @Post('')
+  @Post('/mentor')
   @UseGuards(JwtAccessTokenGuard)
   @ApiAddBoard()
   async create(

@@ -17,9 +17,13 @@ export class CategoryList {
   @Column({ name: 'category_name' })
   categoryName: string;
 
-  @OneToMany(() => User, (user) => user.categoryList)
+  @OneToMany(() => User, (user) => user.hopeCategoryList)
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  hopeUser: User;
+
+  @OneToMany(() => User, (user) => user.activityCategoryList)
+  @JoinColumn({ name: 'user_id' })
+  activityUser: User;
 
   @OneToMany(() => HelpMeBoard, (helpMeBoard) => helpMeBoard.categoryList)
   @JoinColumn({ name: 'help_me_board_id' })

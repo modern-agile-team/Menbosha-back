@@ -45,8 +45,11 @@ export class User {
   @Column({ default: false })
   admin: boolean;
 
-  @Column({ name: 'category_list_id' })
-  categoryId: number;
+  @Column({ name: 'hope_category_list_id' }) //희망 카테고리 id
+  hopeCategoryId: number;
+
+  @Column({ name: 'activity_category_list_id' })
+  activityCategoryId: number;
 
   @Column({ default: 10 })
   rank: number;
@@ -71,7 +74,11 @@ export class User {
   })
   token: Token;
 
-  @ManyToOne(() => CategoryList, (categoryList) => categoryList.user)
-  @JoinColumn({ name: 'category_list_id' })
-  categoryList: CategoryList;
+  @ManyToOne(() => CategoryList, (categoryList) => categoryList.hopeUser)
+  @JoinColumn({ name: 'hope_category_list_id' })
+  hopeCategoryList: CategoryList;
+
+  @ManyToOne(() => CategoryList, (categoryList) => categoryList.activityUser)
+  @JoinColumn({ name: 'activity_category_list_id' })
+  activityCategoryList: CategoryList;
 }
