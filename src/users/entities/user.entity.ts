@@ -6,6 +6,7 @@ import {
   OneToMany,
   OneToOne,
   Index,
+  ManyToOne,
 } from 'typeorm';
 import { UserImage } from './user-image.entity';
 import { Token } from 'src/auth/entities/token.entity';
@@ -44,7 +45,7 @@ export class User {
   @Column({ default: false })
   admin: boolean;
 
-  @Column({ name: 'category_list' })
+  @Column({ name: 'category_list_id' })
   categoryId: number;
 
   @Column({ default: 10 })
@@ -70,7 +71,7 @@ export class User {
   })
   token: Token;
 
-  @OneToOne(() => CategoryList, (categoryList) => categoryList.user)
-  @JoinColumn({ name: 'category_list' })
+  @ManyToOne(() => CategoryList, (categoryList) => categoryList.user)
+  @JoinColumn({ name: 'category_list_id' })
   categoryList: CategoryList;
 }
