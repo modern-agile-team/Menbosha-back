@@ -71,6 +71,6 @@ export class User {
   token: Token;
 
   @OneToOne(() => CategoryList, (categoryList) => categoryList.user)
-  @JoinColumn({ name: 'category_list' })
+  @JoinColumn({ name: 'category_list_id' })
   categoryList: CategoryList;
 }
