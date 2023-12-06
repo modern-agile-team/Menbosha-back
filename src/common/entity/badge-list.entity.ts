@@ -19,6 +19,6 @@ export class BadgeList {
   memo: string;
 
   @OneToMany(() => UserBadge, (userBadge) => userBadge.badge)
-  @JoinColumn({ name: 'userBadgeMapping_id' })
+  @JoinColumn({ name: 'userBadge_id' })
   userBadge: UserBadge;
 }
