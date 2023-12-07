@@ -7,7 +7,7 @@ export class JwtRefreshTokenGuard {
 
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
-    const refreshToken = request.cookies['refresh_token'];
+    const refreshToken = request.headers['refresh_token'];
 
     if (!refreshToken) {
       return false;

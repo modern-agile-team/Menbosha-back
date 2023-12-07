@@ -59,7 +59,7 @@ export class AuthController {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
     });
 
-    return res.json({ accessToken });
+    return res.json({ accessToken, refreshToken });
   }
 
   @ApiKakaoLogin()
@@ -88,7 +88,7 @@ export class AuthController {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
     });
 
-    return res.json({ accessToken });
+    return res.json({ accessToken, refreshToken });
   }
 
   @ApiCookieAuth('refresh-token')
