@@ -25,7 +25,7 @@ export class AuthService implements AuthServiceInterface {
         userInfoHeader: object;
 
       if (provider === 'naver') {
-        // 네이버 로그인 인가코드 발급
+        // 네이버 토큰 발급
         tokenUrl = 'https://nid.naver.com/oauth2.0/token';
         tokenHeader = {
           headers: {
@@ -41,7 +41,7 @@ export class AuthService implements AuthServiceInterface {
           redirect_uri: process.env.NAVER_CALLBACK_URL,
         };
       } else if (provider === 'kakao') {
-        // 카카오 로그인 인가코드 발급
+        // 카카오 토큰 발급
         tokenUrl = 'https://kauth.kakao.com/oauth/token';
         tokenHeader = {
           headers: {
@@ -79,20 +79,20 @@ export class AuthService implements AuthServiceInterface {
         };
       }
 
-      const SocialuserInfo = (await axios.get(userInfoUrl, userInfoHeader))
+      const socialUserInfo = (await axios.get(userInfoUrl, userInfoHeader))
         .data;
       const nickname =
         provider === 'naver'
-          ? SocialuserInfo.response.nickname // 네이버 닉네임
-          : SocialuserInfo.properties.nickname; // 카카오 닉네임
+          ? socialUserInfo.response.nickname // 네이버 닉네임
+          : socialUserInfo.properties.nickname; // 카카오 닉네임
       const email =
         provider === 'naver'
-          ? SocialuserInfo.response.email // 네이버 이메일
-          : SocialuserInfo.kakao_account.email; // 카카오 이메일
+          ? socialUserInfo.response.email // 네이버 이메일
+          : socialUserInfo.kakao_account.email; // 카카오 이메일
       const profileImage =
         provider === 'naver'
-          ? SocialuserInfo.response.profile_image // 네이버 프로필 이미지
-          : SocialuserInfo.properties.profile_image; // 카카오 프로필 이미지
+          ? socialUserInfo.response.profile_image // 네이버 프로필 이미지
+          : socialUserInfo.properties.profile_image; // 카카오 프로필 이미지
 
       const userInfo = {
         provider,
@@ -120,8 +120,8 @@ export class AuthService implements AuthServiceInterface {
 
         return {
           userId,
-          accessToken: socialAccessToken,
-          refreshToken: socialRefreshToken,
+          socialAccessToken,
+          socialRefreshToken,
         };
       } else {
         // 존재하지 않는 사용자인 경우
