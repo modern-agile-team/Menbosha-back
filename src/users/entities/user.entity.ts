@@ -46,7 +46,7 @@ export class User {
   admin: boolean;
 
   @Column({ default: false })
-  ismentor: boolean;
+  isMentor: boolean;
 
   @Column({ name: 'hope_category_list_id' }) //희망 카테고리 id
   hopeCategoryId: number;
