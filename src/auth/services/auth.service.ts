@@ -142,12 +142,11 @@ export class AuthService implements AuthServiceInterface {
         };
       }
     } catch (error) {
-      if (error.response.status == 401) {
-        throw new HttpException(
-          '유효하지 않은 인가코드입니다.',
-          HttpStatus.UNAUTHORIZED,
-        );
-      }
+      console.log(error);
+      throw new HttpException(
+        '소셜 로그인 중 오류가 발생했습니다.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
