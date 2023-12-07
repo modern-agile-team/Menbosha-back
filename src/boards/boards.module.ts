@@ -1,12 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BoardsController } from './controllers/mentor.boards.controller';
-import { BoardsService } from './services/mentor.board.service';
+import { HelpMeBoardController } from './controllers/help.me.boards.controller';
+import { MentorBoardController } from './controllers/mentor.board.controller';
+import { HelpMeBoardService } from './services/help.me.board.service';
+import { MentorBoardsService } from './services/mentor.board.service';
 import { HelpMeBoard } from './entities/help-me-board.entity';
 import { BoardImagesService } from './services/BoardImage.service';
 import { S3Service } from 'src/common/s3/s3.service';
 import { MentorBoard } from './entities/mentor-board.entity';
-import { BoardRepository } from './repository/mentor.boards.repository';
+import { HelpMeBoardRepository } from './repository/help.me.board.repository';
+import { MentorBoardRepository } from './repository/mentor.boards.repository';
 import { BoardImageRepository } from './repository/boardImage.repository';
 import { TokenService } from 'src/auth/services/token.service';
 import { TokenRepository } from 'src/auth/repositories/token.repository';
@@ -16,14 +19,18 @@ import { HelpMeBoardImage } from './entities/help-me-board-image.entity';
   imports: [
     TypeOrmModule.forFeature([MentorBoard, HelpMeBoard, HelpMeBoardImage]),
   ],
-  controllers: [BoardsController],
+  controllers: [MentorBoardController, HelpMeBoardController],
   providers: [
-    BoardsService,
+    HelpMeBoardService,
+    MentorBoardsService,
     BoardImagesService,
     S3Service,
     TokenService,
-    BoardRepository,
+    HelpMeBoardService,
+    MentorBoardsService,
     BoardImageRepository,
+    HelpMeBoardRepository,
+    MentorBoardRepository,
     TokenRepository,
   ],
 })

@@ -24,7 +24,7 @@ import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 
 @Controller('mentorBoard')
 @ApiTags('mentorBoard API')
-export class MentorBoardsController {
+export class MentorBoardController {
   constructor(private readonly mentorBoardsService: MentorBoardsService) {}
 
   @Post('')
