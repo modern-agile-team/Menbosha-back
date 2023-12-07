@@ -99,7 +99,7 @@ export class MentorBoardService {
     }
 
     if (board.userId !== userId) {
-      throw new Error('작성한 게시물이 아닙니다.');
+      throw new ForbiddenException('작성한 게시물이 아닙니다.');
     }
 
     await this.mentorBoardRepository.deleteBoard(board);
