@@ -95,7 +95,7 @@ export class MentorBoardService {
     const board = await this.mentorBoardRepository.findBoardById(mentorBoardId);
 
     if (!board) {
-      throw new Error('존재하지 않는 게시물입니다.');
+      throw new NotFoundException('존재하지 않는 게시물입니다.');
     }
 
     if (board.userId !== userId) {
