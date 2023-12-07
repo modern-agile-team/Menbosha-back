@@ -16,7 +16,7 @@ export class BoardRepository {
     mentorBoard.body = boardData.body;
     mentorBoard.categoryId = boardData.categoryId;
     mentorBoard.userId = userId;
-    return await this.entityManager.save(MentorBoard, mentorBoard);
+    return await this.entityManager.save(MentorBoard, mentorBoard); //이 부분 return은 dto로 수정하기
   }
 
   async findTotalBoards(): Promise<number> {
