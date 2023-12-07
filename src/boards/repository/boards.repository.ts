@@ -1,7 +1,6 @@
 import { EntityManager } from 'typeorm';
-// import { Board } from '../entities/mentor-board.entity';
 import { MentorBoard } from '../entities/mentor-board.entity';
-import { CreateBoardDto } from '../dto/create.board.dto';
+import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -9,14 +8,15 @@ export class BoardRepository {
   constructor(private readonly entityManager: EntityManager) {}
 
   async createBoard(
-    boardData: CreateBoardDto,
+    boardData: CreateMentorBoardDto,
     userId: number,
   ): Promise<MentorBoard> {
-    const board = new MentorBoard();
-    board.head = boardData.head;
-    board.body = boardData.body;
-    board.userId = userId;
-    return await this.entityManager.save(MentorBoard, board);
+    const mentorBoard = new MentorBoard();
+    mentorBoard.head = boardData.head;
+    mentorBoard.body = boardData.body;
+    mentorBoard.categoryId = boardData.categoryId;
+    mentorBoard.userId = userId;
+    return await this.entityManager.save(MentorBoard, mentorBoard);
   }
 
   async findTotalBoards(): Promise<number> {
@@ -38,9 +38,16 @@ export class BoardRepository {
     });
   }
 
+  async findMentorBoardById(id: number): Promise<MentorBoard> {
+    return await this.entityManager.findOne(MentorBoard, {
+      relations: ['user', 'user.userImage'],
+      where: { id },
+    });
+  }
+
   async updateBoard(
     id: number,
-    boardData: Partial<CreateBoardDto>,
+    boardData: Partial<CreateMentorBoardDto>,
   ): Promise<MentorBoard> {
     const existingBoard = await this.entityManager.findOne(MentorBoard, {
       relations: ['user', 'user.userImage', 'boardImages'],

@@ -11,9 +11,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BoardsService } from '../services/Boards.service';
-// import { Board } from '../entities/mentor-board.entity';
 import { MentorBoard } from '../entities/mentor-board.entity';
-import { CreateBoardDto } from '../dto/create.board.dto';
+import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { BoardImagesService } from '../services/BoardImage.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { BoardResponseDTO } from '../dto/boards.response.dto';
@@ -38,14 +37,14 @@ export class BoardsController {
     private readonly boardImagesService: BoardImagesService,
   ) {}
 
-  @Post('')
+  @Post('/mentor')
   @UseGuards(JwtAccessTokenGuard)
   @ApiAddBoard()
   async create(
     @GetUserId() userId: number,
-    @Body() createBoardDto: CreateBoardDto,
+    @Body() createMentorBoardDto: CreateMentorBoardDto,
   ): Promise<MentorBoard> {
-    return await this.boardsService.create(createBoardDto, userId);
+    return await this.boardsService.create(createMentorBoardDto, userId);
   }
 
   @Post('/images')

@@ -6,7 +6,6 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -42,10 +41,10 @@ export class MentorBoard {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @Column({ name: 'category_list' })
+  @Column({ name: 'category_list_id' })
   categoryId: number;
 
-  @OneToOne(() => CategoryList, (categoryList) => categoryList.mentorBoard)
-  @JoinColumn({ name: 'category_list' })
+  @ManyToOne(() => CategoryList, (categoryList) => categoryList.mentorBoard)
+  @JoinColumn({ name: 'category_list_id' })
   categoryList: CategoryList;
 }

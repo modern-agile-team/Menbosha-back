@@ -27,7 +27,8 @@ export class UserRepository {
     user.provider = userInfo.provider;
     user.name = userInfo.nickname;
     user.email = userInfo.email;
-    user.categoryId = 1;
+    user.hopeCategoryId = 3;
+    user.activityCategoryId = 3;
 
     return this.entityManager.save(user);
   }

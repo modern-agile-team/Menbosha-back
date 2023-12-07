@@ -1,4 +1,11 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
 import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
@@ -11,12 +18,15 @@ export class CategoryList {
   @Column({ name: 'category_name' })
   categoryName: string;
 
-  @OneToOne(() => User, (user) => user.categoryList)
+  @ManyToMany(() => User, (user) => user.categoryList)
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @OneToOne(() => HelpMeBoard, (helpMeBoard) => helpMeBoard.categoryList)
+  @OneToMany(() => HelpMeBoard, (helpMeBoard) => helpMeBoard.categoryList)
+  @JoinColumn({ name: 'help_me_board_id' })
   helpMeBoard: HelpMeBoard;
 
-  @OneToOne(() => MentorBoard, (mentorBoard) => mentorBoard.categoryList)
+  @OneToMany(() => MentorBoard, (mentorBoard) => mentorBoard.categoryList)
+  @JoinColumn({ name: 'mentor_board_id' })
   mentorBoard: MentorBoard;
 }
