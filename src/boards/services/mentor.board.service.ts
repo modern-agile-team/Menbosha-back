@@ -6,7 +6,7 @@ import { BoardResponseDTO } from '../dto/boards.response.dto';
 import { oneBoardResponseDTO } from '../dto/boards.one.response.dto';
 
 @Injectable()
-export class MentorBoardsService {
+export class MentorBoardService {
   constructor(private mentorBoardRepository: MentorBoardRepository) {}
   async create(
     boardData: CreateMentorBoardDto,
@@ -36,7 +36,8 @@ export class MentorBoardsService {
           body: board.body.substring(0, 30),
           createdAt: board.createdAt,
           updatedAt: board.updatedAt,
-          userId: {
+          category: board.categoryId,
+          user: {
             name: board.user.name,
             userImage: board.user.userImage ? board.user.userImage : [],
           },
@@ -47,49 +48,51 @@ export class MentorBoardsService {
     return { data: boardResponse, total };
   }
 
-  async findOneBoard(
-    boardId: number,
+  async findOneMentorBoard(
+    mentorBoardId: number,
     userId: number,
   ): Promise<oneBoardResponseDTO> {
-    const board = await this.mentorBoardRepository.findBoardById(boardId);
-    const unitowner = board.userId === userId;
-    if (!board) {
+    const mentorBoard =
+      await this.mentorBoardRepository.findBoardById(mentorBoardId);
+    const unitowner = mentorBoard.userId === userId;
+    if (!mentorBoard) {
       throw new Error('게시물을 찾을 수 없습니다.');
     }
     return {
-      id: board.id,
-      head: board.head,
-      body: board.body,
-      createdAt: board.createdAt,
-      updatedAt: board.updatedAt,
-      userId: {
-        name: board.user.name,
-        userImage: board.user.userImage ? board.user.userImage : [],
+      id: mentorBoard.id,
+      head: mentorBoard.head,
+      body: mentorBoard.body,
+      createdAt: mentorBoard.createdAt,
+      updatedAt: mentorBoard.updatedAt,
+      category: mentorBoard.categoryId,
+      user: {
+        name: mentorBoard.user.name,
+        userImage: mentorBoard.user.userImage ? mentorBoard.user.userImage : [],
       },
       unitowner: unitowner,
     };
   }
 
   async updateMentorBoard(
-    boardId: number,
+    mentorBoardId: number,
     boardData: Partial<CreateMentorBoardDto>,
   ): Promise<MentorBoard | undefined> {
     const existingBoard =
-      await this.mentorBoardRepository.findBoardById(boardId);
+      await this.mentorBoardRepository.findBoardById(mentorBoardId);
     for (const key in boardData) {
       if (boardData.hasOwnProperty(key)) {
         existingBoard[key] = boardData[key];
       }
     }
     const updatedBoard = await this.mentorBoardRepository.updateBoard(
-      boardId,
+      mentorBoardId,
       existingBoard,
     );
     return updatedBoard;
   }
 
-  async deleteBoard(boardId: number, userId: number): Promise<void> {
-    const board = await this.mentorBoardRepository.findBoardById(boardId);
+  async deleteBoard(mentorBoardId: number, userId: number): Promise<void> {
+    const board = await this.mentorBoardRepository.findBoardById(mentorBoardId);
 
     if (!board) {
       throw new Error('존재하지 않는 게시물입니다.');

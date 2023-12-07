@@ -8,7 +8,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { MentorBoardsService } from '../services/mentor.board.service';
+import { MentorBoardService } from '../services/mentor.board.service';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { BoardResponseDTO } from '../dto/boards.response.dto';
@@ -25,7 +25,7 @@ import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 @Controller('mentorBoard')
 @ApiTags('mentorBoard API')
 export class MentorBoardController {
-  constructor(private readonly mentorBoardsService: MentorBoardsService) {}
+  constructor(private readonly mentorBoardService: MentorBoardService) {}
 
   @Post('')
   @UseGuards(JwtAccessTokenGuard)
@@ -34,7 +34,7 @@ export class MentorBoardController {
     @GetUserId() userId: number,
     @Body() createMentorBoardDto: CreateMentorBoardDto,
   ): Promise<MentorBoard> {
-    return await this.mentorBoardsService.create(createMentorBoardDto, userId);
+    return await this.mentorBoardService.create(createMentorBoardDto, userId);
   }
 
   @Get('')
@@ -43,35 +43,41 @@ export class MentorBoardController {
     @Query('page') page = 1,
     @Query('limit') limit = 30,
   ): Promise<{ data: BoardResponseDTO[]; total: number }> {
-    return await this.mentorBoardsService.findPagedBoards(page, limit);
+    return await this.mentorBoardService.findPagedBoards(page, limit);
   }
 
   @Get('/unit') //하나의 게시판 불러오기
   @UseGuards(JwtOptionalGuard)
   @ApiGetOneBoard()
   async findOne(
-    @Query('boardId') boardId: number,
+    @Query('mentorBoardId') mentorBoardId: number,
     @GetUserId() userId: number,
   ): Promise<BoardResponseDTO> {
-    return await this.mentorBoardsService.findOneBoard(boardId, userId);
+    return await this.mentorBoardService.findOneMentorBoard(
+      mentorBoardId,
+      userId,
+    );
   }
 
   @Patch('')
   @ApiUpdateBoard()
   async editBoard(
-    @Query('boardId') boardId: number,
+    @Query('mentorBoardId') mentorBoardId: number,
     @Body() boardData: Partial<MentorBoard>,
   ): Promise<MentorBoard> {
-    return await this.mentorBoardsService.updateMentorBoard(boardId, boardData);
+    return await this.mentorBoardService.updateMentorBoard(
+      mentorBoardId,
+      boardData,
+    );
   }
 
   @Delete('')
   @UseGuards(JwtAccessTokenGuard)
   @ApiDeleteBoard()
   async deleteBoard(
-    @Query('boardId') boardId: number,
+    @Query('mentorBoardId') mentorBoardId: number,
     @GetUserId() userId: number,
   ) {
-    await this.mentorBoardsService.deleteBoard(boardId, userId);
+    await this.mentorBoardService.deleteBoard(mentorBoardId, userId);
   }
 }

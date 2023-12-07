@@ -36,7 +36,8 @@ export class HelpMeBoardService {
           body: board.body.substring(0, 30),
           createdAt: board.createdAt,
           updatedAt: board.updatedAt,
-          userId: {
+          category: board.categoryId,
+          user: {
             name: board.user.name,
             userImage: board.user.userImage ? board.user.userImage : [],
           },
@@ -66,7 +67,8 @@ export class HelpMeBoardService {
       body: board.body,
       createdAt: board.createdAt,
       updatedAt: board.updatedAt,
-      userId: {
+      category: board.categoryId,
+      user: {
         name: board.user.name,
         userImage: board.user.userImage ? board.user.userImage : [],
       },

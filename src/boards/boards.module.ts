@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { HelpMeBoardController } from './controllers/help.me.boards.controller';
 import { MentorBoardController } from './controllers/mentor.board.controller';
 import { HelpMeBoardService } from './services/help.me.board.service';
-import { MentorBoardsService } from './services/mentor.board.service';
+import { MentorBoardService } from './services/mentor.board.service';
 import { HelpMeBoard } from './entities/help-me-board.entity';
 import { BoardImagesService } from './services/BoardImage.service';
 import { S3Service } from 'src/common/s3/s3.service';
@@ -22,12 +22,10 @@ import { HelpMeBoardImage } from './entities/help-me-board-image.entity';
   controllers: [MentorBoardController, HelpMeBoardController],
   providers: [
     HelpMeBoardService,
-    MentorBoardsService,
+    MentorBoardService,
     BoardImagesService,
     S3Service,
     TokenService,
-    HelpMeBoardService,
-    MentorBoardsService,
     BoardImageRepository,
     HelpMeBoardRepository,
     MentorBoardRepository,

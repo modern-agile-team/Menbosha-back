@@ -25,7 +25,7 @@ export class MentorBoardRepository {
 
   async findPagedBoards(skip: number, limit: number): Promise<MentorBoard[]> {
     return await this.entityManager.find(MentorBoard, {
-      relations: ['user', 'user.userImage', 'boardImages'],
+      relations: ['user', 'user.userImage'],
       skip: skip,
       take: limit,
     });
@@ -33,7 +33,7 @@ export class MentorBoardRepository {
 
   async findBoardById(id: number): Promise<MentorBoard> {
     return await this.entityManager.findOne(MentorBoard, {
-      relations: ['user', 'user.userImage', 'boardImages'],
+      relations: ['user', 'user.userImage'],
       where: { id },
     });
   }
@@ -50,7 +50,7 @@ export class MentorBoardRepository {
     boardData: Partial<CreateMentorBoardDto>,
   ): Promise<MentorBoard> {
     const existingBoard = await this.entityManager.findOne(MentorBoard, {
-      relations: ['user', 'user.userImage', 'boardImages'],
+      relations: ['user', 'user.userImage'],
       where: { id },
     });
     for (const key in boardData) {
