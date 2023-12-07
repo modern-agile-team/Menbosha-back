@@ -31,7 +31,7 @@ import { ExceptionsModule } from './http-exceptions/exceptions.module';
       isGlobal: true,
       envFilePath: '.env', // .env 파일 경로 설정
     }),
-    MongooseModule.forRoot(process.env.DB_URI),
+    MongooseModule.forRoot(process.env.MONGO_URI),
     ScheduleModule.forRoot(),
     ChatModule,
     S3Module,
