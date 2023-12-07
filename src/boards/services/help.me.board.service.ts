@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BoardRepository } from '../repository/boards.repository';
+import { BoardRepository } from '../repository/mentor.boards.repository';
 import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { BoardResponseDTO } from '../dto/boards.response.dto';

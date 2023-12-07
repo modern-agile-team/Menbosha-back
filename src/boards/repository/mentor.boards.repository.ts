@@ -4,7 +4,7 @@ import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class BoardRepository {
+export class MentorBoardRepository {
   constructor(private readonly entityManager: EntityManager) {}
 
   async createBoard(

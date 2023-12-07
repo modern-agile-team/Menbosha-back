@@ -6,7 +6,7 @@ import { HelpMeBoard } from './entities/help-me-board.entity';
 import { BoardImagesService } from './services/BoardImage.service';
 import { S3Service } from 'src/common/s3/s3.service';
 import { MentorBoard } from './entities/mentor-board.entity';
-import { BoardRepository } from './repository/boards.repository';
+import { BoardRepository } from './repository/mentor.boards.repository';
 import { BoardImageRepository } from './repository/boardImage.repository';
 import { TokenService } from 'src/auth/services/token.service';
 import { TokenRepository } from 'src/auth/repositories/token.repository';

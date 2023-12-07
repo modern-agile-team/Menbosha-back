@@ -8,7 +8,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { BoardsService } from '../services/mentor.board.service';
+import { MentorBoardsService } from '../services/mentor.board.service';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { BoardResponseDTO } from '../dto/boards.response.dto';
@@ -25,7 +25,7 @@ import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 @Controller('mentorBoard')
 @ApiTags('mentorBoard API')
 export class MentorBoardsController {
-  constructor(private readonly mentorBoardsService: BoardsService) {}
+  constructor(private readonly mentorBoardsService: MentorBoardsService) {}
 
   @Post('')
   @UseGuards(JwtAccessTokenGuard)
@@ -62,7 +62,7 @@ export class MentorBoardsController {
     @Query('boardId') boardId: number,
     @Body() boardData: Partial<MentorBoard>,
   ): Promise<MentorBoard> {
-    return await this.mentorBoardsService.updateBoard(boardId, boardData);
+    return await this.mentorBoardsService.updateMentorBoard(boardId, boardData);
   }
 
   @Delete('')
