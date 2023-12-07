@@ -4,61 +4,100 @@ import { UserRepository } from 'src/users/repositories/user.repository';
 import * as dotenv from 'dotenv';
 import { UserImageRepository } from 'src/users/repositories/user-image.repository';
 import axios from 'axios';
+import { AuthServiceInterface } from '../interfaces/auth-service.interface';
 
 dotenv.config();
 
 @Injectable()
-export class AuthService {
+export class AuthService implements AuthServiceInterface {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly userImageRepository: UserImageRepository,
     private readonly tokenService: TokenService,
   ) {}
 
-  async naverLogin(authorizeCode: string) {
+  async login(authorizeCode: string, provider: string) {
     try {
-      const naverTokenUrl = 'https://nid.naver.com/oauth2.0/token';
-      const naverTokenHeader = {
-        headers: {
-          'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-        },
-      };
-      const naverTokenBody = {
-        grant_type: 'authorization_code',
-        client_id: process.env.NAVER_CLIENT_ID,
-        client_secret: process.env.NAVER_CLIENT_SECRET,
-        code: authorizeCode,
-        state: 'test',
-        redirect_uri: process.env.NAVER_CALLBACK_URL,
-      };
+      let tokenUrl: string,
+        tokenHeader: object,
+        tokenBody: object,
+        userInfoUrl: string,
+        userInfoHeader: object;
 
-      const naverToken = (
-        await axios.post(naverTokenUrl, naverTokenBody, naverTokenHeader)
-      ).data;
+      if (provider === 'naver') {
+        // 네이버 로그인 인가코드 발급
+        tokenUrl = 'https://nid.naver.com/oauth2.0/token';
+        tokenHeader = {
+          headers: {
+            'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+          },
+        };
+        tokenBody = {
+          grant_type: 'authorization_code',
+          client_id: process.env.NAVER_CLIENT_ID,
+          client_secret: process.env.NAVER_CLIENT_SECRET,
+          code: authorizeCode,
+          state: 'test',
+          redirect_uri: process.env.NAVER_CALLBACK_URL,
+        };
+      } else if (provider === 'kakao') {
+        // 카카오 로그인 인가코드 발급
+        tokenUrl = 'https://kauth.kakao.com/oauth/token';
+        tokenHeader = {
+          headers: {
+            'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+          },
+        };
+        tokenBody = {
+          grant_type: 'authorization_code',
+          client_id: process.env.KAKAO_CLIENT_ID,
+          redirect_uri: process.env.KAKAO_CALLBACK_URL,
+          code: authorizeCode,
+        };
+      }
 
-      const naverAccessToken = naverToken.access_token;
-      const naverRefreshToken = naverToken.refresh_token;
+      const token = (await axios.post(tokenUrl, tokenBody, tokenHeader)).data;
+      const socialAccessToken = token.access_token;
+      const socialRefreshToken = token.refresh_token;
 
-      const naverUserInfoUrl = 'https://openapi.naver.com/v1/nid/me';
-      const naverUserInfoHeader = {
-        headers: {
-          Authorization: `Bearer ${naverAccessToken}`,
-        },
-      };
+      if (provider === 'naver') {
+        // 네이버 로그인 사용자 정보 조회
+        userInfoUrl = 'https://openapi.naver.com/v1/nid/me';
+        userInfoHeader = {
+          headers: {
+            Authorization: `Bearer ${socialAccessToken}`,
+          },
+        };
+      } else if (provider === 'kakao') {
+        // 카카오 로그인 사용자 정보 조회
+        userInfoUrl = 'https://kapi.kakao.com/v2/user/me';
+        userInfoHeader = {
+          headers: {
+            Authorization: `Bearer ${socialAccessToken}`,
+            'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+          },
+        };
+      }
 
-      const naverUserInfo = (
-        await axios.get(naverUserInfoUrl, naverUserInfoHeader)
-      ).data;
-      const nickname = naverUserInfo.response.nickname;
-      const email = naverUserInfo.response.email;
-      const profileImage = naverUserInfo.response.profile_image;
-      const gender = naverUserInfo.response.gender;
-      const provider = 'naver';
+      const SocialuserInfo = (await axios.get(userInfoUrl, userInfoHeader))
+        .data;
+      const nickname =
+        provider === 'naver'
+          ? SocialuserInfo.response.nickname // 네이버 닉네임
+          : SocialuserInfo.properties.nickname; // 카카오 닉네임
+      const email =
+        provider === 'naver'
+          ? SocialuserInfo.response.email // 네이버 이메일
+          : SocialuserInfo.kakao_account.email; // 카카오 이메일
+      const profileImage =
+        provider === 'naver'
+          ? SocialuserInfo.response.profile_image // 네이버 프로필 이미지
+          : SocialuserInfo.properties.profile_image; // 카카오 프로필 이미지
+
       const userInfo = {
         provider,
         nickname,
         email,
-        gender,
       };
 
       const checkUser = await this.userRepository.findUser(email, provider);
@@ -79,7 +118,11 @@ export class AuthService {
           await this.userImageRepository.updateUserImage(userId, profileImage); // DB에 이미지 URL 업데이트
         }
 
-        return { userId, naverAccessToken, naverRefreshToken };
+        return {
+          userId,
+          accessToken: socialAccessToken,
+          refreshToken: socialRefreshToken,
+        };
       } else {
         // 존재하지 않는 사용자인 경우
         const newUser = await this.userRepository.createUser(userInfo);
@@ -92,7 +135,11 @@ export class AuthService {
         } else {
           await this.userImageRepository.uploadUserImage(userId, profileImage);
         }
-        return { userId, naverAccessToken, naverRefreshToken };
+        return {
+          userId,
+          socialAccessToken,
+          socialRefreshToken,
+        };
       }
     } catch (error) {
       if (error.response.status == 401) {
@@ -104,98 +151,7 @@ export class AuthService {
     }
   }
 
-  async kakaoLogin(authorizeCode: string) {
-    try {
-      const kakaoTokenUrl = 'https://kauth.kakao.com/oauth/token';
-      const kakaoTokenHeader = {
-        headers: {
-          'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-        },
-      };
-      const kakaoTokenBody = {
-        grant_type: 'authorization_code',
-        client_id: process.env.KAKAO_CLIENT_ID,
-        redirect_uri: process.env.KAKAO_CALLBACK_URL,
-        code: authorizeCode,
-      };
-
-      const kakaoToken = (
-        await axios.post(kakaoTokenUrl, kakaoTokenBody, kakaoTokenHeader)
-      ).data;
-      const kakaoAccessToken = kakaoToken.access_token;
-      const kakaoRefreshToken = kakaoToken.refresh_token;
-
-      const kakaoUserInfoUrl = 'https://kapi.kakao.com/v2/user/me';
-      const kakaoUserInfoHeader = {
-        headers: {
-          Authorization: `Bearer ${kakaoAccessToken}`,
-          'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-        },
-      };
-
-      const kakaoUserInfo = (
-        await axios.get(kakaoUserInfoUrl, kakaoUserInfoHeader)
-      ).data;
-      const nickname = kakaoUserInfo.properties.nickname;
-      const email = kakaoUserInfo.kakao_account.email;
-      const profileImage = kakaoUserInfo.properties.profile_image;
-      const gender = kakaoUserInfo.kakao_account.gender == 'male' ? 'M' : 'F';
-      const provider = 'kakao';
-      const userInfo = {
-        provider,
-        nickname,
-        email,
-        gender,
-      };
-
-      const checkUser = await this.userRepository.findUser(email, provider);
-      if (checkUser) {
-        // 이미 존재하는 사용자인 경우
-        const userId = checkUser.id;
-
-        await this.userRepository.updateUserName(userId, nickname); // 이름 업데이트
-
-        const userImage = (
-          await this.userImageRepository.checkUserImage(userId)
-        ).imageUrl; // DB 이미지
-        const imageUrlParts = userImage.split('/');
-        const dbImageProvider = imageUrlParts[imageUrlParts.length - 2]; // 이미지 제공자 이름
-
-        if (dbImageProvider != 'ma6-main.s3.ap-northeast-2.amazonaws.com') {
-          // S3에 업로드된 이미지가 아닌 경우
-          await this.userImageRepository.updateUserImage(userId, profileImage); // DB에 이미지 URL 업데이트
-        }
-
-        return { userId, kakaoAccessToken, kakaoRefreshToken };
-      } else {
-        // 존재하지 않는 사용자인 경우
-        const newUser = await this.userRepository.createUser(userInfo);
-        const userId = newUser.id;
-        if (!profileImage) {
-          await this.userImageRepository.uploadUserImage(
-            userId,
-            process.env.DEFAULT_USER_IMAGE,
-          );
-        } else {
-          await this.userImageRepository.uploadUserImage(userId, profileImage);
-        }
-        return { userId, kakaoAccessToken, kakaoRefreshToken };
-      }
-    } catch (error) {
-      if (error.response.status == 400) {
-        throw new HttpException(
-          '유효하지 않은 인가코드입니다.',
-          HttpStatus.UNAUTHORIZED,
-        );
-      } else {
-        console.log(error);
-        throw new HttpException(
-          '카카오 로그인 중 오류가 발생했습니다.',
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      }
-    }
-  }
+  async unlink(accessToken: string, refreshToken: string, provider: string) {}
 
   async kakaoLogout(accessToken: string, refreshToken: string) {
     try {

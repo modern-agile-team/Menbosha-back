@@ -40,16 +40,16 @@ export class AuthController {
       throw new BadRequestException('인가코드가 없습니다.');
     }
 
-    const { userId, naverAccessToken, naverRefreshToken } =
-      await this.authService.naverLogin(code);
+    const { userId, socialAccessToken, socialRefreshToken } =
+      await this.authService.login(code, 'naver');
     const accessToken = await this.tokenService.createAccessToken(userId);
     const refreshToken = await this.tokenService.createRefreshToken(userId);
 
     await this.tokenService.saveTokens(
       userId,
       refreshToken,
-      naverAccessToken,
-      naverRefreshToken,
+      socialAccessToken,
+      socialRefreshToken,
     );
 
     res.cookie('refresh_token', refreshToken, {
@@ -69,16 +69,16 @@ export class AuthController {
       throw new BadRequestException('인가코드가 없습니다.');
     }
 
-    const { userId, kakaoAccessToken, kakaoRefreshToken } =
-      await this.authService.kakaoLogin(code);
+    const { userId, socialAccessToken, socialRefreshToken } =
+      await this.authService.login(code, 'kakao');
     const accessToken = await this.tokenService.createAccessToken(userId);
     const refreshToken = await this.tokenService.createRefreshToken(userId);
 
     await this.tokenService.saveTokens(
       userId,
       refreshToken,
-      kakaoAccessToken,
-      kakaoRefreshToken,
+      socialAccessToken,
+      socialRefreshToken,
     );
 
     res.cookie('refresh_Token', refreshToken, {
