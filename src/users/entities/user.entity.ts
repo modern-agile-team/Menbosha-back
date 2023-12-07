@@ -6,7 +6,7 @@ import {
   OneToMany,
   OneToOne,
   Index,
-  ManyToOne,
+  ManyToMany,
 } from 'typeorm';
 import { UserImage } from './user-image.entity';
 import { Token } from 'src/auth/entities/token.entity';
@@ -74,11 +74,7 @@ export class User {
   })
   token: Token;
 
-  @ManyToOne(() => CategoryList, (categoryList) => categoryList.hopeUser)
-  @JoinColumn({ name: 'hope_category_list_id' })
-  hopeCategoryList: CategoryList;
-
-  @ManyToOne(() => CategoryList, (categoryList) => categoryList.activityUser)
-  @JoinColumn({ name: 'activity_category_list_id' })
-  activityCategoryList: CategoryList;
+  @ManyToMany(() => CategoryList, (categoryList) => categoryList.user)
+  @JoinColumn({ name: 'category_id' })
+  categoryList: CategoryList;
 }

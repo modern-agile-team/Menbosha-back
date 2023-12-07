@@ -3,6 +3,7 @@ import {
   Entity,
   JoinColumn,
   OneToMany,
+  ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
@@ -17,13 +18,9 @@ export class CategoryList {
   @Column({ name: 'category_name' })
   categoryName: string;
 
-  @OneToMany(() => User, (user) => user.hopeCategoryList)
+  @ManyToMany(() => User, (user) => user.categoryList)
   @JoinColumn({ name: 'user_id' })
-  hopeUser: User;
-
-  @OneToMany(() => User, (user) => user.activityCategoryList)
-  @JoinColumn({ name: 'user_id' })
-  activityUser: User;
+  user: User;
 
   @OneToMany(() => HelpMeBoard, (helpMeBoard) => helpMeBoard.categoryList)
   @JoinColumn({ name: 'help_me_board_id' })
