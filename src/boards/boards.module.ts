@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BoardsController } from './controllers/Boards.controller';
-import { BoardsService } from './services/Boards.service';
+import { BoardsController } from './controllers/mentor.boards.controller';
+import { BoardsService } from './services/mentor.board.service';
 import { HelpMeBoard } from './entities/help-me-board.entity';
 import { BoardImagesService } from './services/BoardImage.service';
 import { S3Service } from 'src/common/s3/s3.service';

@@ -10,7 +10,7 @@ import {
   UploadedFiles,
   UseGuards,
 } from '@nestjs/common';
-import { BoardsService } from '../services/Boards.service';
+import { BoardsService } from '../services/mentor.board.service';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { BoardImagesService } from '../services/BoardImage.service';
