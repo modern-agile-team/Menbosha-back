@@ -10,7 +10,7 @@ import {
   UploadedFiles,
   UseGuards,
 } from '@nestjs/common';
-import { BoardsService } from '../services/Boards.service';
+import { HelpMeBoardService } from '../services/help.me.board.service';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { BoardImagesService } from '../services/BoardImage.service';
@@ -31,9 +31,9 @@ import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 
 @Controller('boards')
 @ApiTags('board API')
-export class BoardsController {
+export class HelpMeBoardController {
   constructor(
-    private readonly boardsService: BoardsService,
+    private readonly helpMeBoardService: HelpMeBoardService,
     private readonly boardImagesService: BoardImagesService,
   ) {}
 
@@ -44,7 +44,7 @@ export class BoardsController {
     @GetUserId() userId: number,
     @Body() createMentorBoardDto: CreateMentorBoardDto,
   ): Promise<MentorBoard> {
-    return await this.boardsService.create(createMentorBoardDto, userId);
+    return await this.helpMeBoardService.create(createMentorBoardDto, userId);
   }
 
   @Post('/images')
@@ -69,7 +69,7 @@ export class BoardsController {
     @Query('page') page = 1,
     @Query('limit') limit = 30,
   ): Promise<{ data: BoardResponseDTO[]; total: number }> {
-    return await this.boardsService.findPagedBoards(page, limit);
+    return await this.helpMeBoardService.findPagedBoards(page, limit);
   }
 
   @Get('/unit') //하나의 게시판 불러오기
@@ -79,7 +79,7 @@ export class BoardsController {
     @Query('boardId') boardId: number,
     @GetUserId() userId: number,
   ): Promise<BoardResponseDTO> {
-    return await this.boardsService.findOneBoard(boardId, userId);
+    return await this.helpMeBoardService.findOneBoard(boardId, userId);
   }
 
   @Patch('')
@@ -88,7 +88,7 @@ export class BoardsController {
     @Query('boardId') boardId: number,
     @Body() boardData: Partial<MentorBoard>,
   ): Promise<MentorBoard> {
-    return await this.boardsService.updateBoard(boardId, boardData);
+    return await this.helpMeBoardService.updateBoard(boardId, boardData);
   }
 
   @Patch('/images')
@@ -116,6 +116,6 @@ export class BoardsController {
     @Query('boardId') boardId: number,
     @GetUserId() userId: number,
   ) {
-    await this.boardsService.deleteBoard(boardId, userId);
+    await this.helpMeBoardService.deleteBoard(boardId, userId);
   }
 }

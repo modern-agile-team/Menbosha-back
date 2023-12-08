@@ -4,7 +4,7 @@ import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class BoardRepository {
+export class MentorBoardRepository {
   constructor(private readonly entityManager: EntityManager) {}
 
   async createBoard(
@@ -16,7 +16,7 @@ export class BoardRepository {
     mentorBoard.body = boardData.body;
     mentorBoard.categoryId = boardData.categoryId;
     mentorBoard.userId = userId;
-    return await this.entityManager.save(MentorBoard, mentorBoard);
+    return await this.entityManager.save(MentorBoard, mentorBoard); //이 부분 return은 dto로 수정하기
   }
 
   async findTotalBoards(): Promise<number> {
@@ -25,7 +25,7 @@ export class BoardRepository {
 
   async findPagedBoards(skip: number, limit: number): Promise<MentorBoard[]> {
     return await this.entityManager.find(MentorBoard, {
-      relations: ['user', 'user.userImage', 'boardImages'],
+      relations: ['user', 'user.userImage'],
       skip: skip,
       take: limit,
     });
@@ -33,7 +33,7 @@ export class BoardRepository {
 
   async findBoardById(id: number): Promise<MentorBoard> {
     return await this.entityManager.findOne(MentorBoard, {
-      relations: ['user', 'user.userImage', 'boardImages'],
+      relations: ['user', 'user.userImage'],
       where: { id },
     });
   }
@@ -50,7 +50,7 @@ export class BoardRepository {
     boardData: Partial<CreateMentorBoardDto>,
   ): Promise<MentorBoard> {
     const existingBoard = await this.entityManager.findOne(MentorBoard, {
-      relations: ['user', 'user.userImage', 'boardImages'],
+      relations: ['user', 'user.userImage'],
       where: { id },
     });
     for (const key in boardData) {

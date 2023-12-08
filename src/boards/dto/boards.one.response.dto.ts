@@ -7,14 +7,9 @@ export class oneBoardResponseDTO {
   createdAt: Date;
   updatedAt: Date;
   unitowner: true | false;
-  userId: {
-    // id: number;
+  category: number;
+  user: {
     name: string;
     userImage: UserImage | UserImage[];
   };
-
-  // boardImages: {
-  //   id: number;
-  //   imageUrl: string;
-  // }[];
 }

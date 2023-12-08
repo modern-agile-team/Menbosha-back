@@ -6,13 +6,9 @@ export class BoardResponseDTO {
   body: string;
   createdAt: Date;
   updatedAt: Date;
-  userId: {
+  category: number;
+  user: {
     name: string;
     userImage: UserImage | UserImage[];
   };
-
-  // boardImages: {
-  //   id: number;
-  //   imageUrl: string;
-  // }[];
 }
