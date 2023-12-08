@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
 import { IsNumber } from 'class-validator';
+import { Types } from 'mongoose';
 
 const options: SchemaOptions = {
   collection: 'ChatRoom',
@@ -8,6 +9,9 @@ const options: SchemaOptions = {
 
 @Schema(options)
 export class ChatRoom {
+  @Prop({ type: Types.ObjectId })
+  _id: Types.ObjectId;
+
   @IsNumber()
   @Prop({ required: true })
   host_id: number;
