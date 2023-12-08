@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { MentorBoardRepository } from '../repository/mentor.boards.repository';
 import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { MentorBoard } from '../entities/mentor-board.entity';
