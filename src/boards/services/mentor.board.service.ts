@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { MentorBoardRepository } from '../repository/mentor.boards.repository';
 import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { MentorBoard } from '../entities/mentor-board.entity';
@@ -55,6 +59,9 @@ export class MentorBoardService {
     const mentorBoard =
       await this.mentorBoardRepository.findBoardById(mentorBoardId);
     const unitowner = mentorBoard.userId === userId;
+    console.log(userId);
+    console.log(mentorBoard.userId);
+
     if (!mentorBoard) {
       throw new Error('게시물을 찾을 수 없습니다.');
     }

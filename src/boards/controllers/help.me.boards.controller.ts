@@ -20,7 +20,7 @@ import { CreateBoardImageDto } from '../dto/create.board-image.dto';
 import { ApiUploadBoardImages } from '../swagger-decorators/upload-baord-images-decorator';
 import { ApiAddBoard } from '../swagger-decorators/add-board-decorators';
 import { ApiGetPageBoards } from '../swagger-decorators/get-page-boards-decorators';
-import { ApiGetOneBoard } from '../swagger-decorators/get-one-board-decorators';
+import { ApiGetOneMentorBoard } from '../swagger-decorators/get-one-mentor-board-decorators';
 import { ApiUpdateBoard } from '../swagger-decorators/patch-board-decorators';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiDeleteBoard } from '../swagger-decorators/delete-board-decorators';
@@ -69,12 +69,12 @@ export class HelpMeBoardController {
     @Query('page') page = 1,
     @Query('limit') limit = 30,
   ): Promise<{ data: BoardResponseDTO[]; total: number }> {
-    return await this.helpMeBoardService.findPagedBoards(page, limit);
+    return await this.helpMeBoardService.findPagedBoards(page, limit); //여기서 await 안걸고 넘겨도, 서비스딴에서 await 걸려서 넘어옴. async 쓸필요 x
   }
 
   @Get('/unit') //하나의 게시판 불러오기
   @UseGuards(JwtOptionalGuard)
-  @ApiGetOneBoard()
+  @ApiGetOneMentorBoard()
   async findOne(
     @Query('boardId') boardId: number,
     @GetUserId() userId: number,

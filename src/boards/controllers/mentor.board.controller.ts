@@ -14,7 +14,7 @@ import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { BoardResponseDTO } from '../dto/boards.response.dto';
 import { ApiAddBoard } from '../swagger-decorators/add-board-decorators';
 import { ApiGetPageBoards } from '../swagger-decorators/get-page-boards-decorators';
-import { ApiGetOneBoard } from '../swagger-decorators/get-one-board-decorators';
+import { ApiGetOneMentorBoard } from '../swagger-decorators/get-one-mentor-board-decorators';
 import { ApiUpdateBoard } from '../swagger-decorators/patch-board-decorators';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiDeleteBoard } from '../swagger-decorators/delete-board-decorators';
@@ -30,14 +30,14 @@ export class MentorBoardController {
   @Post('')
   @UseGuards(JwtAccessTokenGuard)
   @ApiAddBoard()
-  async create(
+  create(
     @GetUserId() userId: number,
     @Body() createMentorBoardDto: CreateMentorBoardDto,
   ): Promise<MentorBoard> {
-    return await this.mentorBoardService.create(createMentorBoardDto, userId);
+    return this.mentorBoardService.create(createMentorBoardDto, userId);
   }
 
-  @Get('')
+  @Get('') // 이부분은 아직 프론트랑 상의중입니다
   @ApiGetPageBoards()
   async findPageBoards(
     @Query('page') page = 1,
@@ -48,36 +48,30 @@ export class MentorBoardController {
 
   @Get('/unit') //하나의 게시판 불러오기
   @UseGuards(JwtOptionalGuard)
-  @ApiGetOneBoard()
-  async findOne(
+  @ApiGetOneMentorBoard()
+  findOne(
     @Query('mentorBoardId') mentorBoardId: number,
     @GetUserId() userId: number,
   ): Promise<BoardResponseDTO> {
-    return await this.mentorBoardService.findOneMentorBoard(
-      mentorBoardId,
-      userId,
-    );
+    return this.mentorBoardService.findOneMentorBoard(mentorBoardId, userId);
   }
 
   @Patch('')
   @ApiUpdateBoard()
-  async editBoard(
+  editBoard(
     @Query('mentorBoardId') mentorBoardId: number,
     @Body() boardData: Partial<MentorBoard>,
   ): Promise<MentorBoard> {
-    return await this.mentorBoardService.updateMentorBoard(
-      mentorBoardId,
-      boardData,
-    );
+    return this.mentorBoardService.updateMentorBoard(mentorBoardId, boardData);
   }
 
   @Delete('')
   @UseGuards(JwtAccessTokenGuard)
   @ApiDeleteBoard()
-  async deleteBoard(
+  deleteBoard(
     @Query('mentorBoardId') mentorBoardId: number,
     @GetUserId() userId: number,
   ) {
-    await this.mentorBoardService.deleteBoard(mentorBoardId, userId);
+    this.mentorBoardService.deleteBoard(mentorBoardId, userId);
   }
 }
