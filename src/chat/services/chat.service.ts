@@ -17,9 +17,8 @@ import { User } from 'src/users/entities/user.entity';
 import { EntityManager } from 'typeorm';
 import { GetNotificationsResponseFromChatDto } from '../dto/get-notifications-response-from-chat.dto';
 import { UserService } from 'src/users/services/user.service';
-import { ChatDto } from '../dto/chat.dto';
 import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
-import { ChatRoomDto } from '../dto/chat-room.dto';
+import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
 
 @Injectable()
 export class ChatService {
@@ -45,7 +44,7 @@ export class ChatService {
       }),
     );
   }
-  async getChatRooms(myId: number) {
+  getChatRooms(myId: number) {
     return this.chatRepository.getChatRooms(myId);
   }
 
@@ -238,14 +237,16 @@ export class ChatService {
     return Object.values(groupedNotifications);
   }
 
-  async getChatRoomsWithUserAndChat(myId: number) {
+  async getChatRoomsWithUserAndChat(
+    myId: number,
+  ): Promise<ResponseGetChatRoomsDto[]> {
     const returnedChatRooms = await this.chatRepository.getChatRooms(myId);
 
     if (!returnedChatRooms.length) {
       return null;
     }
 
-    const mapChat = await Promise.all(
+    const responseChatRooms = await Promise.all(
       returnedChatRooms.map(async (chatRooms) => {
         const targetUser =
           chatRooms.host_id === myId
@@ -258,29 +259,12 @@ export class ChatService {
           return null;
         }
 
-        const dtoUser = new ChatUserDto(targetUser);
-        const dtoChat: ChatDto = new ChatDto(returnedChat);
-        return new ChatRoomDto(dtoChat, dtoUser, myId);
-        // chatroom_id: returnedChat.chatroom_id,
-        // content: returnedChat.content,
-        // isSeen: returnedChat.isSeen,
-        // created_at: returnedChat.created_at,
+        const chatUserDto = new ChatUserDto(targetUser);
+        return new ResponseGetChatRoomsDto(returnedChat, chatUserDto, myId);
       }),
     );
 
-    // console.log(dtoUser);
-
-    return mapChat.filter((chat) => chat !== null);
-
-    // const finalDto = {};
-    // // for (const index of filterChat) {
-    // //   finalDto += index;
-    // // }
-
-    // // const testChat = Object.values(new ChatDto(filterChat));
-    // console.log(filterChat);
-
-    // console.log(filterChat);
+    return responseChatRooms.filter((chat) => chat !== null);
   }
 
   // async getUnreadCounts(roomId: mongoose.Types.ObjectId, after: number) {

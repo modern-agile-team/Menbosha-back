@@ -17,8 +17,7 @@ import * as cookieParser from 'cookie-parser';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const logger = new Logger();
-  // app.useGlobalPipes(new ValidationPipe());
-  // app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalPipes(new ValidationPipe());
   app.enableCors({
     origin: true, // 또는 특정 도메인을 설정
     methods: 'GET ,HEAD, PUT, PATCH, POST, DELETE',

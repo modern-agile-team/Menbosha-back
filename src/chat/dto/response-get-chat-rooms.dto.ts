@@ -1,17 +1,18 @@
-import { Types } from 'mongoose';
-import { Chat } from '../schemas/chat.schemas';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsBoolean,
   IsDate,
   IsMongoId,
-  IsNumber,
   IsOptional,
   IsString,
 } from 'class-validator';
+import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
+import { ChatDto } from './chat.dto';
+import { Exclude } from 'class-transformer';
+import { Types } from 'mongoose';
 import { TransformMongoId } from './transform/transform-mongo-id';
 
-export class ChatDto implements Partial<Chat> {
+export class ResponseGetChatRoomsDto implements Partial<ChatDto> {
   @ApiProperty({
     description: '채팅 방 id',
     type: 'string',
@@ -27,16 +28,10 @@ export class ChatDto implements Partial<Chat> {
   @IsString()
   content: string;
 
-  @ApiProperty({
-    description: '채팅을 전송한 유저의 id',
-  })
-  @IsNumber()
+  @Exclude()
   sender: number;
 
-  @ApiProperty({
-    description: '채팅을 받은 유저의 id',
-  })
-  @IsNumber()
+  @Exclude()
   receiver: number;
 
   @ApiProperty({
@@ -52,12 +47,32 @@ export class ChatDto implements Partial<Chat> {
   @IsOptional()
   createdAt?: Date;
 
-  constructor(chatDto: Partial<ChatDto>) {
+  @ApiPropertyOptional({
+    description: '상대 유저의 정보(guest_id)',
+  })
+  @IsOptional()
+  host?: ChatUserDto;
+
+  @ApiPropertyOptional({
+    description: '상대 유저의 정보(host_id)',
+  })
+  @IsOptional()
+  guest?: ChatUserDto;
+
+  constructor(
+    chatDto: Partial<ChatDto> = {},
+    chatUserDto: ChatUserDto,
+    myId: number,
+  ) {
     this.chatroom_id = chatDto.chatroom_id;
     this.content = chatDto.content;
-    this.sender = chatDto.sender;
-    this.receiver = chatDto.receiver;
     this.isSeen = chatDto.isSeen;
     this.createdAt = chatDto.createdAt;
+
+    chatDto.sender === myId
+      ? (this.host = chatUserDto)
+      : (this.guest = chatUserDto);
+
+    Object.seal(this);
   }
 }

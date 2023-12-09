@@ -1,42 +1,33 @@
-import { Types } from 'mongoose';
-import { IsMongoId, IsOptional } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
-import { ChatDto } from './chat.dto';
+import { IsDate, IsMongoId, IsNumber } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { ChatRoom } from '../schemas/chat-room.schemas';
+import { Expose } from 'class-transformer';
+import { TransformMongoId } from './transform/transform-mongo-id';
 
-export class ChatRoomDto extends ChatDto {
-  // @ApiProperty({
-  //   description: 'mongoDB objectId',
-  // })
-  // @IsMongoId()
-  // _id: Types.ObjectId;
-
-  @ApiPropertyOptional({
-    description: '상대 유저의 정보(guest_id)',
+export class ChatRoomDto implements Pick<ChatRoom, 'guest_id' | 'host_id'> {
+  @ApiProperty({
+    description: '채팅방 고유 id',
   })
-  @IsOptional()
-  host?: ChatUserDto;
+  @Expose()
+  @TransformMongoId()
+  @IsMongoId()
+  _id: string;
 
-  @ApiPropertyOptional({
-    description: '상대 유저의 정보(host_id)',
+  @ApiProperty({
+    description: '채팅방에 속한 유저의 id',
   })
-  @IsOptional()
-  guest?: ChatUserDto;
+  @Expose()
+  @IsNumber()
+  host_id: number;
 
-  // @ApiProperty({
-  //   description: '가장 마지막 채팅',
-  // })
-  // chat: ChatDto;
+  @ApiProperty({
+    description: '채팅방에 속한 유저의 id',
+  })
+  @Expose()
+  @IsNumber()
+  guest_id: number;
 
-  constructor(
-    chatDto: Partial<ChatDto> = {},
-    chatUserDto: ChatUserDto,
-    myId: number,
-  ) {
-    super(chatDto);
-    chatDto.sender === myId
-      ? (this.host = chatUserDto)
-      : (this.guest = chatUserDto);
-    Object.seal(this);
-  }
+  @Expose()
+  @IsDate()
+  createdAt: Date;
 }
