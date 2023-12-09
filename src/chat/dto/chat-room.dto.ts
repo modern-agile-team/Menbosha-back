@@ -1,9 +1,10 @@
 import { Types } from 'mongoose';
 import { ChatRoom } from '../schemas/chat-room.schemas';
-import { IsMongoId } from 'class-validator';
+import { IsMongoId, IsOptional } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
 
-export class ChatRoomDto implements Partial<ChatRoom> {
+export class ChatRoomDto implements Pick<ChatRoom, '_id'> {
   @ApiProperty({
     description: 'mongoDB objectId',
   })
@@ -11,16 +12,18 @@ export class ChatRoomDto implements Partial<ChatRoom> {
   _id: Types.ObjectId;
 
   @ApiPropertyOptional({
-    description: '상대 유저의 id(guest_id)',
+    description: '상대 유저의 정보(guest_id)',
   })
-  host_id?: Partial<UserDto>;
+  @IsOptional()
+  host?: ChatUserDto;
 
   @ApiPropertyOptional({
-    description: '상대 유저의 id(host_id)',
+    description: '상대 유저의 정보(host_id)',
   })
-  guest_id?: Partial<UserDto>;
+  @IsOptional()
+  guest?: ChatUserDto;
 
-  constructor(chatDto: Partial<ChatRoomDto>) {
+  constructor(chatDto: Partial<ChatRoomDto> = {}) {
     Object.assign(this, chatDto);
   }
 }
