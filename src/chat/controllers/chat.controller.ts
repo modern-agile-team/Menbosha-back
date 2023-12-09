@@ -1,5 +1,6 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -17,7 +18,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { ReceivedUserDto } from '../dto/received-user.dto';
 import mongoose from 'mongoose';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ParseObjectIdPipe } from '../parse-object-id.pipe';
+// import { ParseObjectIdPipe } from '../parse-object-id.pipe';
 import { ApiCreateChatRoom } from '../swagger-decorators/create-chat-room.decorator';
 import { ApiGetChatRooms } from '../swagger-decorators/get-chat-rooms.decorator';
 import { ApiGetOneChatRoom } from '../swagger-decorators/get-one-chat-room.decorator';
@@ -34,8 +35,8 @@ import { ApiCreateChatImage } from '../swagger-decorators/create-chat-image.deco
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
 
 @ApiTags('CHAT')
-@UsePipes(ValidationPipe)
-@UseInterceptors(SuccessResponseInterceptor)
+// @UsePipes(ValidationPipe)
+@UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
 @Controller('chat-room')
 export class ChatController {
   constructor(
@@ -52,80 +53,83 @@ export class ChatController {
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChatRooms()
   @Get()
-  async getChatRooms(@GetUserId() userId: number) {
+  getChatRooms(@GetUserId() userId: number) {
     return this.chatService.getChatRooms(userId);
   }
 
-  @UseGuards(JwtAccessTokenGuard)
-  @ApiGetOneChatRoom()
-  @Get(':roomId')
-  async getOneChatRoom(
-    @GetUserId() userId: number,
-    @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  ) {
-    return this.chatService.getOneChatRoom(userId, roomId);
-  }
+  // @UseGuards(JwtAccessTokenGuard)
+  // @ApiGetOneChatRoom()
+  // @Get(':roomId')
+  // getOneChatRoom(
+  //   @GetUserId() userId: number,
+  //   @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
+  // ) {
+  //   return this.chatService.getOneChatRoom(userId, roomId);
+  // }
 
-  @UseGuards(JwtAccessTokenGuard)
-  @ApiCreateChatRoom()
-  @Post()
-  async createChatRoom(
-    @GetUserId() userId: number,
-    @Body() body: ReceivedUserDto,
-  ) {
-    return this.chatService.createChatRoom(userId, body.receiverId);
-  }
+  // @UseGuards(JwtAccessTokenGuard)
+  // @ApiCreateChatRoom()
+  // @Post()
+  // createChatRoom(@GetUserId() userId: number, @Body() body: ReceivedUserDto) {
+  //   return this.chatService.createChatRoom(userId, body.receiverId);
+  // }
 
-  @UseGuards(JwtAccessTokenGuard)
-  @ApiDeleteChatRoom()
-  @Delete(':roomId')
-  async deleteChatRoom(
-    @GetUserId() userId: number,
-    @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  ) {
-    return this.chatService.deleteChatRoom(userId, roomId);
-  }
+  // @UseGuards(JwtAccessTokenGuard)
+  // @ApiDeleteChatRoom()
+  // @Delete(':roomId')
+  // deleteChatRoom(
+  //   @GetUserId() userId: number,
+  //   @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
+  // ) {
+  //   return this.chatService.deleteChatRoom(userId, roomId);
+  // }
 
-  @UseGuards(JwtAccessTokenGuard)
-  @ApiGetChats()
-  @Get(':roomId/chat')
-  async getChats(
-    @GetUserId() userId: number,
-    @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  ) {
-    return this.chatService.getChats(userId, roomId);
-  }
+  // @UseGuards(JwtAccessTokenGuard)
+  // @ApiGetChats()
+  // @Get(':roomId/chat')
+  // getChats(
+  //   @GetUserId() userId: number,
+  //   @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
+  // ) {
+  //   return this.chatService.getChats(userId, roomId);
+  // }
 
-  @UseGuards(JwtAccessTokenGuard)
-  @ApiCreateChatImage()
-  @Post(':roomId/chat/image')
-  @UseInterceptors(FileInterceptor('file'))
-  async createChatImage(
-    @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-    @GetUserId() senderId: number,
-    @Body() body: ReceivedUserDto,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    return this.chatService.createChatImage(
-      roomId,
-      senderId,
-      body.receiverId,
-      file,
-    );
-  }
+  // @UseGuards(JwtAccessTokenGuard)
+  // @ApiCreateChatImage()
+  // @Post(':roomId/chat/image')
+  // @UseInterceptors(FileInterceptor('file'))
+  // createChatImage(
+  //   @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
+  //   @GetUserId() senderId: number,
+  //   @Body() body: ReceivedUserDto,
+  //   @UploadedFile() file: Express.Multer.File,
+  // ) {
+  //   return this.chatService.createChatImage(
+  //     roomId,
+  //     senderId,
+  //     body.receiverId,
+  //     file,
+  //   );
+  // }
 
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChatNotifications()
   @Get('chat/notice')
-  async getChatNotifications(
+  getChatNotifications(
     @GetUserId() userId: number,
   ): Promise<GetNotificationsResponseFromChatDto[]> {
     return this.chatService.getChatNotifications(userId);
   }
 
+  @UseGuards(JwtAccessTokenGuard)
+  @Get('test')
+  getChatRoomsWithUserAndChat(@GetUserId() userId: number) {
+    return this.chatService.getChatRoomsWithUserAndChat(userId);
+  }
+
   // @ApiGetChatUnreadCounts()
   // @Get(':roomId/chat/unreads')
-  // async getUnreadCounts(
+  //  getUnreadCounts(
   //   @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
   //   @Query('after', ParseIntPipe) after: number,
   // ) {

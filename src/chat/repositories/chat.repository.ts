@@ -58,6 +58,12 @@ export class ChatRepository {
     });
   }
 
+  getOneChat(roomId: string) {
+    return this.chatModel
+      .findOne({ chatroom_id: roomId })
+      .sort({ createdAt: -1 });
+  }
+
   async updateChatIsSeen(receiverId: number, roomId: mongoose.Types.ObjectId) {
     await this.chatModel.updateMany(
       {

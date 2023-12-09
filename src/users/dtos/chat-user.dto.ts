@@ -1,13 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserImage } from '../entities/user-image.entity';
 import { User } from '../entities/user.entity';
 
-export class ChatUserDto implements Pick<User, 'id' | 'name' | 'userImage'> {
+export class ChatUserDto implements Pick<User, 'name'> {
   @ApiProperty({
     description: '유저 고유 id',
     format: 'integer',
   })
-  id: number;
+  userId: number;
 
   @ApiProperty({
     description: '유저 이름',
@@ -17,9 +16,11 @@ export class ChatUserDto implements Pick<User, 'id' | 'name' | 'userImage'> {
   @ApiProperty({
     description: '유저의 이미지',
   })
-  userImage: UserImage;
+  userImage: string;
 
-  constructor(chatUserDto: ChatUserDto) {
-    Object.assign(this, chatUserDto);
+  constructor(chatUserDto: Partial<ChatUserDto> = {}) {
+    this.userId = chatUserDto.userId;
+    this.name = chatUserDto.name;
+    this.userImage = chatUserDto.userImage;
   }
 }

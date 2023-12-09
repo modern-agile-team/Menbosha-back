@@ -1,7 +1,14 @@
 import { Types } from 'mongoose';
 import { Chat } from '../schemas/chat.schemas';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsDate, IsMongoId, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsMongoId,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { Exclude } from 'class-transformer';
 
 export class ChatDto implements Partial<Chat> {
   @ApiProperty({
@@ -16,6 +23,12 @@ export class ChatDto implements Partial<Chat> {
   @IsString()
   content: string;
 
+  @Exclude()
+  sender: number;
+
+  @Exclude()
+  receiver: number;
+
   @ApiProperty({
     description: '채팅 확인 여부',
   })
@@ -26,5 +39,15 @@ export class ChatDto implements Partial<Chat> {
     description: '생성 날짜',
   })
   @IsDate()
-  createdAt: Date;
+  @IsOptional()
+  createdAt?: Date;
+
+  constructor(chatDto: Partial<ChatDto>) {
+    this.chatroom_id = chatDto.chatroom_id;
+    this.content = chatDto.content;
+    this.sender = chatDto.sender;
+    this.receiver = chatDto.receiver;
+    this.isSeen = chatDto.isSeen;
+    this.createdAt = chatDto.createdAt;
+  }
 }
