@@ -252,9 +252,11 @@ export class ChatService {
           chatRooms.host_id === myId
             ? await this.userService.getMyInfo(chatRooms.guest_id)
             : await this.userService.getMyInfo(chatRooms.host_id);
+
         const returnedChat = await this.chatRepository.getOneChat(
           chatRooms._id.toString(),
         );
+
         if (!returnedChat) {
           return null;
         }

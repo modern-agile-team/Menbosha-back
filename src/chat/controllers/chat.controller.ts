@@ -26,7 +26,6 @@ import { ApiDeleteChatRoom } from '../swagger-decorators/delete-chat-room.decora
 import { ApiGetChats } from '../swagger-decorators/get-chats.decorator';
 import { ApiGetChatNotificationSse } from '../swagger-decorators/get-chat-notification-Sse.decorator';
 // import { ApiGetChatUnreadCounts } from '../swagger-decorators/get-chat-unread-counts.decorator';
-import { TokenService } from 'src/auth/services/token.service';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetNotificationsResponseFromChatDto } from '../dto/get-notifications-response-from-chat.dto';
@@ -49,10 +48,7 @@ import { ApiGetChatRoomsNew } from '../swagger-decorators/get-chat-rooms-new.dec
 @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
 @Controller('chat-room')
 export class ChatController {
-  constructor(
-    private chatService: ChatService,
-    private tokenService: TokenService,
-  ) {}
+  constructor(private chatService: ChatService) {}
 
   @ApiGetChatNotificationSse()
   @Sse('listener')
