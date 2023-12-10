@@ -246,27 +246,21 @@ export class ChatService {
       return null;
     }
 
-    const responseChatRooms = await Promise.all(
+    return Promise.all(
       returnedChatRooms.map(async (chatRooms) => {
         const targetUser =
           chatRooms.host_id === myId
             ? await this.userService.getMyInfo(chatRooms.guest_id)
             : await this.userService.getMyInfo(chatRooms.host_id);
 
-        const returnedChat = await this.chatRepository.getOneChat(
+        const returnedChat = (await this.chatRepository.getOneChat(
           chatRooms._id.toString(),
-        );
-
-        if (!returnedChat) {
-          return null;
-        }
+        )) || { chatroom_id: chatRooms._id, content: null };
 
         const chatUserDto = new ChatUserDto(targetUser);
         return new ResponseGetChatRoomsDto(returnedChat, chatUserDto, myId);
       }),
     );
-
-    return responseChatRooms.filter((chat) => chat !== null);
   }
 
   // async getUnreadCounts(roomId: mongoose.Types.ObjectId, after: number) {

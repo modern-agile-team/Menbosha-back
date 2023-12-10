@@ -30,7 +30,7 @@ export class ResponseGetChatRoomsDto implements Partial<ChatDto> {
   })
   isSeen: boolean;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: '생성 날짜',
   })
   createdAt: Date;
@@ -46,14 +46,19 @@ export class ResponseGetChatRoomsDto implements Partial<ChatDto> {
   guest?: ChatUserDto;
 
   constructor(
-    chatDto: Partial<ChatDto> = {},
+    chatDto: Partial<ChatDto>,
     chatUserDto: ChatUserDto,
     myId: number,
   ) {
-    this.chatroom_id = chatDto.chatroom_id;
-    this.content = chatDto.content;
-    this.isSeen = chatDto.isSeen;
-    this.createdAt = chatDto.createdAt;
+    if (chatDto === null) {
+      this.chatroom_id = chatDto.chatroom_id;
+      this.content = chatDto.content;
+    } else {
+      this.chatroom_id = chatDto.chatroom_id;
+      this.content = chatDto.content;
+      this.isSeen = chatDto.isSeen;
+      this.createdAt = chatDto.createdAt;
+    }
 
     chatDto.sender === myId
       ? (this.host = chatUserDto)

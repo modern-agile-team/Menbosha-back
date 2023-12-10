@@ -6,7 +6,6 @@ import {
   IsDate,
   IsMongoId,
   IsNumber,
-  IsOptional,
   IsString,
 } from 'class-validator';
 import { TransformMongoId } from './transform/transform-mongo-id';
@@ -49,8 +48,7 @@ export class ChatDto implements Partial<Chat> {
     description: '생성 날짜',
   })
   @IsDate()
-  @IsOptional()
-  createdAt?: Date;
+  createdAt: Date;
 
   constructor(chatDto: Partial<ChatDto>) {
     this.chatroom_id = chatDto.chatroom_id;
