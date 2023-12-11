@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
 import { ChatDto } from './chat.dto';
 import mongoose from 'mongoose';
@@ -14,7 +14,7 @@ export class ResponseGetChatRoomsDto implements Partial<ChatDto> {
   _id: mongoose.Types.ObjectId;
 
   @ApiProperty({
-    description: '가장 마지막 채팅 객체',
+    description: '가장 최신 채팅 객체',
   })
   chat: Partial<ChatDto>;
 
@@ -23,7 +23,7 @@ export class ResponseGetChatRoomsDto implements Partial<ChatDto> {
   })
   createdAt: Date;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: '채팅 상대 유저의 정보',
   })
   chatPartner: ChatUserDto;

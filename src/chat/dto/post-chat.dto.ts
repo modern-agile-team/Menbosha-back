@@ -1,19 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsMongoId,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsMongoId, IsNumber, IsOptional, IsString } from 'class-validator';
 import mongoose from 'mongoose';
 
 export class PostChatDto {
   @IsMongoId()
-  @IsNotEmpty()
   @ApiProperty({
-    example: '650bde3798dd4c34439c30dc',
-    description: '채팅을 전송하는 채팅방 id',
+    description: '채팅 방 id',
+    type: 'string',
+    format: 'ObjectId',
   })
   roomId: mongoose.Types.ObjectId;
 
@@ -37,7 +31,6 @@ export class PostChatDto {
     description: '채팅을 받는 유저 아이디',
   })
   @IsNumber()
-  @IsNotEmpty()
   receiverId: number;
 
   @ApiPropertyOptional({
