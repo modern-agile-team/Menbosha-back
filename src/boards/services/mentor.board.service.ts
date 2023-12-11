@@ -8,6 +8,8 @@ import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { BoardResponseDTO } from '../dto/boards.response.dto';
 import { oneBoardResponseDTO } from '../dto/boards.one.response.dto';
+import { MentorBoardResponseDTO } from '../dto/update.mentor.board.response.dto';
+import { UpdateMentorBoardDto } from '../dto/update.mentor.board.dto';
 
 @Injectable()
 export class MentorBoardService {
@@ -80,9 +82,10 @@ export class MentorBoardService {
   }
 
   async updateMentorBoard(
+    userId: number,
     mentorBoardId: number,
-    boardData: Partial<CreateMentorBoardDto>,
-  ): Promise<CreateMentorBoardDto> {
+    boardData: Partial<UpdateMentorBoardDto>,
+  ): Promise<MentorBoardResponseDTO> {
     const existingBoard =
       await this.mentorBoardRepository.findBoardById(mentorBoardId);
     for (const key in boardData) {
@@ -90,14 +93,24 @@ export class MentorBoardService {
         existingBoard[key] = boardData[key];
       }
     }
-    const updatedBoard = await this.mentorBoardRepository.updateBoard(
-      mentorBoardId,
-      boardData,
-    );
+
+    const updatedBoard =
+      await this.mentorBoardRepository.updateBoard(existingBoard);
+    const unitowner = userId === updatedBoard.userId;
     return {
+      id: updatedBoard.id,
       head: updatedBoard.head,
       body: updatedBoard.body,
+      createdAt: updatedBoard.createdAt,
+      updatedAt: updatedBoard.updatedAt,
       categoryId: updatedBoard.categoryId,
+      user: {
+        name: updatedBoard.user.name,
+        userImage: updatedBoard.user.userImage
+          ? updatedBoard.user.userImage
+          : [],
+      },
+      unitowner: unitowner,
     };
   }
 

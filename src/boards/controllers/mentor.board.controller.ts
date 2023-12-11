@@ -21,6 +21,8 @@ import { ApiDeleteBoard } from '../swagger-decorators/delete-board-decorators';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
+import { MentorBoardResponseDTO } from '../dto/update.mentor.board.response.dto';
+import { UpdateMentorBoardDto } from '../dto/update.mentor.board.dto';
 
 @Controller('mentorBoard')
 @ApiTags('mentorBoard API')
@@ -57,12 +59,18 @@ export class MentorBoardController {
   }
 
   @Patch('')
+  @UseGuards(JwtAccessTokenGuard)
   @ApiUpdateBoard()
   editBoard(
+    @GetUserId() userId: number,
     @Query('mentorBoardId') mentorBoardId: number,
-    @Body() boardData: Partial<MentorBoard>,
-  ): Promise<CreateMentorBoardDto> {
-    return this.mentorBoardService.updateMentorBoard(mentorBoardId, boardData);
+    @Body() boardData: Partial<UpdateMentorBoardDto>,
+  ): Promise<MentorBoardResponseDTO> {
+    return this.mentorBoardService.updateMentorBoard(
+      userId,
+      mentorBoardId,
+      boardData,
+    );
   }
 
   @Delete('')
