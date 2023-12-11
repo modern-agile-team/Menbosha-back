@@ -1,3 +1,4 @@
+import { RedisModule } from './common/redis/redis.module';
 import { UserImageService } from './users/services/user-image.service';
 import { AuthModule } from './auth/auth.module';
 import { CommentModule } from './comments/comment.module';
@@ -19,6 +20,7 @@ import { ExceptionsModule } from './http-exceptions/exceptions.module';
 
 @Module({
   imports: [
+    RedisModule,
     AuthModule,
     CommentModule,
     UserModule,
