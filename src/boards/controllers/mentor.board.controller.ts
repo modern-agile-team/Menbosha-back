@@ -30,20 +30,20 @@ export class MentorBoardController {
   @Post('')
   @UseGuards(JwtAccessTokenGuard)
   @ApiAddBoard()
-  create(
-    @GetUserId() userId: number,
+  async create(
     @Body() createMentorBoardDto: CreateMentorBoardDto,
+    @GetUserId() userId: number,
   ): Promise<MentorBoard> {
-    return this.mentorBoardService.create(createMentorBoardDto, userId);
+    return await this.mentorBoardService.create(createMentorBoardDto, userId);
   }
 
   @Get('') // 이부분은 아직 프론트랑 상의중입니다
   @ApiGetPageBoards()
-  async findPageBoards(
+  findPageMentorBoards(
     @Query('page') page = 1,
     @Query('limit') limit = 30,
   ): Promise<{ data: BoardResponseDTO[]; total: number }> {
-    return await this.mentorBoardService.findPagedBoards(page, limit);
+    return this.mentorBoardService.findPagedMentorBoards(page, limit);
   }
 
   @Get('/unit') //하나의 게시판 불러오기
@@ -61,7 +61,7 @@ export class MentorBoardController {
   editBoard(
     @Query('mentorBoardId') mentorBoardId: number,
     @Body() boardData: Partial<MentorBoard>,
-  ): Promise<MentorBoard> {
+  ): Promise<CreateMentorBoardDto> {
     return this.mentorBoardService.updateMentorBoard(mentorBoardId, boardData);
   }
 

@@ -2,6 +2,7 @@ import { EntityManager } from 'typeorm';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { Injectable } from '@nestjs/common';
+// import { CreateMentorBoardResponseDto } from '../dto/create.metnor.board.response.dto';
 
 @Injectable()
 export class MentorBoardRepository {
@@ -11,12 +12,16 @@ export class MentorBoardRepository {
     boardData: CreateMentorBoardDto,
     userId: number,
   ): Promise<MentorBoard> {
+    console.log(userId);
+    console.log(boardData);
+
     const mentorBoard = new MentorBoard();
     mentorBoard.head = boardData.head;
     mentorBoard.body = boardData.body;
     mentorBoard.categoryId = boardData.categoryId;
     mentorBoard.userId = userId;
-    return await this.entityManager.save(MentorBoard, mentorBoard); //이 부분 return은 dto로 수정하기
+    return await this.entityManager.save(MentorBoard, mentorBoard);
+    //이 부분 return은 dto로 수정하기
   }
 
   async findTotalBoards(): Promise<number> {
@@ -49,17 +54,7 @@ export class MentorBoardRepository {
     id: number,
     boardData: Partial<CreateMentorBoardDto>,
   ): Promise<MentorBoard> {
-    const existingBoard = await this.entityManager.findOne(MentorBoard, {
-      relations: ['user', 'user.userImage'],
-      where: { id },
-    });
-    for (const key in boardData) {
-      if (boardData.hasOwnProperty(key)) {
-        existingBoard[key] = boardData[key];
-      }
-    }
-    await this.entityManager.save(MentorBoard, existingBoard);
-    return existingBoard;
+    return await this.entityManager.save(MentorBoard, boardData);
   }
 
   async deleteBoard(board: MentorBoard): Promise<void> {

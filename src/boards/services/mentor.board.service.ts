@@ -23,7 +23,7 @@ export class MentorBoardService {
     }
   }
 
-  async findPagedBoards(
+  async findPagedMentorBoards(
     page: number,
     limit: number,
   ): Promise<{ data: BoardResponseDTO[]; total: number }> {
@@ -59,11 +59,10 @@ export class MentorBoardService {
     const mentorBoard =
       await this.mentorBoardRepository.findBoardById(mentorBoardId);
     const unitowner = mentorBoard.userId === userId;
-    console.log(userId);
-    console.log(mentorBoard.userId);
+    console.log(mentorBoardId);
 
     if (!mentorBoard) {
-      throw new Error('게시물을 찾을 수 없습니다.');
+      throw new NotFoundException('게시물을 찾을 수 없습니다.');
     }
     return {
       id: mentorBoard.id,
@@ -83,7 +82,7 @@ export class MentorBoardService {
   async updateMentorBoard(
     mentorBoardId: number,
     boardData: Partial<CreateMentorBoardDto>,
-  ): Promise<MentorBoard | undefined> {
+  ): Promise<CreateMentorBoardDto> {
     const existingBoard =
       await this.mentorBoardRepository.findBoardById(mentorBoardId);
     for (const key in boardData) {
@@ -93,9 +92,13 @@ export class MentorBoardService {
     }
     const updatedBoard = await this.mentorBoardRepository.updateBoard(
       mentorBoardId,
-      existingBoard,
+      boardData,
     );
-    return updatedBoard;
+    return {
+      head: updatedBoard.head,
+      body: updatedBoard.body,
+      categoryId: updatedBoard.categoryId,
+    };
   }
 
   async deleteBoard(mentorBoardId: number, userId: number): Promise<void> {
