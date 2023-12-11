@@ -3,7 +3,6 @@ import { MentorBoard } from '../entities/mentor-board.entity';
 import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { Injectable } from '@nestjs/common';
 import { UpdateMentorBoardDto } from '../dto/update.mentor.board.dto';
-// import { CreateMentorBoardResponseDto } from '../dto/create.metnor.board.response.dto';
 
 @Injectable()
 export class MentorBoardRepository {
@@ -44,12 +43,6 @@ export class MentorBoardRepository {
     });
   }
 
-  // async findMentorBoardById(id: number): Promise<MentorBoard> {
-  //   return await this.entityManager.findOne(MentorBoard, {
-  //     relations: []
-  //   })
-  // }
-
   async findMentorBoardById(id: number): Promise<MentorBoard> {
     return await this.entityManager.findOne(MentorBoard, {
       relations: ['user', 'user.userImage'],
@@ -60,7 +53,6 @@ export class MentorBoardRepository {
   async updateBoard(
     boardData: Partial<UpdateMentorBoardDto>,
   ): Promise<MentorBoard> {
-    console.log(boardData);
     return await this.entityManager.save(MentorBoard, boardData);
   }
 

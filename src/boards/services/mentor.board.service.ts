@@ -72,7 +72,7 @@ export class MentorBoardService {
       body: mentorBoard.body,
       createdAt: mentorBoard.createdAt,
       updatedAt: mentorBoard.updatedAt,
-      category: mentorBoard.categoryId,
+      categoryId: mentorBoard.categoryId,
       user: {
         name: mentorBoard.user.name,
         userImage: mentorBoard.user.userImage ? mentorBoard.user.userImage : [],

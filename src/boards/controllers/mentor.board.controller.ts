@@ -23,6 +23,7 @@ import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 import { MentorBoardResponseDTO } from '../dto/update.mentor.board.response.dto';
 import { UpdateMentorBoardDto } from '../dto/update.mentor.board.dto';
+import { oneBoardResponseDTO } from '../dto/boards.one.response.dto';
 
 @Controller('mentorBoard')
 @ApiTags('mentorBoard API')
@@ -54,7 +55,7 @@ export class MentorBoardController {
   findOne(
     @Query('mentorBoardId') mentorBoardId: number,
     @GetUserId() userId: number,
-  ): Promise<BoardResponseDTO> {
+  ): Promise<oneBoardResponseDTO> {
     return this.mentorBoardService.findOneMentorBoard(mentorBoardId, userId);
   }
 
