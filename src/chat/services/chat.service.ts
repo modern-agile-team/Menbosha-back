@@ -59,7 +59,7 @@ export class ChatService {
     return returnedRoom;
   }
 
-  async createChatRoom(myId: number, guestId: number) {
+  async createChatRoom(myId: number, guestId: number): Promise<ChatRoomDto> {
     try {
       const isChatRoom = await this.chatRoomModel.findOne({
         $or: [
@@ -80,11 +80,13 @@ export class ChatService {
       return new ChatRoomDto(returnedChatRoom);
     } catch (error) {
       console.error('채팅룸 생성 실패: ', error);
+
       if (error.code === 11000) {
         throw new ConflictException(
           '채팅룸 생성 실패. 서버에서 에러가 발생했습니다.',
         );
       }
+
       throw error;
     }
   }
@@ -267,7 +269,6 @@ export class ChatService {
           createdAt: 1,
           chat: {
             content: { $arrayElemAt: ['$chats.content', 0] },
-            sender: { $arrayElemAt: ['$chats.sender', 0] },
             isSeen: { $arrayElemAt: ['$chats.isSeen', 0] },
             createdAt: { $arrayElemAt: ['$chats.createdAt', 0] },
           },
@@ -275,11 +276,7 @@ export class ChatService {
       },
     ]);
 
-    console.log(returnedChatAggregate);
-
-    const returnedChatRooms = await this.chatRepository.getChatRooms(myId);
-
-    if (!returnedChatRooms.length) {
+    if (!returnedChatAggregate) {
       return null;
     }
 
@@ -290,12 +287,9 @@ export class ChatService {
             ? await this.userService.getMyInfo(chatRooms.guest_id)
             : await this.userService.getMyInfo(chatRooms.host_id);
 
-        const returnedChat = (await this.chatRepository.getOneChat(
-          chatRooms._id.toString(),
-        )) || { chatroom_id: chatRooms._id, content: null };
-
         const chatUserDto = new ChatUserDto(targetUser);
-        return new ResponseGetChatRoomsDto(returnedChat, chatUserDto, myId);
+
+        return new ResponseGetChatRoomsDto(chatRooms, chatUserDto);
       }),
     );
   }
