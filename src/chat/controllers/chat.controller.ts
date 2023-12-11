@@ -89,7 +89,10 @@ export class ChatController {
   @UseGuards(JwtAccessTokenGuard)
   @ApiCreateChatRoom()
   @Post()
-  createChatRoom(@GetUserId() userId: number, @Body() body: ReceivedUserDto) {
+  createChatRoom(
+    @GetUserId() userId: number,
+    @Body() body: ReceivedUserDto,
+  ): Promise<ChatRoomDto> {
     return this.chatService.createChatRoom(userId, body.receiverId);
   }
 

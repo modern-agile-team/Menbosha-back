@@ -77,18 +77,24 @@ export class ChatRepository {
     );
   }
 
-  createChat(
+  async createChat(
     roomId: mongoose.Types.ObjectId,
     content: string,
     myId: number,
     receiverId: number,
   ) {
-    return this.chatModel.create({
+    const returnedChat = await this.chatModel.create({
       chatroom_id: roomId,
       content: content,
       sender: myId,
       receiver: receiverId,
     });
+
+    await this.chatRoomModel.findByIdAndUpdate(returnedChat.chatroom_id, {
+      $push: { chat_ids: returnedChat._id },
+    });
+
+    return returnedChat;
   }
 
   async createChatImage(

@@ -19,6 +19,7 @@ import { GetNotificationsResponseFromChatDto } from '../dto/get-notifications-re
 import { UserService } from 'src/users/services/user.service';
 import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
+import { ChatRoomDto } from '../dto/chat-room.dto';
 
 @Injectable()
 export class ChatService {
@@ -71,7 +72,12 @@ export class ChatService {
         throw new ConflictException('해당 유저들의 채팅방이 이미 존재합니다.');
       }
 
-      return await this.chatRepository.createChatRoom(myId, guestId);
+      const returnedChatRoom = await this.chatRepository.createChatRoom(
+        myId,
+        guestId,
+      );
+
+      return new ChatRoomDto(returnedChatRoom);
     } catch (error) {
       console.error('채팅룸 생성 실패: ', error);
       if (error.code === 11000) {
@@ -240,6 +246,37 @@ export class ChatService {
   async getChatRoomsWithUserAndChat(
     myId: number,
   ): Promise<ResponseGetChatRoomsDto[]> {
+    const returnedChatAggregate = await this.chatRoomModel.aggregate([
+      {
+        $match: { $or: [{ host_id: myId }, { guest_id: myId }] },
+      },
+      {
+        $lookup: {
+          from: 'Chat',
+          localField: 'chat_ids',
+          foreignField: '_id',
+          as: 'chats',
+        },
+      },
+      { $sort: { 'chats.createdAt': -1 } },
+      {
+        $project: {
+          _id: 1,
+          host_id: 1,
+          guest_id: 1,
+          createdAt: 1,
+          chat: {
+            content: { $arrayElemAt: ['$chats.content', 0] },
+            sender: { $arrayElemAt: ['$chats.sender', 0] },
+            isSeen: { $arrayElemAt: ['$chats.isSeen', 0] },
+            createdAt: { $arrayElemAt: ['$chats.createdAt', 0] },
+          },
+        },
+      },
+    ]);
+
+    console.log(returnedChatAggregate);
+
     const returnedChatRooms = await this.chatRepository.getChatRooms(myId);
 
     if (!returnedChatRooms.length) {
@@ -247,7 +284,7 @@ export class ChatService {
     }
 
     return Promise.all(
-      returnedChatRooms.map(async (chatRooms) => {
+      returnedChatAggregate.map(async (chatRooms) => {
         const targetUser =
           chatRooms.host_id === myId
             ? await this.userService.getMyInfo(chatRooms.guest_id)

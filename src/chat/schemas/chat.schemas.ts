@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
-import { ChatRoom } from './chat-room.schemas';
 import { IsBoolean, IsMongoId, IsNumber, IsString } from 'class-validator';
 
 const options: SchemaOptions = {
@@ -11,7 +10,7 @@ const options: SchemaOptions = {
 @Schema(options)
 export class Chat {
   @IsMongoId()
-  @Prop({ type: mongoose.Types.ObjectId, ref: ChatRoom.name })
+  @Prop({ type: mongoose.Types.ObjectId, ref: 'ChatRoom' })
   chatroom_id: mongoose.Types.ObjectId;
 
   @IsNumber()
