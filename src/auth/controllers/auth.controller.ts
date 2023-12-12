@@ -91,6 +91,34 @@ export class AuthController {
     return res.json({ accessToken, refreshToken });
   }
 
+  @Get('google/login')
+  async googleLogin(@Query() { code }, @Res() res) {
+    if (!code) {
+      throw new BadRequestException('인가코드가 없습니다.');
+    }
+
+    const { userId, socialAccessToken, socialRefreshToken } =
+      await this.authService.login(code, 'google');
+    const accessToken = await this.tokenService.createAccessToken(userId);
+    const refreshToken = await this.tokenService.createRefreshToken(userId);
+
+    await this.tokenService.saveTokens(
+      userId,
+      refreshToken,
+      socialAccessToken,
+      socialRefreshToken,
+    );
+
+    res.cookie('refresh_Token', refreshToken, {
+      httpOnly: true,
+      sameSite: 'Lax',
+      domain: 'localhost',
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
+    });
+
+    return res.json({ accessToken, refreshToken });
+  }
+
   @ApiCookieAuth('refresh-token')
   @ApiNewAccessToken()
   @UseGuards(JwtRefreshTokenGuard)
