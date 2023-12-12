@@ -106,10 +106,14 @@ export class ChatRepository {
       image_url: returnedChat.content,
     });
 
+    await this.chatRoomModel.findByIdAndUpdate(returnedChat.chatroom_id, {
+      $push: { chat_ids: returnedChat._id },
+    });
+
     return returnedChat;
   }
 
-  async getChatNotifications(userId: number) {
+  async getChatNotifications(userId: number): Promise<Chat[]> {
     const notifications = await this.chatModel
       .find({
         $and: [{ receiver: userId }, { isSeen: false }],
