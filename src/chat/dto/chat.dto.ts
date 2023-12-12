@@ -1,16 +1,24 @@
-import { Types } from 'mongoose';
+import mongoose from 'mongoose';
 import { Chat } from '../schemas/chat.schemas';
 import { ApiProperty } from '@nestjs/swagger';
 import { TransformMongoId } from './transform/transform-mongo-id';
 
 export class ChatDto implements Partial<Chat> {
   @ApiProperty({
+    description: '채팅 id',
+    type: 'string',
+    format: 'ObjectId',
+  })
+  @TransformMongoId()
+  _id: mongoose.Types.ObjectId;
+
+  @ApiProperty({
     description: '채팅 방 id',
     type: 'string',
     format: 'ObjectId',
   })
   @TransformMongoId()
-  chatroom_id: Types.ObjectId;
+  chatroom_id: mongoose.Types.ObjectId;
 
   @ApiProperty({
     description: '채팅 내용',
@@ -29,6 +37,7 @@ export class ChatDto implements Partial<Chat> {
 
   @ApiProperty({
     description: '채팅 확인 여부',
+    default: false,
   })
   isSeen: boolean;
 
@@ -38,6 +47,7 @@ export class ChatDto implements Partial<Chat> {
   createdAt: Date;
 
   constructor(chatDto: Partial<ChatDto>) {
+    this._id = chatDto._id;
     this.chatroom_id = chatDto.chatroom_id;
     this.content = chatDto.content;
     this.sender = chatDto.sender;

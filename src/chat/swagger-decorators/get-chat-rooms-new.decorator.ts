@@ -6,6 +6,7 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
+import { ChatDto } from '../dto/chat.dto';
 
 export function ApiGetChatRoomsNew() {
   return applyDecorators(
@@ -26,6 +27,6 @@ export function ApiGetChatRoomsNew() {
         example: '여기에 액세스 토큰',
       },
     ]),
-    ApiExtraModels(ResponseGetChatRoomsDto),
+    ApiExtraModels(ResponseGetChatRoomsDto, ChatDto),
   );
 }
