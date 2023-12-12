@@ -65,7 +65,7 @@ export class MentorBoardController {
   editBoard(
     @GetUserId() userId: number,
     @Query('mentorBoardId') mentorBoardId: number,
-    @Body() boardData: Partial<UpdateMentorBoardDto>,
+    @Body() boardData: UpdateMentorBoardDto,
   ): Promise<MentorBoardResponseDTO> {
     return this.mentorBoardService.updateMentorBoard(
       userId,

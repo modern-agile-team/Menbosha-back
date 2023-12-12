@@ -84,7 +84,7 @@ export class MentorBoardService {
   async updateMentorBoard(
     userId: number,
     mentorBoardId: number,
-    boardData: Partial<UpdateMentorBoardDto>,
+    boardData: UpdateMentorBoardDto,
   ): Promise<MentorBoardResponseDTO> {
     const existingBoard =
       await this.mentorBoardRepository.findBoardById(mentorBoardId);

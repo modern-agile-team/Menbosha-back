@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { HelpMeBoardRepository } from '../repository/help.me.board.repository';
 import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { MentorBoard } from '../entities/mentor-board.entity';
-import { BoardResponseDTO } from '../dto/boards.response.dto';
+// import { BoardResponseDTO } from '../dto/boards.response.dto';
 import { oneBoardResponseDTO } from '../dto/boards.one.response.dto';
 
 @Injectable()
@@ -19,38 +19,38 @@ export class HelpMeBoardService {
     }
   }
 
-  async findPagedBoards(
-    page: number,
-    limit: number,
-  ): Promise<{ data: BoardResponseDTO[]; total: number }> {
-    const skip = (page - 1) * limit;
-    const take = limit;
-    const boards = await this.helpMeBoardRepository.findPagedBoards(skip, take);
-    const total = await this.helpMeBoardRepository.findTotalBoards();
+  // async findPagedBoards(
+  //   page: number,
+  //   limit: number,
+  // ): Promise<{ data: BoardResponseDTO[]; total: number }> {
+  //   const skip = (page - 1) * limit;
+  //   const take = limit;
+  //   const boards = await this.helpMeBoardRepository.findPagedBoards(skip, take);
+  //   const total = await this.helpMeBoardRepository.findTotalBoards();
 
-    const boardResponse: BoardResponseDTO[] = await Promise.all(
-      boards.map(async (board) => {
-        return {
-          id: board.id,
-          head: board.head,
-          body: board.body.substring(0, 30),
-          createdAt: board.createdAt,
-          updatedAt: board.updatedAt,
-          category: board.categoryId,
-          user: {
-            name: board.user.name,
-            userImage: board.user.userImage ? board.user.userImage : [],
-          },
-          // boardImages: board.boardImages.map((image) => ({
-          //   id: image.id,
-          //   imageUrl: image.imageUrl,
-          // })),
-        };
-      }),
-    );
+  //   const boardResponse: BoardResponseDTO[] = await Promise.all(
+  //     boards.map(async (board) => {
+  //       return {
+  //         id: board.id,
+  //         head: board.head,
+  //         body: board.body.substring(0, 30),
+  //         createdAt: board.createdAt,
+  //         updatedAt: board.updatedAt,
+  //         category: board.categoryId,
+  //         user: {
+  //           name: board.user.name,
+  //           userImage: board.user.userImage ? board.user.userImage : [],
+  //         },
+  //         // boardImages: board.boardImages.map((image) => ({
+  //         //   id: image.id,
+  //         //   imageUrl: image.imageUrl,
+  //         // })),
+  //       };
+  //     }),
+  //   );
 
-    return { data: boardResponse, total };
-  }
+  //   return { data: boardResponse, total };
+  // }
 
   async findOneBoard(
     boardId: number,
@@ -67,7 +67,7 @@ export class HelpMeBoardService {
       body: board.body,
       createdAt: board.createdAt,
       updatedAt: board.updatedAt,
-      category: board.categoryId,
+      categoryId: board.categoryId,
       user: {
         name: board.user.name,
         userImage: board.user.userImage ? board.user.userImage : [],
