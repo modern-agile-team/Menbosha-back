@@ -12,9 +12,6 @@ export class MentorBoardRepository {
     boardData: CreateMentorBoardDto,
     userId: number,
   ): Promise<MentorBoard> {
-    console.log(userId);
-    console.log(boardData);
-
     const mentorBoard = new MentorBoard();
     mentorBoard.head = boardData.head;
     mentorBoard.body = boardData.body;
