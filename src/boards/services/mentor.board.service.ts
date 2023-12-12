@@ -6,7 +6,7 @@ import {
 import { MentorBoardRepository } from '../repository/mentor.boards.repository';
 import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { MentorBoard } from '../entities/mentor-board.entity';
-import { BoardResponseDTO } from '../dto/boards.response.dto';
+import { PageByMentorBoardResponseDTO } from '../dto/boards.response.dto';
 import { oneBoardResponseDTO } from '../dto/boards.one.response.dto';
 import { MentorBoardResponseDTO } from '../dto/update.mentor.board.response.dto';
 import { UpdateMentorBoardDto } from '../dto/update.mentor.board.dto';
@@ -28,13 +28,13 @@ export class MentorBoardService {
   async findPagedMentorBoards(
     page: number,
     limit: number,
-  ): Promise<{ data: BoardResponseDTO[]; total: number }> {
+  ): Promise<{ data: PageByMentorBoardResponseDTO[]; total: number }> {
     const skip = (page - 1) * limit;
     const take = limit;
     const boards = await this.mentorBoardRepository.findPagedBoards(skip, take);
     const total = await this.mentorBoardRepository.findTotalBoards();
 
-    const boardResponse: BoardResponseDTO[] = await Promise.all(
+    const boardResponse: PageByMentorBoardResponseDTO[] = await Promise.all(
       boards.map(async (board) => {
         return {
           id: board.id,

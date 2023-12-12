@@ -11,11 +11,11 @@ import {
 import { MentorBoardService } from '../services/mentor.board.service';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
-import { BoardResponseDTO } from '../dto/boards.response.dto';
-import { ApiAddBoard } from '../swagger-decorators/add-board-decorators';
+import { PageByMentorBoardResponseDTO } from '../dto/boards.response.dto';
+import { ApiAddMentorBoard } from '../swagger-decorators/add-board-decorators';
 import { ApiGetPageBoards } from '../swagger-decorators/get-page-boards-decorators';
 import { ApiGetOneMentorBoard } from '../swagger-decorators/get-one-mentor-board-decorators';
-import { ApiUpdateBoard } from '../swagger-decorators/patch-board-decorators';
+import { ApiUpdateMentorBoard } from '../swagger-decorators/patch-board-decorators';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiDeleteBoard } from '../swagger-decorators/delete-board-decorators';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
@@ -32,7 +32,7 @@ export class MentorBoardController {
 
   @Post('')
   @UseGuards(JwtAccessTokenGuard)
-  @ApiAddBoard()
+  @ApiAddMentorBoard()
   async create(
     @Body() createMentorBoardDto: CreateMentorBoardDto,
     @GetUserId() userId: number,
@@ -45,7 +45,7 @@ export class MentorBoardController {
   findPageMentorBoards(
     @Query('page') page = 1,
     @Query('limit') limit = 30,
-  ): Promise<{ data: BoardResponseDTO[]; total: number }> {
+  ): Promise<{ data: PageByMentorBoardResponseDTO[]; total: number }> {
     return this.mentorBoardService.findPagedMentorBoards(page, limit);
   }
 
@@ -61,7 +61,7 @@ export class MentorBoardController {
 
   @Patch('')
   @UseGuards(JwtAccessTokenGuard)
-  @ApiUpdateBoard()
+  @ApiUpdateMentorBoard()
   editBoard(
     @GetUserId() userId: number,
     @Query('mentorBoardId') mentorBoardId: number,

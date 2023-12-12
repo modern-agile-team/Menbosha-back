@@ -1,7 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-export function ApiUpdateBoard() {
+export function ApiUpdateMentorBoard() {
   return applyDecorators(
     ApiOperation({
       summary: '보드를 수정하는 API',
@@ -17,8 +17,7 @@ export function ApiUpdateBoard() {
             userId: '유저의 id를 받아옵니다.',
             head: '수정한 게시물 제목입니다.',
             body: '수정한 게시물 본문입니다.',
-            main_category: '수정한 메인 카테고리입니다.',
-            sub_category: '수정한 서브 카테고리입니다.',
+            categoryId: '수정한 카테고리가 Id(number)형태로 받아옵니다..',
             createAt: '2023-10-29T17:07:53.964Z',
             updateAt: '수정한 시간이 됩니다.',
             user: {

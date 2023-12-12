@@ -1,11 +1,11 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-export function ApiAddBoard() {
+export function ApiAddMentorBoard() {
   return applyDecorators(
     ApiOperation({
-      summary: '보드를 생성하는 API',
-      description: '보드를 생성하는 API',
+      summary: '멘토보드를 생성하는 API',
+      description: '멘토보드를 생성하는 API',
     }),
     ApiResponse({
       status: 200,

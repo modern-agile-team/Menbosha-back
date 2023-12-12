@@ -4,8 +4,8 @@ import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
 export function ApiGetOneMentorBoard() {
   return applyDecorators(
     ApiOperation({
-      summary: '멘토 보드 가져오는 API',
-      description: '멘토 보드 가져오는 API',
+      summary: '클릭한 멘토 보드 가져오는 API',
+      description: '클릭한 멘토 보드 가져오는 API',
     }),
     ApiResponse({
       status: 200,
