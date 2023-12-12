@@ -25,16 +25,8 @@ export class ChatRepository {
     });
   }
 
-  getOneChatRoom(myId: number, roomId: mongoose.Types.ObjectId) {
-    return this.chatRoomModel.findOne({
-      $and: [
-        {
-          $or: [{ host_id: myId }, { guest_id: myId }],
-        },
-        { deleted_at: null },
-        { _id: roomId },
-      ],
-    });
+  getOneChatRoom(roomId: mongoose.Types.ObjectId) {
+    return this.chatRoomModel.findById(roomId);
   }
 
   createChatRoom(myId: number, guestId: number) {

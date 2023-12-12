@@ -49,14 +49,14 @@ export class ChatService {
     return this.chatRepository.getChatRooms(myId);
   }
 
-  async getOneChatRoom(myId: number, roomId: mongoose.Types.ObjectId) {
-    const returnedRoom = await this.chatRepository.getOneChatRoom(myId, roomId);
+  async getOneChatRoom(roomId: mongoose.Types.ObjectId): Promise<ChatRoomDto> {
+    const returnedRoom = await this.chatRepository.getOneChatRoom(roomId);
 
     if (!returnedRoom) {
-      throw new NotFoundException('해당 유저가 속한 채팅방이 없습니다.');
+      throw new NotFoundException('해당 채팅방이 없습니다.');
     }
 
-    return returnedRoom;
+    return new ChatRoomDto(returnedRoom);
   }
 
   async createChatRoom(myId: number, guestId: number): Promise<ChatRoomDto> {

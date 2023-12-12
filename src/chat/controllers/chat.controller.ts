@@ -76,14 +76,12 @@ export class ChatController {
     return this.chatService.getChatRoomsWithUserAndChat(userId);
   }
 
-  @UseGuards(JwtAccessTokenGuard)
   @ApiGetOneChatRoom()
   @Get(':roomId')
   getOneChatRoom(
-    @GetUserId() userId: number,
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  ) {
-    return this.chatService.getOneChatRoom(userId, roomId);
+  ): Promise<ChatRoomDto> {
+    return this.chatService.getOneChatRoom(roomId);
   }
 
   @UseGuards(JwtAccessTokenGuard)
