@@ -22,6 +22,7 @@ export class ResponseGetChatRoomsDto implements Partial<ChatDto> {
     description: '생성 날짜',
   })
   createdAt: Date;
+  // 빼야하나 말아야 하나??
 
   @ApiProperty({
     description: '채팅 상대 유저의 정보',
