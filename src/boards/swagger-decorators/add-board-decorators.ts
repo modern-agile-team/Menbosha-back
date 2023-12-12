@@ -1,11 +1,11 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-export function ApiAddBoard() {
+export function ApiAddMentorBoard() {
   return applyDecorators(
     ApiOperation({
-      summary: '보드를 생성하는 API',
-      description: '보드를 생성하는 API',
+      summary: '멘토보드를 생성하는 API',
+      description: '멘토보드를 생성하는 API',
     }),
     ApiResponse({
       status: 200,
@@ -15,10 +15,9 @@ export function ApiAddBoard() {
           example: {
             head: '게시물 제목',
             body: '게시물 내용',
-            main_category: '자유',
-            sub_category: '잡담',
-            userId: '유저 아이디가 number로 들어옵니다',
-            id: '생성된 보드 id number로 들어옵니다',
+            categoryId: '3(number)',
+            userId: '유저 아이디 (number)',
+            id: '생성된 보드 id (number)',
             createAt: '2023-10-29T23:45:54.023Z',
             updateAt: '2023-10-29T23:45:54.023Z',
           },
@@ -61,6 +60,7 @@ export function ApiAddBoard() {
         },
       },
     }),
+
     ApiResponse({
       status: 500,
       description: '보드를 생성하는 중 오류가 발생한 경우',

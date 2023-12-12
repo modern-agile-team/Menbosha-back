@@ -1,17 +1,17 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-export function ApiGetOneBoard() {
+export function ApiGetOneMentorBoard() {
   return applyDecorators(
     ApiOperation({
-      summary: '유닛 별 보드 가져오는 API',
-      description: '유닛 별 보드 가져오는 API',
+      summary: '클릭한 멘토 보드 가져오는 API',
+      description: '클릭한 멘토 보드 가져오는 API',
     }),
     ApiResponse({
       status: 200,
-      description: '성공적으로 이미지를 불러온 경우',
+      description: '성공적으로 멘토보드를 불러온 경우',
       content: {
-        JSON: { example: { message: '이미지를 성공적으로 불러왔습니다.' } },
+        JSON: { example: { message: '멘토보드를 성공적으로 불러왔습니다.' } },
       },
     }),
     ApiResponse({

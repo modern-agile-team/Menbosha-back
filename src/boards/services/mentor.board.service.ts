@@ -1,9 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { MentorBoardRepository } from '../repository/mentor.boards.repository';
 import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { MentorBoard } from '../entities/mentor-board.entity';
-import { BoardResponseDTO } from '../dto/boards.response.dto';
+import { PageByMentorBoardResponseDTO } from '../dto/boards.response.dto';
 import { oneBoardResponseDTO } from '../dto/boards.one.response.dto';
+import { MentorBoardResponseDTO } from '../dto/update.mentor.board.response.dto';
+import { UpdateMentorBoardDto } from '../dto/update.mentor.board.dto';
 
 @Injectable()
 export class MentorBoardService {
@@ -19,16 +25,16 @@ export class MentorBoardService {
     }
   }
 
-  async findPagedBoards(
+  async findPagedMentorBoards(
     page: number,
     limit: number,
-  ): Promise<{ data: BoardResponseDTO[]; total: number }> {
+  ): Promise<{ data: PageByMentorBoardResponseDTO[]; total: number }> {
     const skip = (page - 1) * limit;
     const take = limit;
     const boards = await this.mentorBoardRepository.findPagedBoards(skip, take);
     const total = await this.mentorBoardRepository.findTotalBoards();
 
-    const boardResponse: BoardResponseDTO[] = await Promise.all(
+    const boardResponse: PageByMentorBoardResponseDTO[] = await Promise.all(
       boards.map(async (board) => {
         return {
           id: board.id,
@@ -55,8 +61,10 @@ export class MentorBoardService {
     const mentorBoard =
       await this.mentorBoardRepository.findBoardById(mentorBoardId);
     const unitowner = mentorBoard.userId === userId;
+    console.log(mentorBoardId);
+
     if (!mentorBoard) {
-      throw new Error('게시물을 찾을 수 없습니다.');
+      throw new NotFoundException('게시물을 찾을 수 없습니다.');
     }
     return {
       id: mentorBoard.id,
@@ -64,7 +72,7 @@ export class MentorBoardService {
       body: mentorBoard.body,
       createdAt: mentorBoard.createdAt,
       updatedAt: mentorBoard.updatedAt,
-      category: mentorBoard.categoryId,
+      categoryId: mentorBoard.categoryId,
       user: {
         name: mentorBoard.user.name,
         userImage: mentorBoard.user.userImage ? mentorBoard.user.userImage : [],
@@ -74,9 +82,10 @@ export class MentorBoardService {
   }
 
   async updateMentorBoard(
+    userId: number,
     mentorBoardId: number,
-    boardData: Partial<CreateMentorBoardDto>,
-  ): Promise<MentorBoard | undefined> {
+    boardData: UpdateMentorBoardDto,
+  ): Promise<MentorBoardResponseDTO> {
     const existingBoard =
       await this.mentorBoardRepository.findBoardById(mentorBoardId);
     for (const key in boardData) {
@@ -84,11 +93,25 @@ export class MentorBoardService {
         existingBoard[key] = boardData[key];
       }
     }
-    const updatedBoard = await this.mentorBoardRepository.updateBoard(
-      mentorBoardId,
-      existingBoard,
-    );
-    return updatedBoard;
+
+    const updatedBoard =
+      await this.mentorBoardRepository.updateBoard(existingBoard);
+    const unitowner = userId === updatedBoard.userId;
+    return {
+      id: updatedBoard.id,
+      head: updatedBoard.head,
+      body: updatedBoard.body,
+      createdAt: updatedBoard.createdAt,
+      updatedAt: updatedBoard.updatedAt,
+      categoryId: updatedBoard.categoryId,
+      user: {
+        name: updatedBoard.user.name,
+        userImage: updatedBoard.user.userImage
+          ? updatedBoard.user.userImage
+          : [],
+      },
+      unitowner: unitowner,
+    };
   }
 
   async deleteBoard(mentorBoardId: number, userId: number): Promise<void> {

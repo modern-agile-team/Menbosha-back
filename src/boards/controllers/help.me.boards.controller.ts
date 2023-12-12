@@ -1,6 +1,6 @@
 import {
   Controller,
-  Get,
+  // Get,
   Post,
   Body,
   Patch,
@@ -15,19 +15,19 @@ import { MentorBoard } from '../entities/mentor-board.entity';
 import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { BoardImagesService } from '../services/BoardImage.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { BoardResponseDTO } from '../dto/boards.response.dto';
+// import { BoardResponseDTO } from '../dto/boards.response.dto';
 import { CreateBoardImageDto } from '../dto/create.board-image.dto';
 import { ApiUploadBoardImages } from '../swagger-decorators/upload-baord-images-decorator';
-import { ApiAddBoard } from '../swagger-decorators/add-board-decorators';
-import { ApiGetPageBoards } from '../swagger-decorators/get-page-boards-decorators';
-import { ApiGetOneBoard } from '../swagger-decorators/get-one-board-decorators';
-import { ApiUpdateBoard } from '../swagger-decorators/patch-board-decorators';
+// import { ApiAddBoard } from '../swagger-decorators/add-board-decorators';
+// import { ApiGetPageBoards } from '../swagger-decorators/get-page-boards-decorators';
+// import { ApiGetOneMentorBoard } from '../swagger-decorators/get-one-mentor-board-decorators';
+// import { ApiUpdateBoard } from '../swagger-decorators/patch-board-decorators';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiDeleteBoard } from '../swagger-decorators/delete-board-decorators';
 import { ApiUpdateBoardImage } from '../swagger-decorators/patch-board-images-decorators';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
-import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
+// import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 
 @Controller('boards')
 @ApiTags('board API')
@@ -39,7 +39,7 @@ export class HelpMeBoardController {
 
   @Post('/mentor')
   @UseGuards(JwtAccessTokenGuard)
-  @ApiAddBoard()
+  // @ApiAddBoard()
   async create(
     @GetUserId() userId: number,
     @Body() createMentorBoardDto: CreateMentorBoardDto,
@@ -63,33 +63,33 @@ export class HelpMeBoardController {
     );
   }
 
-  @Get('')
-  @ApiGetPageBoards()
-  async findPageBoards(
-    @Query('page') page = 1,
-    @Query('limit') limit = 30,
-  ): Promise<{ data: BoardResponseDTO[]; total: number }> {
-    return await this.helpMeBoardService.findPagedBoards(page, limit);
-  }
+  // @Get('')
+  // @ApiGetPageBoards()
+  // async findPageBoards(
+  //   @Query('page') page = 1,
+  //   @Query('limit') limit = 30,
+  // ): Promise<{ data: BoardResponseDTO[]; total: number }> {
+  //   return await this.helpMeBoardService.findPagedBoards(page, limit); //여기서 await 안걸고 넘겨도, 서비스딴에서 await 걸려서 넘어옴. async 쓸필요 x
+  // }
 
-  @Get('/unit') //하나의 게시판 불러오기
-  @UseGuards(JwtOptionalGuard)
-  @ApiGetOneBoard()
-  async findOne(
-    @Query('boardId') boardId: number,
-    @GetUserId() userId: number,
-  ): Promise<BoardResponseDTO> {
-    return await this.helpMeBoardService.findOneBoard(boardId, userId);
-  }
+  // @Get('/unit') //하나의 게시판 불러오기
+  // @UseGuards(JwtOptionalGuard)
+  // @ApiGetOneMentorBoard()
+  // async findOne(
+  //   @Query('boardId') boardId: number,
+  //   @GetUserId() userId: number,
+  // ): Promise<BoardResponseDTO> {
+  //   return await this.helpMeBoardService.findOneBoard(boardId, userId);
+  // }
 
-  @Patch('')
-  @ApiUpdateBoard()
-  async editBoard(
-    @Query('boardId') boardId: number,
-    @Body() boardData: Partial<MentorBoard>,
-  ): Promise<MentorBoard> {
-    return await this.helpMeBoardService.updateBoard(boardId, boardData);
-  }
+  // @Patch('')
+  // @ApiUpdateBoard()
+  // async editBoard(
+  //   @Query('boardId') boardId: number,
+  //   @Body() boardData: Partial<MentorBoard>,
+  // ): Promise<MentorBoard> {
+  //   return await this.helpMeBoardService.updateBoard(boardId, boardData);
+  // }
 
   @Patch('/images')
   @UseGuards(JwtAccessTokenGuard)
