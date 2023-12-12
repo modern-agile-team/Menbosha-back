@@ -5,18 +5,19 @@ import {
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger';
-import { ChatRoomDto } from '../dto/chat-room.dto';
+import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
+import { ChatDto } from '../dto/chat.dto';
 
-export function ApiGetChatRooms() {
+export function ApiGetChatRoomsNew() {
   return applyDecorators(
     ApiOperation({
-      summary: '채팅룸 조회',
+      summary: '채팅룸 조회 새로운 api',
       description: 'Header - user-token',
     }),
     ApiResponse({
+      type: ResponseGetChatRoomsDto,
       status: 200,
       description: '성공적으로 채팅방 조회',
-      type: ChatRoomDto,
     }),
     ApiHeaders([
       {
@@ -26,6 +27,6 @@ export function ApiGetChatRooms() {
         example: '여기에 액세스 토큰',
       },
     ]),
-    ApiExtraModels(ChatRoomDto),
+    ApiExtraModels(ResponseGetChatRoomsDto, ChatDto),
   );
 }

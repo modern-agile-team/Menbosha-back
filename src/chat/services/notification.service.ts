@@ -11,7 +11,7 @@ export class NotificationService {
 
   constructor(
     @InjectModel(Chat.name)
-    private readonly chatnModel: mongoose.Model<Chat>,
+    private readonly chatModel: mongoose.Model<Chat>,
   ) {}
 
   notificationListener() {
@@ -29,7 +29,7 @@ export class NotificationService {
 
   async createNotification(createNotificationsDto: number) {
     try {
-      const notification = await new this.chatnModel({
+      const notification = await new this.chatModel({
         // description: createNotificationsDto.description,
         // title: createNotificationsDto.title,
         isSeen: false,

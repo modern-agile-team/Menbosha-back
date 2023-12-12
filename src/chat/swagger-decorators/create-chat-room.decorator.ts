@@ -1,5 +1,11 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiExtraModels,
+  ApiHeaders,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
+import { ChatRoomDto } from '../dto/chat-room.dto';
 
 export function ApiCreateChatRoom() {
   return applyDecorators(
@@ -10,19 +16,7 @@ export function ApiCreateChatRoom() {
     ApiResponse({
       status: 201,
       description: '성공적으로 채팅방 생성',
-      content: {
-        JSON: {
-          example: {
-            host_id: 12345642,
-            guest_id: 123456427,
-            deleted_at: null,
-            _id: '653383a4468680bc4e9f8491',
-            createdAt: '2023-10-21T07:54:12.343Z',
-            updatedAt: '2023-10-21T07:54:12.343Z',
-            __v: 0,
-          },
-        },
-      },
+      type: ChatRoomDto,
     }),
     ApiResponse({
       status: 409,
@@ -58,5 +52,6 @@ export function ApiCreateChatRoom() {
         example: '여기에 액세스 토큰',
       },
     ]),
+    ApiExtraModels(ChatRoomDto),
   );
 }

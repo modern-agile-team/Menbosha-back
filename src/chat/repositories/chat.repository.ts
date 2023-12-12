@@ -16,7 +16,7 @@ export class ChatRepository {
     private readonly chatImageModel: mongoose.Model<ChatImage>,
   ) {}
 
-  async getChatRooms(myId: number) {
+  getChatRooms(myId: number) {
     return this.chatRoomModel.find({
       $and: [
         { $or: [{ host_id: myId }, { guest_id: myId }] },
@@ -25,7 +25,7 @@ export class ChatRepository {
     });
   }
 
-  async getOneChatRoom(myId: number, roomId: mongoose.Types.ObjectId) {
+  getOneChatRoom(myId: number, roomId: mongoose.Types.ObjectId) {
     return this.chatRoomModel.findOne({
       $and: [
         {
@@ -37,7 +37,7 @@ export class ChatRepository {
     });
   }
 
-  async createChatRoom(myId: number, guestId: number) {
+  createChatRoom(myId: number, guestId: number) {
     return this.chatRoomModel.create({
       host_id: myId,
       guest_id: guestId,
@@ -52,10 +52,16 @@ export class ChatRepository {
     return { success: true, msg: '게시글 삭제 성공' };
   }
 
-  async getChats(roomId: mongoose.Types.ObjectId) {
+  getChats(roomId: mongoose.Types.ObjectId) {
     return this.chatModel.find({
       chatroom_id: roomId,
     });
+  }
+
+  getOneChat(roomId: string) {
+    return this.chatModel
+      .findOne({ chatroom_id: roomId })
+      .sort({ createdAt: -1 });
   }
 
   async updateChatIsSeen(receiverId: number, roomId: mongoose.Types.ObjectId) {
@@ -77,12 +83,18 @@ export class ChatRepository {
     myId: number,
     receiverId: number,
   ) {
-    return this.chatModel.create({
+    const returnedChat = await this.chatModel.create({
       chatroom_id: roomId,
       content: content,
       sender: myId,
       receiver: receiverId,
     });
+
+    await this.chatRoomModel.findByIdAndUpdate(returnedChat.chatroom_id, {
+      $push: { chat_ids: returnedChat._id },
+    });
+
+    return returnedChat;
   }
 
   async createChatImage(

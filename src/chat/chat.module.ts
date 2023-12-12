@@ -10,6 +10,7 @@ import { ChatRepository } from './repositories/chat.repository';
 import { NotificationService } from './services/notification.service';
 import { EventsGateway } from './events/events.gateway';
 import { AuthModule } from 'src/auth/auth.module';
+import { UserModule } from 'src/users/user.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AuthModule } from 'src/auth/auth.module';
     ]),
     S3Module,
     AuthModule,
+    UserModule,
   ],
   controllers: [ChatController],
   providers: [ChatService, ChatRepository, NotificationService, EventsGateway],

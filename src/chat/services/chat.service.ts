@@ -16,6 +16,10 @@ import { Chat } from '../schemas/chat.schemas';
 import { User } from 'src/users/entities/user.entity';
 import { EntityManager } from 'typeorm';
 import { GetNotificationsResponseFromChatDto } from '../dto/get-notifications-response-from-chat.dto';
+import { UserService } from 'src/users/services/user.service';
+import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
+import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
+import { ChatRoomDto } from '../dto/chat-room.dto';
 
 @Injectable()
 export class ChatService {
@@ -23,6 +27,7 @@ export class ChatService {
   private readonly subject = new Subject();
   constructor(
     private readonly s3Service: S3Service,
+    private readonly userService: UserService,
     private readonly chatRepository: ChatRepository,
     private readonly entityManager: EntityManager,
     @InjectModel(ChatRoom.name)
@@ -40,7 +45,7 @@ export class ChatService {
       }),
     );
   }
-  async getChatRooms(myId: number) {
+  getChatRooms(myId: number) {
     return this.chatRepository.getChatRooms(myId);
   }
 
@@ -54,7 +59,7 @@ export class ChatService {
     return returnedRoom;
   }
 
-  async createChatRoom(myId: number, guestId: number) {
+  async createChatRoom(myId: number, guestId: number): Promise<ChatRoomDto> {
     try {
       const isChatRoom = await this.chatRoomModel.findOne({
         $or: [
@@ -67,14 +72,21 @@ export class ChatService {
         throw new ConflictException('해당 유저들의 채팅방이 이미 존재합니다.');
       }
 
-      return await this.chatRepository.createChatRoom(myId, guestId);
+      const returnedChatRoom = await this.chatRepository.createChatRoom(
+        myId,
+        guestId,
+      );
+
+      return new ChatRoomDto(returnedChatRoom);
     } catch (error) {
       console.error('채팅룸 생성 실패: ', error);
+
       if (error.code === 11000) {
         throw new ConflictException(
           '채팅룸 생성 실패. 서버에서 에러가 발생했습니다.',
         );
       }
+
       throw error;
     }
   }
@@ -231,6 +243,55 @@ export class ChatService {
     });
 
     return Object.values(groupedNotifications);
+  }
+
+  async getChatRoomsWithUserAndChat(
+    myId: number,
+  ): Promise<ResponseGetChatRoomsDto[]> {
+    const returnedChatAggregate = await this.chatRoomModel.aggregate([
+      {
+        $match: { $or: [{ host_id: myId }, { guest_id: myId }] },
+      },
+      {
+        $lookup: {
+          from: 'Chat',
+          localField: 'chat_ids',
+          foreignField: '_id',
+          as: 'chats',
+        },
+      },
+      { $sort: { 'chats.createdAt': -1 } },
+      {
+        $project: {
+          _id: 1,
+          host_id: 1,
+          guest_id: 1,
+          createdAt: 1,
+          chat: {
+            content: { $arrayElemAt: ['$chats.content', 0] },
+            isSeen: { $arrayElemAt: ['$chats.isSeen', 0] },
+            createdAt: { $arrayElemAt: ['$chats.createdAt', 0] },
+          },
+        },
+      },
+    ]);
+
+    if (!returnedChatAggregate) {
+      return null;
+    }
+
+    return Promise.all(
+      returnedChatAggregate.map(async (chatRooms) => {
+        const targetUser =
+          chatRooms.host_id === myId
+            ? await this.userService.getMyInfo(chatRooms.guest_id)
+            : await this.userService.getMyInfo(chatRooms.host_id);
+
+        const chatUserDto = new ChatUserDto(targetUser);
+
+        return new ResponseGetChatRoomsDto(chatRooms, chatUserDto);
+      }),
+    );
   }
 
   // async getUnreadCounts(roomId: mongoose.Types.ObjectId, after: number) {
