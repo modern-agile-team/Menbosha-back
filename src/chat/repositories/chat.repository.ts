@@ -4,6 +4,9 @@ import { ChatRoom } from '../schemas/chat-room.schemas';
 import { Chat } from '../schemas/chat.schemas';
 import { ChatImage } from '../schemas/chat-image.schemas';
 import mongoose from 'mongoose';
+import { ChatRoomDto } from '../dto/chat-room.dto';
+import { ChatDto } from '../dto/chat.dto';
+import { ResponsePostChatDto } from '../dto/response-post-chat-dto';
 
 @Injectable()
 export class ChatRepository {
@@ -16,27 +19,26 @@ export class ChatRepository {
     private readonly chatImageModel: mongoose.Model<ChatImage>,
   ) {}
 
-  getChatRooms(myId: number) {
+  getChatRooms(myId: number): Promise<ChatRoomDto[]> {
     return this.chatRoomModel.find({
-      $and: [
-        { $or: [{ host_id: myId }, { guest_id: myId }] },
-        { deleted_at: null },
-      ],
+      $and: [{ $or: [{ host_id: myId }, { guest_id: myId }] }],
     });
   }
 
-  getOneChatRoom(roomId: mongoose.Types.ObjectId) {
+  getOneChatRoom(roomId: mongoose.Types.ObjectId): Promise<ChatRoomDto> {
     return this.chatRoomModel.findById(roomId);
   }
 
-  createChatRoom(myId: number, guestId: number) {
+  createChatRoom(myId: number, guestId: number): Promise<ChatRoom> {
     return this.chatRoomModel.create({
       host_id: myId,
       guest_id: guestId,
     });
   }
 
-  async deleteChatRoom(roomId: mongoose.Types.ObjectId) {
+  async deleteChatRoom(
+    roomId: mongoose.Types.ObjectId,
+  ): Promise<{ success: boolean; msg: string }> {
     await this.chatRoomModel.findByIdAndUpdate(roomId, {
       deleted_at: new Date(),
     });
@@ -44,19 +46,16 @@ export class ChatRepository {
     return { success: true, msg: '게시글 삭제 성공' };
   }
 
-  getChats(roomId: mongoose.Types.ObjectId) {
+  getChats(roomId: mongoose.Types.ObjectId): Promise<ChatDto[]> {
     return this.chatModel.find({
       chatroom_id: roomId,
     });
   }
 
-  getOneChat(roomId: string) {
-    return this.chatModel
-      .findOne({ chatroom_id: roomId })
-      .sort({ createdAt: -1 });
-  }
-
-  async updateChatIsSeen(receiverId: number, roomId: mongoose.Types.ObjectId) {
+  async updateChatIsSeen(
+    receiverId: number,
+    roomId: mongoose.Types.ObjectId,
+  ): Promise<void> {
     await this.chatModel.updateMany(
       {
         $and: [
@@ -74,7 +73,7 @@ export class ChatRepository {
     content: string,
     myId: number,
     receiverId: number,
-  ) {
+  ): Promise<Chat> {
     const returnedChat = await this.chatModel.create({
       chatroom_id: roomId,
       content: content,
@@ -94,7 +93,7 @@ export class ChatRepository {
     myId: number,
     receiverId: number,
     imageUrl: string,
-  ) {
+  ): Promise<Chat> {
     const returnedChat = await this.chatModel.create({
       chatroom_id: roomId,
       sender: myId,

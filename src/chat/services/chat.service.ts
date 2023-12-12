@@ -1,6 +1,7 @@
 import { ChatRepository } from '../repositories/chat.repository';
 import {
   ConflictException,
+  ForbiddenException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -20,6 +21,7 @@ import { UserService } from 'src/users/services/user.service';
 import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
 import { ChatRoomDto } from '../dto/chat-room.dto';
+import { ResponsePostChatDto } from '../dto/response-post-chat-dto';
 
 @Injectable()
 export class ChatService {
@@ -45,7 +47,7 @@ export class ChatService {
       }),
     );
   }
-  getChatRooms(myId: number) {
+  getChatRooms(myId: number): Promise<ChatRoomDto[]> {
     return this.chatRepository.getChatRooms(myId);
   }
 
@@ -115,7 +117,7 @@ export class ChatService {
   }
 
   async getChats(userId: number, roomId: mongoose.Types.ObjectId) {
-    await this.getOneChatRoom(userId, roomId);
+    await this.getOneChatRoom(roomId);
     const returnedChat = await this.chatRepository.getChats(roomId);
 
     if (returnedChat.length) {
@@ -126,22 +128,23 @@ export class ChatService {
     return returnedChat;
   }
 
-  async createChat({ roomId, content, senderId, receiverId }) {
-    await this.getOneChatRoom(senderId, roomId);
+  async createChat({
+    roomId,
+    content,
+    senderId,
+    receiverId,
+  }): Promise<ResponsePostChatDto> {
+    const returnedChatRoom = await this.getOneChatRoom(roomId);
 
-    const isChatRoom = await this.chatRoomModel.findOne({
-      $or: [
-        {
-          $and: [{ host_id: senderId }, { guest_id: receiverId }],
-        },
-        {
-          $and: [{ host_id: receiverId }, { guest_id: senderId }],
-        },
-      ],
-    });
-
-    if (!isChatRoom) {
-      throw new NotFoundException('채팅을 전송할 유저가 채팅방에 없습니다');
+    if (
+      !(
+        (returnedChatRoom.host_id === senderId ||
+          returnedChatRoom.host_id === receiverId) &&
+        (returnedChatRoom.guest_id === senderId ||
+          returnedChatRoom.guest_id === receiverId)
+      )
+    ) {
+      throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
     }
 
     const returnedChat = await this.chatRepository.createChat(
@@ -151,15 +154,9 @@ export class ChatService {
       receiverId,
     );
 
-    const chat = {
-      content: returnedChat.content,
-      sender: returnedChat.sender,
-      receiver: returnedChat.receiver,
-    };
-
     if (returnedChat) this.subject.next(returnedChat);
 
-    return chat;
+    return new ResponsePostChatDto(returnedChat);
   }
 
   async createChatImage(
@@ -168,7 +165,7 @@ export class ChatService {
     receiverId: number,
     file: Express.Multer.File,
   ) {
-    await this.getOneChatRoom(myId, roomId);
+    await this.getOneChatRoom(roomId);
 
     const isChatRoom = await this.chatRoomModel.findOne({
       $or: [
