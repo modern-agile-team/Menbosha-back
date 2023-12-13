@@ -12,7 +12,7 @@ import { MentorBoardService } from '../services/mentor.board.service';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { PageByMentorBoardResponseDTO } from '../dto/boards.response.dto';
-import { ApiAddMentorBoard } from '../swagger-decorators/add-board-decorators';
+import { ApiAddMentorBoard } from '../swagger-decorators/add-mentor-board-decorators';
 import { ApiGetPageBoards } from '../swagger-decorators/get-page-boards-decorators';
 import { ApiGetOneMentorBoard } from '../swagger-decorators/get-one-mentor-board-decorators';
 import { ApiUpdateMentorBoard } from '../swagger-decorators/patch-board-decorators';

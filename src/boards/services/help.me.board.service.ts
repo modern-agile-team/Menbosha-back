@@ -4,12 +4,13 @@ import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { MentorBoard } from '../entities/mentor-board.entity';
 // import { BoardResponseDTO } from '../dto/boards.response.dto';
 import { oneBoardResponseDTO } from '../dto/boards.one.response.dto';
+import { CreateHelpMeBoardDto } from '../dto/creare.help.me.board.dto';
 
 @Injectable()
 export class HelpMeBoardService {
   constructor(private helpMeBoardRepository: HelpMeBoardRepository) {}
   async create(
-    boardData: CreateMentorBoardDto,
+    boardData: CreateHelpMeBoardDto,
     userId: number,
   ): Promise<MentorBoard> {
     try {
@@ -91,7 +92,7 @@ export class HelpMeBoardService {
         existingBoard[key] = boardData[key];
       }
     }
-    const updatedBoard = await this.helpMeBoardRepository.updateBoard(
+    const updatedBoard = await this.helpMeBoardRepository.updateHelpMeBoard(
       boardId,
       existingBoard,
     );

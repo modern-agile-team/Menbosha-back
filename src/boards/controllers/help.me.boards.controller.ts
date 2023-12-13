@@ -12,7 +12,6 @@ import {
 } from '@nestjs/common';
 import { HelpMeBoardService } from '../services/help.me.board.service';
 import { MentorBoard } from '../entities/mentor-board.entity';
-import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { BoardImagesService } from '../services/BoardImage.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 // import { BoardResponseDTO } from '../dto/boards.response.dto';
@@ -27,24 +26,26 @@ import { ApiDeleteBoard } from '../swagger-decorators/delete-board-decorators';
 import { ApiUpdateBoardImage } from '../swagger-decorators/patch-board-images-decorators';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
+import { ApiAddHelpMeBoard } from '../swagger-decorators/add-help-me-board-decorator';
+import { CreateHelpMeBoardDto } from '../dto/creare.help.me.board.dto';
 // import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 
-@Controller('boards')
-@ApiTags('board API')
+@Controller('HelpMeBoard')
+@ApiTags('HelpMeBoard API')
 export class HelpMeBoardController {
   constructor(
     private readonly helpMeBoardService: HelpMeBoardService,
     private readonly boardImagesService: BoardImagesService,
   ) {}
 
-  @Post('/mentor')
+  @Post('')
   @UseGuards(JwtAccessTokenGuard)
-  // @ApiAddBoard()
+  @ApiAddHelpMeBoard()
   async create(
     @GetUserId() userId: number,
-    @Body() createMentorBoardDto: CreateMentorBoardDto,
+    @Body() createHelpMeBoardDto: CreateHelpMeBoardDto,
   ): Promise<MentorBoard> {
-    return await this.helpMeBoardService.create(createMentorBoardDto, userId);
+    return await this.helpMeBoardService.create(createHelpMeBoardDto, userId);
   }
 
   @Post('/images')
