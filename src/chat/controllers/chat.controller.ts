@@ -4,6 +4,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   Sse,
@@ -96,6 +98,7 @@ export class ChatController {
 
   @UseGuards(JwtAccessTokenGuard)
   @ApiDeleteChatRoom()
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':roomId')
   deleteChatRoom(
     @GetUserId() userId: number,

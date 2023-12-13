@@ -14,7 +14,6 @@ import * as mongoose from 'mongoose';
 import { S3Service } from 'src/common/s3/s3.service';
 import { Subject, catchError, map } from 'rxjs';
 import { Chat } from '../schemas/chat.schemas';
-import { User } from 'src/users/entities/user.entity';
 import { EntityManager } from 'typeorm';
 import { GetNotificationsResponseFromChatDto } from '../dto/get-notifications-response-from-chat.dto';
 import { UserService } from 'src/users/services/user.service';
@@ -93,24 +92,14 @@ export class ChatService {
     }
   }
 
-  async deleteChatRoom(myId: number, roomId: mongoose.Types.ObjectId) {
-    const chatRoom = await this.chatRoomModel.findOne({
-      $and: [{ _id: roomId }, { deleted_at: null }],
-    });
+  async deleteChatRoom(
+    myId: number,
+    roomId: mongoose.Types.ObjectId,
+  ): Promise<void> {
+    const existChatRoom = await this.getOneChatRoom(roomId);
 
-    if (!chatRoom) {
-      throw new NotFoundException('해당 채팅룸이 없습니다.');
-    }
-
-    const isUser = await this.chatRoomModel.find({
-      $and: [
-        { $or: [{ host_id: myId }, { guest_id: myId }] },
-        { _id: chatRoom.id },
-      ],
-    });
-
-    if (!isUser.length) {
-      throw new NotFoundException('해당 유저는 채팅방에 속해있지 않습니다.');
+    if (!(existChatRoom.host_id === myId || existChatRoom.guest_id === myId)) {
+      throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
     }
 
     return this.chatRepository.deleteChatRoom(roomId);
@@ -212,14 +201,6 @@ export class ChatService {
   async getChatNotifications(
     userId: number,
   ): Promise<GetNotificationsResponseFromChatDto[]> {
-    const isUser = await this.entityManager.findOne(User, {
-      where: { id: userId },
-    });
-
-    if (!isUser) {
-      throw new NotFoundException('해당 유저를 찾지 못했습니다.');
-    }
-
     const returnedNotifications =
       await this.chatRepository.getChatNotifications(userId);
 
@@ -229,7 +210,7 @@ export class ChatService {
       const chatroomId = notification.chatroom_id.toString();
       if (!groupedNotifications[chatroomId]) {
         const newNotification = {
-          ...notification.toObject(),
+          ...notification,
           count: 1,
           content: notification.content.substring(0, 10),
         };

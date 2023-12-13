@@ -6,7 +6,6 @@ import { ChatImage } from '../schemas/chat-image.schemas';
 import mongoose from 'mongoose';
 import { ChatRoomDto } from '../dto/chat-room.dto';
 import { ChatDto } from '../dto/chat.dto';
-import { ResponsePostChatDto } from '../dto/response-post-chat-dto';
 
 @Injectable()
 export class ChatRepository {
@@ -36,14 +35,10 @@ export class ChatRepository {
     });
   }
 
-  async deleteChatRoom(
-    roomId: mongoose.Types.ObjectId,
-  ): Promise<{ success: boolean; msg: string }> {
+  async deleteChatRoom(roomId: mongoose.Types.ObjectId) {
     await this.chatRoomModel.findByIdAndUpdate(roomId, {
       deleted_at: new Date(),
     });
-
-    return { success: true, msg: '게시글 삭제 성공' };
   }
 
   getChats(roomId: mongoose.Types.ObjectId): Promise<ChatDto[]> {
