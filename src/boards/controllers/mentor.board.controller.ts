@@ -11,7 +11,7 @@ import {
 import { MentorBoardService } from '../services/mentor.board.service';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
-import { PageByMentorBoardResponseDTO } from '../dto/boards.response.dto';
+import { PageByMentorBoardResponseDTO } from '../dto/response.mentor.boards.dto';
 import { ApiAddMentorBoard } from '../swagger-decorators/add-mentor-board-decorators';
 import { ApiGetPageBoards } from '../swagger-decorators/get-page-boards-decorators';
 import { ApiGetOneMentorBoard } from '../swagger-decorators/get-one-mentor-board-decorators';
@@ -23,7 +23,7 @@ import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 import { MentorBoardResponseDTO } from '../dto/update.mentor.board.response.dto';
 import { UpdateMentorBoardDto } from '../dto/update.mentor.board.dto';
-import { oneBoardResponseDTO } from '../dto/boards.one.response.dto';
+import { oneMentorBoardResponseDTO } from '../dto/one.response.mentor.boards.dto';
 
 @Controller('mentorBoard')
 @ApiTags('mentorBoard API')
@@ -55,7 +55,7 @@ export class MentorBoardController {
   findOne(
     @Query('mentorBoardId') mentorBoardId: number,
     @GetUserId() userId: number,
-  ): Promise<oneBoardResponseDTO> {
+  ): Promise<oneMentorBoardResponseDTO> {
     return this.mentorBoardService.findOneMentorBoard(mentorBoardId, userId);
   }
 

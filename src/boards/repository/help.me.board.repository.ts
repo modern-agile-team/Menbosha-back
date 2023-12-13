@@ -8,7 +8,6 @@ import { HelpMeBoard } from '../entities/help-me-board.entity';
 @Injectable()
 export class HelpMeBoardRepository {
   constructor(private readonly entityManager: EntityManager) {}
-
   async createBoard(
     boardData: CreateHelpMeBoardDto,
     userId: number,
@@ -25,7 +24,10 @@ export class HelpMeBoardRepository {
     return this.entityManager.count(HelpMeBoard);
   }
 
-  async findPagedBoards(skip: number, limit: number): Promise<HelpMeBoard[]> {
+  async findPageByHelpMeBoards(
+    skip: number,
+    limit: number,
+  ): Promise<HelpMeBoard[]> {
     return await this.entityManager.find(HelpMeBoard, {
       relations: ['user', 'user.userImage', 'boardImages'],
       skip: skip,

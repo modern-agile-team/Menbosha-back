@@ -1,6 +1,6 @@
 import {
   Controller,
-  // Get,
+  Get,
   Post,
   Body,
   Patch,
@@ -11,16 +11,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { HelpMeBoardService } from '../services/help.me.board.service';
-import { MentorBoard } from '../entities/mentor-board.entity';
 import { BoardImagesService } from '../services/BoardImage.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
-// import { BoardResponseDTO } from '../dto/boards.response.dto';
-import { CreateBoardImageDto } from '../dto/create.board-image.dto';
-import { ApiUploadBoardImages } from '../swagger-decorators/upload-baord-images-decorator';
-// import { ApiAddBoard } from '../swagger-decorators/add-board-decorators';
-// import { ApiGetPageBoards } from '../swagger-decorators/get-page-boards-decorators';
-// import { ApiGetOneMentorBoard } from '../swagger-decorators/get-one-mentor-board-decorators';
-// import { ApiUpdateBoard } from '../swagger-decorators/patch-board-decorators';
+import { CreateHelpMeBoardImageDto } from '../dto/create.board-image.dto';
+import { ApiUploadHelpMeBoardImages } from '../swagger-decorators/upload-help-me-baord-images-decorator';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiDeleteBoard } from '../swagger-decorators/delete-board-decorators';
 import { ApiUpdateBoardImage } from '../swagger-decorators/patch-board-images-decorators';
@@ -28,6 +22,8 @@ import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { ApiAddHelpMeBoard } from '../swagger-decorators/add-help-me-board-decorator';
 import { CreateHelpMeBoardDto } from '../dto/creare.help.me.board.dto';
+import { HelpMeBoard } from '../entities/help-me-board.entity';
+import { PageByHelpMeBoardResponseDTO } from '../dto/response.help.me.board.dto';
 // import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 
 @Controller('HelpMeBoard')
@@ -44,34 +40,34 @@ export class HelpMeBoardController {
   async create(
     @GetUserId() userId: number,
     @Body() createHelpMeBoardDto: CreateHelpMeBoardDto,
-  ): Promise<MentorBoard> {
+  ): Promise<HelpMeBoard> {
     return await this.helpMeBoardService.create(createHelpMeBoardDto, userId);
   }
 
   @Post('/images')
   @UseGuards(JwtAccessTokenGuard)
   @UseInterceptors(FilesInterceptor('files', 3))
-  @ApiUploadBoardImages()
+  @ApiUploadHelpMeBoardImages()
   async uploadImage(
     @GetUserId() userId: number,
-    @Query('boardId') boardId: number,
+    @Query('helpMeBoardId') boardId: number,
     @UploadedFiles() files: Express.Multer.File[],
-  ): Promise<CreateBoardImageDto[]> {
-    return await this.boardImagesService.createBoardImages(
+  ): Promise<CreateHelpMeBoardImageDto[]> {
+    return await this.boardImagesService.createHelpMeBoardImages(
       boardId,
       files,
       userId,
     );
   }
 
-  // @Get('')
+  @Get('')
   // @ApiGetPageBoards()
-  // async findPageBoards(
-  //   @Query('page') page = 1,
-  //   @Query('limit') limit = 30,
-  // ): Promise<{ data: BoardResponseDTO[]; total: number }> {
-  //   return await this.helpMeBoardService.findPagedBoards(page, limit); //여기서 await 안걸고 넘겨도, 서비스딴에서 await 걸려서 넘어옴. async 쓸필요 x
-  // }
+  async findPageBoards(
+    @Query('page') page = 1,
+    @Query('limit') limit = 30,
+  ): Promise<{ data: PageByHelpMeBoardResponseDTO[]; total: number }> {
+    return await this.helpMeBoardService.findPagedHelpMeBoards(page, limit); //여기서 await 안걸고 넘겨도, 서비스딴에서 await 걸려서 넘어옴. async 쓸필요 x
+  }
 
   // @Get('/unit') //하나의 게시판 불러오기
   // @UseGuards(JwtOptionalGuard)
@@ -102,7 +98,7 @@ export class HelpMeBoardController {
     @Query('deleteImageUrl') deleteImageUrl: string[],
     @UploadedFiles() files: Express.Multer.File[],
   ) {
-    return await this.boardImagesService.updateBoardImages(
+    return await this.boardImagesService.updateHelpMeBoardImages(
       boardId,
       files,
       userId,
