@@ -2,14 +2,14 @@ import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 
 const options: SchemaOptions = {
-  collection: 'Chat',
+  collection: 'chats',
   timestamps: true,
 };
 
 @Schema(options)
-export class Chat {
-  @Prop({ type: mongoose.Types.ObjectId, ref: 'ChatRoom' })
-  chatroom_id: mongoose.Types.ObjectId;
+export class Chats {
+  @Prop({ type: mongoose.Types.ObjectId, ref: 'chat_rooms' })
+  chatroomId: mongoose.Types.ObjectId;
 
   @Prop({ required: true })
   sender: number;
@@ -24,4 +24,4 @@ export class Chat {
   isSeen: boolean;
 }
 
-export const ChatSchema = SchemaFactory.createForClass(Chat);
+export const ChatSchema = SchemaFactory.createForClass(Chats);

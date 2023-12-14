@@ -1,23 +1,23 @@
 import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
-import { Chat } from './chat.schemas';
 import { IsMongoId, IsNotEmpty, IsString } from 'class-validator';
+import { Chats } from './chat.schemas';
 
 const options: SchemaOptions = {
-  collection: 'ChatImage',
+  collection: 'chat_images',
   timestamps: true,
 };
 
 @Schema(options)
-export class ChatImage {
+export class ChatImages {
   @IsMongoId()
   @IsNotEmpty()
-  @Prop({ type: mongoose.Types.ObjectId, ref: Chat.name })
-  chat_id: mongoose.Types.ObjectId;
+  @Prop({ type: mongoose.Types.ObjectId, ref: Chats.name })
+  chatId: mongoose.Types.ObjectId;
 
   @IsString()
   @Prop({ required: true })
-  image_url: string;
+  imageUrl: string;
 }
 
-export const ChatImageSchema = SchemaFactory.createForClass(ChatImage);
+export const ChatImageSchema = SchemaFactory.createForClass(ChatImages);

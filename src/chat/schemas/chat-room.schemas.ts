@@ -1,28 +1,28 @@
 import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import { Chat } from './chat.schemas';
+import { Chats } from './chat.schemas';
 
 const options: SchemaOptions = {
-  collection: 'ChatRoom',
+  collection: 'chat_rooms',
   timestamps: true,
 };
 
 @Schema(options)
-export class ChatRoom {
+export class ChatRooms {
   @Prop({
-    type: [{ type: mongoose.Types.ObjectId, ref: Chat.name }],
+    type: [{ type: mongoose.Types.ObjectId, ref: Chats.name }],
     default: [],
   })
-  chat_ids: mongoose.Types.ObjectId[];
+  chatIds: mongoose.Types.ObjectId[];
 
   @Prop({ required: true })
-  host_id: number;
+  hostId: number;
 
   @Prop({ required: true })
-  guest_id: number;
+  guestId: number;
 
   @Prop({ type: Date, default: null })
-  deleted_at: Date | null;
+  deletedAt: Date | null;
 }
 
-export const ChatRoomSchema = SchemaFactory.createForClass(ChatRoom);
+export const ChatRoomSchema = SchemaFactory.createForClass(ChatRooms);
