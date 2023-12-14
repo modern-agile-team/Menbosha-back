@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
 import { TransformMongoId } from './transform/transform-mongo-id';
-import { Chats } from '../schemas/chat.schemas';
+import { Chats } from '../schemas/chats.schemas';
 
 export class ChatsDto
   implements

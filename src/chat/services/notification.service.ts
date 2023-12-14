@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Subject, map } from 'rxjs';
 import mongoose from 'mongoose';
-import { Chat } from '../schemas/chat.schemas';
+import { Chats } from '../schemas/chats.schemas';
 
 @Injectable()
 export class NotificationService {
@@ -10,8 +10,8 @@ export class NotificationService {
   private readonly subject = new Subject();
 
   constructor(
-    @InjectModel(Chat.name)
-    private readonly chatModel: mongoose.Model<Chat>,
+    @InjectModel(Chats.name)
+    private readonly chatModel: mongoose.Model<Chats>,
   ) {}
 
   notificationListener() {

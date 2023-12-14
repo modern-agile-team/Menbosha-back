@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { IsMongoId, IsNotEmpty, IsString } from 'class-validator';
-import { Chats } from './chat.schemas';
+import { Chats } from './chats.schemas';
 
 const options: SchemaOptions = {
   collection: 'chat_images',

@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 import { TransformMongoId } from './transform/transform-mongo-id';
 import mongoose from 'mongoose';
-import { ChatRooms } from '../schemas/chat-room.schemas';
+import { ChatRooms } from '../schemas/chat-rooms.schemas';
 
 export class ChatRoomsDto
   implements Pick<ChatRooms, 'guestId' | 'hostId' | 'chatIds' | 'deletedAt'>

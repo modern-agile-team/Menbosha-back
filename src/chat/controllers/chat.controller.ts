@@ -30,7 +30,7 @@ import { ApiGetChatNotificationSse } from '../swagger-decorators/get-chat-notifi
 // import { ApiGetChatUnreadCounts } from '../swagger-decorators/get-chat-unread-counts.decorator';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
-import { GetNotificationsResponseFromChatDto } from '../dto/get-notifications-response-from-chat.dto';
+import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 import { ApiGetChatNotifications } from '../swagger-decorators/get-chat-notifications.decorator';
 import { ApiCreateChatImage } from '../swagger-decorators/create-chat-image.decorators';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
@@ -140,11 +140,11 @@ export class ChatController {
   @Get('chat/notice')
   async getChatNotifications(
     @GetUserId() userId: number,
-  ): Promise<GetNotificationsResponseFromChatDto[]> {
+  ): Promise<GetNotificationsResponseFromChatsDto[]> {
     const returnedChatNotifications =
       await this.chatService.getChatNotifications(userId);
     return plainToInstance(
-      GetNotificationsResponseFromChatDto,
+      GetNotificationsResponseFromChatsDto,
       returnedChatNotifications,
     );
   }

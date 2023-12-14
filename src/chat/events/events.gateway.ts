@@ -18,7 +18,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { LoginChatRoomDto } from '../dto/login-chat-room.dto';
+import { LoginChatRoomsDto } from '../dto/login-chat-rooms.dto';
 import { WebSocketExceptionFilter } from '../exceptions/websocket-exception.filter';
 import mongoose from 'mongoose';
 @WebSocketGateway({ namespace: /\/ch-.+/, cors: true })
@@ -42,12 +42,12 @@ export class EventsGateway
     소켓 룸으로 join`,
     channel: 'login',
     message: {
-      payload: LoginChatRoomDto,
+      payload: LoginChatRoomsDto,
     },
   })
   @SubscribeMessage('login')
   handleLogin(
-    @MessageBody() loginChatRoomDto: LoginChatRoomDto,
+    @MessageBody() loginChatRoomDto: LoginChatRoomsDto,
     @ConnectedSocket() socket: Socket,
   ) {
     console.log('login', loginChatRoomDto.userId);

@@ -1,37 +1,37 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ChatRoom } from '../schemas/chat-room.schemas';
-import { Chat } from '../schemas/chat.schemas';
-import { ChatImage } from '../schemas/chat-image.schemas';
+import { ChatRooms } from '../schemas/chat-rooms.schemas';
+import { Chats } from '../schemas/chats.schemas';
+import { ChatImages } from '../schemas/chat-images.schemas';
 import mongoose from 'mongoose';
-import { ChatRoomDto } from '../dto/chat-rooms.dto';
-import { ChatDto } from '../dto/chats.dto';
+import { ChatRoomsDto } from '../dto/chat-rooms.dto';
+import { ChatsDto } from '../dto/chats.dto';
 
 @Injectable()
 export class ChatRepository {
   constructor(
-    @InjectModel(ChatRoom.name)
-    private readonly chatRoomModel: mongoose.Model<ChatRoom>,
-    @InjectModel(Chat.name)
-    private readonly chatModel: mongoose.Model<Chat>,
-    @InjectModel(ChatImage.name)
-    private readonly chatImageModel: mongoose.Model<ChatImage>,
+    @InjectModel(ChatRooms.name)
+    private readonly chatRoomModel: mongoose.Model<ChatRooms>,
+    @InjectModel(Chats.name)
+    private readonly chatModel: mongoose.Model<Chats>,
+    @InjectModel(ChatImages.name)
+    private readonly chatImageModel: mongoose.Model<ChatImages>,
   ) {}
 
-  getChatRooms(myId: number): Promise<ChatRoomDto[]> {
+  getChatRooms(myId: number): Promise<ChatRoomsDto[]> {
     return this.chatRoomModel.find({
-      $and: [{ $or: [{ host_id: myId }, { guest_id: myId }] }],
+      $and: [{ $or: [{ hostId: myId }, { guestId: myId }] }],
     });
   }
 
-  getOneChatRoom(roomId: mongoose.Types.ObjectId): Promise<ChatRoomDto> {
+  getOneChatRoom(roomId: mongoose.Types.ObjectId): Promise<ChatRoomsDto> {
     return this.chatRoomModel.findById(roomId);
   }
 
-  createChatRoom(myId: number, guestId: number): Promise<ChatRoom> {
+  createChatRoom(myId: number, guestId: number): Promise<ChatRooms> {
     return this.chatRoomModel.create({
-      host_id: myId,
-      guest_id: guestId,
+      hostId: myId,
+      guestId: guestId,
     });
   }
 
@@ -41,9 +41,9 @@ export class ChatRepository {
     });
   }
 
-  getChats(roomId: mongoose.Types.ObjectId): Promise<ChatDto[]> {
+  getChats(roomId: mongoose.Types.ObjectId): Promise<ChatsDto[]> {
     return this.chatModel.find({
-      chatroom_id: roomId,
+      chatroomId: roomId,
     });
   }
 
@@ -55,7 +55,7 @@ export class ChatRepository {
       {
         $and: [
           { receiver: receiverId },
-          { chatroom_id: roomId },
+          { chatroomId: roomId },
           { isSeen: false },
         ],
       },
@@ -68,16 +68,16 @@ export class ChatRepository {
     content: string,
     myId: number,
     receiverId: number,
-  ): Promise<Chat> {
+  ): Promise<Chats> {
     const returnedChat = await this.chatModel.create({
-      chatroom_id: roomId,
+      chatroomId: roomId,
       content: content,
       sender: myId,
       receiver: receiverId,
     });
 
-    await this.chatRoomModel.findByIdAndUpdate(returnedChat.chatroom_id, {
-      $push: { chat_ids: returnedChat._id },
+    await this.chatRoomModel.findByIdAndUpdate(returnedChat.chatroomId, {
+      $push: { chatIds: returnedChat._id },
     });
 
     return returnedChat;
@@ -88,27 +88,27 @@ export class ChatRepository {
     myId: number,
     receiverId: number,
     imageUrl: string,
-  ): Promise<Chat> {
+  ): Promise<Chats> {
     const returnedChat = await this.chatModel.create({
-      chatroom_id: roomId,
+      chatroomId: roomId,
       sender: myId,
       receiver: receiverId,
       content: imageUrl,
     });
 
     await this.chatImageModel.create({
-      chat_id: returnedChat.id,
-      image_url: returnedChat.content,
+      chatId: returnedChat.id,
+      imageUrl: returnedChat.content,
     });
 
-    await this.chatRoomModel.findByIdAndUpdate(returnedChat.chatroom_id, {
-      $push: { chat_ids: returnedChat._id },
+    await this.chatRoomModel.findByIdAndUpdate(returnedChat.chatroomId, {
+      $push: { chatIds: returnedChat._id },
     });
 
     return returnedChat;
   }
 
-  async getChatNotifications(userId: number): Promise<Chat[]> {
+  async getChatNotifications(userId: number): Promise<Chats[]> {
     const notifications = await this.chatModel
       .find({
         $and: [{ receiver: userId }, { isSeen: false }],
@@ -120,7 +120,7 @@ export class ChatRepository {
 
   // async getUnreadCounts(roomId: mongoose.Types.ObjectId, after: number) {
   //   return this.chatModel.count({
-  //     $and: [{ chatroom_id: roomId }, { createdAt: { $gt: new Date(after) } }],
+  //     $and: [{ chatroomId: roomId }, { createdAt: { $gt: new Date(after) } }],
   //   });
   // }
 }

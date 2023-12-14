@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
-import { ChatDto } from './chats.dto';
+import { ChatsDto } from './chats.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { TransformMongoId } from './transform/transform-mongo-id';
 
 export class ResponsePostChatDto
   implements
-    Pick<ChatDto, 'content' | 'createdAt' | 'receiver' | 'sender' | 'isSeen'>
+    Pick<ChatsDto, 'content' | 'createdAt' | 'receiver' | 'sender' | 'isSeen'>
 {
   @ApiProperty({
     description: '채팅 id',

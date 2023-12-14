@@ -9,13 +9,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ChatRooms } from '../schemas/chat-room.schemas';
+import { ChatRooms } from '../schemas/chat-rooms.schemas';
 import * as mongoose from 'mongoose';
 import { S3Service } from 'src/common/s3/s3.service';
 import { Subject, catchError, map } from 'rxjs';
-import { Chats } from '../schemas/chat.schemas';
+import { Chats } from '../schemas/chats.schemas';
 import { EntityManager } from 'typeorm';
-import { GetNotificationsResponseFromChatDto } from '../dto/get-notifications-response-from-chat.dto';
+import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 import { UserService } from 'src/users/services/user.service';
 import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
@@ -32,9 +32,9 @@ export class ChatService {
     private readonly chatRepository: ChatRepository,
     private readonly entityManager: EntityManager,
     @InjectModel(ChatRooms.name)
-    private readonly chatRoomModel: mongoose.Model<ChatRooms>,
+    private readonly chatRoomsModel: mongoose.Model<ChatRooms>,
     @InjectModel(Chats.name)
-    private readonly chatModel: mongoose.Model<Chats>,
+    private readonly chatsModel: mongoose.Model<Chats>,
   ) {}
 
   notificationListener() {
@@ -62,10 +62,10 @@ export class ChatService {
 
   async createChatRoom(myId: number, guestId: number): Promise<ChatRoomsDto> {
     try {
-      const isChatRoom = await this.chatRoomModel.findOne({
+      const isChatRoom = await this.chatRoomsModel.findOne({
         $or: [
-          { $and: [{ host_id: myId }, { guest_id: guestId }] },
-          { $and: [{ host_id: guestId }, { guest_id: myId }] },
+          { $and: [{ hostId: myId }, { guestId: guestId }] },
+          { $and: [{ hostId: guestId }, { guestId: myId }] },
         ],
       });
 
@@ -156,13 +156,13 @@ export class ChatService {
   ) {
     await this.getOneChatRoom(roomId);
 
-    const isChatRoom = await this.chatRoomModel.findOne({
+    const isChatRoom = await this.chatRoomsModel.findOne({
       $or: [
         {
-          $and: [{ host_id: myId }, { guest_id: receiverId }],
+          $and: [{ hostId: myId }, { guestId: receiverId }],
         },
         {
-          $and: [{ host_id: receiverId }, { guest_id: myId }],
+          $and: [{ hostId: receiverId }, { guestId: myId }],
         },
       ],
     });
@@ -182,9 +182,9 @@ export class ChatService {
   }
 
   async findChatImage({ roomId, imageUrl, senderId, receiverId }) {
-    const isChatAndUsers = await this.chatModel.findOne({
+    const isChatAndUsers = await this.chatsModel.findOne({
       $and: [
-        { chatroom_id: roomId },
+        { chatroomId: roomId },
         { sender: senderId },
         { receiver: receiverId },
         { content: imageUrl },
@@ -200,14 +200,14 @@ export class ChatService {
 
   async getChatNotifications(
     userId: number,
-  ): Promise<GetNotificationsResponseFromChatDto[]> {
+  ): Promise<GetNotificationsResponseFromChatsDto[]> {
     const returnedNotifications =
       await this.chatRepository.getChatNotifications(userId);
 
     const groupedNotifications = {};
 
     returnedNotifications.forEach((notification) => {
-      const chatroomId = notification.chatroom_id.toString();
+      const chatroomId = notification.chatroomId.toString();
       if (!groupedNotifications[chatroomId]) {
         const newNotification = {
           ...notification,
@@ -226,14 +226,14 @@ export class ChatService {
   async getChatRoomsWithUserAndChat(
     myId: number,
   ): Promise<ResponseGetChatRoomsDto[]> {
-    const returnedChatAggregate = await this.chatRoomModel.aggregate([
+    const returnedChatAggregate = await this.chatRoomsModel.aggregate([
       {
-        $match: { $or: [{ host_id: myId }, { guest_id: myId }] },
+        $match: { $or: [{ hostId: myId }, { guestId: myId }] },
       },
       {
         $lookup: {
-          from: 'Chat',
-          localField: 'chat_ids',
+          from: 'Chats',
+          localField: 'chatIds',
           foreignField: '_id',
           as: 'chats',
         },
@@ -242,8 +242,8 @@ export class ChatService {
       {
         $project: {
           _id: 1,
-          host_id: 1,
-          guest_id: 1,
+          hostId: 1,
+          guestId: 1,
           createdAt: 1,
           chat: {
             content: { $arrayElemAt: ['$chats.content', 0] },
@@ -261,9 +261,9 @@ export class ChatService {
     return Promise.all(
       returnedChatAggregate.map(async (chatRooms) => {
         const targetUser =
-          chatRooms.host_id === myId
-            ? await this.userService.getMyInfo(chatRooms.guest_id)
-            : await this.userService.getMyInfo(chatRooms.host_id);
+          chatRooms.hostId === myId
+            ? await this.userService.getMyInfo(chatRooms.guestId)
+            : await this.userService.getMyInfo(chatRooms.hostId);
 
         const chatUserDto = new ChatUserDto(targetUser);
 
@@ -273,7 +273,7 @@ export class ChatService {
   }
 
   // async getUnreadCounts(roomId: mongoose.Types.ObjectId, after: number) {
-  //   const returnedRoom = await this.chatRoomModel.findOne({ _id: roomId });
+  //   const returnedRoom = await this.chatRoomsModel.findOne({ _id: roomId });
   //   if (!returnedRoom) {
   //     throw new NotFoundException('해당 채팅 룸을 찾지 못했습니다.');
   //   }
