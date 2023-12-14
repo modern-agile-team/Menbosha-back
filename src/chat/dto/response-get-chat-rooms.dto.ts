@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
-import { ChatDto } from './chat.dto';
+import { ChatDto } from './chats.dto';
 import mongoose from 'mongoose';
 import { TransformMongoId } from './transform/transform-mongo-id';
-import { ChatRoomDto } from './chat-room.dto';
+import { ChatRoomDto } from './chat-rooms.dto';
 
 export class ResponseGetChatRoomsDto
   implements Pick<ChatRoomDto, '_id' | 'createdAt'>

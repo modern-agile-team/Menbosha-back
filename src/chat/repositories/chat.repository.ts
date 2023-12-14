@@ -4,8 +4,8 @@ import { ChatRoom } from '../schemas/chat-room.schemas';
 import { Chat } from '../schemas/chat.schemas';
 import { ChatImage } from '../schemas/chat-image.schemas';
 import mongoose from 'mongoose';
-import { ChatRoomDto } from '../dto/chat-room.dto';
-import { ChatDto } from '../dto/chat.dto';
+import { ChatRoomDto } from '../dto/chat-rooms.dto';
+import { ChatDto } from '../dto/chats.dto';
 
 @Injectable()
 export class ChatRepository {

@@ -9,17 +9,17 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ChatRoom } from '../schemas/chat-room.schemas';
+import { ChatRooms } from '../schemas/chat-room.schemas';
 import * as mongoose from 'mongoose';
 import { S3Service } from 'src/common/s3/s3.service';
 import { Subject, catchError, map } from 'rxjs';
-import { Chat } from '../schemas/chat.schemas';
+import { Chats } from '../schemas/chat.schemas';
 import { EntityManager } from 'typeorm';
 import { GetNotificationsResponseFromChatDto } from '../dto/get-notifications-response-from-chat.dto';
 import { UserService } from 'src/users/services/user.service';
 import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
-import { ChatRoomDto } from '../dto/chat-room.dto';
+import { ChatRoomsDto } from '../dto/chat-rooms.dto';
 import { ResponsePostChatDto } from '../dto/response-post-chat-dto';
 
 @Injectable()
@@ -31,10 +31,10 @@ export class ChatService {
     private readonly userService: UserService,
     private readonly chatRepository: ChatRepository,
     private readonly entityManager: EntityManager,
-    @InjectModel(ChatRoom.name)
-    private readonly chatRoomModel: mongoose.Model<ChatRoom>,
-    @InjectModel(Chat.name)
-    private readonly chatModel: mongoose.Model<Chat>,
+    @InjectModel(ChatRooms.name)
+    private readonly chatRoomModel: mongoose.Model<ChatRooms>,
+    @InjectModel(Chats.name)
+    private readonly chatModel: mongoose.Model<Chats>,
   ) {}
 
   notificationListener() {
@@ -46,21 +46,21 @@ export class ChatService {
       }),
     );
   }
-  getChatRooms(myId: number): Promise<ChatRoomDto[]> {
+  getChatRooms(myId: number): Promise<ChatRoomsDto[]> {
     return this.chatRepository.getChatRooms(myId);
   }
 
-  async getOneChatRoom(roomId: mongoose.Types.ObjectId): Promise<ChatRoomDto> {
+  async getOneChatRoom(roomId: mongoose.Types.ObjectId): Promise<ChatRoomsDto> {
     const returnedRoom = await this.chatRepository.getOneChatRoom(roomId);
 
     if (!returnedRoom) {
       throw new NotFoundException('해당 채팅방이 없습니다.');
     }
 
-    return new ChatRoomDto(returnedRoom);
+    return new ChatRoomsDto(returnedRoom);
   }
 
-  async createChatRoom(myId: number, guestId: number): Promise<ChatRoomDto> {
+  async createChatRoom(myId: number, guestId: number): Promise<ChatRoomsDto> {
     try {
       const isChatRoom = await this.chatRoomModel.findOne({
         $or: [
@@ -78,7 +78,7 @@ export class ChatService {
         guestId,
       );
 
-      return new ChatRoomDto(returnedChatRoom);
+      return new ChatRoomsDto(returnedChatRoom);
     } catch (error) {
       console.error('채팅룸 생성 실패: ', error);
 
@@ -98,7 +98,7 @@ export class ChatService {
   ): Promise<void> {
     const existChatRoom = await this.getOneChatRoom(roomId);
 
-    if (!(existChatRoom.host_id === myId || existChatRoom.guest_id === myId)) {
+    if (!(existChatRoom.hostId === myId || existChatRoom.guestId === myId)) {
       throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
     }
 
@@ -127,10 +127,10 @@ export class ChatService {
 
     if (
       !(
-        (returnedChatRoom.host_id === senderId ||
-          returnedChatRoom.host_id === receiverId) &&
-        (returnedChatRoom.guest_id === senderId ||
-          returnedChatRoom.guest_id === receiverId)
+        (returnedChatRoom.hostId === senderId ||
+          returnedChatRoom.hostId === receiverId) &&
+        (returnedChatRoom.guestId === senderId ||
+          returnedChatRoom.guestId === receiverId)
       )
     ) {
       throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');

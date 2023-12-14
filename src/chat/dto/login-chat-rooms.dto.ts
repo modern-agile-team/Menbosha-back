@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsNumber } from 'class-validator';
 import mongoose from 'mongoose';
 
-export class LoginChatRoomDto {
+export class LoginChatRoomsDto {
   @IsNumber()
   @ApiProperty({
     example: '1',

@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { TransformMongoId } from './transform/transform-mongo-id';
 import { Chats } from '../schemas/chat.schemas';
 
-export class ChatDto
+export class ChatsDto
   implements
     Pick<Chats, 'chatroomId' | 'content' | 'sender' | 'receiver' | 'isSeen'>
 {
@@ -40,7 +40,7 @@ export class ChatDto
   })
   createdAt: Date;
 
-  constructor(chatDto: Partial<ChatDto>) {
+  constructor(chatDto: Partial<ChatsDto>) {
     this.chatroomId = chatDto.chatroomId;
     this.content = chatDto.content;
     this.sender = chatDto.sender;

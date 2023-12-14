@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { ChatDto } from './chat.dto';
+import { ChatDto } from './chats.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { TransformMongoId } from './transform/transform-mongo-id';
 

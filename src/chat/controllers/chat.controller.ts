@@ -34,7 +34,7 @@ import { GetNotificationsResponseFromChatDto } from '../dto/get-notifications-re
 import { ApiGetChatNotifications } from '../swagger-decorators/get-chat-notifications.decorator';
 import { ApiCreateChatImage } from '../swagger-decorators/create-chat-image.decorators';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
-import { ChatRoomDto } from '../dto/chat-room.dto';
+import { ChatRoomsDto } from '../dto/chat-rooms.dto';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
 import { plainToInstance } from 'class-transformer';
 import { ApiGetChatRoomsNew } from '../swagger-decorators/get-chat-rooms-new.decorator';
@@ -61,10 +61,10 @@ export class ChatController {
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChatRooms()
   @Get()
-  async getChatRooms(@GetUserId() userId: number): Promise<ChatRoomDto[]> {
+  async getChatRooms(@GetUserId() userId: number): Promise<ChatRoomsDto[]> {
     const returnedChatRooms = await this.chatService.getChatRooms(userId);
 
-    return plainToInstance(ChatRoomDto, returnedChatRooms, {
+    return plainToInstance(ChatRoomsDto, returnedChatRooms, {
       excludeExtraneousValues: true,
     });
   }
@@ -82,7 +82,7 @@ export class ChatController {
   @Get(':roomId')
   getOneChatRoom(
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  ): Promise<ChatRoomDto> {
+  ): Promise<ChatRoomsDto> {
     return this.chatService.getOneChatRoom(roomId);
   }
 
@@ -92,7 +92,7 @@ export class ChatController {
   createChatRoom(
     @GetUserId() userId: number,
     @Body() body: ReceivedUserDto,
-  ): Promise<ChatRoomDto> {
+  ): Promise<ChatRoomsDto> {
     return this.chatService.createChatRoom(userId, body.receiverId);
   }
 
@@ -138,10 +138,15 @@ export class ChatController {
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChatNotifications()
   @Get('chat/notice')
-  getChatNotifications(
+  async getChatNotifications(
     @GetUserId() userId: number,
   ): Promise<GetNotificationsResponseFromChatDto[]> {
-    return this.chatService.getChatNotifications(userId);
+    const returnedChatNotifications =
+      await this.chatService.getChatNotifications(userId);
+    return plainToInstance(
+      GetNotificationsResponseFromChatDto,
+      returnedChatNotifications,
+    );
   }
 
   // @ApiGetChatUnreadCounts()

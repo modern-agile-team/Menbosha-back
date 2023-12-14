@@ -1,19 +1,17 @@
 import mongoose from 'mongoose';
+import { ChatsDto } from './chats.dto';
 
-export class GetNotificationsResponseFromChatDto {
+export class GetNotificationsResponseFromChatDto extends ChatsDto {
   _id: mongoose.Types.ObjectId;
 
-  chatroom_id: mongoose.Types.ObjectId;
-
-  sender: number;
-
-  receiver: number;
-
-  content: string;
-
-  createdAt: Date;
-
-  isSeen: false;
-
   count: number;
+
+  constructor(
+    getNotificationsResponseFromChatDto: GetNotificationsResponseFromChatDto,
+  ) {
+    super(getNotificationsResponseFromChatDto);
+
+    this._id = getNotificationsResponseFromChatDto._id;
+    this.count = getNotificationsResponseFromChatDto.count;
+  }
 }
