@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Exclude, Expose, Transform } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import { TransformMongoId } from './transform/transform-mongo-id';
 import mongoose from 'mongoose';
 import { ChatRooms } from '../schemas/chat-rooms.schemas';
-import { ExposeId } from './expose/expose-id';
+import { TransformMongoIdToPlainOnly } from './transform/transform-mongo-id-for-array';
 
 export class ChatRoomsDto
   implements Pick<ChatRooms, 'guestId' | 'hostId' | 'chatIds' | 'deletedAt'>
@@ -35,7 +35,7 @@ export class ChatRoomsDto
     format: 'ObjectId',
   })
   @Expose()
-  @Transform(({ value }) => value.map(String), { toPlainOnly: true })
+  @TransformMongoIdToPlainOnly()
   chatIds: mongoose.Types.ObjectId[];
 
   @ApiProperty({
