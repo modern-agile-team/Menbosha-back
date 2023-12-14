@@ -24,6 +24,8 @@ import { ApiAddHelpMeBoard } from '../swagger-decorators/add-help-me-board-decor
 import { CreateHelpMeBoardDto } from '../dto/creare.help.me.board.dto';
 import { HelpMeBoard } from '../entities/help-me-board.entity';
 import { PageByHelpMeBoardResponseDTO } from '../dto/response.help.me.board.dto';
+import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
+import { oneHelpMeBoardResponseDTO } from '../dto/one.response.help.me.board.dto';
 // import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 
 @Controller('HelpMeBoard')
@@ -69,15 +71,15 @@ export class HelpMeBoardController {
     return await this.helpMeBoardService.findPagedHelpMeBoards(page, limit); //여기서 await 안걸고 넘겨도, 서비스딴에서 await 걸려서 넘어옴. async 쓸필요 x
   }
 
-  // @Get('/unit') //하나의 게시판 불러오기
-  // @UseGuards(JwtOptionalGuard)
+  @Get('/unit') //하나의 게시판 불러오기
+  @UseGuards(JwtOptionalGuard)
   // @ApiGetOneMentorBoard()
-  // async findOne(
-  //   @Query('boardId') boardId: number,
-  //   @GetUserId() userId: number,
-  // ): Promise<BoardResponseDTO> {
-  //   return await this.helpMeBoardService.findOneBoard(boardId, userId);
-  // }
+  async findOne(
+    @Query('boardId') boardId: number,
+    @GetUserId() userId: number,
+  ): Promise<oneHelpMeBoardResponseDTO> {
+    return await this.helpMeBoardService.findOneBoard(boardId, userId);
+  }
 
   // @Patch('')
   // @ApiUpdateBoard()
