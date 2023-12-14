@@ -19,20 +19,24 @@ export class ChatRepository {
   ) {}
 
   getChatRooms(myId: number): Promise<ChatRoomsDto[]> {
-    return this.chatRoomModel.find({
-      $and: [{ $or: [{ hostId: myId }, { guestId: myId }] }],
-    });
+    return this.chatRoomModel
+      .find({
+        $and: [{ $or: [{ hostId: myId }, { guestId: myId }] }],
+      })
+      .select({ _id: 1, hostId: 1, guestId: 1, chatIds: 1, createdAt: 1 });
   }
 
   getOneChatRoom(roomId: mongoose.Types.ObjectId): Promise<ChatRoomsDto> {
     return this.chatRoomModel.findById(roomId);
   }
 
-  createChatRoom(myId: number, guestId: number): Promise<ChatRooms> {
-    return this.chatRoomModel.create({
+  async createChatRoom(myId: number, guestId: number): Promise<ChatRoomsDto> {
+    const value = await this.chatRoomModel.create({
       hostId: myId,
       guestId: guestId,
     });
+
+    return value.unprotectedData;
   }
 
   async deleteChatRoom(roomId: mongoose.Types.ObjectId) {

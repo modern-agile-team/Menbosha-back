@@ -63,7 +63,6 @@ export class ChatController {
   @Get()
   async getChatRooms(@GetUserId() userId: number): Promise<ChatRoomsDto[]> {
     const returnedChatRooms = await this.chatService.getChatRooms(userId);
-    console.log(returnedChatRooms);
 
     return plainToInstance(ChatRoomsDto, returnedChatRooms, {
       excludeExtraneousValues: true,

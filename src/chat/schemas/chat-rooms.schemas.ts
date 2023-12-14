@@ -23,6 +23,26 @@ export class ChatRooms {
 
   @Prop({ type: Date, default: null })
   deletedAt: Date | null;
+
+  readonly unprotectedData: {
+    _id: mongoose.Types.ObjectId;
+    chatIds: mongoose.Types.ObjectId[];
+    hostId: number;
+    guestId: number;
+    createdAt: Date;
+    deletedAt: Date;
+  };
 }
 
 export const ChatRoomsSchema = SchemaFactory.createForClass(ChatRooms);
+
+ChatRoomsSchema.virtual('unprotectedData').get(function (this: ChatRooms) {
+  return {
+    _id: options._id,
+    chatIds: this.chatIds,
+    hostId: this.hostId,
+    guestId: this.guestId,
+    createdAt: options.timestamps,
+    deletedAt: this.deletedAt,
+  };
+});
