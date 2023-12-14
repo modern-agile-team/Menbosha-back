@@ -63,6 +63,7 @@ export class ChatController {
   @Get()
   async getChatRooms(@GetUserId() userId: number): Promise<ChatRoomsDto[]> {
     const returnedChatRooms = await this.chatService.getChatRooms(userId);
+    console.log(returnedChatRooms);
 
     return plainToInstance(ChatRoomsDto, returnedChatRooms, {
       excludeExtraneousValues: true,
@@ -138,9 +139,7 @@ export class ChatController {
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChatNotifications()
   @Get('chat/notice')
-  async getChatNotifications(
-    @GetUserId() userId: number,
-  ): Promise<GetNotificationsResponseFromChatsDto[]> {
+  async getChatNotifications(@GetUserId() userId: number) {
     const returnedChatNotifications =
       await this.chatService.getChatNotifications(userId);
     return plainToInstance(

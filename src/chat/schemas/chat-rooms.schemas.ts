@@ -25,4 +25,4 @@ export class ChatRooms {
   deletedAt: Date | null;
 }
 
-export const ChatRoomSchema = SchemaFactory.createForClass(ChatRooms);
+export const ChatRoomsSchema = SchemaFactory.createForClass(ChatRooms);

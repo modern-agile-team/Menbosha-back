@@ -9,7 +9,7 @@ const options: SchemaOptions = {
 @Schema(options)
 export class Chats {
   @Prop({ type: mongoose.Types.ObjectId, ref: 'chat_rooms' })
-  chatroomId: mongoose.Types.ObjectId;
+  chatRoomId: string;
 
   @Prop({ required: true })
   sender: number;
@@ -24,4 +24,4 @@ export class Chats {
   isSeen: boolean;
 }
 
-export const ChatSchema = SchemaFactory.createForClass(Chats);
+export const ChatsSchema = SchemaFactory.createForClass(Chats);

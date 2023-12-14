@@ -32,10 +32,7 @@ export class ResponseGetChatRoomsDto
   })
   chatPartner: ChatUserDto;
 
-  constructor(
-    chatDto: Partial<ResponseGetChatRoomsDto>,
-    chatUserDto: ChatUserDto,
-  ) {
+  constructor(chatDto: ResponseGetChatRoomsDto, chatUserDto: ChatUserDto) {
     this._id = chatDto._id;
     this.chat = chatDto.chat;
     this.chatPartner = chatUserDto;

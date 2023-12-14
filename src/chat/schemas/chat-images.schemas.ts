@@ -20,4 +20,4 @@ export class ChatImages {
   imageUrl: string;
 }
 
-export const ChatImageSchema = SchemaFactory.createForClass(ChatImages);
+export const ChatImagesSchema = SchemaFactory.createForClass(ChatImages);

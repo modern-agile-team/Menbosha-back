@@ -43,7 +43,7 @@ export class ChatRepository {
 
   getChats(roomId: mongoose.Types.ObjectId): Promise<ChatsDto[]> {
     return this.chatModel.find({
-      chatroomId: roomId,
+      chatRoomId: roomId,
     });
   }
 
@@ -55,7 +55,7 @@ export class ChatRepository {
       {
         $and: [
           { receiver: receiverId },
-          { chatroomId: roomId },
+          { chatRoomId: roomId },
           { isSeen: false },
         ],
       },
@@ -70,13 +70,13 @@ export class ChatRepository {
     receiverId: number,
   ): Promise<Chats> {
     const returnedChat = await this.chatModel.create({
-      chatroomId: roomId,
+      chatRoomId: roomId,
       content: content,
       sender: myId,
       receiver: receiverId,
     });
 
-    await this.chatRoomModel.findByIdAndUpdate(returnedChat.chatroomId, {
+    await this.chatRoomModel.findByIdAndUpdate(returnedChat.chatRoomId, {
       $push: { chatIds: returnedChat._id },
     });
 
@@ -90,7 +90,7 @@ export class ChatRepository {
     imageUrl: string,
   ): Promise<Chats> {
     const returnedChat = await this.chatModel.create({
-      chatroomId: roomId,
+      chatRoomId: roomId,
       sender: myId,
       receiver: receiverId,
       content: imageUrl,
@@ -101,7 +101,7 @@ export class ChatRepository {
       imageUrl: returnedChat.content,
     });
 
-    await this.chatRoomModel.findByIdAndUpdate(returnedChat.chatroomId, {
+    await this.chatRoomModel.findByIdAndUpdate(returnedChat.chatRoomId, {
       $push: { chatIds: returnedChat._id },
     });
 
@@ -113,14 +113,15 @@ export class ChatRepository {
       .find({
         $and: [{ receiver: userId }, { isSeen: false }],
       })
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .lean();
 
     return notifications;
   }
 
   // async getUnreadCounts(roomId: mongoose.Types.ObjectId, after: number) {
   //   return this.chatModel.count({
-  //     $and: [{ chatroomId: roomId }, { createdAt: { $gt: new Date(after) } }],
+  //     $and: [{ chatRoomId: roomId }, { createdAt: { $gt: new Date(after) } }],
   //   });
   // }
 }

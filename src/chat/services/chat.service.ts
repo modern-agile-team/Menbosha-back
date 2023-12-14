@@ -184,7 +184,7 @@ export class ChatService {
   async findChatImage({ roomId, imageUrl, senderId, receiverId }) {
     const isChatAndUsers = await this.chatsModel.findOne({
       $and: [
-        { chatroomId: roomId },
+        { chatRoomId: roomId },
         { sender: senderId },
         { receiver: receiverId },
         { content: imageUrl },
@@ -198,29 +198,29 @@ export class ChatService {
     return isChatAndUsers;
   }
 
-  async getChatNotifications(
-    userId: number,
-  ): Promise<GetNotificationsResponseFromChatsDto[]> {
+  async getChatNotifications(userId: number) {
     const returnedNotifications =
       await this.chatRepository.getChatNotifications(userId);
 
     const groupedNotifications = {};
 
     returnedNotifications.forEach((notification) => {
-      const chatroomId = notification.chatroomId.toString();
-      if (!groupedNotifications[chatroomId]) {
+      const chatRoomId = notification.chatRoomId;
+      console.log(chatRoomId);
+      if (!groupedNotifications[chatRoomId]) {
         const newNotification = {
           ...notification,
           count: 1,
           content: notification.content.substring(0, 10),
         };
-        groupedNotifications[chatroomId] = newNotification;
+        groupedNotifications[chatRoomId] = newNotification;
       } else {
-        groupedNotifications[chatroomId]['count'] += 1;
+        groupedNotifications[chatRoomId]['count'] += 1;
       }
     });
+    console.log(groupedNotifications);
 
-    return Object.values(groupedNotifications);
+    return groupedNotifications;
   }
 
   async getChatRoomsWithUserAndChat(
@@ -230,12 +230,21 @@ export class ChatService {
       {
         $match: { $or: [{ hostId: myId }, { guestId: myId }] },
       },
+
       {
         $lookup: {
-          from: 'Chats',
+          from: 'chats',
           localField: 'chatIds',
           foreignField: '_id',
           as: 'chats',
+        },
+      },
+
+      {
+        $addFields: {
+          chatCount: {
+            $size: '$chats',
+          },
         },
       },
       { $sort: { 'chats.createdAt': -1 } },
@@ -245,6 +254,7 @@ export class ChatService {
           hostId: 1,
           guestId: 1,
           createdAt: 1,
+          chatCount: 1,
           chat: {
             content: { $arrayElemAt: ['$chats.content', 0] },
             isSeen: { $arrayElemAt: ['$chats.isSeen', 0] },
@@ -254,7 +264,7 @@ export class ChatService {
       },
     ]);
 
-    if (!returnedChatAggregate) {
+    if (!returnedChatAggregate[0]._id) {
       return null;
     }
 
