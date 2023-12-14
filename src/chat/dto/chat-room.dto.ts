@@ -13,6 +13,7 @@ export class ChatRoomsDto
     format: 'ObjectId',
   })
   @TransformMongoId()
+  @Expose()
   _id: mongoose.Types.ObjectId;
 
   @ApiProperty({
@@ -32,6 +33,7 @@ export class ChatRoomsDto
     type: 'string',
     format: 'ObjectId',
   })
+  @Expose()
   chatIds: mongoose.Types.ObjectId[];
 
   @ApiProperty({
@@ -50,6 +52,7 @@ export class ChatRoomsDto
     this._id = chatRoomDto._id;
     this.hostId = chatRoomDto.hostId;
     this.guestId = chatRoomDto.guestId;
+    this.chatIds = chatRoomDto.chatIds;
     this.createdAt = chatRoomDto.createdAt;
   }
 }
