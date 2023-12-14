@@ -1,10 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ChatRoom } from '../schemas/chat-room.schemas';
-import { Expose } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import { TransformMongoId } from './transform/transform-mongo-id';
 import mongoose from 'mongoose';
+import { ChatRooms } from '../schemas/chat-room.schemas';
 
-export class ChatRoomDto implements Pick<ChatRoom, 'guest_id' | 'host_id'> {
+export class ChatRoomsDto
+  implements Pick<ChatRooms, 'guestId' | 'hostId' | 'chatIds' | 'deletedAt'>
+{
   @ApiProperty({
     description: '채팅 방 id',
     type: 'string',
@@ -17,13 +19,20 @@ export class ChatRoomDto implements Pick<ChatRoom, 'guest_id' | 'host_id'> {
     description: '채팅방에 속한 유저의 id',
   })
   @Expose()
-  host_id: number;
+  hostId: number;
 
   @ApiProperty({
     description: '채팅방에 속한 유저의 id',
   })
   @Expose()
-  guest_id: number;
+  guestId: number;
+
+  @ApiProperty({
+    description: '해당 채팅방 채팅 내역 id',
+    type: 'string',
+    format: 'ObjectId',
+  })
+  chatIds: mongoose.Types.ObjectId[];
 
   @ApiProperty({
     description: '채팅방 생성 날짜',
@@ -31,10 +40,16 @@ export class ChatRoomDto implements Pick<ChatRoom, 'guest_id' | 'host_id'> {
   @Expose()
   createdAt: Date;
 
-  constructor(chatRoomDto: Partial<ChatRoomDto>) {
+  @ApiProperty({
+    description: '채팅방 삭제 날짜',
+  })
+  @Exclude()
+  deletedAt: Date;
+
+  constructor(chatRoomDto: Partial<ChatRoomsDto>) {
     this._id = chatRoomDto._id;
-    this.host_id = chatRoomDto.host_id;
-    this.guest_id = chatRoomDto.guest_id;
+    this.hostId = chatRoomDto.hostId;
+    this.guestId = chatRoomDto.guestId;
     this.createdAt = chatRoomDto.createdAt;
   }
 }
