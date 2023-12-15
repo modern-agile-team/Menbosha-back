@@ -15,12 +15,12 @@ import { S3Service } from 'src/common/s3/s3.service';
 import { Subject, catchError, map } from 'rxjs';
 import { Chats } from '../schemas/chats.schemas';
 import { EntityManager } from 'typeorm';
-import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 import { UserService } from 'src/users/services/user.service';
 import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
 import { ChatRoomsDto } from '../dto/chat-rooms.dto';
 import { ResponsePostChatDto } from '../dto/response-post-chat-dto';
+// import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 
 @Injectable()
 export class ChatService {
@@ -198,30 +198,34 @@ export class ChatService {
     return isChatAndUsers;
   }
 
-  async getChatNotifications(userId: number) {
-    const returnedNotifications =
-      await this.chatRepository.getChatNotifications(userId);
+  // async getChatNotifications(
+  //   userId: number,
+  // ): Promise<Partial<GetNotificationsResponseFromChatsDto[]>> {
+  //   const returnedNotifications =
+  //     await this.chatRepository.getChatNotifications(userId);
 
-    const groupedNotifications = {};
+  //   const groupedNotifications: Partial<
+  //     GetNotificationsResponseFromChatsDto[]
+  //   > = {};
 
-    returnedNotifications.forEach((notification) => {
-      const chatRoomId = notification.chatRoomId;
-      console.log(chatRoomId);
-      if (!groupedNotifications[chatRoomId]) {
-        const newNotification = {
-          ...notification,
-          count: 1,
-          content: notification.content.substring(0, 10),
-        };
-        groupedNotifications[chatRoomId] = newNotification;
-      } else {
-        groupedNotifications[chatRoomId]['count'] += 1;
-      }
-    });
-    console.log(groupedNotifications);
+  //   returnedNotifications.forEach((notification) => {
+  //     const chatRoomId = notification.chatRoomId;
+  //     console.log(chatRoomId);
+  //     if (!groupedNotifications[chatRoomId]) {
+  //       const newNotification: GetNotificationsResponseFromChatsDto = {
+  //         ...notification,
+  //         count: 1,
+  //         content: notification.content.substring(0, 10),
+  //       };
+  //       groupedNotifications[chatRoomId] = newNotification;
+  //     } else {
+  //       groupedNotifications[chatRoomId]['count'] += 1;
+  //     }
+  //   });
+  //   console.log(groupedNotifications);
 
-    return groupedNotifications;
-  }
+  //   return groupedNotifications;
+  // }
 
   async getChatRoomsWithUserAndChat(
     myId: number,

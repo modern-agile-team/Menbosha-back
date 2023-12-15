@@ -30,8 +30,8 @@ import { ApiGetChatNotificationSse } from '../swagger-decorators/get-chat-notifi
 // import { ApiGetChatUnreadCounts } from '../swagger-decorators/get-chat-unread-counts.decorator';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
-import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
-import { ApiGetChatNotifications } from '../swagger-decorators/get-chat-notifications.decorator';
+// import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
+// import { ApiGetChatNotifications } from '../swagger-decorators/get-chat-notifications.decorator';
 import { ApiCreateChatImage } from '../swagger-decorators/create-chat-image.decorators';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
 import { ChatRoomsDto } from '../dto/chat-rooms.dto';
@@ -135,18 +135,18 @@ export class ChatController {
     );
   }
 
-  @UseGuards(JwtAccessTokenGuard)
-  @ApiGetChatNotifications()
-  @Get('chat/notice')
-  async getChatNotifications(@GetUserId() userId: number) {
-    const returnedChatNotifications =
-      await this.chatService.getChatNotifications(userId);
-    return plainToInstance(
-      GetNotificationsResponseFromChatsDto,
-      returnedChatNotifications,
-      // { excludeExtraneousValues: true },
-    );
-  }
+  // @UseGuards(JwtAccessTokenGuard)
+  // @ApiGetChatNotifications()
+  // @Get('chat/notice')
+  // async getChatNotifications(@GetUserId() userId: number) {
+  //   const returnedChatNotifications =
+  //     await this.chatService.getChatNotifications(userId);
+  //   return plainToInstance(
+  //     GetNotificationsResponseFromChatsDto,
+  //     returnedChatNotifications,
+  //     { excludeExtraneousValues: true },
+  //   );
+  // }
 
   // @ApiGetChatUnreadCounts()
   // @Get(':roomId/chat/unreads')

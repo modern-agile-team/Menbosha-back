@@ -18,6 +18,22 @@ export class ChatImages {
   @IsString()
   @Prop({ required: true })
   imageUrl: string;
+
+  readonly unprotectedData: {
+    _id: mongoose.Types.ObjectId;
+    chatId: mongoose.Types.ObjectId;
+    imageUrl: string;
+    createdAt: Date;
+  };
 }
 
 export const ChatImagesSchema = SchemaFactory.createForClass(ChatImages);
+
+ChatImagesSchema.virtual('unprotectedData').get(function (this: ChatImages) {
+  return {
+    _id: options._id,
+    chatId: this.chatId,
+    imageUrl: this.imageUrl,
+    createdAt: options.timestamps,
+  };
+});

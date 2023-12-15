@@ -22,6 +22,28 @@ export class Chats {
 
   @Prop({ required: true, default: false })
   isSeen: boolean;
+
+  readonly unprotectedData: {
+    _id: mongoose.Types.ObjectId;
+    chatRoomId: string;
+    sender: number;
+    receiver: number;
+    content: string;
+    isSeen: boolean;
+    createdAt: Date;
+  };
 }
 
 export const ChatsSchema = SchemaFactory.createForClass(Chats);
+
+ChatsSchema.virtual('unprotectedData').get(function (this: Chats) {
+  return {
+    _id: options._id,
+    chatRoomId: this.chatRoomId,
+    sender: this.sender,
+    receiver: this.receiver,
+    content: this.content,
+    isSeen: this.isSeen,
+    createdAt: options.timestamps,
+  };
+});

@@ -112,16 +112,25 @@ export class ChatRepository {
     return returnedChat;
   }
 
-  async getChatNotifications(userId: number): Promise<Chats[]> {
-    const notifications = await this.chatModel
-      .find({
-        $and: [{ receiver: userId }, { isSeen: false }],
-      })
-      .sort({ createdAt: -1 });
-    // .lean();
+  // async getChatNotifications(userId: number): Promise<Chats[]> {
+  //   const notifications = await this.chatModel
+  //     .find({
+  //       $and: [{ receiver: userId }, { isSeen: false }],
+  //     })
+  //     .select({
+  //       _id: 1,
+  //       chatRoomId: 1,
+  //       content: 1,
+  //       sender: 1,
+  //       receiver: 1,
+  //       isSeen: 1,
+  //       createdAt: 1,
+  //     })
+  //     .sort({ createdAt: -1 });
+  //   // .lean();
 
-    return notifications;
-  }
+  //   return notifications;
+  // }
 
   // async getUnreadCounts(roomId: mongoose.Types.ObjectId, after: number) {
   //   return this.chatModel.count({
