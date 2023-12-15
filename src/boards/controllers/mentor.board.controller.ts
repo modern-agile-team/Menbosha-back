@@ -13,7 +13,7 @@ import { MentorBoard } from '../entities/mentor-board.entity';
 import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { PageByMentorBoardResponseDTO } from '../dto/response.mentor.boards.dto';
 import { ApiAddMentorBoard } from '../swagger-decorators/add-mentor-board-decorators';
-import { ApiGetPageBoards } from '../swagger-decorators/get-page-boards-decorators';
+import { ApiGetPageMentorBoards } from '../swagger-decorators/get-page-mentor-boards-decorators';
 import { ApiGetOneMentorBoard } from '../swagger-decorators/get-one-mentor-board-decorators';
 import { ApiUpdateMentorBoard } from '../swagger-decorators/patch-board-decorators';
 import { ApiTags } from '@nestjs/swagger';
@@ -41,7 +41,7 @@ export class MentorBoardController {
   }
 
   @Get('') // 이부분은 아직 프론트랑 상의중입니다
-  @ApiGetPageBoards()
+  @ApiGetPageMentorBoards()
   findPageMentorBoards(
     @Query('page') page = 1,
     @Query('limit') limit = 30,
