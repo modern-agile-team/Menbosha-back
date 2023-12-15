@@ -53,9 +53,11 @@ export class ChatController {
   constructor(private chatService: ChatService) {}
 
   @ApiGetChatNotificationSse()
-  @Sse('listener')
-  notificationListener() {
-    return this.chatService.notificationListener();
+  @Sse('listener/:roomId')
+  notificationListener(
+    @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
+  ) {
+    return this.chatService.notificationListener(roomId);
   }
 
   @UseGuards(JwtAccessTokenGuard)

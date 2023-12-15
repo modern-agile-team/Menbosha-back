@@ -72,7 +72,7 @@ export class ChatRepository {
     content: string,
     myId: number,
     receiverId: number,
-  ): Promise<Chats> {
+  ): Promise<ChatsDto> {
     const returnedChat = await this.chatModel.create({
       chatRoomId: roomId,
       content: content,
@@ -84,7 +84,7 @@ export class ChatRepository {
       $push: { chatIds: returnedChat._id },
     });
 
-    return returnedChat;
+    return returnedChat.unprotectedData;
   }
 
   async createChatImage(

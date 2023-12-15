@@ -11,6 +11,8 @@ import { NotificationService } from './services/notification.service';
 import { EventsGateway } from './events/events.gateway';
 import { AuthModule } from 'src/auth/auth.module';
 import { UserModule } from 'src/users/user.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from 'src/users/entities/user.entity';
 
 @Module({
   imports: [
@@ -19,6 +21,7 @@ import { UserModule } from 'src/users/user.module';
       { name: Chats.name, schema: ChatsSchema },
       { name: ChatImages.name, schema: ChatImagesSchema },
     ]),
+    TypeOrmModule.forFeature([User]),
     S3Module,
     AuthModule,
     UserModule,

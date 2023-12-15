@@ -1,6 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { UserImageRepository } from '../repositories/user-image.repository';
+import { FindManyOptions } from 'typeorm';
+import { User } from '../entities/user.entity';
 
 @Injectable()
 export class UserService {
@@ -8,6 +10,10 @@ export class UserService {
     private readonly userRepository: UserRepository,
     private readonly userImageRepository: UserImageRepository,
   ) {}
+
+  findAll(options: FindManyOptions<User>) {
+    return this.userRepository.findAll(options);
+  }
 
   async getMyInfo(userId: number) {
     if (!userId) {

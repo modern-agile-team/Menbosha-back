@@ -5,6 +5,7 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
@@ -12,21 +13,24 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ChatRooms } from '../schemas/chat-rooms.schemas';
 import * as mongoose from 'mongoose';
 import { S3Service } from 'src/common/s3/s3.service';
-import { Subject, catchError, map } from 'rxjs';
+import { Observable, Subject, catchError, map } from 'rxjs';
 import { Chats } from '../schemas/chats.schemas';
-import { EntityManager } from 'typeorm';
+import { EntityManager, In, Repository } from 'typeorm';
 import { UserService } from 'src/users/services/user.service';
 import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
 import { ChatRoomsDto } from '../dto/chat-rooms.dto';
 import { ResponsePostChatDto } from '../dto/response-post-chat-dto';
 import { AggregateChatRoomsDto } from '../dto/aggregate-chat-rooms.dto';
+import { ChatsDto } from '../dto/chats.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/users/entities/user.entity';
 // import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 
 @Injectable()
 export class ChatService {
   private readonly logger = new Logger(ChatService.name);
-  private readonly subject = new Subject();
+  private readonly subjectMap: Map<string, Subject<ChatsDto>> = new Map();
   constructor(
     private readonly s3Service: S3Service,
     private readonly userService: UserService,
@@ -36,11 +40,22 @@ export class ChatService {
     private readonly chatRoomsModel: mongoose.Model<ChatRooms>,
     @InjectModel(Chats.name)
     private readonly chatsModel: mongoose.Model<Chats>,
+
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
-  notificationListener() {
-    return this.subject.asObservable().pipe(
-      map((notification: Notification) => JSON.stringify(notification)),
+  notificationListener(roomId: mongoose.Types.ObjectId): Observable<string> {
+    const roomIdToString = roomId.toString();
+    if (!this.subjectMap.get(roomIdToString)) {
+      this.subjectMap.set(roomIdToString, new Subject<ChatsDto>());
+    }
+    console.log(this.subjectMap.get(roomIdToString));
+
+    const subject = this.subjectMap.get(roomIdToString);
+
+    return subject.asObservable().pipe(
+      map((notification: ChatsDto) => JSON.stringify(notification)),
       catchError((err) => {
         this.logger.error('notificationListener : ' + err.message);
         throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -144,7 +159,12 @@ export class ChatService {
       receiverId,
     );
 
-    if (returnedChat) this.subject.next(returnedChat);
+    if (returnedChat) {
+      const subject = this.subjectMap.get(roomId);
+      if (subject) {
+        subject.next(returnedChat);
+      }
+    }
 
     return new ResponsePostChatDto(returnedChat);
   }
@@ -270,9 +290,68 @@ export class ChatService {
         },
       ]);
 
-    if (!returnedChatAggregate[0]._id) {
+    if (!returnedChatAggregate) {
       return null;
     }
+
+    const userIds = returnedChatAggregate.map((el) => {
+      return el.hostId === myId ? el.guestId : el.hostId;
+    });
+
+    const tempUsers = this.userService.findAll({
+      select: {
+        id: true,
+      },
+      relations: {},
+    });
+    /**
+     * @todo 맞게 수정
+     */
+
+    const users = await this.userRepository.find({
+      select: {
+        id: true,
+        name: true,
+        userImage: {
+          imageUrl: true,
+        },
+      },
+      where: {
+        id: In(userIds),
+      },
+      relations: {
+        userImage: true,
+      },
+    });
+
+    const myUsers = users.map((user) => {
+      return new ChatUserDto({
+        userId: user.id,
+        name: user.name,
+        userImage: user.userImage.imageUrl,
+      });
+    });
+
+    const aggregateChatRoomsDto = returnedChatAggregate.map((el) => {
+      return new AggregateChatRoomsDto(el);
+    });
+
+    /**
+     * @todo 리펙토링
+     */
+    return aggregateChatRoomsDto.map((aggregateChatRoomDto) => {
+      const userId =
+        myId === aggregateChatRoomDto.hostId
+          ? aggregateChatRoomDto.guestId
+          : aggregateChatRoomDto.hostId;
+
+      const user =
+        myUsers.find((el) => {
+          return userId === el.userId;
+        }) || ({} as ChatUserDto);
+
+      return new ResponseGetChatRoomsDto(aggregateChatRoomDto, user);
+    });
 
     return Promise.all(
       returnedChatAggregate.map(async (chatRooms) => {

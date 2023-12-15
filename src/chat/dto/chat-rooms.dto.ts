@@ -31,12 +31,12 @@ export class ChatRoomsDto
 
   @ApiProperty({
     description: '해당 채팅방 채팅 내역 id',
-    type: 'string',
+    type: Array,
     format: 'ObjectId',
   })
   @Expose()
   @TransformMongoIdToPlainOnly()
-  chatIds: mongoose.Types.ObjectId[];
+  chatIds: mongoose.Types.ObjectId[] | [];
 
   @ApiProperty({
     description: '채팅방 생성 날짜',
