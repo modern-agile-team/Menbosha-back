@@ -16,7 +16,7 @@ export class AggregateChatRoomsDto extends OmitType(ChatRoomsDto, [
   })
   chat: lookupChatsDto;
 
-  constructor(aggregateChatRoomsDto: Partial<AggregateChatRoomsDto> = {}) {
+  constructor(aggregateChatRoomsDto: AggregateChatRoomsDto) {
     super();
 
     this._id = aggregateChatRoomsDto._id;
