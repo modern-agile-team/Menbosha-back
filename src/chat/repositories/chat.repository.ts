@@ -117,8 +117,8 @@ export class ChatRepository {
       .find({
         $and: [{ receiver: userId }, { isSeen: false }],
       })
-      .sort({ createdAt: -1 })
-      .lean();
+      .sort({ createdAt: -1 });
+    // .lean();
 
     return notifications;
   }

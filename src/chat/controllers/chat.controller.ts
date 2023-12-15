@@ -144,6 +144,7 @@ export class ChatController {
     return plainToInstance(
       GetNotificationsResponseFromChatsDto,
       returnedChatNotifications,
+      // { excludeExtraneousValues: true },
     );
   }
 

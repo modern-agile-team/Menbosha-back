@@ -3,7 +3,7 @@ import { Exclude, Expose } from 'class-transformer';
 import { TransformMongoId } from './transform/transform-mongo-id';
 import mongoose from 'mongoose';
 import { ChatRooms } from '../schemas/chat-rooms.schemas';
-import { TransformMongoIdToPlainOnly } from './transform/transform-mongo-id-for-array';
+import { TransformMongoIdToPlainOnly } from './transform/transform-mongo-id-to-plain-only';
 
 export class ChatRoomsDto
   implements Pick<ChatRooms, 'guestId' | 'hostId' | 'chatIds' | 'deletedAt'>

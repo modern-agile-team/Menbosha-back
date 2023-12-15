@@ -1,16 +1,18 @@
 import mongoose from 'mongoose';
 import { ChatsDto } from './chats.dto';
 import { Expose } from 'class-transformer';
+import { TransformMongoId } from './transform/transform-mongo-id';
 
 export class GetNotificationsResponseFromChatsDto extends ChatsDto {
   @Expose()
+  @TransformMongoId()
   _id: mongoose.Types.ObjectId;
 
   @Expose()
   count: number;
 
   constructor(
-    getNotificationsResponseFromChatsDto: GetNotificationsResponseFromChatsDto,
+    getNotificationsResponseFromChatsDto: Partial<GetNotificationsResponseFromChatsDto> = {},
   ) {
     super(getNotificationsResponseFromChatsDto);
 
