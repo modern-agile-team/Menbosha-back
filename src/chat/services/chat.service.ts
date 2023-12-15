@@ -20,6 +20,7 @@ import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
 import { ChatRoomsDto } from '../dto/chat-rooms.dto';
 import { ResponsePostChatDto } from '../dto/response-post-chat-dto';
+import { AggregateChatRoomsDto } from '../dto/aggregate-chat-rooms.dto';
 // import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 
 @Injectable()
@@ -230,43 +231,44 @@ export class ChatService {
   async getChatRoomsWithUserAndChat(
     myId: number,
   ): Promise<ResponseGetChatRoomsDto[]> {
-    const returnedChatAggregate = await this.chatRoomsModel.aggregate([
-      {
-        $match: { $or: [{ hostId: myId }, { guestId: myId }] },
-      },
-
-      {
-        $lookup: {
-          from: 'chats',
-          localField: 'chatIds',
-          foreignField: '_id',
-          as: 'chats',
+    const returnedChatAggregate: AggregateChatRoomsDto[] =
+      await this.chatRoomsModel.aggregate([
+        {
+          $match: { $or: [{ hostId: myId }, { guestId: myId }] },
         },
-      },
 
-      {
-        $addFields: {
-          chatCount: {
-            $size: '$chats',
+        {
+          $lookup: {
+            from: 'chats',
+            localField: 'chatIds',
+            foreignField: '_id',
+            as: 'chats',
           },
         },
-      },
-      { $sort: { 'chats.createdAt': -1 } },
-      {
-        $project: {
-          _id: 1,
-          hostId: 1,
-          guestId: 1,
-          createdAt: 1,
-          chatCount: 1,
-          chat: {
-            content: { $arrayElemAt: ['$chats.content', 0] },
-            isSeen: { $arrayElemAt: ['$chats.isSeen', 0] },
-            createdAt: { $arrayElemAt: ['$chats.createdAt', 0] },
+
+        {
+          $addFields: {
+            chatCount: {
+              $size: '$chats',
+            },
           },
         },
-      },
-    ]);
+        { $sort: { 'chats.createdAt': -1 } },
+        {
+          $project: {
+            _id: 1,
+            hostId: 1,
+            guestId: 1,
+            createdAt: 1,
+            chatCount: 1,
+            chat: {
+              content: { $arrayElemAt: ['$chats.content', 0] },
+              isSeen: { $arrayElemAt: ['$chats.isSeen', 0] },
+              createdAt: { $arrayElemAt: ['$chats.createdAt', 0] },
+            },
+          },
+        },
+      ]);
 
     if (!returnedChatAggregate[0]._id) {
       return null;
@@ -280,8 +282,9 @@ export class ChatService {
             : await this.userService.getMyInfo(chatRooms.hostId);
 
         const chatUserDto = new ChatUserDto(targetUser);
+        const aggregateChatRoomsDto = new AggregateChatRoomsDto(chatRooms);
 
-        return new ResponseGetChatRoomsDto(chatRooms, chatUserDto);
+        return new ResponseGetChatRoomsDto(aggregateChatRoomsDto, chatUserDto);
       }),
     );
   }

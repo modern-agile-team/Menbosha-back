@@ -18,7 +18,7 @@ export class ChatUserDto implements Pick<User, 'name'> {
   })
   userImage: string;
 
-  constructor(chatUserDto: Partial<ChatUserDto> = {}) {
+  constructor(chatUserDto: ChatUserDto) {
     this.userId = chatUserDto.userId;
     this.name = chatUserDto.name;
     this.userImage = chatUserDto.userImage;
