@@ -317,7 +317,7 @@ export class ChatService {
      * @todo 맞게 수정
      */
 
-    const chatUsersDto = targetUsers.map((user) => {
+    const chatUsersDtoArray = targetUsers.map((user) => {
       return new ChatUserDto({
         id: user.id,
         name: user.name,
@@ -329,26 +329,15 @@ export class ChatService {
       return new AggregateChatRoomsDto(chat);
     });
 
-    /**
-     * @todo 리펙토링
-     */
     return aggregateChatRoomsDto.map((aggregateChatRoomDto) => {
-      const userId =
-        myId === aggregateChatRoomDto.hostId
-          ? aggregateChatRoomDto.guestId
-          : aggregateChatRoomDto.hostId;
-
-      console.log(aggregateChatRoomDto.hostId, aggregateChatRoomDto.guestId);
-      const user = chatUsersDto.find((el) => {
-        console.log(el.id);
-        console.log(aggregateChatRoomDto.hostId);
+      const chatUsersDto = chatUsersDtoArray.find((user) => {
         return (
-          el.id === aggregateChatRoomDto.hostId || aggregateChatRoomDto.guestId
+          user.id === aggregateChatRoomDto.hostId ||
+          user.id === aggregateChatRoomDto.guestId
         );
       });
-      console.log(user);
 
-      return new ResponseGetChatRoomsDto(aggregateChatRoomDto, user);
+      return new ResponseGetChatRoomsDto(aggregateChatRoomDto, chatUsersDto);
     });
 
     // return Promise.all(
