@@ -6,7 +6,7 @@ export class ChatUserDto implements Pick<User, 'name'> {
     description: '유저 고유 id',
     format: 'integer',
   })
-  userId: number;
+  id: number;
 
   @ApiProperty({
     description: '유저 이름',
@@ -19,7 +19,7 @@ export class ChatUserDto implements Pick<User, 'name'> {
   userImage: string;
 
   constructor(chatUserDto: ChatUserDto) {
-    this.userId = chatUserDto.userId;
+    this.id = chatUserDto.id;
     this.name = chatUserDto.name;
     this.userImage = chatUserDto.userImage;
   }

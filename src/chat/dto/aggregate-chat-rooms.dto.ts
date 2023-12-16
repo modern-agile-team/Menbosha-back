@@ -1,6 +1,7 @@
 import { ChatRoomsDto } from './chat-rooms.dto';
-import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { lookupChatsDto } from './lookup-chat-dto';
+import { ApiProperty, OmitType, PickType } from '@nestjs/swagger';
+import { LookupChatsDto } from './lookup-chat-dto';
+import { ChatsDto } from './chats.dto';
 
 export class AggregateChatRoomsDto extends OmitType(ChatRoomsDto, [
   'chatIds',
@@ -14,7 +15,7 @@ export class AggregateChatRoomsDto extends OmitType(ChatRoomsDto, [
   @ApiProperty({
     description: '채팅 schema에서 content, 생성 날짜, 채팅 확인 여부',
   })
-  chat: lookupChatsDto;
+  chat: LookupChatsDto;
 
   constructor(aggregateChatRoomsDto: AggregateChatRoomsDto) {
     super();

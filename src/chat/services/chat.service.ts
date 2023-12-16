@@ -294,21 +294,11 @@ export class ChatService {
       return null;
     }
 
-    const userIds = returnedChatAggregate.map((el) => {
-      return el.hostId === myId ? el.guestId : el.hostId;
+    const userIds = returnedChatAggregate.map((userId) => {
+      return userId.hostId === myId ? userId.guestId : userId.hostId;
     });
 
-    const tempUsers = this.userService.findAll({
-      select: {
-        id: true,
-      },
-      relations: {},
-    });
-    /**
-     * @todo 맞게 수정
-     */
-
-    const users = await this.userRepository.find({
+    const targetUsers = await this.userService.findAll({
       select: {
         id: true,
         name: true,
@@ -316,24 +306,27 @@ export class ChatService {
           imageUrl: true,
         },
       },
-      where: {
-        id: In(userIds),
-      },
       relations: {
         userImage: true,
       },
+      where: {
+        id: In(userIds),
+      },
     });
+    /**
+     * @todo 맞게 수정
+     */
 
-    const myUsers = users.map((user) => {
+    const chatUsersDto = targetUsers.map((user) => {
       return new ChatUserDto({
-        userId: user.id,
+        id: user.id,
         name: user.name,
         userImage: user.userImage.imageUrl,
       });
     });
 
-    const aggregateChatRoomsDto = returnedChatAggregate.map((el) => {
-      return new AggregateChatRoomsDto(el);
+    const aggregateChatRoomsDto = returnedChatAggregate.map((chat) => {
+      return new AggregateChatRoomsDto(chat);
     });
 
     /**
@@ -345,27 +338,32 @@ export class ChatService {
           ? aggregateChatRoomDto.guestId
           : aggregateChatRoomDto.hostId;
 
-      const user =
-        myUsers.find((el) => {
-          return userId === el.userId;
-        }) || ({} as ChatUserDto);
+      console.log(aggregateChatRoomDto.hostId, aggregateChatRoomDto.guestId);
+      const user = chatUsersDto.find((el) => {
+        console.log(el.id);
+        console.log(aggregateChatRoomDto.hostId);
+        return (
+          el.id === aggregateChatRoomDto.hostId || aggregateChatRoomDto.guestId
+        );
+      });
+      console.log(user);
 
       return new ResponseGetChatRoomsDto(aggregateChatRoomDto, user);
     });
 
-    return Promise.all(
-      returnedChatAggregate.map(async (chatRooms) => {
-        const targetUser =
-          chatRooms.hostId === myId
-            ? await this.userService.getMyInfo(chatRooms.guestId)
-            : await this.userService.getMyInfo(chatRooms.hostId);
+    // return Promise.all(
+    //   returnedChatAggregate.map(async (chatRooms) => {
+    //     const targetUser =
+    //       chatRooms.hostId === myId
+    //         ? await this.userService.getMyInfo(chatRooms.guestId)
+    //         : await this.userService.getMyInfo(chatRooms.hostId);
 
-        const chatUserDto = new ChatUserDto(targetUser);
-        const aggregateChatRoomsDto = new AggregateChatRoomsDto(chatRooms);
+    //     const chatUserDto = new ChatUserDto(targetUser);
+    //     const aggregateChatRoomsDto = new AggregateChatRoomsDto(chatRooms);
 
-        return new ResponseGetChatRoomsDto(aggregateChatRoomsDto, chatUserDto);
-      }),
-    );
+    //     return new ResponseGetChatRoomsDto(aggregateChatRoomsDto, chatUserDto);
+    //   }),
+    // );
   }
 
   // async getUnreadCounts(roomId: mongoose.Types.ObjectId, after: number) {

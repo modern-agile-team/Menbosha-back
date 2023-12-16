@@ -4,6 +4,7 @@ import {
   ApiHeaders,
   ApiOperation,
   ApiResponse,
+  getSchemaPath,
 } from '@nestjs/swagger';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
 
@@ -14,8 +15,21 @@ export function ApiGetChatRoomsNew() {
       description: 'Header - user-token',
     }),
     ApiResponse({
-      type: ResponseGetChatRoomsDto,
-      status: 200,
+      schema: {
+        properties: {
+          statusCode: {
+            type: 'number',
+          },
+          data: {
+            type: 'array',
+            items: {
+              $ref: getSchemaPath(ResponseGetChatRoomsDto),
+            },
+          },
+        },
+      },
+      // type: ResponseGetChatRoomsDto,
+      // status: 200,
       description: '성공적으로 채팅방 조회',
     }),
     ApiHeaders([

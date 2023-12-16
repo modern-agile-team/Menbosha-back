@@ -31,7 +31,8 @@ export class ChatRoomsDto
 
   @ApiProperty({
     description: '해당 채팅방 채팅 내역 id',
-    type: Array,
+    type: 'string',
+    isArray: true,
     format: 'ObjectId',
   })
   @Expose()
