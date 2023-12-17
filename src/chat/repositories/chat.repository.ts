@@ -19,11 +19,9 @@ export class ChatRepository {
   ) {}
 
   getChatRooms(myId: number): Promise<ChatRoomsDto[]> {
-    return this.chatRoomModel
-      .find({
-        $and: [{ $or: [{ hostId: myId }, { guestId: myId }] }],
-      })
-      .select({ _id: 1, hostId: 1, guestId: 1, chatIds: 1, createdAt: 1 });
+    return this.chatRoomModel.find({
+      $and: [{ $or: [{ hostId: myId }, { guestId: myId }] }],
+    });
   }
 
   getOneChatRoom(roomId: mongoose.Types.ObjectId): Promise<ChatRoomsDto> {

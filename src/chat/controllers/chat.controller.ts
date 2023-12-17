@@ -38,6 +38,7 @@ import { ChatRoomsDto } from '../dto/chat-rooms.dto';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
 import { plainToInstance } from 'class-transformer';
 import { ApiGetChatRoomsNew } from '../swagger-decorators/get-chat-rooms-new.decorator';
+import { Observable } from 'rxjs';
 
 @ApiTags('CHAT')
 @UsePipes(
@@ -55,7 +56,7 @@ export class ChatController {
   @ApiGetChatNotificationSse()
   @UseGuards(JwtAccessTokenGuard)
   @Sse('listener')
-  notificationListener(@GetUserId() userId: number) {
+  notificationListener(@GetUserId() userId: number): Observable<string> {
     return this.chatService.notificationListener(userId);
   }
 
