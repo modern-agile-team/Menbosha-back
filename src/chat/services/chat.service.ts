@@ -339,20 +339,6 @@ export class ChatService {
 
       return new ResponseGetChatRoomsDto(aggregateChatRoomDto, chatUsersDto);
     });
-
-    // return Promise.all(
-    //   returnedChatAggregate.map(async (chatRooms) => {
-    //     const targetUser =
-    //       chatRooms.hostId === myId
-    //         ? await this.userService.getMyInfo(chatRooms.guestId)
-    //         : await this.userService.getMyInfo(chatRooms.hostId);
-
-    //     const chatUserDto = new ChatUserDto(targetUser);
-    //     const aggregateChatRoomsDto = new AggregateChatRoomsDto(chatRooms);
-
-    //     return new ResponseGetChatRoomsDto(aggregateChatRoomsDto, chatUserDto);
-    //   }),
-    // );
   }
 
   // async getUnreadCounts(roomId: mongoose.Types.ObjectId, after: number) {
