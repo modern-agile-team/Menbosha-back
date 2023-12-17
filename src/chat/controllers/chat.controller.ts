@@ -26,7 +26,7 @@ import { ApiGetChatRooms } from '../swagger-decorators/get-chat-rooms.decorator'
 import { ApiGetOneChatRoom } from '../swagger-decorators/get-one-chat-room.decorator';
 import { ApiDeleteChatRoom } from '../swagger-decorators/delete-chat-room.decorator';
 import { ApiGetChats } from '../swagger-decorators/get-chats.decorator';
-import { ApiGetChatNotificationSse } from '../swagger-decorators/get-chat-notification-Sse.decorator';
+import { ApiGetChatNotificationSse } from '../swagger-decorators/get-chat-notification-sse.decorator';
 // import { ApiGetChatUnreadCounts } from '../swagger-decorators/get-chat-unread-counts.decorator';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
