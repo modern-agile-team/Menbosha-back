@@ -313,9 +313,6 @@ export class ChatService {
         id: In(userIds),
       },
     });
-    /**
-     * @todo 맞게 수정
-     */
 
     const chatUsersDtoArray = targetUsers.map((user) => {
       return new ChatUserDto({
