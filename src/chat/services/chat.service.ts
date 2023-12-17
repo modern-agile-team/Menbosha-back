@@ -5,7 +5,6 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
-  InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
@@ -30,7 +29,7 @@ import { User } from 'src/users/entities/user.entity';
 @Injectable()
 export class ChatService {
   private readonly logger = new Logger(ChatService.name);
-  private readonly subjectMap: Map<string, Subject<ChatsDto>> = new Map();
+  private readonly subjectMap: Map<number, Subject<ChatsDto>> = new Map();
   constructor(
     private readonly s3Service: S3Service,
     private readonly userService: UserService,
@@ -45,14 +44,14 @@ export class ChatService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  notificationListener(roomId: mongoose.Types.ObjectId): Observable<string> {
-    const roomIdToString = roomId.toString();
-    if (!this.subjectMap.get(roomIdToString)) {
-      this.subjectMap.set(roomIdToString, new Subject<ChatsDto>());
+  notificationListener(myId: number): Observable<string> {
+    if (!this.subjectMap.get(myId)) {
+      this.subjectMap.set(myId, new Subject<ChatsDto>());
     }
-    console.log(this.subjectMap.get(roomIdToString));
+    console.log(myId);
+    console.log(this.subjectMap.get(myId));
 
-    const subject = this.subjectMap.get(roomIdToString);
+    const subject = this.subjectMap.get(myId);
 
     return subject.asObservable().pipe(
       map((notification: ChatsDto) => JSON.stringify(notification)),
@@ -160,7 +159,7 @@ export class ChatService {
     );
 
     if (returnedChat) {
-      const subject = this.subjectMap.get(roomId);
+      const subject = this.subjectMap.get(receiverId);
       if (subject) {
         subject.next(returnedChat);
       }

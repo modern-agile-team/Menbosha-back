@@ -1,4 +1,4 @@
-import { HttpStatus, applyDecorators } from '@nestjs/common';
+import { applyDecorators } from '@nestjs/common';
 import {
   ApiExtraModels,
   ApiHeaders,
