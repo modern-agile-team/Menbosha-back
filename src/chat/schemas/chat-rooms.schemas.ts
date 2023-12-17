@@ -9,6 +9,8 @@ const options: SchemaOptions = {
 
 @Schema(options)
 export class ChatRooms {
+  _id: mongoose.Types.ObjectId;
+
   @Prop({
     type: [{ type: mongoose.Types.ObjectId, ref: Chats.name }],
     default: [],
@@ -20,6 +22,8 @@ export class ChatRooms {
 
   @Prop({ required: true })
   guestId: number;
+
+  createdAt: Date;
 
   @Prop({ type: Date, default: null })
   deletedAt: Date | null;
@@ -38,11 +42,11 @@ export const ChatRoomsSchema = SchemaFactory.createForClass(ChatRooms);
 
 ChatRoomsSchema.virtual('unprotectedData').get(function (this: ChatRooms) {
   return {
-    _id: options._id,
+    _id: this._id,
     chatIds: this.chatIds,
     hostId: this.hostId,
     guestId: this.guestId,
-    createdAt: options.timestamps,
+    createdAt: this.createdAt,
     deletedAt: this.deletedAt,
   };
 });

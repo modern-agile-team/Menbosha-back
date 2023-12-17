@@ -84,7 +84,7 @@ export class ChatRepository {
       $push: { chatIds: returnedChat._id },
     });
 
-    return returnedChat.unprotectedData;
+    return returnedChat;
   }
 
   async createChatImage(

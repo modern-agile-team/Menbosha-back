@@ -10,6 +10,8 @@ const options: SchemaOptions = {
 
 @Schema(options)
 export class ChatImages {
+  _id: mongoose.Types.ObjectId;
+
   @IsMongoId()
   @IsNotEmpty()
   @Prop({ type: mongoose.Types.ObjectId, ref: Chats.name })
@@ -18,6 +20,8 @@ export class ChatImages {
   @IsString()
   @Prop({ required: true })
   imageUrl: string;
+
+  createdAt: Date;
 
   readonly unprotectedData: {
     _id: mongoose.Types.ObjectId;
@@ -31,9 +35,9 @@ export const ChatImagesSchema = SchemaFactory.createForClass(ChatImages);
 
 ChatImagesSchema.virtual('unprotectedData').get(function (this: ChatImages) {
   return {
-    _id: options._id,
+    _id: this._id,
     chatId: this.chatId,
     imageUrl: this.imageUrl,
-    createdAt: options.timestamps,
+    createdAt: this.createdAt,
   };
 });

@@ -2,11 +2,21 @@ import { ApiProperty } from '@nestjs/swagger';
 import { TransformMongoId } from './transform/transform-mongo-id';
 import { Chats } from '../schemas/chats.schemas';
 import { Expose } from 'class-transformer';
+import mongoose from 'mongoose';
 
 export class ChatsDto
   implements
     Pick<Chats, 'chatRoomId' | 'content' | 'sender' | 'receiver' | 'isSeen'>
 {
+  @ApiProperty({
+    description: '채팅 id',
+    type: 'string',
+    format: 'ObjectId',
+  })
+  @TransformMongoId()
+  @Expose()
+  _id: mongoose.Types.ObjectId;
+
   @ApiProperty({
     description: '채팅 방 id',
     type: 'string',
@@ -47,6 +57,7 @@ export class ChatsDto
   createdAt: Date;
 
   constructor(chatDto: Partial<ChatsDto>) {
+    this._id = chatDto._id;
     this.chatRoomId = chatDto.chatRoomId;
     this.content = chatDto.content;
     this.sender = chatDto.sender;

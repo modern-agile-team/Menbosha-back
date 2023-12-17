@@ -8,6 +8,8 @@ const options: SchemaOptions = {
 
 @Schema(options)
 export class Chats {
+  _id: mongoose.Types.ObjectId;
+
   @Prop({ type: mongoose.Types.ObjectId, ref: 'chat_rooms' })
   chatRoomId: string;
 
@@ -22,6 +24,8 @@ export class Chats {
 
   @Prop({ required: true, default: false })
   isSeen: boolean;
+
+  createdAt: Date;
 
   readonly unprotectedData: {
     _id: mongoose.Types.ObjectId;
@@ -38,12 +42,12 @@ export const ChatsSchema = SchemaFactory.createForClass(Chats);
 
 ChatsSchema.virtual('unprotectedData').get(function (this: Chats) {
   return {
-    _id: options._id,
+    _id: this._id,
     chatRoomId: this.chatRoomId,
     sender: this.sender,
     receiver: this.receiver,
     content: this.content,
     isSeen: this.isSeen,
-    createdAt: options.timestamps,
+    createdAt: this.createdAt,
   };
 });

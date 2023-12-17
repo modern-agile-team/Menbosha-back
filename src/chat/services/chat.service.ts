@@ -48,8 +48,6 @@ export class ChatService {
     if (!this.subjectMap.get(myId)) {
       this.subjectMap.set(myId, new Subject<ChatsDto>());
     }
-    console.log(myId);
-    console.log(this.subjectMap.get(myId));
 
     const subject = this.subjectMap.get(myId);
 
@@ -158,14 +156,18 @@ export class ChatService {
       receiverId,
     );
 
-    if (returnedChat) {
+    console.log(returnedChat);
+
+    const chatsDto = new ChatsDto(returnedChat);
+
+    if (chatsDto) {
       const subject = this.subjectMap.get(receiverId);
       if (subject) {
-        subject.next(returnedChat);
+        subject.next(chatsDto);
       }
     }
 
-    return new ResponsePostChatDto(returnedChat);
+    return chatsDto;
   }
 
   async createChatImage(
@@ -210,7 +212,7 @@ export class ChatService {
         { content: imageUrl },
       ],
     });
-    console.log(isChatAndUsers);
+
     if (!isChatAndUsers) {
       throw new NotFoundException('해당 채팅을 찾지 못했습니다.');
     }
