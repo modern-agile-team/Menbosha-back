@@ -43,10 +43,8 @@ export class ChatRepository {
     });
   }
 
-  getChats(roomId: mongoose.Types.ObjectId): Promise<ChatsDto[]> {
-    return this.chatModel.find({
-      chatRoomId: roomId,
-    });
+  chatsFindAll(filter: mongoose.FilterQuery<Chats>): Promise<ChatsDto[]> {
+    return this.chatModel.find(filter);
   }
 
   async updateChatIsSeen(

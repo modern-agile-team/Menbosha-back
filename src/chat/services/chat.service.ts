@@ -118,9 +118,14 @@ export class ChatService {
     return this.chatRepository.deleteChatRoom(roomId);
   }
 
-  async getChats(userId: number, roomId: mongoose.Types.ObjectId) {
+  async getChats(
+    userId: number,
+    roomId: mongoose.Types.ObjectId,
+  ): Promise<ChatsDto[]> {
     await this.getOneChatRoom(roomId);
-    const returnedChat = await this.chatRepository.getChats(roomId);
+    const returnedChat = await this.chatRepository.chatsFindAll({
+      chatRoomId: roomId,
+    });
 
     if (returnedChat.length) {
       this.chatRepository.updateChatIsSeen(userId, roomId);

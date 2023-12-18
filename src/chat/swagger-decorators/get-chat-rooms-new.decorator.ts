@@ -34,7 +34,6 @@ export function ApiGetChatRoomsNew() {
       description: '성공적으로 채팅방 조회',
     }),
     ApiNotFoundResponse({
-      status: 404,
       description: '내 정보를 찾을 수 없는 경우',
       schema: {
         type: 'object',

@@ -56,7 +56,7 @@ export class ChatsDto
   @Expose()
   createdAt: Date;
 
-  constructor(chatDto: Partial<ChatsDto>) {
+  constructor(chatDto: Partial<ChatsDto> = {}) {
     this._id = chatDto._id;
     this.chatRoomId = chatDto.chatRoomId;
     this.content = chatDto.content;

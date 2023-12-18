@@ -39,6 +39,7 @@ import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
 import { plainToInstance } from 'class-transformer';
 import { ApiGetChatRoomsNew } from '../swagger-decorators/get-chat-rooms-new.decorator';
 import { Observable } from 'rxjs';
+import { ChatsDto } from '../dto/chats.dto';
 
 @ApiTags('CHAT')
 @UsePipes(
@@ -112,11 +113,15 @@ export class ChatController {
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChats()
   @Get(':roomId/chat')
-  getChats(
+  async getChats(
     @GetUserId() userId: number,
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  ) {
-    return this.chatService.getChats(userId, roomId);
+  ): Promise<ChatsDto[]> {
+    const returnedChats = await this.chatService.getChats(userId, roomId);
+
+    return plainToInstance(ChatsDto, returnedChats, {
+      excludeExtraneousValues: true,
+    });
   }
 
   @UseGuards(JwtAccessTokenGuard)
