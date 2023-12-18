@@ -14,7 +14,7 @@ import * as mongoose from 'mongoose';
 import { S3Service } from 'src/common/s3/s3.service';
 import { Observable, Subject, catchError, map } from 'rxjs';
 import { Chats } from '../schemas/chats.schemas';
-import { EntityManager, In, Repository } from 'typeorm';
+import { EntityManager, In } from 'typeorm';
 import { UserService } from 'src/users/services/user.service';
 import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
@@ -22,8 +22,6 @@ import { ChatRoomsDto } from '../dto/chat-rooms.dto';
 import { ResponsePostChatDto } from '../dto/response-post-chat-dto';
 import { AggregateChatRoomsDto } from '../dto/aggregate-chat-rooms.dto';
 import { ChatsDto } from '../dto/chats.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/users/entities/user.entity';
 // import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 
 @Injectable()
@@ -34,7 +32,6 @@ export class ChatService {
     private readonly s3Service: S3Service,
     private readonly userService: UserService,
     private readonly chatRepository: ChatRepository,
-    private readonly entityManager: EntityManager,
     @InjectModel(ChatRooms.name)
     private readonly chatRoomsModel: mongoose.Model<ChatRooms>,
     @InjectModel(Chats.name)
