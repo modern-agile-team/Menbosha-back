@@ -87,7 +87,7 @@ export class EventsGateway
       const data = returnedChat;
       socket.to(postChatDto.roomId.toString()).emit('message', { data });
     } else {
-      const returnedChat = await this.chatService.findChatImage(postChatDto);
+      const returnedChat = await this.chatService.findOneChatImage(postChatDto);
       const data = returnedChat;
       socket.to(postChatDto.roomId.toString()).emit('message', { data });
     }

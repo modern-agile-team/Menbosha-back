@@ -120,7 +120,7 @@ export class ChatController {
   @Post()
   createChatRoom(
     @GetUserId() userId: number,
-    @Body('receivedUserDto') receivedUserDto: ReceivedUserDto,
+    @Body() receivedUserDto: ReceivedUserDto,
   ): Promise<ChatRoomsDto> {
     return this.chatService.createChatRoom(userId, receivedUserDto.receiverId);
   }

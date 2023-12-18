@@ -68,7 +68,7 @@ export class ChatService {
   async findOneChatRoomOrFail(
     roomId: mongoose.Types.ObjectId,
   ): Promise<ChatRoomsDto> {
-    const returnedRoom = await this.chatRepository.findOneChatRoomOrFail({
+    const returnedRoom = await this.chatRepository.findOneChatRoom({
       _id: roomId,
       deletedAt: null,
     });
@@ -80,16 +80,16 @@ export class ChatService {
     return new ChatRoomsDto(returnedRoom);
   }
 
-  /**
-   *  @todo 재사용성 높은 코드로 고치기
-   *
-   */
   async createChatRoom(myId: number, guestId: number): Promise<ChatRoomsDto> {
     try {
-      const isChatRoom = await this.chatRoomsModel.findOne({
+      const isChatRoom = await this.chatRepository.findOneChatRoom({
         $or: [
-          { $and: [{ hostId: myId }, { guestId: guestId }] },
-          { $and: [{ hostId: guestId }, { guestId: myId }] },
+          {
+            $and: [{ hostId: myId }, { guestId: guestId }, { deletedAt: null }],
+          },
+          {
+            $and: [{ hostId: guestId }, { guestId: myId }, { deletedAt: null }],
+          },
         ],
       });
 
@@ -97,10 +97,10 @@ export class ChatService {
         throw new ConflictException('해당 유저들의 채팅방이 이미 존재합니다.');
       }
 
-      const returnedChatRoom = await this.chatRepository.createChatRoom(
-        myId,
-        guestId,
-      );
+      const returnedChatRoom = await this.chatRepository.createChatRoom({
+        hostId: myId,
+        guestId: guestId,
+      });
 
       return new ChatRoomsDto(returnedChatRoom);
     } catch (error) {
@@ -140,32 +140,22 @@ export class ChatService {
     );
   }
 
-  /**
-   *  @todo 재사용성 높은 코드로 고치기
-   *
-   */
   async findAllChats(
     userId: number,
     roomId: mongoose.Types.ObjectId,
   ): Promise<ChatsDto[]> {
     await this.findOneChatRoomOrFail(roomId);
-    const returnedChat = await this.chatRepository.findAllChats({
-      chatRoomId: roomId,
-    });
 
-    if (returnedChat.length) {
-      this.chatRepository.updateManyChats(
-        {
-          $and: [
-            { receiver: userId },
-            { chatRoomId: roomId },
-            { isSeen: false },
-          ],
-        },
-        { $set: { isSeen: true } },
-      );
-      return returnedChat;
-    }
+    await this.chatRepository.updateManyChats(
+      {
+        $and: [{ receiver: userId }, { chatRoomId: roomId }, { isSeen: false }],
+      },
+      { $set: { isSeen: true } },
+    );
+
+    const returnedChat = await this.chatRepository.findAllChats({
+      chatRoomId: new mongoose.Types.ObjectId(roomId),
+    });
 
     return returnedChat;
   }
@@ -193,8 +183,10 @@ export class ChatService {
       throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
     }
 
+    new mongoose.Types.ObjectId(roomId);
+
     const returnedChat = await this.chatRepository.createChat(
-      roomId,
+      returnedChatRoom._id,
       content,
       senderId,
       receiverId,

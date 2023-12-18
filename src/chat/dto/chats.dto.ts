@@ -21,7 +21,7 @@ export class ChatsDto implements Omit<Chats, 'unprotectedData'> {
   })
   @Expose()
   @TransformMongoId()
-  chatRoomId: string;
+  chatRoomId: mongoose.Types.ObjectId;
 
   @ApiProperty({
     description: '채팅 내용',

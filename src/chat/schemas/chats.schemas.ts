@@ -11,7 +11,7 @@ export class Chats {
   _id: mongoose.Types.ObjectId;
 
   @Prop({ type: mongoose.Types.ObjectId, ref: 'chat_rooms' })
-  chatRoomId: string;
+  chatRoomId: mongoose.Types.ObjectId;
 
   @Prop({ required: true })
   sender: number;

@@ -33,7 +33,7 @@ export class ChatRepository {
    * @param filter
    * @returns
    */
-  findOneChatRoomOrFail(
+  findOneChatRoom(
     filter: mongoose.FilterQuery<ChatRooms>,
   ): Promise<ChatRoomsDto> {
     return this.chatRoomModel.findOne(filter);
@@ -43,11 +43,10 @@ export class ChatRepository {
    *  @todo 재사용성 높은 코드로 고치기
    *
    */
-  async createChatRoom(myId: number, guestId: number): Promise<ChatRoomsDto> {
-    const value = await this.chatRoomModel.create({
-      hostId: myId,
-      guestId: guestId,
-    });
+  async createChatRoom<DocContents = mongoose.AnyKeys<ChatRooms>>(
+    doc: DocContents,
+  ): Promise<ChatRoomsDto> {
+    const value = await this.chatRoomModel.create(doc);
 
     return value.unprotectedData;
   }
