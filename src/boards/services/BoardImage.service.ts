@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BoardImageRepository } from '../repository/boardImage.repository';
 import { S3Service } from '../../common/s3/s3.service';
-import { CreateBoardImageDto } from '../dto/create.board-image.dto';
+import { CreateHelpMeBoardImageDto } from '../dto/create.board-image.dto';
 import { HelpMeBoardImage } from '../entities/help-me-board-image.entity';
 
 @Injectable()
@@ -11,19 +11,19 @@ export class BoardImagesService {
     private readonly boardImageRepository: BoardImageRepository,
   ) {}
 
-  async createBoardImages(
+  async createHelpMeBoardImages(
     boardId: number,
     files: Express.Multer.File[],
     userId: number,
-  ): Promise<CreateBoardImageDto[]> {
-    const savedImagesArray: CreateBoardImageDto[] = [];
+  ): Promise<CreateHelpMeBoardImageDto[]> {
+    const savedImagesArray: CreateHelpMeBoardImageDto[] = [];
     for (const file of files) {
       const uploadedImage = await this.s3Service.uploadImage(
         file,
         userId,
-        'BoardImages',
+        'HelpMeBoardImages',
       );
-      const boardImage = new CreateBoardImageDto();
+      const boardImage = new CreateHelpMeBoardImageDto();
       boardImage.helpMeBoardId = boardId;
       boardImage.imageUrl = uploadedImage.url;
       const savedImage =
@@ -33,7 +33,7 @@ export class BoardImagesService {
     return savedImagesArray;
   }
 
-  async updateBoardImages(
+  async updateHelpMeBoardImages(
     boardId: number,
     files: Express.Multer.File[] | undefined,
     userId: number,
@@ -44,10 +44,10 @@ export class BoardImagesService {
     const imagesToDelete = existingImages.filter(
       (image) => deleteImageUrl.includes(image.imageUrl), // 불러온 이미지들과 param값 비교
     );
-    await this.deleteImages(imagesToDelete); //이미지 삭제처리
+    await this.deleteHelpMeBoardImages(imagesToDelete); //이미지 삭제처리
 
     // 여기서부터 새로운 이미지 추가
-    const newImagesArray: CreateBoardImageDto[] = [];
+    const newImagesArray: CreateHelpMeBoardImageDto[] = [];
     // 예외처리 files이 없으면 실행되지 않음.
     if (files && files.length > 0) {
       for (const file of files) {
@@ -56,7 +56,7 @@ export class BoardImagesService {
           userId,
           'BoardImages',
         );
-        const boardImage = new CreateBoardImageDto();
+        const boardImage = new CreateHelpMeBoardImageDto();
         boardImage.helpMeBoardId = boardId;
         boardImage.imageUrl = uploadedImage.url;
         const savedImage =
@@ -70,7 +70,7 @@ export class BoardImagesService {
     };
   }
   // 이미지 삭제 수행
-  private async deleteImages(imagesToDelete: HelpMeBoardImage[]) {
+  private async deleteHelpMeBoardImages(imagesToDelete: HelpMeBoardImage[]) {
     const s3ToDelete = imagesToDelete.map((image) => {
       const parts = image.imageUrl.split('/');
       const fileName = parts[parts.length - 1]; // S3에서 삭제할 이미지 파일명을 추출합니다.

@@ -1,6 +1,6 @@
 import { IsNumber, IsString } from 'class-validator';
 
-export class CreateBoardImageDto {
+export class CreateHelpMeBoardImageDto {
   @IsNumber()
   id: number;
 

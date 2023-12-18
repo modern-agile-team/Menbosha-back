@@ -1,6 +1,6 @@
 import { UserImage } from 'src/users/entities/user-image.entity';
 
-export class oneBoardResponseDTO {
+export class oneMentorBoardResponseDTO {
   id: number;
   head: string;
   body: string;

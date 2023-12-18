@@ -1,33 +1,30 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiHeaders,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+} from '@nestjs/swagger';
 
-export function ApiGetOneMentorBoard() {
+export function ApiAddMentorBoard() {
   return applyDecorators(
     ApiOperation({
-      summary: '클릭한 멘토 보드 가져오는 API',
-      description: 'header - accessToken, param - mentorBoardId ',
+      summary: '멘토보드를 생성하는 API',
+      description: '멘토보드를 생성하는 API',
     }),
     ApiResponse({
       status: 200,
-      description: '성공적으로 멘토보드를 불러온 경우',
+      description: '성공적으로 보드를 생성한 경우',
       content: {
         JSON: {
           example: {
-            id: '8',
-            head: '제목',
-            body: '내용',
-            createdAt: '2023-12-06T23:51:47.969Z',
-            updatedAt: '2023-12-06T23:51:47.969Z',
-            categoryId: 4,
-            user: {
-              name: '홍길동',
-              userImage: {
-                id: 'image pk키 (number)',
-                userId: '유저 아이디 (number)',
-                imageUrl: '이미지 url(string)',
-              },
-            },
-            unitowner: 'bollean값',
+            head: '게시물 제목',
+            body: '게시물 내용',
+            categoryId: '3(number)',
+            userId: '유저 아이디 (number)',
+            id: '생성된 보드 id (number)',
+            createAt: '2023-10-29T23:45:54.023Z',
+            updateAt: '2023-10-29T23:45:54.023Z',
           },
         },
       },
@@ -52,10 +49,10 @@ export function ApiGetOneMentorBoard() {
     }),
     ApiResponse({
       status: 404,
-      description: 'DB에서 일치하는 보드를 찾을 수 없는 경우',
+      description: 'DB에서 사용자를 찾을 수 없는 경우',
       content: {
         JSON: {
-          example: { statusCode: 404, message: '보드를 찾을 수 없습니다.' },
+          example: { statusCode: 404, message: '사용자를 찾을 수 없습니다.' },
         },
       },
     }),
@@ -68,14 +65,15 @@ export function ApiGetOneMentorBoard() {
         },
       },
     }),
+
     ApiResponse({
       status: 500,
-      description: '보드를 불러오는 중 오류가 발생한 경우',
+      description: '보드를 생성하는 중 오류가 발생한 경우',
       content: {
         JSON: {
           example: {
             statusCode: 500,
-            message: '보드를 불러오는 중 오류가 발생했습니다.',
+            message: '보드를 생성하는 중 오류가 발생했습니다.',
           },
         },
       },
@@ -88,5 +86,20 @@ export function ApiGetOneMentorBoard() {
         example: '여기에 액세스 토큰',
       },
     ]),
+    ApiBody({
+      schema: {
+        type: 'object',
+        properties: {
+          head: { type: 'string' },
+          body: { type: 'string' },
+          categoryId: { type: 'number' },
+        },
+        example: {
+          head: '게시물 제목',
+          body: 'click send to get a response boards.service.ts 30자 넘는 게시물 테스트 중입니다.',
+          categoryId: 4,
+        },
+      },
+    }),
   );
 }

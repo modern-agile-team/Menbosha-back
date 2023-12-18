@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
-import { CreateBoardImageDto } from '../dto/create.board-image.dto';
+
 import { HelpMeBoardImage } from '../entities/help-me-board-image.entity';
+import { CreateHelpMeBoardImageDto } from '../dto/create.board-image.dto';
 
 @Injectable()
 export class BoardImageRepository {
   constructor(private readonly entityManager: EntityManager) {}
 
   async saveBoardImage(
-    boardImage: CreateBoardImageDto,
+    boardImage: CreateHelpMeBoardImageDto,
   ): Promise<HelpMeBoardImage> {
     const newBoardImage = new HelpMeBoardImage();
     newBoardImage.helpMeBoardId = boardImage.helpMeBoardId;

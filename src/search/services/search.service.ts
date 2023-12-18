@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 // import { PageByMentorBoardResponseDTO } from 'src/boards/dto/boards.response.dto';
 import { SearchRepository } from '../repositories/search.repository';
-import { PageByMentorBoardResponseDTO } from 'src/boards/dto/boards.response.dto';
+import { PageByMentorBoardResponseDTO } from 'src/boards/dto/response.mentor.boards.dto';
 
 @Injectable()
 export class SearchService {

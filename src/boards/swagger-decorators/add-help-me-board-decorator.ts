@@ -1,15 +1,15 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-export function ApiAddMentorBoard() {
+export function ApiAddHelpMeBoard() {
   return applyDecorators(
     ApiOperation({
-      summary: '멘토보드를 생성하는 API',
-      description: '멘토보드를 생성하는 API',
+      summary: '도와주세요 게시글을 생성하는 API',
+      description: '도와주세요 게시글을 생성하는 API',
     }),
     ApiResponse({
       status: 200,
-      description: '성공적으로 보드를 생성한 경우',
+      description: '성공적으로 게시글를 생성한 경우',
       content: {
         JSON: {
           example: {
@@ -63,12 +63,12 @@ export function ApiAddMentorBoard() {
 
     ApiResponse({
       status: 500,
-      description: '보드를 생성하는 중 오류가 발생한 경우',
+      description: '게시글을 생성하는 중 오류가 발생한 경우',
       content: {
         JSON: {
           example: {
             statusCode: 500,
-            message: '보드를 생성하는 중 오류가 발생했습니다.',
+            message: '게시글을 생성하는 중 오류가 발생했습니다.',
           },
         },
       },

@@ -1,35 +1,17 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-export function ApiGetOneMentorBoard() {
+export function ApiGetOneHelpMeBoard() {
   return applyDecorators(
     ApiOperation({
-      summary: '클릭한 멘토 보드 가져오는 API',
-      description: 'header - accessToken, param - mentorBoardId ',
+      summary: '클릭한 멘티 보드 가져오는 API',
+      description: '클릭한 멘티 보드 가져오는 API',
     }),
     ApiResponse({
       status: 200,
-      description: '성공적으로 멘토보드를 불러온 경우',
+      description: '성공적으로 멘티보드를 불러온 경우',
       content: {
-        JSON: {
-          example: {
-            id: '8',
-            head: '제목',
-            body: '내용',
-            createdAt: '2023-12-06T23:51:47.969Z',
-            updatedAt: '2023-12-06T23:51:47.969Z',
-            categoryId: 4,
-            user: {
-              name: '홍길동',
-              userImage: {
-                id: 'image pk키 (number)',
-                userId: '유저 아이디 (number)',
-                imageUrl: '이미지 url(string)',
-              },
-            },
-            unitowner: 'bollean값',
-          },
-        },
+        JSON: { example: { message: '멘티보드를 성공적으로 불러왔습니다.' } },
       },
     }),
     ApiResponse({
