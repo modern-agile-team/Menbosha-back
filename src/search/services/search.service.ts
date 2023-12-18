@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { BoardResponseDTO } from 'src/boards/dto/boards.response.dto';
+// import { PageByMentorBoardResponseDTO } from 'src/boards/dto/boards.response.dto';
 import { SearchRepository } from '../repositories/search.repository';
+import { PageByMentorBoardResponseDTO } from 'src/boards/dto/response.mentor.boards.dto';
 
 @Injectable()
 export class SearchService {
@@ -26,7 +27,7 @@ export class SearchService {
         );
       const last_page = Math.ceil(total / take);
 
-      const boardResponse: BoardResponseDTO[] = await Promise.all(
+      const boardResponse: PageByMentorBoardResponseDTO[] = await Promise.all(
         returnedBoards.map(async (board) => {
           return {
             id: board.id,
@@ -68,7 +69,7 @@ export class SearchService {
         );
       const last_page = Math.ceil(total / take);
 
-      const boardResponse: BoardResponseDTO[] = await Promise.all(
+      const boardResponse: PageByMentorBoardResponseDTO[] = await Promise.all(
         returnedBoards.map(async (board) => {
           return {
             id: board.id,
@@ -120,7 +121,7 @@ export class SearchService {
 
       const last_page = Math.ceil(total / take);
 
-      const boardResponse: BoardResponseDTO[] = await Promise.all(
+      const boardResponse: PageByMentorBoardResponseDTO[] = await Promise.all(
         returnedBoards.map(async (board) => {
           return {
             id: board.id,
@@ -172,7 +173,7 @@ export class SearchService {
       );
     const last_page = Math.ceil(total / take);
 
-    const boardResponse: BoardResponseDTO[] = await Promise.all(
+    const boardResponse: PageByMentorBoardResponseDTO[] = await Promise.all(
       returnedBoards.map(async (board) => {
         return {
           id: board.id,
@@ -223,7 +224,7 @@ export class SearchService {
       );
     const last_page = Math.ceil(total / take);
 
-    const boardResponse: BoardResponseDTO[] = await Promise.all(
+    const boardResponse: PageByMentorBoardResponseDTO[] = await Promise.all(
       returnedBoards.map(async (board) => {
         return {
           id: board.id,
@@ -278,7 +279,7 @@ export class SearchService {
 
     const last_page = Math.ceil(total / take);
 
-    const boardResponse: BoardResponseDTO[] = await Promise.all(
+    const boardResponse: PageByMentorBoardResponseDTO[] = await Promise.all(
       returnedBoards.map(async (board) => {
         return {
           id: board.id,

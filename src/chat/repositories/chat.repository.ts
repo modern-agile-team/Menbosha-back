@@ -22,10 +22,10 @@ export class ChatRepository {
    *  @todo 재사용성 높은 코드로 고치기
    *
    */
-  getChatRooms(myId: number): Promise<ChatRoomsDto[]> {
-    return this.chatRoomModel.find({
-      $and: [{ $or: [{ hostId: myId }, { guestId: myId }] }],
-    });
+  findAllChatRooms(
+    filter: mongoose.FilterQuery<ChatRooms>,
+  ): Promise<ChatRoomsDto[]> {
+    return this.chatRoomModel.find(filter);
   }
 
   /**
@@ -33,7 +33,7 @@ export class ChatRepository {
    * @param filter
    * @returns
    */
-  getOneChatRoom(
+  findOneChatRoomOrFail(
     filter: mongoose.FilterQuery<ChatRooms>,
   ): Promise<ChatRoomsDto> {
     return this.chatRoomModel.findOne(filter);
@@ -57,7 +57,7 @@ export class ChatRepository {
    * @param filter
    * @param update
    */
-  async updatedOneChatRoom(
+  async updateOneChatRoom(
     filter?: mongoose.FilterQuery<ChatRooms>,
     update?: mongoose.UpdateQuery<ChatRooms>,
   ): Promise<void> {
@@ -75,7 +75,7 @@ export class ChatRepository {
    * @param filter
    * @returns
    */
-  chatsFindAll(filter: mongoose.FilterQuery<Chats>): Promise<ChatsDto[]> {
+  findAllChats(filter: mongoose.FilterQuery<Chats>): Promise<ChatsDto[]> {
     return this.chatModel.find(filter);
   }
 
@@ -83,20 +83,11 @@ export class ChatRepository {
    *  @todo 재사용성 높은 코드로 고치기
    *
    */
-  async updateChatIsSeen(
-    receiverId: number,
-    roomId: mongoose.Types.ObjectId,
+  async updateManyChats(
+    filter: mongoose.FilterQuery<Chats>,
+    update: mongoose.UpdateQuery<Chats>,
   ): Promise<void> {
-    await this.chatModel.updateMany(
-      {
-        $and: [
-          { receiver: receiverId },
-          { chatRoomId: roomId },
-          { isSeen: false },
-        ],
-      },
-      { $set: { isSeen: true } },
-    );
+    await this.chatModel.updateMany(filter, update);
   }
 
   /**
@@ -116,7 +107,7 @@ export class ChatRepository {
       receiver: receiverId,
     });
 
-    await this.updatedOneChatRoom(
+    await this.updateOneChatRoom(
       { _id: roomId },
       {
         $push: { chatIds: returnedChat._id },

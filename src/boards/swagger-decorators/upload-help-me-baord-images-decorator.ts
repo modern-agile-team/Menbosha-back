@@ -1,7 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-export function ApiUploadBoardImages() {
+export function ApiUploadHelpMeBoardImages() {
   return applyDecorators(
     ApiOperation({
       summary: '보드 이미지 업로드 API',

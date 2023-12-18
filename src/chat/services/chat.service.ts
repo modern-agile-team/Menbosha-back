@@ -14,7 +14,7 @@ import * as mongoose from 'mongoose';
 import { S3Service } from 'src/common/s3/s3.service';
 import { Observable, Subject, catchError, map } from 'rxjs';
 import { Chats } from '../schemas/chats.schemas';
-import { EntityManager, In } from 'typeorm';
+import { In } from 'typeorm';
 import { UserService } from 'src/users/services/user.service';
 import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
@@ -54,12 +54,10 @@ export class ChatService {
     );
   }
 
-  /**
-   *  @todo 재사용성 높은 코드로 고치기
-   *
-   */
-  getChatRooms(myId: number): Promise<ChatRoomsDto[]> {
-    return this.chatRepository.getChatRooms(myId);
+  findAllChatRooms(myId: number): Promise<ChatRoomsDto[]> {
+    return this.chatRepository.findAllChatRooms({
+      $and: [{ $or: [{ hostId: myId }, { guestId: myId }] }],
+    });
   }
 
   /**
@@ -67,8 +65,10 @@ export class ChatService {
    * @param roomId
    * @returns
    */
-  async getOneChatRoom(roomId: mongoose.Types.ObjectId): Promise<ChatRoomsDto> {
-    const returnedRoom = await this.chatRepository.getOneChatRoom({
+  async findOneChatRoomOrFail(
+    roomId: mongoose.Types.ObjectId,
+  ): Promise<ChatRoomsDto> {
+    const returnedRoom = await this.chatRepository.findOneChatRoomOrFail({
       _id: roomId,
       deletedAt: null,
     });
@@ -126,13 +126,13 @@ export class ChatService {
     myId: number,
     roomId: mongoose.Types.ObjectId,
   ): Promise<void> {
-    const existChatRoom = await this.getOneChatRoom(roomId);
+    const existChatRoom = await this.findOneChatRoomOrFail(roomId);
 
     if (!(existChatRoom.hostId === myId || existChatRoom.guestId === myId)) {
       throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
     }
 
-    return this.chatRepository.updatedOneChatRoom(
+    return this.chatRepository.updateOneChatRoom(
       { _id: roomId },
       {
         deletedAt: new Date(),
@@ -144,17 +144,26 @@ export class ChatService {
    *  @todo 재사용성 높은 코드로 고치기
    *
    */
-  async getChats(
+  async findAllChats(
     userId: number,
     roomId: mongoose.Types.ObjectId,
   ): Promise<ChatsDto[]> {
-    await this.getOneChatRoom(roomId);
-    const returnedChat = await this.chatRepository.chatsFindAll({
+    await this.findOneChatRoomOrFail(roomId);
+    const returnedChat = await this.chatRepository.findAllChats({
       chatRoomId: roomId,
     });
 
     if (returnedChat.length) {
-      this.chatRepository.updateChatIsSeen(userId, roomId);
+      this.chatRepository.updateManyChats(
+        {
+          $and: [
+            { receiver: userId },
+            { chatRoomId: roomId },
+            { isSeen: false },
+          ],
+        },
+        { $set: { isSeen: true } },
+      );
       return returnedChat;
     }
 
@@ -171,7 +180,7 @@ export class ChatService {
     senderId,
     receiverId,
   }): Promise<ResponsePostChatDto> {
-    const returnedChatRoom = await this.getOneChatRoom(roomId);
+    const returnedChatRoom = await this.findOneChatRoomOrFail(roomId);
 
     if (
       !(
@@ -213,7 +222,7 @@ export class ChatService {
     receiverId: number,
     file: Express.Multer.File,
   ) {
-    await this.getOneChatRoom(roomId);
+    await this.findOneChatRoomOrFail(roomId);
 
     const isChatRoom = await this.chatRoomsModel.findOne({
       $or: [
@@ -244,7 +253,7 @@ export class ChatService {
    *  @todo 재사용성 높은 코드로 고치기
    *
    */
-  async findChatImage({ roomId, imageUrl, senderId, receiverId }) {
+  async findOneChatImage({ roomId, imageUrl, senderId, receiverId }) {
     const isChatAndUsers = await this.chatsModel.findOne({
       $and: [
         { chatRoomId: roomId },
@@ -294,7 +303,7 @@ export class ChatService {
    *  @todo 레포지터리 코드랑 분리
    *
    */
-  async getChatRoomsWithUserAndChat(
+  async findAllChatRoomsWithUserAndChat(
     myId: number,
   ): Promise<ResponseGetChatRoomsDto[]> {
     const returnedChatAggregate: AggregateChatRoomsDto[] =

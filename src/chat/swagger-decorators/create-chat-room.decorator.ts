@@ -1,3 +1,7 @@
+/**
+ *
+ * @todo swagger 수정
+ */
 import { applyDecorators } from '@nestjs/common';
 import {
   ApiBody,
@@ -8,11 +12,8 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 import { ReceivedUserDto } from '../dto/received-user.dto';
+import { ChatRoomsDto } from '../dto/chat-rooms.dto';
 
-/**
- *
- * @todo swagger 수정
- */
 export function ApiCreateChatRoom() {
   return applyDecorators(
     ApiOperation({
@@ -22,19 +23,7 @@ export function ApiCreateChatRoom() {
     ApiResponse({
       status: 201,
       description: '성공적으로 채팅방 생성',
-      content: {
-        JSON: {
-          example: {
-            host_id: 12345642,
-            guest_id: 123456427,
-            deleted_at: null,
-            _id: '653383a4468680bc4e9f8491',
-            createdAt: '2023-10-21T07:54:12.343Z',
-            updatedAt: '2023-10-21T07:54:12.343Z',
-            __v: 0,
-          },
-        },
-      },
+      type: ChatRoomsDto,
     }),
     ApiConflictResponse({
       description: '해당 유저들의 채팅방이 이미 존재합니다.',

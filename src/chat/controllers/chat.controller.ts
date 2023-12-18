@@ -74,8 +74,8 @@ export class ChatController {
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChatRooms()
   @Get()
-  async getChatRooms(@GetUserId() userId: number): Promise<ChatRoomsDto[]> {
-    const returnedChatRooms = await this.chatService.getChatRooms(userId);
+  async findAllChatRooms(@GetUserId() userId: number): Promise<ChatRoomsDto[]> {
+    const returnedChatRooms = await this.chatService.findAllChatRooms(userId);
 
     return plainToInstance(ChatRoomsDto, returnedChatRooms, {
       excludeExtraneousValues: true,
@@ -90,10 +90,10 @@ export class ChatController {
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChatRoomsNew()
   @Get('new-api')
-  getChatRoomsWithUserAndChat(
+  findAllChatRoomsWithUserAndChat(
     @GetUserId() userId: number,
   ): Promise<ResponseGetChatRoomsDto[]> {
-    return this.chatService.getChatRoomsWithUserAndChat(userId);
+    return this.chatService.findAllChatRoomsWithUserAndChat(userId);
   }
 
   /**
@@ -103,10 +103,10 @@ export class ChatController {
    */
   @ApiGetOneChatRoom()
   @Get(':roomId')
-  getOneChatRoom(
+  findOneChatRoomOrFail(
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
   ): Promise<ChatRoomsDto> {
-    return this.chatService.getOneChatRoom(roomId);
+    return this.chatService.findOneChatRoomOrFail(roomId);
   }
 
   /**
@@ -145,11 +145,11 @@ export class ChatController {
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChats()
   @Get(':roomId/chat')
-  async getChats(
+  async findChats(
     @GetUserId() userId: number,
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
   ): Promise<ChatsDto[]> {
-    const returnedChats = await this.chatService.getChats(userId, roomId);
+    const returnedChats = await this.chatService.findAllChats(userId, roomId);
 
     return plainToInstance(ChatsDto, returnedChats, {
       excludeExtraneousValues: true,

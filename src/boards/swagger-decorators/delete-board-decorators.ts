@@ -1,10 +1,10 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiHeaders } from '@nestjs/swagger';
 
 export function ApiDeleteBoard() {
   return applyDecorators(
     ApiOperation({
-      summary: '게시글 삭제',
+      summary: '멘토 게시글 삭제',
       description: 'Header - access-token, Param - board-id',
     }),
     ApiResponse({
@@ -32,5 +32,13 @@ export function ApiDeleteBoard() {
         },
       },
     }),
+    ApiHeaders([
+      {
+        name: 'access_token',
+        description: '액세스 토큰',
+        required: true,
+        example: '여기에 액세스 토큰',
+      },
+    ]),
   );
 }

@@ -2,16 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { HelpMeBoardRepository } from '../repository/help.me.board.repository';
 import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { MentorBoard } from '../entities/mentor-board.entity';
-import { BoardResponseDTO } from '../dto/boards.response.dto';
-import { oneBoardResponseDTO } from '../dto/boards.one.response.dto';
+// import { BoardResponseDTO } from '../dto/boards.response.dto';
+import { oneHelpMeBoardResponseDTO } from '../dto/one.response.help.me.board.dto';
+import { CreateHelpMeBoardDto } from '../dto/creare.help.me.board.dto';
+import { HelpMeBoard } from '../entities/help-me-board.entity';
+import { PageByHelpMeBoardResponseDTO } from '../dto/response.help.me.board.dto';
 
 @Injectable()
 export class HelpMeBoardService {
   constructor(private helpMeBoardRepository: HelpMeBoardRepository) {}
   async create(
-    boardData: CreateMentorBoardDto,
+    boardData: CreateHelpMeBoardDto,
     userId: number,
-  ): Promise<MentorBoard> {
+  ): Promise<HelpMeBoard> {
     try {
       return await this.helpMeBoardRepository.createBoard(boardData, userId);
     } catch (error) {
@@ -19,16 +22,19 @@ export class HelpMeBoardService {
     }
   }
 
-  async findPagedBoards(
+  async findPagedHelpMeBoards(
     page: number,
     limit: number,
-  ): Promise<{ data: BoardResponseDTO[]; total: number }> {
+  ): Promise<{ data: PageByHelpMeBoardResponseDTO[]; total: number }> {
     const skip = (page - 1) * limit;
     const take = limit;
-    const boards = await this.helpMeBoardRepository.findPagedBoards(skip, take);
+    const boards = await this.helpMeBoardRepository.findPageByHelpMeBoards(
+      skip,
+      take,
+    );
     const total = await this.helpMeBoardRepository.findTotalBoards();
 
-    const boardResponse: BoardResponseDTO[] = await Promise.all(
+    const boardResponse: PageByHelpMeBoardResponseDTO[] = await Promise.all(
       boards.map(async (board) => {
         return {
           id: board.id,
@@ -41,10 +47,10 @@ export class HelpMeBoardService {
             name: board.user.name,
             userImage: board.user.userImage ? board.user.userImage : [],
           },
-          // boardImages: board.boardImages.map((image) => ({
-          //   id: image.id,
-          //   imageUrl: image.imageUrl,
-          // })),
+          helpMeBoardImages: board.helpMeBoardImages.map((image) => ({
+            id: image.id,
+            imageUrl: image.imageUrl,
+          })),
         };
       }),
     );
@@ -55,7 +61,7 @@ export class HelpMeBoardService {
   async findOneBoard(
     boardId: number,
     userId: number,
-  ): Promise<oneBoardResponseDTO> {
+  ): Promise<oneHelpMeBoardResponseDTO> {
     const board = await this.helpMeBoardRepository.findBoardById(boardId);
     const unitowner = board.userId === userId;
     if (!board) {
@@ -67,15 +73,15 @@ export class HelpMeBoardService {
       body: board.body,
       createdAt: board.createdAt,
       updatedAt: board.updatedAt,
-      category: board.categoryId,
+      categoryId: board.categoryId,
       user: {
         name: board.user.name,
         userImage: board.user.userImage ? board.user.userImage : [],
       },
-      // boardImages: board.boardImages.map((image) => ({
-      //   id: image.id,
-      //   imageUrl: image.imageUrl,
-      // })),
+      helpMeBoardImages: board.helpMeBoardImages.map((image) => ({
+        id: image.id,
+        imageUrl: image.imageUrl,
+      })),
       unitowner: unitowner,
     };
   }
@@ -91,7 +97,7 @@ export class HelpMeBoardService {
         existingBoard[key] = boardData[key];
       }
     }
-    const updatedBoard = await this.helpMeBoardRepository.updateBoard(
+    const updatedBoard = await this.helpMeBoardRepository.updateHelpMeBoard(
       boardId,
       existingBoard,
     );

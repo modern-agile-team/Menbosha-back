@@ -4,10 +4,7 @@ import { Chats } from '../schemas/chats.schemas';
 import { Expose } from 'class-transformer';
 import mongoose from 'mongoose';
 
-export class ChatsDto
-  implements
-    Pick<Chats, 'chatRoomId' | 'content' | 'sender' | 'receiver' | 'isSeen'>
-{
+export class ChatsDto implements Omit<Chats, 'unprotectedData'> {
   @ApiProperty({
     description: '채팅 id',
     type: 'string',

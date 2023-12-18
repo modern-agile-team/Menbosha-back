@@ -38,7 +38,7 @@ export class AuthService implements AuthServiceInterface {
           client_secret: process.env.NAVER_CLIENT_SECRET,
           code: authorizeCode,
           state: 'test',
-          redirect_uri: process.env.NAVER_CALLBACK_URL,
+          redirect_uri: process.env.NAVER_REDIRECT_URI,
         };
       } else if (provider === 'kakao') {
         // 카카오 토큰 발급
@@ -51,8 +51,23 @@ export class AuthService implements AuthServiceInterface {
         tokenBody = {
           grant_type: 'authorization_code',
           client_id: process.env.KAKAO_CLIENT_ID,
-          redirect_uri: process.env.KAKAO_CALLBACK_URL,
+          redirect_uri: process.env.KAKAO_REDIRECT_URI,
           code: authorizeCode,
+        };
+      } else if (provider === 'google') {
+        // 구글 토큰 발급
+        tokenUrl = 'https://oauth2.googleapis.com/token';
+        tokenHeader = {
+          headers: {
+            'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+          },
+        };
+        tokenBody = {
+          grant_type: 'authorization_code',
+          client_id: process.env.GOOGLE_CLIENT_ID,
+          client_secret: process.env.GOOGLE_CLIENT_SECRET,
+          code: authorizeCode,
+          redirect_uri: process.env.GOOGLE_REDIRECT_URI,
         };
       }
 
@@ -77,22 +92,43 @@ export class AuthService implements AuthServiceInterface {
             'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
           },
         };
+      } else if (provider === 'google') {
+        // 구글 로그인 사용자 정보 조회
+        userInfoUrl = 'https://www.googleapis.com/oauth2/v2/userinfo';
+        userInfoHeader = {
+          headers: {
+            Authorization: `Bearer ${socialAccessToken}`,
+          },
+        };
       }
 
       const socialUserInfo = (await axios.get(userInfoUrl, userInfoHeader))
         .data;
+
       const nickname =
         provider === 'naver'
           ? socialUserInfo.response.nickname // 네이버 닉네임
-          : socialUserInfo.properties.nickname; // 카카오 닉네임
+          : provider === 'kakao'
+            ? socialUserInfo.properties.nickname // 카카오 닉네임
+            : provider === 'google'
+              ? socialUserInfo.name // Google 닉네임
+              : null;
       const email =
         provider === 'naver'
           ? socialUserInfo.response.email // 네이버 이메일
-          : socialUserInfo.kakao_account.email; // 카카오 이메일
+          : provider === 'kakao'
+            ? socialUserInfo.kakao_account.email // 카카오 이메일
+            : provider === 'google'
+              ? socialUserInfo.email // Google 이메일
+              : null;
       const profileImage =
         provider === 'naver'
           ? socialUserInfo.response.profile_image // 네이버 프로필 이미지
-          : socialUserInfo.properties.profile_image; // 카카오 프로필 이미지
+          : provider === 'kakao'
+            ? socialUserInfo.properties.profile_image // 카카오 프로필 이미지
+            : provider === 'google'
+              ? socialUserInfo.picture // Google 프로필 이미지
+              : null;
 
       const userInfo = {
         provider,

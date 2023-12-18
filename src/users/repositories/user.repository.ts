@@ -33,6 +33,7 @@ export class UserRepository {
     user.email = userInfo.email;
     user.hopeCategoryId = 3;
     user.activityCategoryId = 3;
+    user.isMentor = false;
 
     return this.entityManager.save(user);
   }

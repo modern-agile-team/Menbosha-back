@@ -5,9 +5,7 @@ import mongoose from 'mongoose';
 import { ChatRooms } from '../schemas/chat-rooms.schemas';
 import { TransformMongoIdToPlainOnly } from './transform/transform-mongo-id-to-plain-only';
 
-export class ChatRoomsDto
-  implements Pick<ChatRooms, 'guestId' | 'hostId' | 'chatIds' | 'deletedAt'>
-{
+export class ChatRoomsDto implements Omit<ChatRooms, 'unprotectedData'> {
   @ApiProperty({
     description: '채팅 방 id',
     type: 'string',
