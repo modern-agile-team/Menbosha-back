@@ -46,9 +46,7 @@ export class ChatRepository {
   async createChatRoom<DocContents = mongoose.AnyKeys<ChatRooms>>(
     doc: DocContents,
   ): Promise<ChatRoomsDto> {
-    const value = await this.chatRoomModel.create(doc);
-
-    return value.unprotectedData;
+    return this.chatRoomModel.create(doc);
   }
 
   /**
@@ -89,25 +87,13 @@ export class ChatRepository {
     await this.chatModel.updateMany(filter, update);
   }
 
-  /**
-   *  @todo 재사용성 높은 코드로 고치기
-   *
-   */
-  async createChat(
-    roomId: mongoose.Types.ObjectId,
-    content: string,
-    myId: number,
-    receiverId: number,
+  async createChat<DocContents = mongoose.AnyKeys<Chats>>(
+    doc: DocContents,
   ): Promise<ChatsDto> {
-    const returnedChat = await this.chatModel.create({
-      chatRoomId: roomId,
-      content: content,
-      sender: myId,
-      receiver: receiverId,
-    });
+    const returnedChat = await this.chatModel.create(doc);
 
     await this.updateOneChatRoom(
-      { _id: roomId },
+      { _id: returnedChat.chatRoomId },
       {
         $push: { chatIds: returnedChat._id },
       },
@@ -125,8 +111,8 @@ export class ChatRepository {
     myId: number,
     receiverId: number,
     imageUrl: string,
-  ): Promise<Chats> {
-    const returnedChat = await this.chatModel.create({
+  ): Promise<ChatsDto> {
+    const returnedChat = await this.createChat({
       chatRoomId: roomId,
       sender: myId,
       receiver: receiverId,
@@ -134,13 +120,16 @@ export class ChatRepository {
     });
 
     await this.chatImageModel.create({
-      chatId: returnedChat.id,
+      chatId: returnedChat._id,
       imageUrl: returnedChat.content,
     });
 
-    await this.chatRoomModel.findByIdAndUpdate(returnedChat.chatRoomId, {
-      $push: { chatIds: returnedChat._id },
-    });
+    await this.updateOneChatRoom(
+      { _id: returnedChat.chatRoomId },
+      {
+        $push: { chatIds: returnedChat._id },
+      },
+    );
 
     return returnedChat;
   }

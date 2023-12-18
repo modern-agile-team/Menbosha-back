@@ -181,14 +181,12 @@ export class ChatService {
       throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
     }
 
-    new mongoose.Types.ObjectId(roomId);
-
-    const returnedChat = await this.chatRepository.createChat(
-      returnedChatRoom._id,
-      content,
-      senderId,
-      receiverId,
-    );
+    const returnedChat = await this.chatRepository.createChat({
+      chatRoomId: returnedChatRoom._id,
+      content: content,
+      sender: senderId,
+      receiver: receiverId,
+    });
 
     const chatsDto = new ChatsDto(returnedChat);
 
@@ -214,7 +212,7 @@ export class ChatService {
   ) {
     await this.findOneChatRoomOrFail(roomId);
 
-    const isChatRoom = await this.chatRoomsModel.findOne({
+    const isChatRoom = await this.chatRepository.findOneChatRoom({
       $or: [
         {
           $and: [{ hostId: myId }, { guestId: receiverId }],
