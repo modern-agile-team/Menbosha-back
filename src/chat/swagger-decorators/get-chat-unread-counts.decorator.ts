@@ -1,6 +1,10 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
+/**
+ *
+ * @todo swagger 수정
+ */
 export function ApiGetChatUnreadCounts() {
   return applyDecorators(
     ApiOperation({

@@ -4,6 +4,7 @@ import {
   ApiHeaders,
   ApiOkResponse,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
@@ -64,6 +65,13 @@ export function ApiGetChats() {
         example: '여기에 액세스 토큰',
       },
     ]),
+    ApiParam({
+      name: 'roomId',
+      description: '채팅방의 id',
+      required: true,
+      type: 'string',
+      format: 'objectId',
+    }),
     ApiExtraModels(ChatsDto),
   );
 }

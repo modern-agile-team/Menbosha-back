@@ -1,6 +1,18 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiConflictResponse,
+  ApiExtraModels,
+  ApiHeaders,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
+import { ReceivedUserDto } from '../dto/received-user.dto';
 
+/**
+ *
+ * @todo swagger 수정
+ */
 export function ApiCreateChatRoom() {
   return applyDecorators(
     ApiOperation({
@@ -24,8 +36,7 @@ export function ApiCreateChatRoom() {
         },
       },
     }),
-    ApiResponse({
-      status: 409,
+    ApiConflictResponse({
       description: '해당 유저들의 채팅방이 이미 존재합니다.',
       content: {
         JSON: {
@@ -37,8 +48,7 @@ export function ApiCreateChatRoom() {
         },
       },
     }),
-    ApiResponse({
-      status: 409,
+    ApiConflictResponse({
       description: '채팅룸 생성 실패.',
       content: {
         JSON: {
@@ -58,5 +68,11 @@ export function ApiCreateChatRoom() {
         example: '여기에 액세스 토큰',
       },
     ]),
+    ApiBody({
+      type: ReceivedUserDto,
+      description: '채팅방 guestId',
+      required: true,
+    }),
+    ApiExtraModels(ReceivedUserDto),
   );
 }

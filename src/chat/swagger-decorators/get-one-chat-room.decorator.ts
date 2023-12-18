@@ -5,6 +5,7 @@ import {
   ApiHeaders,
   ApiNotFoundResponse,
   ApiOperation,
+  ApiParam,
   ApiResponse,
 } from '@nestjs/swagger';
 import { ChatRoomsDto } from '../dto/chat-rooms.dto';
@@ -52,6 +53,13 @@ export function ApiGetOneChatRoom() {
         example: '여기에 액세스 토큰',
       },
     ]),
+    ApiParam({
+      name: 'roomId',
+      description: '채팅방의 id',
+      required: true,
+      type: 'string',
+      format: 'objectId',
+    }),
     ApiExtraModels(ChatRoomsDto),
   );
 }
