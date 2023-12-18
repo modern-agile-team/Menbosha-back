@@ -39,9 +39,6 @@ export class ChatService {
     private readonly chatRoomsModel: mongoose.Model<ChatRooms>,
     @InjectModel(Chats.name)
     private readonly chatsModel: mongoose.Model<Chats>,
-
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
   ) {}
 
   notificationListener(myId: number): Observable<string> {
