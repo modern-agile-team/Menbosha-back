@@ -5,7 +5,7 @@ export function ApiGetOneMentorBoard() {
   return applyDecorators(
     ApiOperation({
       summary: '클릭한 멘토 보드 가져오는 API',
-      description: '클릭한 멘토 보드 가져오는 API',
+      description: 'header - accessToken, param - mentorBoardId ',
     }),
     ApiResponse({
       status: 200,

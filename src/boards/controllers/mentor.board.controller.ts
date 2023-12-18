@@ -15,7 +15,7 @@ import { PageByMentorBoardResponseDTO } from '../dto/response.mentor.boards.dto'
 import { ApiAddMentorBoard } from '../swagger-decorators/add-mentor-board-decorators';
 import { ApiGetPageMentorBoards } from '../swagger-decorators/get-page-mentor-boards-decorators';
 import { ApiGetOneMentorBoard } from '../swagger-decorators/get-one-mentor-board-decorators';
-import { ApiUpdateMentorBoard } from '../swagger-decorators/patch-board-decorators';
+import { ApiUpdateMentorBoard } from '../swagger-decorators/patch-mentor-board-decorators';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiDeleteBoard } from '../swagger-decorators/delete-board-decorators';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';

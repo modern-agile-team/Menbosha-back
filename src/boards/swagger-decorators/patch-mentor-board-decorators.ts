@@ -1,15 +1,20 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiHeaders,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+} from '@nestjs/swagger';
 
 export function ApiUpdateMentorBoard() {
   return applyDecorators(
     ApiOperation({
-      summary: '보드를 수정하는 API',
-      description: '보드 수정하는 API',
+      summary: '멘토 게시판을 수정하는 API',
+      description: '멘토 게시판을 수정하는 API',
     }),
     ApiResponse({
       status: 200,
-      description: '보드의 내용을 성공적으로 수정한 경우',
+      description: '게시판의 내용을 성공적으로 수정한 경우',
       content: {
         JSON: {
           example: {
@@ -88,5 +93,20 @@ export function ApiUpdateMentorBoard() {
         example: '여기에 액세스 토큰',
       },
     ]),
+    ApiBody({
+      schema: {
+        type: 'object',
+        properties: {
+          head: { type: 'string' },
+          body: { type: 'string' },
+          categoryId: { type: 'number' },
+        },
+        example: {
+          head: '게시물 제목',
+          body: 'click send to get a response boards.service.ts 30자 넘는 게시물 테스트 중입니다.',
+          categoryId: 4,
+        },
+      },
+    }),
   );
 }
