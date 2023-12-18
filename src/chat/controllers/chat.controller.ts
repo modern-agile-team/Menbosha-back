@@ -54,6 +54,11 @@ import { ChatsDto } from '../dto/chats.dto';
 export class ChatController {
   constructor(private chatService: ChatService) {}
 
+  /**
+   *
+   * @param userId
+   * @returns
+   */
   @ApiGetChatNotificationSse()
   @UseGuards(JwtAccessTokenGuard)
   @Sse('listener')
@@ -61,6 +66,11 @@ export class ChatController {
     return this.chatService.notificationListener(userId);
   }
 
+  /**
+   *
+   * @param userId
+   * @returns
+   */
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChatRooms()
   @Get()
@@ -72,6 +82,11 @@ export class ChatController {
     });
   }
 
+  /**
+   *
+   * @param userId
+   * @returns
+   */
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChatRoomsNew()
   @Get('new-api')
@@ -81,6 +96,11 @@ export class ChatController {
     return this.chatService.getChatRoomsWithUserAndChat(userId);
   }
 
+  /**
+   *
+   * @param roomId
+   * @returns
+   */
   @ApiGetOneChatRoom()
   @Get(':roomId')
   getOneChatRoom(
@@ -89,16 +109,28 @@ export class ChatController {
     return this.chatService.getOneChatRoom(roomId);
   }
 
+  /**
+   *
+   * @param userId
+   * @param receivedUserDto
+   * @returns
+   */
   @UseGuards(JwtAccessTokenGuard)
   @ApiCreateChatRoom()
   @Post()
   createChatRoom(
     @GetUserId() userId: number,
-    @Body() body: ReceivedUserDto,
+    @Body('receivedUserDto') receivedUserDto: ReceivedUserDto,
   ): Promise<ChatRoomsDto> {
-    return this.chatService.createChatRoom(userId, body.receiverId);
+    return this.chatService.createChatRoom(userId, receivedUserDto.receiverId);
   }
 
+  /**
+   *
+   * @param userId
+   * @param roomId
+   * @returns
+   */
   @UseGuards(JwtAccessTokenGuard)
   @ApiDeleteChatRoom()
   @HttpCode(HttpStatus.NO_CONTENT)

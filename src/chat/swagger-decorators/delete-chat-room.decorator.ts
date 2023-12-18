@@ -1,5 +1,13 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiForbiddenResponse,
+  ApiHeaders,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOperation,
+  ApiParam,
+} from '@nestjs/swagger';
 
 export function ApiDeleteChatRoom() {
   return applyDecorators(
@@ -7,20 +15,10 @@ export function ApiDeleteChatRoom() {
       summary: '채팅룸 삭제',
       description: 'Header - access_token, Param - roomId',
     }),
-    ApiResponse({
-      status: 200,
+    ApiNoContentResponse({
       description: '성공적으로 채팅방 삭제',
-      content: {
-        JSON: {
-          example: {
-            success: true,
-            msg: '게시글 삭제 성공',
-          },
-        },
-      },
     }),
-    ApiResponse({
-      status: 400,
+    ApiBadRequestResponse({
       description: '유효성 검사 실패',
       content: {
         JSON: {
@@ -32,8 +30,19 @@ export function ApiDeleteChatRoom() {
         },
       },
     }),
-    ApiResponse({
-      status: 404,
+    ApiForbiddenResponse({
+      description: '해당 채팅방에 접근 권한이 없습니다',
+      content: {
+        JSON: {
+          example: {
+            message: '해당 채팅방에 접근 권한이 없습니다',
+            error: 'Forbidden',
+            statusCode: 403,
+          },
+        },
+      },
+    }),
+    ApiNotFoundResponse({
       description: '해당 채팅룸이 없습니다.',
       content: {
         JSON: {
@@ -45,19 +54,7 @@ export function ApiDeleteChatRoom() {
         },
       },
     }),
-    ApiResponse({
-      status: 404,
-      description: '해당 유저는 채팅방에 속해있지 않습니다.',
-      content: {
-        JSON: {
-          example: {
-            message: '해당 유저는 채팅방에 속해있지 않습니다.',
-            error: 'Not Found',
-            statusCode: 404,
-          },
-        },
-      },
-    }),
+
     ApiHeaders([
       {
         name: 'access_token',
@@ -66,5 +63,12 @@ export function ApiDeleteChatRoom() {
         example: '여기에 액세스 토큰',
       },
     ]),
+    ApiParam({
+      name: 'roomId',
+      description: '채팅방의 id',
+      required: true,
+      type: 'string',
+      format: 'objectId',
+    }),
   );
 }

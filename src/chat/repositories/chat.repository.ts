@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ChatRooms } from '../schemas/chat-rooms.schemas';
 import { Chats } from '../schemas/chats.schemas';
@@ -18,16 +18,31 @@ export class ChatRepository {
     private readonly chatImageModel: mongoose.Model<ChatImages>,
   ) {}
 
+  /**
+   *  @todo 재사용성 높은 코드로 고치기
+   *
+   */
   getChatRooms(myId: number): Promise<ChatRoomsDto[]> {
     return this.chatRoomModel.find({
       $and: [{ $or: [{ hostId: myId }, { guestId: myId }] }],
     });
   }
 
-  getOneChatRoom(roomId: mongoose.Types.ObjectId): Promise<ChatRoomsDto> {
-    return this.chatRoomModel.findById(roomId);
+  /**
+   *
+   * @param filter
+   * @returns
+   */
+  getOneChatRoom(
+    filter: mongoose.FilterQuery<ChatRooms>,
+  ): Promise<ChatRoomsDto> {
+    return this.chatRoomModel.findOne(filter);
   }
 
+  /**
+   *  @todo 재사용성 높은 코드로 고치기
+   *
+   */
   async createChatRoom(myId: number, guestId: number): Promise<ChatRoomsDto> {
     const value = await this.chatRoomModel.create({
       hostId: myId,
@@ -37,16 +52,37 @@ export class ChatRepository {
     return value.unprotectedData;
   }
 
-  async deleteChatRoom(roomId: mongoose.Types.ObjectId) {
-    await this.chatRoomModel.findByIdAndUpdate(roomId, {
-      deleted_at: new Date(),
-    });
+  /**
+   *
+   * @param filter
+   * @param update
+   */
+  async updatedOneChatRoom(
+    filter?: mongoose.FilterQuery<ChatRooms>,
+    update?: mongoose.UpdateQuery<ChatRooms>,
+  ): Promise<void> {
+    const updatedChatRoom = await this.chatRoomModel.updateOne(filter, update);
+
+    if (!updatedChatRoom.modifiedCount) {
+      throw new InternalServerErrorException(
+        '업데이트 중 알 수 없는 오류 발생',
+      );
+    }
   }
 
+  /**
+   *
+   * @param filter
+   * @returns
+   */
   chatsFindAll(filter: mongoose.FilterQuery<Chats>): Promise<ChatsDto[]> {
     return this.chatModel.find(filter);
   }
 
+  /**
+   *  @todo 재사용성 높은 코드로 고치기
+   *
+   */
   async updateChatIsSeen(
     receiverId: number,
     roomId: mongoose.Types.ObjectId,
@@ -63,6 +99,10 @@ export class ChatRepository {
     );
   }
 
+  /**
+   *  @todo 재사용성 높은 코드로 고치기
+   *
+   */
   async createChat(
     roomId: mongoose.Types.ObjectId,
     content: string,
@@ -76,13 +116,20 @@ export class ChatRepository {
       receiver: receiverId,
     });
 
-    await this.chatRoomModel.findByIdAndUpdate(returnedChat.chatRoomId, {
-      $push: { chatIds: returnedChat._id },
-    });
+    await this.updatedOneChatRoom(
+      { _id: roomId },
+      {
+        $push: { chatIds: returnedChat._id },
+      },
+    );
 
     return returnedChat;
   }
 
+  /**
+   *  @todo 재사용성 높은 코드로 고치기
+   *
+   */
   async createChatImage(
     roomId: mongoose.Types.ObjectId,
     myId: number,

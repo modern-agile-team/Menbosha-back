@@ -59,12 +59,25 @@ export class ChatService {
       }),
     );
   }
+
+  /**
+   *  @todo 재사용성 높은 코드로 고치기
+   *
+   */
   getChatRooms(myId: number): Promise<ChatRoomsDto[]> {
     return this.chatRepository.getChatRooms(myId);
   }
 
+  /**
+   *
+   * @param roomId
+   * @returns
+   */
   async getOneChatRoom(roomId: mongoose.Types.ObjectId): Promise<ChatRoomsDto> {
-    const returnedRoom = await this.chatRepository.getOneChatRoom(roomId);
+    const returnedRoom = await this.chatRepository.getOneChatRoom({
+      _id: roomId,
+      deletedAt: null,
+    });
 
     if (!returnedRoom) {
       throw new NotFoundException('해당 채팅방이 없습니다.');
@@ -73,6 +86,10 @@ export class ChatService {
     return new ChatRoomsDto(returnedRoom);
   }
 
+  /**
+   *  @todo 재사용성 높은 코드로 고치기
+   *
+   */
   async createChatRoom(myId: number, guestId: number): Promise<ChatRoomsDto> {
     try {
       const isChatRoom = await this.chatRoomsModel.findOne({
@@ -105,6 +122,12 @@ export class ChatService {
     }
   }
 
+  /**
+   *
+   * @param myId
+   * @param roomId
+   * @returns
+   */
   async deleteChatRoom(
     myId: number,
     roomId: mongoose.Types.ObjectId,
@@ -115,9 +138,18 @@ export class ChatService {
       throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
     }
 
-    return this.chatRepository.deleteChatRoom(roomId);
+    return this.chatRepository.updatedOneChatRoom(
+      { _id: roomId },
+      {
+        deletedAt: new Date(),
+      },
+    );
   }
 
+  /**
+   *  @todo 재사용성 높은 코드로 고치기
+   *
+   */
   async getChats(
     userId: number,
     roomId: mongoose.Types.ObjectId,
@@ -135,6 +167,10 @@ export class ChatService {
     return returnedChat;
   }
 
+  /**
+   *  @todo 재사용성 높은 코드로 고치기
+   *
+   */
   async createChat({
     roomId,
     content,
@@ -161,8 +197,6 @@ export class ChatService {
       receiverId,
     );
 
-    console.log(returnedChat);
-
     const chatsDto = new ChatsDto(returnedChat);
 
     if (chatsDto) {
@@ -175,6 +209,10 @@ export class ChatService {
     return chatsDto;
   }
 
+  /**
+   *  @todo 재사용성 높은 코드로 고치기
+   *
+   */
   async createChatImage(
     roomId: mongoose.Types.ObjectId,
     myId: number,
@@ -208,6 +246,10 @@ export class ChatService {
     );
   }
 
+  /**
+   *  @todo 재사용성 높은 코드로 고치기
+   *
+   */
   async findChatImage({ roomId, imageUrl, senderId, receiverId }) {
     const isChatAndUsers = await this.chatsModel.findOne({
       $and: [
@@ -254,6 +296,10 @@ export class ChatService {
   //   return groupedNotifications;
   // }
 
+  /**
+   *  @todo 레포지터리 코드랑 분리
+   *
+   */
   async getChatRoomsWithUserAndChat(
     myId: number,
   ): Promise<ResponseGetChatRoomsDto[]> {
