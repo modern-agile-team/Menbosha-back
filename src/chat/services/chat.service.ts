@@ -153,11 +153,9 @@ export class ChatService {
       { $set: { isSeen: true } },
     );
 
-    const returnedChat = await this.chatRepository.findAllChats({
+    return this.chatRepository.findAllChats({
       chatRoomId: new mongoose.Types.ObjectId(roomId),
     });
-
-    return returnedChat;
   }
 
   /**
