@@ -305,19 +305,14 @@ export class ChatService {
   //   return groupedNotifications;
   // }
 
-  /**
-   *  @todo 레포지터리 코드랑 분리
-   *
-   */
   async findAllChatRoomsWithUserAndChat(
     myId: number,
   ): Promise<ResponseGetChatRoomsDto[]> {
-    const returnedChatAggregate: AggregateChatRoomsDto[] =
-      await this.chatRoomsModel.aggregate([
+    const returnedChatRoomsAggregate =
+      await this.chatRepository.aggregateChatRooms([
         {
           $match: { $or: [{ hostId: myId }, { guestId: myId }] },
         },
-
         {
           $lookup: {
             from: 'chats',
@@ -326,7 +321,6 @@ export class ChatService {
             as: 'chats',
           },
         },
-
         {
           $addFields: {
             chatCount: {
@@ -351,11 +345,11 @@ export class ChatService {
         },
       ]);
 
-    if (!returnedChatAggregate) {
+    if (!returnedChatRoomsAggregate) {
       return null;
     }
 
-    const userIds = returnedChatAggregate.map((userId) => {
+    const userIds = returnedChatRoomsAggregate.map((userId) => {
       return userId.hostId === myId ? userId.guestId : userId.hostId;
     });
 
@@ -383,7 +377,7 @@ export class ChatService {
       });
     });
 
-    const aggregateChatRoomsDto = returnedChatAggregate.map((chat) => {
+    const aggregateChatRoomsDto = returnedChatRoomsAggregate.map((chat) => {
       return new AggregateChatRoomsDto(chat);
     });
 

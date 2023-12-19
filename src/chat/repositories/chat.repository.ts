@@ -7,6 +7,7 @@ import mongoose from 'mongoose';
 import { ChatRoomsDto } from '../dto/chat-rooms.dto';
 import { ChatsDto } from '../dto/chats.dto';
 import { ChatImagesDto } from '../dto/chat-images.dto';
+import { AggregateChatRoomsDto } from '../dto/aggregate-chat-rooms.dto';
 
 @Injectable()
 export class ChatRepository {
@@ -27,6 +28,12 @@ export class ChatRepository {
     filter: mongoose.FilterQuery<ChatRooms>,
   ): Promise<ChatRoomsDto[]> {
     return this.chatRoomModel.find(filter);
+  }
+
+  aggregateChatRooms(
+    pipeline: mongoose.PipelineStage[],
+  ): Promise<AggregateChatRoomsDto[]> {
+    return this.chatRoomModel.aggregate(pipeline);
   }
 
   /**
