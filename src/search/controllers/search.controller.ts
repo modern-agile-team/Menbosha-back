@@ -23,6 +23,10 @@ import { SuccessResponseInterceptor } from 'src/common/interceptors/success-resp
 export class SearchController {
   constructor(private searchService: SearchService) {}
 
+  searchAllBoardsAndMentorsForPageSize() {}
+
+  searchAllBoardsAndMentors() {}
+
   @ApiSearchBoardsByHeadOrBodyOrUserName()
   @Get('boards/:category')
   async searchBoardsByHeadOrUserOrName(
