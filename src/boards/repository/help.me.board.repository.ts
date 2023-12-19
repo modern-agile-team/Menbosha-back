@@ -36,7 +36,7 @@ export class HelpMeBoardRepository {
 
   async findBoardById(id: number): Promise<HelpMeBoard> {
     return await this.entityManager.findOne(HelpMeBoard, {
-      relations: ['user', 'user.userImage', 'boardImages'],
+      relations: ['user', 'user.userImage', 'helpMeBoardImages'],
       where: { id },
     });
   }

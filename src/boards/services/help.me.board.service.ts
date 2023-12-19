@@ -55,7 +55,7 @@ export class HelpMeBoardService {
     return { data: boardResponse, total };
   }
 
-  async findOneBoard(
+  async findOneHelpMeBoard(
     boardId: number,
     userId: number,
   ): Promise<oneHelpMeBoardResponseDTO> {

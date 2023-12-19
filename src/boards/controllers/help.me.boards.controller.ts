@@ -79,7 +79,7 @@ export class HelpMeBoardController {
     @Query('boardId') boardId: number,
     @GetUserId() userId: number,
   ): Promise<oneHelpMeBoardResponseDTO> {
-    return await this.helpMeBoardService.findOneBoard(boardId, userId);
+    return await this.helpMeBoardService.findOneHelpMeBoard(boardId, userId);
   }
 
   @Patch('')
