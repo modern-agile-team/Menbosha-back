@@ -23,8 +23,14 @@ import { SuccessResponseInterceptor } from 'src/common/interceptors/success-resp
 export class SearchController {
   constructor(private searchService: SearchService) {}
 
-  searchAllBoardsAndMentorsForPageSize() {}
+  @Get('count')
+  searchAllBoardsAndMentorsForPageSize(
+    @Query('searchQuery') searchQuery: string,
+  ) {
+    return this.searchService.searchAllBoardsAndMentorsForPageSize(searchQuery);
+  }
 
+  @Get()
   searchAllBoardsAndMentors() {}
 
   @ApiSearchBoardsByHeadOrBodyOrUserName()

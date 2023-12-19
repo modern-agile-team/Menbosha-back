@@ -6,6 +6,14 @@ import { PageByMentorBoardResponseDTO } from 'src/boards/dto/response.mentor.boa
 @Injectable()
 export class SearchService {
   constructor(private searchRepository: SearchRepository) {}
+  async searchAllBoardsAndMentorsForPageSize(searchQuery: string) {
+    const take = 10;
+    const mentorBoardTotal =
+      await this.searchRepository.searchAllMentorBoardsForCount(searchQuery);
+
+    const lastPage = Math.ceil(mentorBoardTotal / take);
+  }
+
   async searchBoardsByHeadOrBodyOrUserName(
     head: string,
     body: string,

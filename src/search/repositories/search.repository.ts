@@ -1,14 +1,20 @@
 import { Injectable } from '@nestjs/common';
-// import { BoardImage } from 'src/boards/entities/mentor-board-image.entity';
 import { HelpMeBoardImage } from 'src/boards/entities/help-me-board-image.entity';
-// import { Board } from 'src/boards/entities/mentor-board.entity';
 import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
+import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
 import { User } from 'src/users/entities/user.entity';
 import { EntityManager } from 'typeorm';
 
 @Injectable()
 export class SearchRepository {
   constructor(private entityManager: EntityManager) {}
+  async searchAllMentorBoardsForCount(searchQuery: string) {
+    this.entityManager
+      .getRepository(MentorBoard)
+      .createQueryBuilder('mentorBoard')
+      .where(`MATCH(head)`);
+  }
+
   async searchBoardsByHead(
     category: string,
     searchQuery: string,
