@@ -3,10 +3,7 @@ import { ChatsDto } from './chats.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { TransformMongoId } from './transform/transform-mongo-id';
 
-export class ResponsePostChatDto
-  implements
-    Pick<ChatsDto, 'content' | 'createdAt' | 'receiver' | 'sender' | 'isSeen'>
-{
+export class ResponsePostChatDto implements Omit<ChatsDto, 'chatRoomId'> {
   @ApiProperty({
     description: '채팅 id',
     type: 'string',

@@ -158,10 +158,6 @@ export class ChatService {
     });
   }
 
-  /**
-   *  @todo 재사용성 높은 코드로 고치기
-   *
-   */
   async createChat({
     roomId,
     content,
@@ -188,6 +184,13 @@ export class ChatService {
       receiver: receiverId,
     });
 
+    await this.chatRepository.updateOneChatRoom(
+      { _id: returnedChat.chatRoomId },
+      {
+        $push: { chatIds: returnedChat._id },
+      },
+    );
+
     const chatsDto = new ChatsDto(returnedChat);
 
     if (chatsDto) {
@@ -200,49 +203,64 @@ export class ChatService {
     return chatsDto;
   }
 
-  /**
-   *  @todo 재사용성 높은 코드로 고치기
-   *
-   */
   async createChatImage(
     roomId: mongoose.Types.ObjectId,
-    myId: number,
+    senderId: number,
     receiverId: number,
     file: Express.Multer.File,
-  ) {
-    await this.findOneChatRoomOrFail(roomId);
+  ): Promise<ChatsDto> {
+    const existChatRoom = await this.findOneChatRoomOrFail(roomId);
 
-    const isChatRoom = await this.chatRepository.findOneChatRoom({
-      $or: [
-        {
-          $and: [{ hostId: myId }, { guestId: receiverId }],
-        },
-        {
-          $and: [{ hostId: receiverId }, { guestId: myId }],
-        },
-      ],
-    });
-
-    if (!isChatRoom) {
-      throw new NotFoundException('채팅을 전송할 유저가 채팅방에 없습니다');
+    if (
+      !(
+        (existChatRoom.hostId === senderId ||
+          existChatRoom.hostId === receiverId) &&
+        (existChatRoom.guestId === senderId ||
+          existChatRoom.guestId === receiverId)
+      )
+    ) {
+      throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
     }
 
-    const imageUrl = await this.s3Service.uploadImage(file, myId, 'ChatImages');
-
-    return this.chatRepository.createChatImage(
-      roomId,
-      myId,
-      receiverId,
-      imageUrl.url,
+    const imageUrl = await this.s3Service.uploadImage(
+      file,
+      senderId,
+      'ChatImages',
     );
+
+    const returnedChat = await this.chatRepository.createChat({
+      chatRoomId: existChatRoom._id,
+      sender: senderId,
+      receiver: receiverId,
+      content: imageUrl,
+    });
+
+    await this.chatRepository.updateOneChatRoom(
+      { _id: returnedChat.chatRoomId },
+      {
+        $push: { chatIds: returnedChat._id },
+      },
+    );
+
+    const chatsDto = new ChatsDto(returnedChat);
+
+    if (chatsDto) {
+      const subject = this.subjectMap.get(receiverId);
+      if (subject) {
+        subject.next(chatsDto);
+      }
+    }
+
+    return chatsDto;
   }
 
-  /**
-   *  @todo 재사용성 높은 코드로 고치기
-   *
-   */
-  async findOneChatImage({ roomId, imageUrl, senderId, receiverId }) {
-    const isChatAndUsers = await this.chatsModel.findOne({
+  async findOneChatImage({
+    roomId,
+    imageUrl,
+    senderId,
+    receiverId,
+  }): Promise<ChatsDto> {
+    const existChat = await this.chatRepository.findOneChat({
       $and: [
         { chatRoomId: roomId },
         { sender: senderId },
@@ -251,11 +269,11 @@ export class ChatService {
       ],
     });
 
-    if (!isChatAndUsers) {
+    if (!existChat) {
       throw new NotFoundException('해당 채팅을 찾지 못했습니다.');
     }
 
-    return isChatAndUsers;
+    return new ChatsDto(existChat);
   }
 
   // async getChatNotifications(
