@@ -7,6 +7,7 @@ import {
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
+  WsException,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ChatService } from 'src/chat/services/chat.service';
@@ -18,12 +19,12 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { LoginChatRoomDto } from '../dto/login-chat-room.dto';
+import { LoginChatRoomsDto } from '../dto/login-chat-rooms.dto';
 import { WebSocketExceptionFilter } from '../exceptions/websocket-exception.filter';
 import mongoose from 'mongoose';
 @WebSocketGateway({ namespace: /\/ch-.+/, cors: true })
 @UsePipes(ValidationPipe)
-@UseFilters(WebSocketExceptionFilter)
+@UseFilters(new WebSocketExceptionFilter())
 export class EventsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
@@ -42,20 +43,22 @@ export class EventsGateway
     소켓 룸으로 join`,
     channel: 'login',
     message: {
-      payload: LoginChatRoomDto,
+      payload: LoginChatRoomsDto,
     },
   })
   @SubscribeMessage('login')
   handleLogin(
-    @MessageBody() loginChatRoomDto: LoginChatRoomDto,
+    @MessageBody() loginChatRoomDto: LoginChatRoomsDto,
     @ConnectedSocket() socket: Socket,
   ) {
     console.log('login', loginChatRoomDto.userId);
     loginChatRoomDto.rooms.forEach((room) => {
       const isObjectId = mongoose.isObjectIdOrHexString(room);
+
       if (!isObjectId) {
-        throw new BadRequestException('오브젝트 id 형식이 아닙니다');
+        throw new WsException('오브젝트 id 형식이 아닙니다');
       }
+
       console.log('join', socket.nsp.name, room);
       socket.join(room.toString());
     });
@@ -87,7 +90,7 @@ export class EventsGateway
       const data = returnedChat;
       socket.to(postChatDto.roomId.toString()).emit('message', { data });
     } else {
-      const returnedChat = await this.chatService.findChatImage(postChatDto);
+      const returnedChat = await this.chatService.findOneChatImage(postChatDto);
       const data = returnedChat;
       socket.to(postChatDto.roomId.toString()).emit('message', { data });
     }

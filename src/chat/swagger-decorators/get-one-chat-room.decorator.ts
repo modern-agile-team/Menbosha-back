@@ -1,5 +1,14 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiExtraModels,
+  ApiHeaders,
+  ApiNotFoundResponse,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+} from '@nestjs/swagger';
+import { ChatRoomsDto } from '../dto/chat-rooms.dto';
 
 export function ApiGetOneChatRoom() {
   return applyDecorators(
@@ -10,22 +19,9 @@ export function ApiGetOneChatRoom() {
     ApiResponse({
       status: 200,
       description: '성공적으로 채팅방 (단일)조회',
-      content: {
-        JSON: {
-          example: {
-            _id: '650bde3798dd4c34439c30dc',
-            host_id: 123,
-            guest_id: 1234,
-            deleted_at: null,
-            createdAt: '2023-09-21T06:09:59.724Z',
-            updatedAt: '2023-09-21T06:09:59.724Z',
-            __v: 0,
-          },
-        },
-      },
+      type: ChatRoomsDto,
     }),
-    ApiResponse({
-      status: 400,
+    ApiBadRequestResponse({
       description: '유효성 검사 실패',
       content: {
         JSON: {
@@ -37,8 +33,7 @@ export function ApiGetOneChatRoom() {
         },
       },
     }),
-    ApiResponse({
-      status: 404,
+    ApiNotFoundResponse({
       description: '채팅룸 조회 실패.',
       content: {
         JSON: {
@@ -58,5 +53,13 @@ export function ApiGetOneChatRoom() {
         example: '여기에 액세스 토큰',
       },
     ]),
+    ApiParam({
+      name: 'roomId',
+      description: '채팅방의 id',
+      required: true,
+      type: 'string',
+      format: 'objectId',
+    }),
+    ApiExtraModels(ChatRoomsDto),
   );
 }

@@ -1,9 +1,12 @@
 import mongoose from 'mongoose';
-import { Chat } from '../schemas/chat.schemas';
+import { ChatsDto } from './chats.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { TransformMongoId } from './transform/transform-mongo-id';
 
-export class ChatDto implements Partial<Chat> {
+export class ResponsePostChatDto
+  implements
+    Pick<ChatsDto, 'content' | 'createdAt' | 'receiver' | 'sender' | 'isSeen'>
+{
   @ApiProperty({
     description: '채팅 id',
     type: 'string',
@@ -11,14 +14,6 @@ export class ChatDto implements Partial<Chat> {
   })
   @TransformMongoId()
   _id: mongoose.Types.ObjectId;
-
-  @ApiProperty({
-    description: '채팅 방 id',
-    type: 'string',
-    format: 'ObjectId',
-  })
-  @TransformMongoId()
-  chatroom_id: mongoose.Types.ObjectId;
 
   @ApiProperty({
     description: '채팅 내용',
@@ -37,7 +32,6 @@ export class ChatDto implements Partial<Chat> {
 
   @ApiProperty({
     description: '채팅 확인 여부',
-    default: false,
   })
   isSeen: boolean;
 
@@ -46,13 +40,12 @@ export class ChatDto implements Partial<Chat> {
   })
   createdAt: Date;
 
-  constructor(chatDto: Partial<ChatDto>) {
-    this._id = chatDto._id;
-    this.chatroom_id = chatDto.chatroom_id;
-    this.content = chatDto.content;
-    this.sender = chatDto.sender;
-    this.receiver = chatDto.receiver;
-    this.isSeen = chatDto.isSeen;
-    this.createdAt = chatDto.createdAt;
+  constructor(responseChatDto: Partial<ResponsePostChatDto>) {
+    this._id = responseChatDto._id;
+    this.content = responseChatDto.content;
+    this.sender = responseChatDto.sender;
+    this.receiver = responseChatDto.receiver;
+    this.isSeen = responseChatDto.isSeen;
+    this.createdAt = responseChatDto.createdAt;
   }
 }

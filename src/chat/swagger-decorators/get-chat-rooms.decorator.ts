@@ -4,8 +4,9 @@ import {
   ApiHeaders,
   ApiOperation,
   ApiResponse,
+  getSchemaPath,
 } from '@nestjs/swagger';
-import { ChatRoomDto } from '../dto/chat-room.dto';
+import { ChatRoomsDto } from '../dto/chat-rooms.dto';
 
 export function ApiGetChatRooms() {
   return applyDecorators(
@@ -16,7 +17,20 @@ export function ApiGetChatRooms() {
     ApiResponse({
       status: 200,
       description: '성공적으로 채팅방 조회',
-      type: ChatRoomDto,
+      schema: {
+        properties: {
+          statusCode: {
+            example: 200,
+            type: 'number',
+          },
+          data: {
+            type: 'array',
+            items: {
+              $ref: getSchemaPath(ChatRoomsDto),
+            },
+          },
+        },
+      },
     }),
     ApiHeaders([
       {
@@ -26,6 +40,6 @@ export function ApiGetChatRooms() {
         example: '여기에 액세스 토큰',
       },
     ]),
-    ApiExtraModels(ChatRoomDto),
+    ApiExtraModels(ChatRoomsDto),
   );
 }

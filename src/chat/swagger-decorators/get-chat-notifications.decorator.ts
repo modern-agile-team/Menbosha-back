@@ -1,6 +1,10 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
+/**
+ *
+ * @todo swagger 수정
+ */
 export function ApiGetChatNotifications() {
   return applyDecorators(
     ApiOperation({

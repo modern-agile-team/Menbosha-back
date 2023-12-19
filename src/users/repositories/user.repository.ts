@@ -1,10 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DeleteResult, EntityManager } from 'typeorm';
+import { DeleteResult, EntityManager, FindManyOptions } from 'typeorm';
 import { User } from '../entities/user.entity';
 
 @Injectable()
 export class UserRepository {
   constructor(private readonly entityManager: EntityManager) {}
+
+  findAll(options: FindManyOptions<User>) {
+    return this.entityManager.getRepository(User).find(options);
+  }
 
   async getUserInfo(userId: number): Promise<User> {
     const user = await this.entityManager.findOne(User, {

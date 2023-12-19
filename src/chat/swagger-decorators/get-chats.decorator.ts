@@ -1,5 +1,14 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiExtraModels,
+  ApiHeaders,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  getSchemaPath,
+} from '@nestjs/swagger';
+import { ChatsDto } from '../dto/chats.dto';
 
 export function ApiGetChats() {
   return applyDecorators(
@@ -7,36 +16,18 @@ export function ApiGetChats() {
       summary: '해당 채팅룸 채팅 전체 조회',
       description: 'Param - room-id, Headers - access_token',
     }),
-    ApiResponse({
-      status: 200,
+    ApiOkResponse({
       description:
         '성공적으로 채팅방 채팅 조회 및 읽지 않았던 채팅들 isSeen: true로 변경',
-      content: {
-        JSON: {
-          example: [
-            {
-              _id: '654a1b3a88ad1cdd55124710',
-              chatroom_id: '653383a4468680bc4e9f8492',
-              sender: 70,
-              receiver: 69,
-              content: '으아아아이 테스트테스트으아으아으앙',
-              isSeen: true,
-              createdAt: '2023-11-07T11:10:50.817Z',
-              updatedAt: '2023-11-07T11:11:13.830Z',
-              __v: 0,
+      schema: {
+        properties: {
+          statusCode: { example: 200, type: 'number' },
+          data: {
+            type: 'array',
+            items: {
+              $ref: getSchemaPath(ChatsDto),
             },
-            {
-              _id: '654a1d106770906a7a5d6274',
-              chatroom_id: '653383a4468680bc4e9f8492',
-              sender: 70,
-              receiver: 69,
-              content: '으아아아삼 테스트테스트으아으아으앙',
-              isSeen: true,
-              createdAt: '2023-11-07T11:18:40.425Z',
-              updatedAt: '2023-11-07T11:18:52.075Z',
-              __v: 0,
-            },
-          ],
+          },
         },
       },
     }),
@@ -74,5 +65,13 @@ export function ApiGetChats() {
         example: '여기에 액세스 토큰',
       },
     ]),
+    ApiParam({
+      name: 'roomId',
+      description: '채팅방의 id',
+      required: true,
+      type: 'string',
+      format: 'objectId',
+    }),
+    ApiExtraModels(ChatsDto),
   );
 }

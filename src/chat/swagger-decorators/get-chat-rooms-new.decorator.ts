@@ -2,11 +2,12 @@ import { applyDecorators } from '@nestjs/common';
 import {
   ApiExtraModels,
   ApiHeaders,
+  ApiNotFoundResponse,
   ApiOperation,
   ApiResponse,
+  getSchemaPath,
 } from '@nestjs/swagger';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
-import { ChatDto } from '../dto/chat.dto';
 
 export function ApiGetChatRoomsNew() {
   return applyDecorators(
@@ -15,9 +16,33 @@ export function ApiGetChatRoomsNew() {
       description: 'Header - user-token',
     }),
     ApiResponse({
-      type: ResponseGetChatRoomsDto,
       status: 200,
+      schema: {
+        properties: {
+          statusCode: {
+            example: 200,
+            type: 'number',
+          },
+          data: {
+            type: 'array',
+            items: {
+              $ref: getSchemaPath(ResponseGetChatRoomsDto),
+            },
+          },
+        },
+      },
       description: '성공적으로 채팅방 조회',
+    }),
+    ApiNotFoundResponse({
+      description: '내 정보를 찾을 수 없는 경우',
+      schema: {
+        type: 'object',
+        example: {
+          statusCode: 404,
+          message: '사용자를 찾을 수 없습니다.',
+          error: 'Not Found',
+        },
+      },
     }),
     ApiHeaders([
       {
@@ -27,6 +52,6 @@ export function ApiGetChatRoomsNew() {
         example: '여기에 액세스 토큰',
       },
     ]),
-    ApiExtraModels(ResponseGetChatRoomsDto, ChatDto),
+    ApiExtraModels(ResponseGetChatRoomsDto),
   );
 }

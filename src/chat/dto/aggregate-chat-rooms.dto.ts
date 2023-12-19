@@ -1,0 +1,30 @@
+import { ChatRoomsDto } from './chat-rooms.dto';
+import { ApiProperty, OmitType, PickType } from '@nestjs/swagger';
+import { LookupChatsDto } from './lookup-chat-dto';
+import { ChatsDto } from './chats.dto';
+
+export class AggregateChatRoomsDto extends OmitType(ChatRoomsDto, [
+  'chatIds',
+  'deletedAt',
+]) {
+  @ApiProperty({
+    description: '채팅 갯수',
+  })
+  chatCount: number;
+
+  @ApiProperty({
+    description: '채팅 schema에서 content, 생성 날짜, 채팅 확인 여부',
+  })
+  chat: LookupChatsDto;
+
+  constructor(aggregateChatRoomsDto: AggregateChatRoomsDto) {
+    super();
+
+    this._id = aggregateChatRoomsDto._id;
+    this.hostId = aggregateChatRoomsDto.hostId;
+    this.guestId = aggregateChatRoomsDto.guestId;
+    this.createdAt = aggregateChatRoomsDto.createdAt;
+    this.chatCount = aggregateChatRoomsDto.chatCount;
+    this.chat = aggregateChatRoomsDto.chat;
+  }
+}

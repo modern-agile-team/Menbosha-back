@@ -4,6 +4,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   Sse,
@@ -24,18 +26,20 @@ import { ApiGetChatRooms } from '../swagger-decorators/get-chat-rooms.decorator'
 import { ApiGetOneChatRoom } from '../swagger-decorators/get-one-chat-room.decorator';
 import { ApiDeleteChatRoom } from '../swagger-decorators/delete-chat-room.decorator';
 import { ApiGetChats } from '../swagger-decorators/get-chats.decorator';
-import { ApiGetChatNotificationSse } from '../swagger-decorators/get-chat-notification-Sse.decorator';
+import { ApiGetChatNotificationSse } from '../swagger-decorators/get-chat-notification-sse.decorator';
 // import { ApiGetChatUnreadCounts } from '../swagger-decorators/get-chat-unread-counts.decorator';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
-import { GetNotificationsResponseFromChatDto } from '../dto/get-notifications-response-from-chat.dto';
-import { ApiGetChatNotifications } from '../swagger-decorators/get-chat-notifications.decorator';
+// import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
+// import { ApiGetChatNotifications } from '../swagger-decorators/get-chat-notifications.decorator';
 import { ApiCreateChatImage } from '../swagger-decorators/create-chat-image.decorators';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
-import { ChatRoomDto } from '../dto/chat-room.dto';
+import { ChatRoomsDto } from '../dto/chat-rooms.dto';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
 import { plainToInstance } from 'class-transformer';
 import { ApiGetChatRoomsNew } from '../swagger-decorators/get-chat-rooms-new.decorator';
+import { Observable } from 'rxjs';
+import { ChatsDto } from '../dto/chats.dto';
 
 @ApiTags('CHAT')
 @UsePipes(
@@ -50,54 +54,86 @@ import { ApiGetChatRoomsNew } from '../swagger-decorators/get-chat-rooms-new.dec
 export class ChatController {
   constructor(private chatService: ChatService) {}
 
+  /**
+   *
+   * @param userId
+   * @returns
+   */
   @ApiGetChatNotificationSse()
+  @UseGuards(JwtAccessTokenGuard)
   @Sse('listener')
-  notificationListener() {
-    return this.chatService.notificationListener();
+  notificationListener(@GetUserId() userId: number): Observable<string> {
+    return this.chatService.notificationListener(userId);
   }
 
+  /**
+   *
+   * @param userId
+   * @returns
+   */
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChatRooms()
   @Get()
-  async getChatRooms(@GetUserId() userId: number): Promise<ChatRoomDto[]> {
-    const returnedChatRooms = await this.chatService.getChatRooms(userId);
+  async findAllChatRooms(@GetUserId() userId: number): Promise<ChatRoomsDto[]> {
+    const returnedChatRooms = await this.chatService.findAllChatRooms(userId);
 
-    return plainToInstance(ChatRoomDto, returnedChatRooms, {
+    return plainToInstance(ChatRoomsDto, returnedChatRooms, {
       excludeExtraneousValues: true,
     });
   }
 
+  /**
+   *
+   * @param userId
+   * @returns
+   */
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChatRoomsNew()
   @Get('new-api')
-  getChatRoomsWithUserAndChat(
+  findAllChatRoomsWithUserAndChat(
     @GetUserId() userId: number,
   ): Promise<ResponseGetChatRoomsDto[]> {
-    return this.chatService.getChatRoomsWithUserAndChat(userId);
+    return this.chatService.findAllChatRoomsWithUserAndChat(userId);
   }
 
-  @UseGuards(JwtAccessTokenGuard)
+  /**
+   *
+   * @param roomId
+   * @returns
+   */
   @ApiGetOneChatRoom()
   @Get(':roomId')
-  getOneChatRoom(
-    @GetUserId() userId: number,
+  findOneChatRoomOrFail(
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  ) {
-    return this.chatService.getOneChatRoom(userId, roomId);
+  ): Promise<ChatRoomsDto> {
+    return this.chatService.findOneChatRoomOrFail(roomId);
   }
 
+  /**
+   *
+   * @param userId
+   * @param receivedUserDto
+   * @returns
+   */
   @UseGuards(JwtAccessTokenGuard)
   @ApiCreateChatRoom()
   @Post()
   createChatRoom(
     @GetUserId() userId: number,
-    @Body() body: ReceivedUserDto,
-  ): Promise<ChatRoomDto> {
-    return this.chatService.createChatRoom(userId, body.receiverId);
+    @Body() receivedUserDto: ReceivedUserDto,
+  ): Promise<ChatRoomsDto> {
+    return this.chatService.createChatRoom(userId, receivedUserDto.receiverId);
   }
 
+  /**
+   *
+   * @param userId
+   * @param roomId
+   * @returns
+   */
   @UseGuards(JwtAccessTokenGuard)
   @ApiDeleteChatRoom()
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':roomId')
   deleteChatRoom(
     @GetUserId() userId: number,
@@ -109,11 +145,15 @@ export class ChatController {
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChats()
   @Get(':roomId/chat')
-  getChats(
+  async findChats(
     @GetUserId() userId: number,
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  ) {
-    return this.chatService.getChats(userId, roomId);
+  ): Promise<ChatsDto[]> {
+    const returnedChats = await this.chatService.findAllChats(userId, roomId);
+
+    return plainToInstance(ChatsDto, returnedChats, {
+      excludeExtraneousValues: true,
+    });
   }
 
   @UseGuards(JwtAccessTokenGuard)
@@ -134,14 +174,18 @@ export class ChatController {
     );
   }
 
-  @UseGuards(JwtAccessTokenGuard)
-  @ApiGetChatNotifications()
-  @Get('chat/notice')
-  getChatNotifications(
-    @GetUserId() userId: number,
-  ): Promise<GetNotificationsResponseFromChatDto[]> {
-    return this.chatService.getChatNotifications(userId);
-  }
+  // @UseGuards(JwtAccessTokenGuard)
+  // @ApiGetChatNotifications()
+  // @Get('chat/notice')
+  // async getChatNotifications(@GetUserId() userId: number) {
+  //   const returnedChatNotifications =
+  //     await this.chatService.getChatNotifications(userId);
+  //   return plainToInstance(
+  //     GetNotificationsResponseFromChatsDto,
+  //     returnedChatNotifications,
+  //     { excludeExtraneousValues: true },
+  //   );
+  // }
 
   // @ApiGetChatUnreadCounts()
   // @Get(':roomId/chat/unreads')
