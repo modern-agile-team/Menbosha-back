@@ -1,11 +1,11 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-export function ApiUpdateBoardImage() {
+export function ApiUpdateHelpMeBoardImage() {
   return applyDecorators(
     ApiOperation({
-      summary: '보드의 이미지를 수정하는 API',
-      description: '보드의 이미지를 수정하는 API',
+      summary: '멘티게시판의 이미지를 수정하는 API',
+      description: '멘티게시판의 이미지를 수정하는 API',
     }),
     ApiResponse({
       status: 200,

@@ -12,12 +12,12 @@ import { MentorBoardService } from '../services/mentor.board.service';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { CreateMentorBoardDto } from '../dto/mentorBoard/create.mentor.board.dto';
 import { PageByMentorBoardResponseDTO } from '../dto/mentorBoard/response.mentor.boards.dto';
-import { ApiAddMentorBoard } from '../swagger-decorators/add-mentor-board-decorators';
+import { ApiAddMentorBoard } from '../swagger-decorators/mentorBoard/add-mentor-board-decorators';
 import { ApiGetPageMentorBoards } from '../swagger-decorators/get-page-mentor-boards-decorators';
 import { ApiGetOneMentorBoard } from '../swagger-decorators/get-one-mentor-board-decorators';
 import { ApiUpdateMentorBoard } from '../swagger-decorators/patch-mentor-board-decorators';
 import { ApiTags } from '@nestjs/swagger';
-import { ApiDeleteBoard } from '../swagger-decorators/delete-board-decorators';
+import { ApiDeleteMentorBoard } from '../swagger-decorators/mentorBoard/delete-mentor-board-decorators';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
@@ -76,7 +76,7 @@ export class MentorBoardController {
 
   @Delete('')
   @UseGuards(JwtAccessTokenGuard)
-  @ApiDeleteBoard()
+  @ApiDeleteMentorBoard()
   deleteBoard(
     @Query('mentorBoardId') mentorBoardId: number,
     @GetUserId() userId: number,

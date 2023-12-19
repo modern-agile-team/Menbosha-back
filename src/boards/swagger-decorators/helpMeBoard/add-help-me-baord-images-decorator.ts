@@ -1,5 +1,10 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiHeaders,
+  ApiOperation,
+  // ApiParam,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 export function ApiUploadHelpMeBoardImages() {
   return applyDecorators(

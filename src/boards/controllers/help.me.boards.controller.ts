@@ -14,19 +14,19 @@ import { HelpMeBoardService } from '../services/help.me.board.service';
 import { BoardImagesService } from '../services/BoardImage.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateHelpMeBoardImageDto } from '../dto/helpMeBoard/create.board-image.dto';
-import { ApiUploadHelpMeBoardImages } from '../swagger-decorators/upload-help-me-baord-images-decorator';
+import { ApiUploadHelpMeBoardImages } from '../swagger-decorators/helpMeBoard/add-help-me-baord-images-decorator';
 import { ApiTags } from '@nestjs/swagger';
-import { ApiDeleteBoard } from '../swagger-decorators/delete-board-decorators';
-import { ApiUpdateBoardImage } from '../swagger-decorators/patch-board-images-decorators';
+
+import { ApiUpdateHelpMeBoardImage } from '../swagger-decorators/helpMeBoard/patch-help-me-board-images-decorators';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
-import { ApiAddHelpMeBoard } from '../swagger-decorators/add-help-me-board-decorator';
+import { ApiAddHelpMeBoard } from '../swagger-decorators/helpMeBoard/add-help-me-board-decorator';
 import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/creare.help.me.board.dto';
 import { HelpMeBoard } from '../entities/help-me-board.entity';
 import { PageByHelpMeBoardResponseDTO } from '../dto/helpMeBoard/response.help.me.board.dto';
 import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 import { oneHelpMeBoardResponseDTO } from '../dto/helpMeBoard/one.response.help.me.board.dto';
-import { ApiGetOneHelpMeBoard } from '../swagger-decorators/get-one-help-me-board.dtd';
+import { ApiGetOneHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-one-help-me-board.dtd';
 // import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 
 @Controller('HelpMeBoard')
@@ -93,7 +93,7 @@ export class HelpMeBoardController {
 
   @Patch('/images')
   @UseGuards(JwtAccessTokenGuard)
-  @ApiUpdateBoardImage()
+  @ApiUpdateHelpMeBoardImage()
   @UseInterceptors(FilesInterceptor('files', 3))
   async editBoardImages(
     @GetUserId() userId: number,
@@ -111,7 +111,7 @@ export class HelpMeBoardController {
 
   @Delete('')
   @UseGuards(JwtAccessTokenGuard)
-  @ApiDeleteBoard()
+  // @ApiDeleteBoard()
   async deleteBoard(
     @Query('boardId') boardId: number,
     @GetUserId() userId: number,
