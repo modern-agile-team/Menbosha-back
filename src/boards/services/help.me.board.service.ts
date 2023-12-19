@@ -1,12 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { HelpMeBoardRepository } from '../repository/help.me.board.repository';
-import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
-import { MentorBoard } from '../entities/mentor-board.entity';
-// import { BoardResponseDTO } from '../dto/boards.response.dto';
-import { oneHelpMeBoardResponseDTO } from '../dto/one.response.help.me.board.dto';
-import { CreateHelpMeBoardDto } from '../dto/creare.help.me.board.dto';
+import { oneHelpMeBoardResponseDTO } from '../dto/helpMeBoard/one.response.help.me.board.dto';
+import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/creare.help.me.board.dto';
 import { HelpMeBoard } from '../entities/help-me-board.entity';
-import { PageByHelpMeBoardResponseDTO } from '../dto/response.help.me.board.dto';
+import { PageByHelpMeBoardResponseDTO } from '../dto/helpMeBoard/response.help.me.board.dto';
 
 @Injectable()
 export class HelpMeBoardService {
@@ -88,8 +85,8 @@ export class HelpMeBoardService {
 
   async updateBoard(
     boardId: number,
-    boardData: Partial<CreateMentorBoardDto>,
-  ): Promise<MentorBoard | undefined> {
+    boardData: Partial<CreateHelpMeBoardDto>,
+  ): Promise<HelpMeBoard | undefined> {
     const existingBoard =
       await this.helpMeBoardRepository.findBoardById(boardId);
     for (const key in boardData) {

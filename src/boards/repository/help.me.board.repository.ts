@@ -1,8 +1,7 @@
 import { EntityManager } from 'typeorm';
 import { MentorBoard } from '../entities/mentor-board.entity';
-import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
 import { Injectable } from '@nestjs/common';
-import { CreateHelpMeBoardDto } from '../dto/creare.help.me.board.dto';
+import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/creare.help.me.board.dto';
 import { HelpMeBoard } from '../entities/help-me-board.entity';
 
 @Injectable()
@@ -51,9 +50,9 @@ export class HelpMeBoardRepository {
 
   async updateHelpMeBoard(
     id: number,
-    boardData: Partial<CreateMentorBoardDto>,
-  ): Promise<MentorBoard> {
-    const existingBoard = await this.entityManager.findOne(MentorBoard, {
+    boardData: Partial<CreateHelpMeBoardDto>,
+  ): Promise<HelpMeBoard> {
+    const existingBoard = await this.entityManager.findOne(HelpMeBoard, {
       relations: ['user', 'user.userImage', 'boardImages'],
       where: { id },
     });

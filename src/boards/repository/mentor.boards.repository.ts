@@ -1,8 +1,8 @@
 import { EntityManager } from 'typeorm';
 import { MentorBoard } from '../entities/mentor-board.entity';
-import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
+import { CreateMentorBoardDto } from '../dto/mentorBoard/create.mentor.board.dto';
 import { Injectable } from '@nestjs/common';
-import { UpdateMentorBoardDto } from '../dto/update.mentor.board.dto';
+import { UpdateMentorBoardDto } from '../dto/mentorBoard/update.mentor.board.dto';
 
 @Injectable()
 export class MentorBoardRepository {
