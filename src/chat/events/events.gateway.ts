@@ -91,6 +91,7 @@ export class EventsGateway
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   afterInit(server: Server): any {
     console.log('websocketserver init');
   }
