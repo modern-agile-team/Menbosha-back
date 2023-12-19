@@ -5,6 +5,9 @@ import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
 import { User } from 'src/users/entities/user.entity';
 import { EntityManager } from 'typeorm';
 
+/**
+ * @todo 나중에 setParameter를 통해서 코드를 간소화 할 수 있을 것 같음
+ */
 @Injectable()
 export class SearchRepository {
   constructor(private entityManager: EntityManager) {}
@@ -12,7 +15,44 @@ export class SearchRepository {
     this.entityManager
       .getRepository(MentorBoard)
       .createQueryBuilder('mentorBoard')
-      .where(`MATCH(head)`);
+      .where(`MATCH(head) AGAINST (:searchQuery IN BOOLEAN MODE)`, {
+        searchQuery,
+      })
+      .orWhere(`MATCH(body) AGAINST (:searchQuery IN BOOLEAN MODE)`, {
+        searchQuery,
+      })
+      .leftJoinAndMapMany();
+
+    return this.entityManager
+      .createQueryBuilder(HelpMeBoard, 'board')
+      .leftJoinAndMapMany('board.user', User, 'user', 'user.id = board.userId')
+      .leftJoinAndSelect('user.userImage', 'userImage')
+      .leftJoinAndMapMany(
+        'board.boardImages',
+        HelpMeBoardImage,
+        'boardImages',
+        'boardImages.boardId = board.id',
+      )
+      .select([
+        'board.id',
+        'board.head',
+        'board.body',
+        'board.createAt',
+        'board.updateAt',
+        'user.name',
+        'userImage.id',
+        'userImage.userId',
+        'userImage.imageUrl',
+        'boardImages.id',
+        'boardImages.imageUrl',
+      ])
+      .where('board.userId IN (:...userId)', {
+        userId: returnedUsers.map((user) => user.id),
+      })
+      .andWhere('board.main_category = :category', { category })
+      .skip(skip)
+      .take(take)
+      .getManyAndCount();
   }
 
   async searchBoardsByHead(
