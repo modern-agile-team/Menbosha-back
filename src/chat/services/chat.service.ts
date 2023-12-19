@@ -155,7 +155,7 @@ export class ChatService {
     });
   }
 
-  async createAndSendChat({
+  async createChat({
     roomId,
     content,
     senderId,

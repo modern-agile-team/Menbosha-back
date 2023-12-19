@@ -19,7 +19,7 @@ import { WebSocketExceptionFilter } from '../exceptions/websocket-exception.filt
 import mongoose from 'mongoose';
 @WebSocketGateway({ namespace: /\/ch-.+/, cors: true })
 @UsePipes(ValidationPipe)
-@UseFilters(new WebSocketExceptionFilter())
+@UseFilters(WebSocketExceptionFilter)
 export class EventsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
@@ -85,7 +85,7 @@ export class EventsGateway
     @MessageBody() postChatDto: PostChatDto,
     @ConnectedSocket() socket: Socket,
   ) {
-    const returnedChat = await this.chatService.createAndSendChat(postChatDto);
+    const returnedChat = await this.chatService.createChat(postChatDto);
     const data = returnedChat;
 
     socket.to(postChatDto.roomId.toString()).emit('message', { data });
