@@ -1,10 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
 
-/**
- *
- * @todo swagger 수정
- */
 export function ApiGetChatUnreadCounts() {
   return applyDecorators(
     ApiOperation({
@@ -45,6 +41,17 @@ export function ApiGetChatUnreadCounts() {
           },
         },
       },
+    }),
+    ApiQuery({
+      name: 'after',
+      type: 'number',
+      description: 'getTime() 메서드를 통해 얻은 number',
+    }),
+    ApiParam({
+      name: 'roomId',
+      type: 'string',
+      format: 'ObjectId',
+      description: '채팅 룸 id',
     }),
   );
 }

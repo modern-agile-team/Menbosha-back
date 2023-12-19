@@ -1,7 +1,3 @@
-/**
- *
- * @todo swagger 수정
- */
 import { applyDecorators } from '@nestjs/common';
 import {
   ApiBody,
@@ -26,23 +22,14 @@ export function ApiCreateChatRoom() {
       type: ChatRoomsDto,
     }),
     ApiConflictResponse({
-      description: '해당 유저들의 채팅방이 이미 존재합니다.',
+      description: '해당 유저들의 채팅방이 이미 존재 및 서버에서 중복에러 발생',
       content: {
         JSON: {
           example: {
-            message: '해당 유저들의 채팅방이 이미 존재합니다.',
-            error: 'Conflict',
-            statusCode: 409,
-          },
-        },
-      },
-    }),
-    ApiConflictResponse({
-      description: '채팅룸 생성 실패.',
-      content: {
-        JSON: {
-          example: {
-            message: '채팅룸 생성 실패. 서버에서 에러가 발생했습니다.',
+            message: [
+              '해당 유저들의 채팅방이 이미 존재합니다.',
+              '채팅룸 생성 실패. 서버에서 에러가 발생했습니다.',
+            ],
             error: 'Conflict',
             statusCode: 409,
           },
@@ -62,6 +49,6 @@ export function ApiCreateChatRoom() {
       description: '채팅방 guestId',
       required: true,
     }),
-    ApiExtraModels(ReceivedUserDto),
+    ApiExtraModels(ReceivedUserDto, ChatRoomsDto),
   );
 }

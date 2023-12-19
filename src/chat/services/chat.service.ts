@@ -8,12 +8,9 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { ChatRooms } from '../schemas/chat-rooms.schemas';
 import * as mongoose from 'mongoose';
 import { S3Service } from 'src/common/s3/s3.service';
 import { Observable, Subject, catchError, map } from 'rxjs';
-import { Chats } from '../schemas/chats.schemas';
 import { In } from 'typeorm';
 import { UserService } from 'src/users/services/user.service';
 import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
@@ -32,10 +29,6 @@ export class ChatService {
     private readonly s3Service: S3Service,
     private readonly userService: UserService,
     private readonly chatRepository: ChatRepository,
-    @InjectModel(ChatRooms.name)
-    private readonly chatRoomsModel: mongoose.Model<ChatRooms>,
-    @InjectModel(Chats.name)
-    private readonly chatsModel: mongoose.Model<Chats>,
   ) {}
 
   notificationListener(myId: number): Observable<string> {
@@ -275,35 +268,6 @@ export class ChatService {
 
     return new ChatsDto(existChat);
   }
-
-  // async getChatNotifications(
-  //   userId: number,
-  // ): Promise<Partial<GetNotificationsResponseFromChatsDto[]>> {
-  //   const returnedNotifications =
-  //     await this.chatRepository.getChatNotifications(userId);
-
-  //   const groupedNotifications: Partial<
-  //     GetNotificationsResponseFromChatsDto[]
-  //   > = {};
-
-  //   returnedNotifications.forEach((notification) => {
-  //     const chatRoomId = notification.chatRoomId;
-  //     console.log(chatRoomId);
-  //     if (!groupedNotifications[chatRoomId]) {
-  //       const newNotification: GetNotificationsResponseFromChatsDto = {
-  //         ...notification,
-  //         count: 1,
-  //         content: notification.content.substring(0, 10),
-  //       };
-  //       groupedNotifications[chatRoomId] = newNotification;
-  //     } else {
-  //       groupedNotifications[chatRoomId]['count'] += 1;
-  //     }
-  //   });
-  //   console.log(groupedNotifications);
-
-  //   return groupedNotifications;
-  // }
 
   async findAllChatRoomsWithUserAndChat(
     myId: number,

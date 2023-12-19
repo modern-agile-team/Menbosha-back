@@ -13,11 +13,11 @@ import { AggregateChatRoomsDto } from '../dto/aggregate-chat-rooms.dto';
 export class ChatRepository {
   constructor(
     @InjectModel(ChatRooms.name)
-    private readonly chatRoomModel: mongoose.Model<ChatRooms>,
+    private readonly chatRoomsModel: mongoose.Model<ChatRooms>,
     @InjectModel(Chats.name)
-    private readonly chatModel: mongoose.Model<Chats>,
+    private readonly chatsModel: mongoose.Model<Chats>,
     @InjectModel(ChatImages.name)
-    private readonly chatImageModel: mongoose.Model<ChatImages>,
+    private readonly chatImagesModel: mongoose.Model<ChatImages>,
   ) {}
 
   /**
@@ -27,13 +27,13 @@ export class ChatRepository {
   findAllChatRooms(
     filter: mongoose.FilterQuery<ChatRooms>,
   ): Promise<ChatRoomsDto[]> {
-    return this.chatRoomModel.find(filter);
+    return this.chatRoomsModel.find(filter);
   }
 
   aggregateChatRooms(
     pipeline: mongoose.PipelineStage[],
   ): Promise<AggregateChatRoomsDto[]> {
-    return this.chatRoomModel.aggregate(pipeline);
+    return this.chatRoomsModel.aggregate(pipeline);
   }
 
   /**
@@ -44,20 +44,20 @@ export class ChatRepository {
   findOneChatRoom(
     filter: mongoose.FilterQuery<ChatRooms>,
   ): Promise<ChatRoomsDto> {
-    return this.chatRoomModel.findOne(filter);
+    return this.chatRoomsModel.findOne(filter);
   }
 
   async createChatRoom<DocContents = mongoose.AnyKeys<ChatRooms>>(
     doc: DocContents,
   ): Promise<ChatRoomsDto> {
-    return this.chatRoomModel.create(doc);
+    return this.chatRoomsModel.create(doc);
   }
 
   async updateOneChatRoom(
     filter: mongoose.FilterQuery<ChatRooms>,
     update: mongoose.UpdateQuery<ChatRooms>,
   ): Promise<void> {
-    const updatedChatRoom = await this.chatRoomModel.updateOne(filter, update);
+    const updatedChatRoom = await this.chatRoomsModel.updateOne(filter, update);
 
     if (!updatedChatRoom.modifiedCount) {
       throw new InternalServerErrorException(
@@ -67,54 +67,34 @@ export class ChatRepository {
   }
 
   findAllChats(filter: mongoose.FilterQuery<Chats>): Promise<ChatsDto[]> {
-    return this.chatModel.find(filter);
+    return this.chatsModel.find(filter);
   }
 
   findOneChat(filter: mongoose.FilterQuery<Chats>): Promise<ChatsDto> {
-    return this.chatModel.findOne(filter);
+    return this.chatsModel.findOne(filter);
   }
 
   async updateManyChats(
     filter: mongoose.FilterQuery<Chats>,
     update: mongoose.UpdateQuery<Chats>,
   ): Promise<void> {
-    await this.chatModel.updateMany(filter, update);
+    await this.chatsModel.updateMany(filter, update);
   }
 
   async createChat<DocContents = mongoose.AnyKeys<Chats>>(
     doc: DocContents,
   ): Promise<ChatsDto> {
-    return this.chatModel.create(doc);
+    return this.chatsModel.create(doc);
   }
 
   async createChatImage<DocContents = mongoose.AnyKeys<Chats>>(
     doc: DocContents,
   ): Promise<ChatImagesDto> {
-    return this.chatImageModel.create(doc);
+    return this.chatImagesModel.create(doc);
   }
 
-  // async getChatNotifications(userId: number): Promise<Chats[]> {
-  //   const notifications = await this.chatModel
-  //     .find({
-  //       $and: [{ receiver: userId }, { isSeen: false }],
-  //     })
-  //     .select({
-  //       _id: 1,
-  //       chatRoomId: 1,
-  //       content: 1,
-  //       sender: 1,
-  //       receiver: 1,
-  //       isSeen: 1,
-  //       createdAt: 1,
-  //     })
-  //     .sort({ createdAt: -1 });
-  //   // .lean();
-
-  //   return notifications;
-  // }
-
   // async getUnreadCounts(roomId: mongoose.Types.ObjectId, after: number) {
-  //   return this.chatModel.count({
+  //   return this.chatsModel.count({
   //     $and: [{ chatRoomId: roomId }, { createdAt: { $gt: new Date(after) } }],
   //   });
   // }

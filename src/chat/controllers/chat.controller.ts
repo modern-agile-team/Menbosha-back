@@ -166,6 +166,7 @@ export class ChatController {
     @Body() body: ReceivedUserDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
+    console.log(body, file);
     return this.chatService.createChatImage(
       roomId,
       senderId,
@@ -173,19 +174,6 @@ export class ChatController {
       file,
     );
   }
-
-  // @UseGuards(JwtAccessTokenGuard)
-  // @ApiGetChatNotifications()
-  // @Get('chat/notice')
-  // async getChatNotifications(@GetUserId() userId: number) {
-  //   const returnedChatNotifications =
-  //     await this.chatService.getChatNotifications(userId);
-  //   return plainToInstance(
-  //     GetNotificationsResponseFromChatsDto,
-  //     returnedChatNotifications,
-  //     { excludeExtraneousValues: true },
-  //   );
-  // }
 
   // @ApiGetChatUnreadCounts()
   // @Get(':roomId/chat/unreads')
