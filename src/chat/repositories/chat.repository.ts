@@ -83,7 +83,7 @@ export class ChatRepository {
     return this.chatsModel.create(doc);
   }
 
-  async createChatImage<DocContents = mongoose.AnyKeys<Chats>>(
+  async createChatImage<DocContents = mongoose.AnyKeys<ChatImages>>(
     doc: DocContents,
   ): Promise<ChatImagesDto> {
     return this.chatImagesModel.create(doc);

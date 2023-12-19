@@ -228,6 +228,11 @@ export class ChatService {
       content: imageUrl.url,
     });
 
+    await this.chatRepository.createChatImage({
+      chatId: returnedChat._id,
+      imageUrl: returnedChat.content,
+    });
+
     await this.chatRepository.updateOneChatRoom(
       { _id: returnedChat.chatRoomId },
       {
@@ -255,7 +260,7 @@ export class ChatService {
   }): Promise<ChatsDto> {
     const existChat = await this.chatRepository.findOneChat({
       $and: [
-        { chatRoomId: roomId },
+        { chatRoomId: new mongoose.Types.ObjectId(roomId) },
         { sender: senderId },
         { receiver: receiverId },
         { content: imageUrl },

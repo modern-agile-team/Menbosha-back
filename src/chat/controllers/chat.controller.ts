@@ -166,7 +166,6 @@ export class ChatController {
     @Body() body: ReceivedUserDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    console.log(body, file);
     return this.chatService.createChatImage(
       roomId,
       senderId,
@@ -176,7 +175,7 @@ export class ChatController {
   }
 
   // @ApiGetChatUnreadCounts()
-  // @Get(':roomId/chat/unreads')
+  // @Get(':roomId/chat/unReads')
   //  getUnreadCounts(
   //   @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
   //   @Query('after', ParseIntPipe) after: number,
