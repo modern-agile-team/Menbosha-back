@@ -1,10 +1,12 @@
 import { applyDecorators } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
   ApiBody,
   ApiConsumes,
   ApiExtraModels,
   ApiForbiddenResponse,
   ApiHeaders,
+  ApiNotFoundResponse,
   ApiOperation,
   ApiParam,
   ApiResponse,
@@ -32,8 +34,7 @@ export function ApiCreateChatImage() {
         },
       },
     }),
-    ApiResponse({
-      status: 404,
+    ApiNotFoundResponse({
       description: '채팅룸 조회 실패',
       content: {
         JSON: {
@@ -46,7 +47,6 @@ export function ApiCreateChatImage() {
       },
     }),
     ApiForbiddenResponse({
-      status: 403,
       description: '해당 유저가 채팅방에 속하지 않음.',
       content: {
         JSON: {
@@ -58,8 +58,7 @@ export function ApiCreateChatImage() {
         },
       },
     }),
-    ApiResponse({
-      status: 400,
+    ApiBadRequestResponse({
       description:
         'ObjectId Validation 실패 및 property가 비어 있어서 생긴 오류',
       content: {

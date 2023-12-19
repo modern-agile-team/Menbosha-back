@@ -20,12 +20,12 @@ export class ResponsePostChatDto implements Omit<ChatsDto, 'chatRoomId'> {
   @ApiProperty({
     description: '채팅을 전송한 유저의 id',
   })
-  sender: number;
+  senderId: number;
 
   @ApiProperty({
     description: '채팅을 받은 유저의 id',
   })
-  receiver: number;
+  receiverId: number;
 
   @ApiProperty({
     description: '채팅 확인 여부',
@@ -40,8 +40,8 @@ export class ResponsePostChatDto implements Omit<ChatsDto, 'chatRoomId'> {
   constructor(responseChatDto: Partial<ResponsePostChatDto>) {
     this._id = responseChatDto._id;
     this.content = responseChatDto.content;
-    this.sender = responseChatDto.sender;
-    this.receiver = responseChatDto.receiver;
+    this.senderId = responseChatDto.senderId;
+    this.receiverId = responseChatDto.receiverId;
     this.isSeen = responseChatDto.isSeen;
     this.createdAt = responseChatDto.createdAt;
   }

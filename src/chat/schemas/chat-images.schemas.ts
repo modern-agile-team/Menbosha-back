@@ -15,7 +15,7 @@ export class ChatImages {
   chatRoomId: mongoose.Types.ObjectId;
 
   @Prop({ required: true })
-  sender: number;
+  senderId: number;
 
   @Prop({ required: true })
   imageUrl: string;
@@ -25,7 +25,7 @@ export class ChatImages {
   readonly unprotectedData: {
     _id: mongoose.Types.ObjectId;
     chatRoomId: mongoose.Types.ObjectId;
-    sender: number;
+    senderId: number;
     imageUrl: string;
     createdAt: Date;
   };
@@ -37,7 +37,7 @@ ChatImagesSchema.virtual('unprotectedData').get(function (this: ChatImages) {
   return {
     _id: this._id,
     chatRoomId: this.chatRoomId,
-    sender: this.sender,
+    senderId: this.senderId,
     imageUrl: this.imageUrl,
     createdAt: this.createdAt,
   };

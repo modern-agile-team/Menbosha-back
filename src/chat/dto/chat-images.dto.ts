@@ -28,7 +28,7 @@ export class ChatImagesDto implements Omit<ChatImages, 'unprotectedData'> {
     format: 'integer',
   })
   @Expose()
-  sender: number;
+  senderId: number;
 
   @ApiProperty({
     description: '채팅 내용',
@@ -46,7 +46,7 @@ export class ChatImagesDto implements Omit<ChatImages, 'unprotectedData'> {
     this._id = chatImagesDto._id;
     this.chatRoomId = chatImagesDto.chatRoomId;
     this.imageUrl = chatImagesDto.imageUrl;
-    this.sender = chatImagesDto.sender;
+    this.senderId = chatImagesDto.senderId;
     this.createdAt = chatImagesDto.createdAt;
   }
 }

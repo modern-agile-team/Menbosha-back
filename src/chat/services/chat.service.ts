@@ -145,7 +145,11 @@ export class ChatService {
 
     await this.chatRepository.updateManyChats(
       {
-        $and: [{ receiver: userId }, { chatRoomId: roomId }, { isSeen: false }],
+        $and: [
+          { receiverId: userId },
+          { chatRoomId: roomId },
+          { isSeen: false },
+        ],
       },
       { $set: { isSeen: true } },
     );
@@ -177,8 +181,8 @@ export class ChatService {
     const returnedChat = await this.chatRepository.createChat({
       chatRoomId: returnedChatRoom._id,
       content: content,
-      sender: senderId,
-      receiver: receiverId,
+      senderId: senderId,
+      receiverId: receiverId,
     });
 
     await this.chatRepository.updateOneChatRoom(
@@ -213,7 +217,7 @@ export class ChatService {
       throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
     }
 
-    const imageUrl = await this.s3Service.uploadImage(
+    const uploadedImage = await this.s3Service.uploadImage(
       file,
       senderId,
       'ChatImages',
@@ -221,8 +225,8 @@ export class ChatService {
 
     const returnedChatImage = await this.chatRepository.createChatImage({
       chatRoomId: new mongoose.Types.ObjectId(roomId),
-      sender: senderId,
-      imageUrl: imageUrl.url,
+      senderId: senderId,
+      receiverId: uploadedImage.url,
     });
 
     return new ChatImagesDto(returnedChatImage);

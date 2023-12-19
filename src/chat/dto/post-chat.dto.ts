@@ -12,10 +12,7 @@ export class PostChatDto {
   roomId: mongoose.Types.ObjectId;
 
   @ApiProperty({
-    example: [
-      '안녕하세요',
-      'https://ma6-main.s3.ap-northeast-2.amazonaws.com/1_1696831127634.jpeg',
-    ],
+    example: ['안녕하세요', 'imageUrl'],
     description: '채팅 내용',
   })
   @IsString()

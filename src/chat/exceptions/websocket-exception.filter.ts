@@ -7,11 +7,7 @@ export class WebSocketExceptionFilter extends BaseWsExceptionFilter {
     const ctx = host.switchToWs();
     const client = ctx.getClient();
 
-    if (exception.response) {
-      client.emit('error', exception.response);
-    } else {
-      client.emit('error', { exception });
-    }
+    client.emit('error', exception.response || { exception });
 
     console.error(exception.message, exception);
   }
