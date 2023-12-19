@@ -47,7 +47,7 @@ export class EventsGateway
     @ConnectedSocket() socket: Socket,
   ) {
     console.log('login', loginChatRoomDto.userId);
-    loginChatRoomDto.rooms.forEach((room) => {
+    loginChatRoomDto.chatRoomIds.forEach((room) => {
       const isObjectId = mongoose.isObjectIdOrHexString(room);
 
       if (!isObjectId) {
