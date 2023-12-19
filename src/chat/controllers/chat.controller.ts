@@ -163,15 +163,9 @@ export class ChatController {
   createChatImage(
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
     @GetUserId() senderId: number,
-    @Body() body: ReceivedUserDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.chatService.createChatImage(
-      roomId,
-      senderId,
-      body.receiverId,
-      file,
-    );
+    return this.chatService.createChatImage(roomId, senderId, file);
   }
 
   // @ApiGetChatUnreadCounts()

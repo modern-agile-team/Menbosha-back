@@ -41,4 +41,12 @@ export class ChatImagesDto implements Omit<ChatImages, 'unprotectedData'> {
   })
   @Expose()
   createdAt: Date;
+
+  constructor(chatImagesDto: ChatImagesDto) {
+    this._id = chatImagesDto._id;
+    this.chatRoomId = chatImagesDto.chatRoomId;
+    this.imageUrl = chatImagesDto.imageUrl;
+    this.sender = chatImagesDto.sender;
+    this.createdAt = chatImagesDto.createdAt;
+  }
 }

@@ -19,6 +19,7 @@ import { ChatRoomsDto } from '../dto/chat-rooms.dto';
 import { ResponsePostChatDto } from '../dto/response-post-chat-dto';
 import { AggregateChatRoomsDto } from '../dto/aggregate-chat-rooms.dto';
 import { ChatsDto } from '../dto/chats.dto';
+import { ChatImagesDto } from '../dto/chat-images.dto';
 // import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 
 @Injectable()
@@ -49,7 +50,10 @@ export class ChatService {
 
   findAllChatRooms(myId: number): Promise<ChatRoomsDto[]> {
     return this.chatRepository.findAllChatRooms({
-      $and: [{ $or: [{ hostId: myId }, { guestId: myId }] }],
+      $and: [
+        { $or: [{ hostId: myId }, { guestId: myId }] },
+        { deletedAt: null },
+      ],
     });
   }
 
@@ -151,7 +155,7 @@ export class ChatService {
     });
   }
 
-  async createChat({
+  async createAndSendChat({
     roomId,
     content,
     senderId,
@@ -199,18 +203,12 @@ export class ChatService {
   async createChatImage(
     roomId: mongoose.Types.ObjectId,
     senderId: number,
-    receiverId: number,
     file: Express.Multer.File,
-  ): Promise<ChatsDto> {
+  ) {
     const existChatRoom = await this.findOneChatRoomOrFail(roomId);
 
     if (
-      !(
-        (existChatRoom.hostId === senderId ||
-          existChatRoom.hostId === receiverId) &&
-        (existChatRoom.guestId === senderId ||
-          existChatRoom.guestId === receiverId)
-      )
+      !(existChatRoom.hostId === senderId || existChatRoom.guestId === senderId)
     ) {
       throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
     }
@@ -221,57 +219,13 @@ export class ChatService {
       'ChatImages',
     );
 
-    const returnedChat = await this.chatRepository.createChat({
-      chatRoomId: existChatRoom._id,
+    const returnedChatImage = await this.chatRepository.createChatImage({
+      chatRoomId: new mongoose.Types.ObjectId(roomId),
       sender: senderId,
-      receiver: receiverId,
-      content: imageUrl.url,
+      imageUrl: imageUrl.url,
     });
 
-    await this.chatRepository.createChatImage({
-      chatId: returnedChat._id,
-      imageUrl: returnedChat.content,
-    });
-
-    await this.chatRepository.updateOneChatRoom(
-      { _id: returnedChat.chatRoomId },
-      {
-        $push: { chatIds: returnedChat._id },
-      },
-    );
-
-    const chatsDto = new ChatsDto(returnedChat);
-
-    if (chatsDto) {
-      const subject = this.subjectMap.get(receiverId);
-      if (subject) {
-        subject.next(chatsDto);
-      }
-    }
-
-    return chatsDto;
-  }
-
-  async findOneChatImage({
-    roomId,
-    imageUrl,
-    senderId,
-    receiverId,
-  }): Promise<ChatsDto> {
-    const existChat = await this.chatRepository.findOneChat({
-      $and: [
-        { chatRoomId: new mongoose.Types.ObjectId(roomId) },
-        { sender: senderId },
-        { receiver: receiverId },
-        { content: imageUrl },
-      ],
-    });
-
-    if (!existChat) {
-      throw new NotFoundException('해당 채팅을 찾지 못했습니다.');
-    }
-
-    return new ChatsDto(existChat);
+    return new ChatImagesDto(returnedChatImage);
   }
 
   async findAllChatRoomsWithUserAndChat(
@@ -280,7 +234,10 @@ export class ChatService {
     const returnedChatRoomsAggregate =
       await this.chatRepository.aggregateChatRooms([
         {
-          $match: { $or: [{ hostId: myId }, { guestId: myId }] },
+          $match: {
+            $or: [{ hostId: myId }, { guestId: myId }],
+            deletedAt: null,
+          },
         },
         {
           $lookup: {

@@ -2,13 +2,15 @@ import { applyDecorators } from '@nestjs/common';
 import {
   ApiBody,
   ApiConsumes,
+  ApiExtraModels,
+  ApiForbiddenResponse,
   ApiHeaders,
   ApiOperation,
   ApiParam,
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ChatsDto } from '../dto/chats.dto';
+import { ChatImagesDto } from '../dto/chat-images.dto';
 
 export function ApiCreateChatImage() {
   return applyDecorators(
@@ -22,36 +24,36 @@ export function ApiCreateChatImage() {
       description: '채팅 이미지 url 생성 성공',
       schema: {
         properties: {
-          statusCode: { example: 200, type: 'number' },
+          statusCode: { example: 201, type: 'number' },
           data: {
             type: 'object',
-            $ref: getSchemaPath(ChatsDto),
+            $ref: getSchemaPath(ChatImagesDto),
           },
         },
       },
     }),
     ApiResponse({
       status: 404,
-      description: '채팅룸 조회 실패.',
+      description: '채팅룸 조회 실패',
       content: {
         JSON: {
           example: {
-            message: '해당 유저가 속한 채팅방이 없습니다.',
+            message: '해당 채팅방이 없습니다.',
             error: 'Not Found',
             statusCode: 404,
           },
         },
       },
     }),
-    ApiResponse({
-      status: 404,
-      description: '채팅 이미지 생성 실패.',
+    ApiForbiddenResponse({
+      status: 403,
+      description: '해당 유저가 채팅방에 속하지 않음.',
       content: {
         JSON: {
           example: {
-            message: '채팅을 전송할 유저가 채팅방에 없습니다',
-            error: 'Not Found',
-            statusCode: 404,
+            message: '해당 채팅방에 접근 권한이 없습니다',
+            error: 'Forbidden',
+            statusCode: 403,
           },
         },
       },
@@ -101,5 +103,6 @@ export function ApiCreateChatImage() {
         },
       },
     }),
+    ApiExtraModels(ChatImagesDto),
   );
 }

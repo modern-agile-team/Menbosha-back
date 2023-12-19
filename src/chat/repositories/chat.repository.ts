@@ -70,6 +70,12 @@ export class ChatRepository {
     return this.chatsModel.findOne(filter);
   }
 
+  findOneChatImages(
+    filter: mongoose.FilterQuery<ChatImages>,
+  ): Promise<ChatImages> {
+    return this.chatImagesModel.findOne(filter);
+  }
+
   async updateManyChats(
     filter: mongoose.FilterQuery<Chats>,
     update: mongoose.UpdateQuery<Chats>,

@@ -61,13 +61,18 @@ export class EventsGateway
 
   @AsyncApiSub({
     description: `
-    imageUrl 혹은 content로 이미지 전송인지, 스트링 챗인지 판별
     채팅 전송
     리턴 값
     {
-      content: 채팅내용,
-      sender: 보낸 사람 id,
-      receiver: 받는 사람 id,
+      data: {
+        _id: "string",
+        chatRoomId: "string"
+        content: 채팅내용,
+        sender: 보낸 사람 id,
+        receiver: 받는 사람 id,
+        isSeen: "boolean",
+        createdAt: "Date",
+      }
     };
     `,
     channel: 'message',
@@ -80,15 +85,10 @@ export class EventsGateway
     @MessageBody() postChatDto: PostChatDto,
     @ConnectedSocket() socket: Socket,
   ) {
-    if (postChatDto.hasOwnProperty('content')) {
-      const returnedChat = await this.chatService.createChat(postChatDto);
-      const data = returnedChat;
-      socket.to(postChatDto.roomId.toString()).emit('message', { data });
-    } else {
-      const returnedChat = await this.chatService.findOneChatImage(postChatDto);
-      const data = returnedChat;
-      socket.to(postChatDto.roomId.toString()).emit('message', { data });
-    }
+    const returnedChat = await this.chatService.createAndSendChat(postChatDto);
+    const data = returnedChat;
+
+    socket.to(postChatDto.roomId.toString()).emit('message', { data });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
