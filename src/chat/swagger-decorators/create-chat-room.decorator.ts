@@ -6,6 +6,7 @@ import {
   ApiHeaders,
   ApiOperation,
   ApiResponse,
+  getSchemaPath,
 } from '@nestjs/swagger';
 import { ReceivedUserDto } from '../dto/received-user.dto';
 import { ChatRoomsDto } from '../dto/chat-rooms.dto';
@@ -19,7 +20,15 @@ export function ApiCreateChatRoom() {
     ApiResponse({
       status: 201,
       description: '성공적으로 채팅방 생성',
-      type: ChatRoomsDto,
+      schema: {
+        properties: {
+          statusCode: { example: 200, type: 'number' },
+          data: {
+            type: 'object',
+            $ref: getSchemaPath(ChatRoomsDto),
+          },
+        },
+      },
     }),
     ApiConflictResponse({
       description: '해당 유저들의 채팅방이 이미 존재 및 서버에서 중복에러 발생',

@@ -10,9 +10,13 @@ export function ApiGetChatUnreadCounts() {
     ApiResponse({
       status: 200,
       description: '개수 받아오기 성공',
-      content: {
-        JSON: {
-          example: 161,
+      schema: {
+        properties: {
+          statusCode: { example: 200, type: 'number' },
+          data: {
+            type: 'number',
+            example: 1,
+          },
         },
       },
     }),

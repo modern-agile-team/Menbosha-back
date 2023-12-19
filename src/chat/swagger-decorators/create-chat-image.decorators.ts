@@ -6,6 +6,7 @@ import {
   ApiOperation,
   ApiParam,
   ApiResponse,
+  getSchemaPath,
 } from '@nestjs/swagger';
 import { ChatsDto } from '../dto/chats.dto';
 
@@ -19,7 +20,15 @@ export function ApiCreateChatImage() {
     ApiResponse({
       status: 201,
       description: '채팅 이미지 url 생성 성공',
-      type: ChatsDto,
+      schema: {
+        properties: {
+          statusCode: { example: 200, type: 'number' },
+          data: {
+            type: 'object',
+            $ref: getSchemaPath(ChatsDto),
+          },
+        },
+      },
     }),
     ApiResponse({
       status: 404,
