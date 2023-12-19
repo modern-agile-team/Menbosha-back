@@ -225,7 +225,7 @@ export class ChatService {
       chatRoomId: existChatRoom._id,
       sender: senderId,
       receiver: receiverId,
-      content: imageUrl,
+      content: imageUrl.url,
     });
 
     await this.chatRepository.updateOneChatRoom(

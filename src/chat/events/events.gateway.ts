@@ -13,12 +13,7 @@ import { Server, Socket } from 'socket.io';
 import { ChatService } from 'src/chat/services/chat.service';
 import { PostChatDto } from '../dto/post-chat.dto';
 import { AsyncApiSub } from 'nestjs-asyncapi';
-import {
-  BadRequestException,
-  UseFilters,
-  UsePipes,
-  ValidationPipe,
-} from '@nestjs/common';
+import { UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
 import { LoginChatRoomsDto } from '../dto/login-chat-rooms.dto';
 import { WebSocketExceptionFilter } from '../exceptions/websocket-exception.filter';
 import mongoose from 'mongoose';

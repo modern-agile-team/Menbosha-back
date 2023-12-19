@@ -20,10 +20,6 @@ export class ChatRepository {
     private readonly chatImagesModel: mongoose.Model<ChatImages>,
   ) {}
 
-  /**
-   *  @todo 재사용성 높은 코드로 고치기
-   *
-   */
   findAllChatRooms(
     filter: mongoose.FilterQuery<ChatRooms>,
   ): Promise<ChatRoomsDto[]> {
