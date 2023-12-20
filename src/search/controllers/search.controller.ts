@@ -22,7 +22,13 @@ import { SearchAllPageSizeDto } from '../dtos/search-all-page-size.dto';
 
 @ApiTags('SEARCH')
 @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
-@UsePipes(ValidationPipe)
+@UsePipes(
+  new ValidationPipe({
+    transform: true,
+    whitelist: true,
+    forbidNonWhitelisted: true,
+  }),
+)
 @Controller('search')
 export class SearchController {
   constructor(private searchService: SearchService) {}
