@@ -1,4 +1,3 @@
-import { HelpMeBoardImage } from 'src/boards/entities/help-me-board-image.entity';
 import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
 import { CategoryList } from 'src/common/entity/category-list.entity';
 import { SearchUserDto } from './search-user-dto';
@@ -53,17 +52,15 @@ export class SearchAllHelpMeBoardsDto
   })
   categoryList: Pick<CategoryList, 'categoryName'>;
 
-  constructor(searchAllHelpMeBoardsDto: SearchAllHelpMeBoardsDto) {
+  constructor(
+    searchAllHelpMeBoardsDto: Partial<SearchAllHelpMeBoardsDto> = {},
+  ) {
     this.id = searchAllHelpMeBoardsDto.id;
     this.head = searchAllHelpMeBoardsDto.head;
     this.body = searchAllHelpMeBoardsDto.body;
     this.createdAt = searchAllHelpMeBoardsDto.createdAt;
     this.user = searchAllHelpMeBoardsDto.user;
-    this.helpMeBoardImages = searchAllHelpMeBoardsDto.helpMeBoardImages.map(
-      (helpMeBoardImage: HelpMeBoardImage) => {
-        return { imageUrl: helpMeBoardImage.imageUrl };
-      },
-    );
+    this.helpMeBoardImages = searchAllHelpMeBoardsDto.helpMeBoardImages;
     this.categoryList = searchAllHelpMeBoardsDto.categoryList;
   }
 }

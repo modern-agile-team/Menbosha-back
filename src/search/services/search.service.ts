@@ -5,6 +5,7 @@ import { PageByMentorBoardResponseDTO } from 'src/boards/dto/mentorBoard/respons
 import { SearchAllPageSizeDto } from '../dtos/search-all-page-size.dto';
 import { SearchAllHelpMeBoardsDto } from '../dtos/search-all-help-me-boards.dto';
 import { plainToInstance } from 'class-transformer';
+import { SearchAllMentorsDto } from '../dtos/search-all-mentors.dto';
 
 @Injectable()
 export class SearchService {
@@ -19,10 +20,11 @@ export class SearchService {
   async searchAllBoardsAndMentors(searchQuery: string) {
     const [helpMeBoards, mentors] =
       await this.searchRepository.searchAllBoardsAndMentors(searchQuery);
-    const helpMeBoardsDtos = plainToInstance(
-      SearchAllHelpMeBoardsDto,
-      helpMeBoards,
-    );
+
+    return {
+      helpMeBoards: plainToInstance(SearchAllHelpMeBoardsDto, helpMeBoards),
+      mentors: plainToInstance(SearchAllMentorsDto, mentors),
+    };
   }
 
   async searchBoardsByHeadOrBodyOrUserName(

@@ -3,6 +3,8 @@ import { HelpMeBoardImage } from 'src/boards/entities/help-me-board-image.entity
 import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
 import { User } from 'src/users/entities/user.entity';
 import { EntityManager } from 'typeorm';
+import { SearchAllHelpMeBoardsDto } from '../dtos/search-all-help-me-boards.dto';
+import { SearchAllMentorsDto } from '../dtos/search-all-mentors.dto';
 
 /**
  * @todo 나중에 setParameter, forEach를 통해서 코드를 간소화 할 수 있을 것 같음
@@ -38,7 +40,9 @@ export class SearchRepository {
     ]);
   }
 
-  async searchAllBoardsAndMentors(searchQuery: string) {
+  async searchAllBoardsAndMentors(
+    searchQuery: string,
+  ): Promise<[SearchAllHelpMeBoardsDto[], SearchAllMentorsDto[]]> {
     return Promise.all([
       this.entityManager
         .getRepository(HelpMeBoard)
@@ -52,7 +56,6 @@ export class SearchRepository {
           'helpMeBoard.head',
           'helpMeBoard.body',
           'helpMeBoard.createdAt',
-          'helpMeBoardImages.id',
           'helpMeBoardImages.imageUrl',
           'user.id',
           'user.name',
