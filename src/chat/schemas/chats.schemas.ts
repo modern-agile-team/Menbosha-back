@@ -14,10 +14,10 @@ export class Chats {
   chatRoomId: mongoose.Types.ObjectId;
 
   @Prop({ required: true })
-  sender: number;
+  senderId: number;
 
   @Prop({ required: true })
-  receiver: number;
+  receiverId: number;
 
   @Prop({ required: true })
   content: string;
@@ -30,8 +30,8 @@ export class Chats {
   readonly unprotectedData: {
     _id: mongoose.Types.ObjectId;
     chatRoomId: string;
-    sender: number;
-    receiver: number;
+    senderId: number;
+    receiverId: number;
     content: string;
     isSeen: boolean;
     createdAt: Date;
@@ -44,8 +44,8 @@ ChatsSchema.virtual('unprotectedData').get(function (this: Chats) {
   return {
     _id: this._id,
     chatRoomId: this.chatRoomId,
-    sender: this.sender,
-    receiver: this.receiver,
+    senderId: this.senderId,
+    receiverId: this.receiverId,
     content: this.content,
     isSeen: this.isSeen,
     createdAt: this.createdAt,

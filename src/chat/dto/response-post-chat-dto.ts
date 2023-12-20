@@ -3,10 +3,7 @@ import { ChatsDto } from './chats.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { TransformMongoId } from './transform/transform-mongo-id';
 
-export class ResponsePostChatDto
-  implements
-    Pick<ChatsDto, 'content' | 'createdAt' | 'receiver' | 'sender' | 'isSeen'>
-{
+export class ResponsePostChatDto implements Omit<ChatsDto, 'chatRoomId'> {
   @ApiProperty({
     description: '채팅 id',
     type: 'string',
@@ -23,12 +20,12 @@ export class ResponsePostChatDto
   @ApiProperty({
     description: '채팅을 전송한 유저의 id',
   })
-  sender: number;
+  senderId: number;
 
   @ApiProperty({
     description: '채팅을 받은 유저의 id',
   })
-  receiver: number;
+  receiverId: number;
 
   @ApiProperty({
     description: '채팅 확인 여부',
@@ -43,8 +40,8 @@ export class ResponsePostChatDto
   constructor(responseChatDto: Partial<ResponsePostChatDto>) {
     this._id = responseChatDto._id;
     this.content = responseChatDto.content;
-    this.sender = responseChatDto.sender;
-    this.receiver = responseChatDto.receiver;
+    this.senderId = responseChatDto.senderId;
+    this.receiverId = responseChatDto.receiverId;
     this.isSeen = responseChatDto.isSeen;
     this.createdAt = responseChatDto.createdAt;
   }

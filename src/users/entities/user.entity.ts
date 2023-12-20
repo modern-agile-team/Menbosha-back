@@ -15,6 +15,7 @@ import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
 import { UserReview } from './user-review.entity';
 import { UserBadge } from './user-badge.entity';
 import { CategoryList } from '../../common/entity/category-list.entity';
+import { UserIntro } from './user-intro.entity';
 
 @Entity({
   name: 'user',
@@ -25,6 +26,9 @@ export class User {
 
   @OneToOne(() => UserImage, (userImage) => userImage.user)
   userImage: UserImage;
+
+  @OneToOne(() => UserIntro, (userIntro) => userIntro.user)
+  userIntro: UserIntro;
 
   @OneToOne(() => UserReview, (userReview) => userReview.mentor)
   mentor: UserReview;

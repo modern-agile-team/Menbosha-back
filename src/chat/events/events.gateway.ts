@@ -13,18 +13,13 @@ import { Server, Socket } from 'socket.io';
 import { ChatService } from 'src/chat/services/chat.service';
 import { PostChatDto } from '../dto/post-chat.dto';
 import { AsyncApiSub } from 'nestjs-asyncapi';
-import {
-  BadRequestException,
-  UseFilters,
-  UsePipes,
-  ValidationPipe,
-} from '@nestjs/common';
+import { UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
 import { LoginChatRoomsDto } from '../dto/login-chat-rooms.dto';
 import { WebSocketExceptionFilter } from '../exceptions/websocket-exception.filter';
 import mongoose from 'mongoose';
 @WebSocketGateway({ namespace: /\/ch-.+/, cors: true })
 @UsePipes(ValidationPipe)
-@UseFilters(new WebSocketExceptionFilter())
+@UseFilters(WebSocketExceptionFilter)
 export class EventsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
@@ -52,7 +47,7 @@ export class EventsGateway
     @ConnectedSocket() socket: Socket,
   ) {
     console.log('login', loginChatRoomDto.userId);
-    loginChatRoomDto.rooms.forEach((room) => {
+    loginChatRoomDto.chatRoomIds.forEach((room) => {
       const isObjectId = mongoose.isObjectIdOrHexString(room);
 
       if (!isObjectId) {
@@ -66,13 +61,18 @@ export class EventsGateway
 
   @AsyncApiSub({
     description: `
-    imageUrl 혹은 content로 이미지 전송인지, 스트링 챗인지 판별
     채팅 전송
     리턴 값
     {
-      content: 채팅내용,
-      sender: 보낸 사람 id,
-      receiver: 받는 사람 id,
+      data: {
+        _id: "string",
+        chatRoomId: "string"
+        content: 채팅내용,
+        sender: 보낸 사람 id,
+        receiver: 받는 사람 id,
+        isSeen: "boolean",
+        createdAt: "Date",
+      }
     };
     `,
     channel: 'message',
@@ -85,17 +85,12 @@ export class EventsGateway
     @MessageBody() postChatDto: PostChatDto,
     @ConnectedSocket() socket: Socket,
   ) {
-    if (postChatDto.hasOwnProperty('content')) {
-      const returnedChat = await this.chatService.createChat(postChatDto);
-      const data = returnedChat;
-      socket.to(postChatDto.roomId.toString()).emit('message', { data });
-    } else {
-      const returnedChat = await this.chatService.findOneChatImage(postChatDto);
-      const data = returnedChat;
-      socket.to(postChatDto.roomId.toString()).emit('message', { data });
-    }
+    const returnedChat = await this.chatService.createChat(postChatDto);
+
+    socket.to(postChatDto.roomId.toString()).emit('message', returnedChat);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   afterInit(server: Server): any {
     console.log('websocketserver init');
   }

@@ -1,10 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
 
-/**
- *
- * @todo swagger 수정
- */
 export function ApiGetChatUnreadCounts() {
   return applyDecorators(
     ApiOperation({
@@ -14,9 +10,13 @@ export function ApiGetChatUnreadCounts() {
     ApiResponse({
       status: 200,
       description: '개수 받아오기 성공',
-      content: {
-        JSON: {
-          example: 161,
+      schema: {
+        properties: {
+          statusCode: { example: 200, type: 'number' },
+          data: {
+            type: 'number',
+            example: 1,
+          },
         },
       },
     }),
@@ -45,6 +45,18 @@ export function ApiGetChatUnreadCounts() {
           },
         },
       },
+    }),
+    ApiQuery({
+      name: 'after',
+      type: 'number',
+      description:
+        'getTime() 메서드를 통해 얻은 number.레퍼런스 링크 https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Date/getTime',
+    }),
+    ApiParam({
+      name: 'roomId',
+      type: 'string',
+      format: 'ObjectId',
+      description: '채팅 룸 id',
     }),
   );
 }

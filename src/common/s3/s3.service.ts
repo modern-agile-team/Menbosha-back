@@ -19,7 +19,7 @@ export class S3Service {
     region: process.env.AWS_S3_REGION,
   });
 
-  private s3Adress = `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/`;
+  private readonly S3_ADDRESS = `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/`;
 
   async uploadImage(
     file,
@@ -40,7 +40,7 @@ export class S3Service {
           ContentDisposition: 'inline',
         }),
       );
-      const fileUrl = `${this.s3Adress}${filename}`;
+      const fileUrl = `${this.S3_ADDRESS}${filename}`;
 
       return { url: fileUrl, key: filename };
     } catch (error) {

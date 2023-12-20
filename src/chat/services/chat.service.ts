@@ -8,12 +8,9 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { ChatRooms } from '../schemas/chat-rooms.schemas';
 import * as mongoose from 'mongoose';
 import { S3Service } from 'src/common/s3/s3.service';
 import { Observable, Subject, catchError, map } from 'rxjs';
-import { Chats } from '../schemas/chats.schemas';
 import { In } from 'typeorm';
 import { UserService } from 'src/users/services/user.service';
 import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
@@ -22,6 +19,7 @@ import { ChatRoomsDto } from '../dto/chat-rooms.dto';
 import { ResponsePostChatDto } from '../dto/response-post-chat-dto';
 import { AggregateChatRoomsDto } from '../dto/aggregate-chat-rooms.dto';
 import { ChatsDto } from '../dto/chats.dto';
+import { ChatImagesDto } from '../dto/chat-images.dto';
 // import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 
 @Injectable()
@@ -32,10 +30,6 @@ export class ChatService {
     private readonly s3Service: S3Service,
     private readonly userService: UserService,
     private readonly chatRepository: ChatRepository,
-    @InjectModel(ChatRooms.name)
-    private readonly chatRoomsModel: mongoose.Model<ChatRooms>,
-    @InjectModel(Chats.name)
-    private readonly chatsModel: mongoose.Model<Chats>,
   ) {}
 
   notificationListener(myId: number): Observable<string> {
@@ -56,7 +50,10 @@ export class ChatService {
 
   findAllChatRooms(myId: number): Promise<ChatRoomsDto[]> {
     return this.chatRepository.findAllChatRooms({
-      $and: [{ $or: [{ hostId: myId }, { guestId: myId }] }],
+      $and: [
+        { $or: [{ hostId: myId }, { guestId: myId }] },
+        { deletedAt: null },
+      ],
     });
   }
 
@@ -148,7 +145,11 @@ export class ChatService {
 
     await this.chatRepository.updateManyChats(
       {
-        $and: [{ receiver: userId }, { chatRoomId: roomId }, { isSeen: false }],
+        $and: [
+          { receiverId: userId },
+          { chatRoomId: roomId },
+          { isSeen: false },
+        ],
       },
       { $set: { isSeen: true } },
     );
@@ -158,10 +159,6 @@ export class ChatService {
     });
   }
 
-  /**
-   *  @todo 재사용성 높은 코드로 고치기
-   *
-   */
   async createChat({
     roomId,
     content,
@@ -184,9 +181,16 @@ export class ChatService {
     const returnedChat = await this.chatRepository.createChat({
       chatRoomId: returnedChatRoom._id,
       content: content,
-      sender: senderId,
-      receiver: receiverId,
+      senderId: senderId,
+      receiverId: receiverId,
     });
+
+    await this.chatRepository.updateOneChatRoom(
+      { _id: returnedChat.chatRoomId },
+      {
+        $push: { chatIds: returnedChat._id },
+      },
+    );
 
     const chatsDto = new ChatsDto(returnedChat);
 
@@ -200,106 +204,45 @@ export class ChatService {
     return chatsDto;
   }
 
-  /**
-   *  @todo 재사용성 높은 코드로 고치기
-   *
-   */
   async createChatImage(
     roomId: mongoose.Types.ObjectId,
-    myId: number,
-    receiverId: number,
+    senderId: number,
     file: Express.Multer.File,
   ) {
-    await this.findOneChatRoomOrFail(roomId);
+    const existChatRoom = await this.findOneChatRoomOrFail(roomId);
 
-    const isChatRoom = await this.chatRepository.findOneChatRoom({
-      $or: [
-        {
-          $and: [{ hostId: myId }, { guestId: receiverId }],
-        },
-        {
-          $and: [{ hostId: receiverId }, { guestId: myId }],
-        },
-      ],
-    });
-
-    if (!isChatRoom) {
-      throw new NotFoundException('채팅을 전송할 유저가 채팅방에 없습니다');
+    if (
+      !(existChatRoom.hostId === senderId || existChatRoom.guestId === senderId)
+    ) {
+      throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
     }
 
-    const imageUrl = await this.s3Service.uploadImage(file, myId, 'ChatImages');
-
-    return this.chatRepository.createChatImage(
-      roomId,
-      myId,
-      receiverId,
-      imageUrl.url,
+    const uploadedImage = await this.s3Service.uploadImage(
+      file,
+      senderId,
+      'ChatImages',
     );
-  }
 
-  /**
-   *  @todo 재사용성 높은 코드로 고치기
-   *
-   */
-  async findOneChatImage({ roomId, imageUrl, senderId, receiverId }) {
-    const isChatAndUsers = await this.chatsModel.findOne({
-      $and: [
-        { chatRoomId: roomId },
-        { sender: senderId },
-        { receiver: receiverId },
-        { content: imageUrl },
-      ],
+    const returnedChatImage = await this.chatRepository.createChatImage({
+      chatRoomId: new mongoose.Types.ObjectId(roomId),
+      senderId: senderId,
+      receiverId: uploadedImage.url,
     });
 
-    if (!isChatAndUsers) {
-      throw new NotFoundException('해당 채팅을 찾지 못했습니다.');
-    }
-
-    return isChatAndUsers;
+    return new ChatImagesDto(returnedChatImage);
   }
 
-  // async getChatNotifications(
-  //   userId: number,
-  // ): Promise<Partial<GetNotificationsResponseFromChatsDto[]>> {
-  //   const returnedNotifications =
-  //     await this.chatRepository.getChatNotifications(userId);
-
-  //   const groupedNotifications: Partial<
-  //     GetNotificationsResponseFromChatsDto[]
-  //   > = {};
-
-  //   returnedNotifications.forEach((notification) => {
-  //     const chatRoomId = notification.chatRoomId;
-  //     console.log(chatRoomId);
-  //     if (!groupedNotifications[chatRoomId]) {
-  //       const newNotification: GetNotificationsResponseFromChatsDto = {
-  //         ...notification,
-  //         count: 1,
-  //         content: notification.content.substring(0, 10),
-  //       };
-  //       groupedNotifications[chatRoomId] = newNotification;
-  //     } else {
-  //       groupedNotifications[chatRoomId]['count'] += 1;
-  //     }
-  //   });
-  //   console.log(groupedNotifications);
-
-  //   return groupedNotifications;
-  // }
-
-  /**
-   *  @todo 레포지터리 코드랑 분리
-   *
-   */
   async findAllChatRoomsWithUserAndChat(
     myId: number,
   ): Promise<ResponseGetChatRoomsDto[]> {
-    const returnedChatAggregate: AggregateChatRoomsDto[] =
-      await this.chatRoomsModel.aggregate([
+    const returnedChatRoomsAggregate =
+      await this.chatRepository.aggregateChatRooms([
         {
-          $match: { $or: [{ hostId: myId }, { guestId: myId }] },
+          $match: {
+            $or: [{ hostId: myId }, { guestId: myId }],
+            deletedAt: null,
+          },
         },
-
         {
           $lookup: {
             from: 'chats',
@@ -308,7 +251,6 @@ export class ChatService {
             as: 'chats',
           },
         },
-
         {
           $addFields: {
             chatCount: {
@@ -333,11 +275,11 @@ export class ChatService {
         },
       ]);
 
-    if (!returnedChatAggregate) {
+    if (!returnedChatRoomsAggregate) {
       return null;
     }
 
-    const userIds = returnedChatAggregate.map((userId) => {
+    const userIds = returnedChatRoomsAggregate.map((userId) => {
       return userId.hostId === myId ? userId.guestId : userId.hostId;
     });
 
@@ -365,7 +307,7 @@ export class ChatService {
       });
     });
 
-    const aggregateChatRoomsDto = returnedChatAggregate.map((chat) => {
+    const aggregateChatRoomsDto = returnedChatRoomsAggregate.map((chat) => {
       return new AggregateChatRoomsDto(chat);
     });
 
