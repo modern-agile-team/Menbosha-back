@@ -64,13 +64,15 @@ export class UserService {
 
     const mentorResponse: PageByMentorListResponseDTO[] = await Promise.all(
       mentors.map(async (user) => {
-        id: user.id;
-        name: user.name;
-        userImage: user.userImage ? user.userImage : [];
-        userIntro: {
-          introduce: user.userIntro.introduce;
-          mainField: user.userIntro.mainField;
-        }
+        return {
+          id: user.id,
+          name: user.name,
+          userImage: user.userImage ? user.userImage : [],
+          userIntro: {
+            introduce: user.userIntro.introduce.substring(0, 30),
+            mainField: user.userIntro.mainField.substring(0, 30),
+          },
+        };
       }),
     );
     return { data: mentorResponse, total };
