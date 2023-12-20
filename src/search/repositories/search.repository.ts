@@ -14,8 +14,8 @@ import { EntityManager } from 'typeorm';
 export class SearchRepository {
   constructor(private entityManager: EntityManager) {}
   async searchAllHelpMeBoardsForCount(searchQuery: string, take: number) {
-    const helpMeBoardsCount = Promise.all([
-      await this.entityManager
+    return Promise.all([
+      this.entityManager
         .getRepository(HelpMeBoard)
         .createQueryBuilder('helpMeBoard')
         .innerJoin('helpMeBoard.user', 'user', 'user.id = helpMeBoard.userId')
@@ -46,10 +46,26 @@ export class SearchRepository {
         .skip(0)
         .take(take)
         .getCount(),
-      await this.entityManager
+      this.entityManager
         .getRepository(User)
         .createQueryBuilder('user')
-        .innerJoin('user.userImage', 'userImage'),
+        .innerJoin('user.userImage', 'userImage')
+        .leftJoin('user.userIntro', 'userIntro')
+        .select([
+          'user.id',
+          'user.name',
+          'user.isMentor',
+          'userImage.imageUrl',
+          'userIntro.mainField',
+          'userIntro.introduce',
+        ])
+        .where('MATCH(name) AGAINST (:searchQuery IN BOOLEAN MODE)', {
+          searchQuery,
+        })
+        .andWhere('user.isMentor = true')
+        .skip(0)
+        .take(take)
+        .getCount(),
     ]);
   }
 

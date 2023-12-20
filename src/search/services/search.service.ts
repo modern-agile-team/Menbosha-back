@@ -8,14 +8,16 @@ export class SearchService {
   constructor(private searchRepository: SearchRepository) {}
   async searchAllBoardsAndMentorsForPageSize(searchQuery: string) {
     const take = 10;
-    const mentorBoardTotal =
+    const helpMeBoardsAndMentorsSearchCount =
       await this.searchRepository.searchAllHelpMeBoardsForCount(
         searchQuery,
         take,
       );
-    console.log(mentorBoardTotal);
-    // const lastPage = Math.ceil(mentorBoardTotal[1] / take);
-    return mentorBoardTotal;
+
+    return {
+      helpMeBoardsCount: Math.ceil(helpMeBoardsAndMentorsSearchCount[0] / take),
+      MentorsCount: Math.ceil(helpMeBoardsAndMentorsSearchCount[1] / take),
+    };
   }
 
   async searchBoardsByHeadOrBodyOrUserName(
