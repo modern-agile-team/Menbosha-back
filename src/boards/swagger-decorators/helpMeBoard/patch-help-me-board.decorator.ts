@@ -1,26 +1,38 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiHeaders,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+} from '@nestjs/swagger';
 
-export function ApiUpdateBoardImage() {
+export function ApiUpdateHelpMeBoard() {
   return applyDecorators(
     ApiOperation({
-      summary: '보드의 이미지를 수정하는 API',
-      description: '보드의 이미지를 수정하는 API',
+      summary: '멘티 게시판을 수정하는 API',
+      description: '멘티 게시판을 수정하는 API',
     }),
     ApiResponse({
       status: 200,
-      description: '보드의 내용을 성공적으로 수정한 경우',
+      description: '게시판의 내용을 성공적으로 수정한 경우',
       content: {
         JSON: {
           example: {
-            message: '이미지 업데이트 및 삭제가 성공적으로 처리되었습니다.',
-            newImagesArray: [
-              {
-                boardId: '업데이트된 보드 아이디',
-                imageUrl: '새롭게 넣은 이미지 url',
-                id: '새롭게 넣은 이미지 id',
+            id: '8',
+            head: '제목',
+            body: '내용',
+            createdAt: '2023-12-06T23:51:47.969Z',
+            updatedAt: '2023-12-06T23:51:47.969Z',
+            categoryId: 4,
+            user: {
+              name: '홍길동',
+              userImage: {
+                id: 'image pk키 (number)',
+                userId: '유저 아이디 (number)',
+                imageUrl: '이미지 url(string)',
               },
-            ],
+            },
+            unitowner: 'bollean값',
           },
         },
       },
@@ -81,5 +93,20 @@ export function ApiUpdateBoardImage() {
         example: '여기에 액세스 토큰',
       },
     ]),
+    ApiBody({
+      schema: {
+        type: 'object',
+        properties: {
+          head: { type: 'string' },
+          body: { type: 'string' },
+          categoryId: { type: 'number' },
+        },
+        example: {
+          head: '게시물 제목',
+          body: 'click send to get a response boards.service.ts 30자 넘는 게시물 테스트 중입니다.',
+          categoryId: 4,
+        },
+      },
+    }),
   );
 }

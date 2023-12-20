@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BoardImageRepository } from '../repository/boardImage.repository';
 import { S3Service } from '../../common/s3/s3.service';
-import { CreateHelpMeBoardImageDto } from '../dto/create.board-image.dto';
+import { CreateHelpMeBoardImageDto } from '../dto/helpMeBoard/create.board-image.dto';
 import { HelpMeBoardImage } from '../entities/help-me-board-image.entity';
 
 @Injectable()

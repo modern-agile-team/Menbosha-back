@@ -1,17 +1,28 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-export function ApiGetOneHelpMeBoard() {
+export function ApiUpdateHelpMeBoardImage() {
   return applyDecorators(
     ApiOperation({
-      summary: '클릭한 멘티 보드 가져오는 API',
-      description: '클릭한 멘티 보드 가져오는 API',
+      summary: '멘티게시판의 이미지를 수정하는 API',
+      description: '멘티게시판의 이미지를 수정하는 API',
     }),
     ApiResponse({
       status: 200,
-      description: '성공적으로 멘티보드를 불러온 경우',
+      description: '보드의 내용을 성공적으로 수정한 경우',
       content: {
-        JSON: { example: { message: '멘티보드를 성공적으로 불러왔습니다.' } },
+        JSON: {
+          example: {
+            message: '이미지 업데이트 및 삭제가 성공적으로 처리되었습니다.',
+            newImagesArray: [
+              {
+                boardId: '업데이트된 보드 아이디',
+                imageUrl: '새롭게 넣은 이미지 url',
+                id: '새롭게 넣은 이미지 id',
+              },
+            ],
+          },
+        },
       },
     }),
     ApiResponse({
@@ -34,10 +45,10 @@ export function ApiGetOneHelpMeBoard() {
     }),
     ApiResponse({
       status: 404,
-      description: 'DB에서 일치하는 보드를 찾을 수 없는 경우',
+      description: 'DB에서 사용자를 찾을 수 없는 경우',
       content: {
         JSON: {
-          example: { statusCode: 404, message: '보드를 찾을 수 없습니다.' },
+          example: { statusCode: 404, message: '사용자를 찾을 수 없습니다.' },
         },
       },
     }),
@@ -52,12 +63,12 @@ export function ApiGetOneHelpMeBoard() {
     }),
     ApiResponse({
       status: 500,
-      description: '보드를 불러오는 중 오류가 발생한 경우',
+      description: '보드 수정중 오류가 발생했습니다',
       content: {
         JSON: {
           example: {
             statusCode: 500,
-            message: '보드를 불러오는 중 오류가 발생했습니다.',
+            message: '보드 수정 중 오류가 발생했습니다.',
           },
         },
       },

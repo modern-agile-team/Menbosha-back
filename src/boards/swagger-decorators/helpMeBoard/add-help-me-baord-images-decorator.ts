@@ -1,5 +1,10 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiHeaders,
+  ApiOperation,
+  ApiBody,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 export function ApiUploadHelpMeBoardImages() {
   return applyDecorators(
@@ -70,5 +75,16 @@ export function ApiUploadHelpMeBoardImages() {
         example: '여기에 액세스 토큰',
       },
     ]),
+    ApiBody({
+      schema: {
+        type: 'form-data',
+        properties: {
+          files: { type: 'file' },
+        },
+        example: {
+          files: '고양이.png',
+        },
+      },
+    }),
   );
 }

@@ -1,8 +1,8 @@
 import { EntityManager } from 'typeorm';
 import { MentorBoard } from '../entities/mentor-board.entity';
-import { CreateMentorBoardDto } from '../dto/create.mentor.board.dto';
+import { CreateMentorBoardDto } from '../dto/mentorBoard/create.mentor.board.dto';
 import { Injectable } from '@nestjs/common';
-import { UpdateMentorBoardDto } from '../dto/update.mentor.board.dto';
+import { UpdateMentorBoardDto } from '../dto/mentorBoard/update.mentor.board.dto';
 
 @Injectable()
 export class MentorBoardRepository {
@@ -33,13 +33,6 @@ export class MentorBoardRepository {
     });
   }
 
-  async findBoardById(id: number): Promise<MentorBoard> {
-    return await this.entityManager.findOne(MentorBoard, {
-      relations: ['user', 'user.userImage'],
-      where: { id },
-    });
-  }
-
   async findMentorBoardById(id: number): Promise<MentorBoard> {
     return await this.entityManager.findOne(MentorBoard, {
       relations: ['user', 'user.userImage'],
@@ -47,7 +40,7 @@ export class MentorBoardRepository {
     });
   }
 
-  async updateBoard(
+  async updateMentorBoard(
     boardData: Partial<UpdateMentorBoardDto>,
   ): Promise<MentorBoard> {
     return await this.entityManager.save(MentorBoard, boardData);
