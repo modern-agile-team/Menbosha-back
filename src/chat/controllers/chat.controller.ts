@@ -39,7 +39,7 @@ import { plainToInstance } from 'class-transformer';
 import { ApiGetChatRoomsNew } from '../swagger-decorators/get-chat-rooms-new.decorator';
 import { Observable } from 'rxjs';
 import { ChatsDto } from '../dto/chats.dto';
-import { ApiGetChatNotificationSse } from '../swagger-decorators/get-chat-notification-sse.decorator';
+import { ApiGetChatNotificationSse } from '../swagger-decorators/get-chat-notification-Sse.decorator';
 
 @ApiTags('CHAT')
 @UsePipes(
