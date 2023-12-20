@@ -36,17 +36,6 @@ import { ApiSearchAllBoardsAndMentorsForPageSize } from '../swagger-decorators/s
 export class SearchController {
   constructor(private searchService: SearchService) {}
 
-  @Get('count')
-  @ApiSearchAllBoardsAndMentorsForPageSize()
-  searchAllBoardsAndMentorsForPageSize(
-    @Query()
-    searchAllBoardsAndMentorsQueryDto: SearchAllBoardsAndMentorsQueryDto,
-  ): Promise<SearchAllPageSizeDto> {
-    return this.searchService.searchAllBoardsAndMentorsForPageSize(
-      searchAllBoardsAndMentorsQueryDto.searchQuery,
-    );
-  }
-
   @Get('all')
   @ApiSearchAllBoardsAndMentors()
   searchAllBoardsAndMentors(
@@ -58,6 +47,17 @@ export class SearchController {
   }> {
     return this.searchService.searchAllBoardsAndMentors(
       searchAllBoardsAndMentorsQueryDto,
+    );
+  }
+
+  @Get('all/count')
+  @ApiSearchAllBoardsAndMentorsForPageSize()
+  searchAllBoardsAndMentorsForPageSize(
+    @Query()
+    searchAllBoardsAndMentorsQueryDto: SearchAllBoardsAndMentorsQueryDto,
+  ): Promise<SearchAllPageSizeDto> {
+    return this.searchService.searchAllBoardsAndMentorsForPageSize(
+      searchAllBoardsAndMentorsQueryDto.searchQuery,
     );
   }
 

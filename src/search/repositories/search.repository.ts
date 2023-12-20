@@ -73,7 +73,7 @@ export class SearchRepository {
           searchQuery,
         })
         .offset(skip)
-        .limit(10)
+        .limit(13)
         .getMany(),
 
       this.entityManager
