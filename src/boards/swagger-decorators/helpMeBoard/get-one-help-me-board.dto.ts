@@ -37,7 +37,7 @@ export function ApiGetOneHelpMeBoard() {
                 imageUrl: 's3 저장된 url 주소',
               },
             ],
-            unitowner: 'bollean값',
+            unitowner: 'boolean값',
           },
         },
       },
