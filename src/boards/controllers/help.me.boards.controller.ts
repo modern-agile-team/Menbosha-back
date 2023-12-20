@@ -25,7 +25,7 @@ import { HelpMeBoard } from '../entities/help-me-board.entity';
 import { PageByHelpMeBoardResponseDTO } from '../dto/helpMeBoard/response.help.me.board.dto';
 import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 import { oneHelpMeBoardResponseDTO } from '../dto/helpMeBoard/one.response.help.me.board.dto';
-import { ApiGetOneHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-one-help-me-board.dtd';
+import { ApiGetOneHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-one-help-me-board.dto';
 import { ApiUpdateHelpMeBoard } from '../swagger-decorators/helpMeBoard/patch-help-me-board.decorator';
 import { ApiGetPageHelpMeBoards } from '../swagger-decorators/helpMeBoard/get-page-help-me-board.decorator';
 import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dto';

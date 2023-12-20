@@ -28,7 +28,7 @@ export class User {
   userImage: UserImage;
 
   @OneToOne(() => UserIntro, (userIntro) => userIntro.user)
-  userIntor: UserIntro;
+  userIntro: UserIntro;
 
   @OneToOne(() => UserReview, (userReview) => userReview.mentor)
   mentor: UserReview;
