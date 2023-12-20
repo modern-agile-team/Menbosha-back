@@ -30,6 +30,7 @@ import { ApiUpdateHelpMeBoard } from '../swagger-decorators/helpMeBoard/patch-he
 import { ApiGetPageHelpMeBoards } from '../swagger-decorators/helpMeBoard/get-page-help-me-board.decorator';
 import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dto';
 import { HelpMeBoardResponseDTO } from '../dto/helpMeBoard/update.help.me.board.response.dto';
+import { ApiDeleteHelpMeBoard } from '../swagger-decorators/helpMeBoard/delete-help-me-board-decorator';
 
 @Controller('HelpMeBoard')
 @ApiTags('HelpMeBoard API')
@@ -115,6 +116,7 @@ export class HelpMeBoardController {
 
   @Delete('')
   @UseGuards(JwtAccessTokenGuard)
+  @ApiDeleteHelpMeBoard()
   deleteBoard(
     @Query('helpMeBoardId') boardId: number,
     @GetUserId() userId: number,

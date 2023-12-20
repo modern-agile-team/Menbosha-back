@@ -1,10 +1,10 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiHeaders } from '@nestjs/swagger';
 
-export function ApiDeleteMentorBoard() {
+export function ApiDeleteHelpMeBoard() {
   return applyDecorators(
     ApiOperation({
-      summary: '멘토 게시글 삭제',
+      summary: '도와주세요 게시글 삭제',
       description: 'Header - access-token, Param - helpMeBoard-id',
     }),
     ApiResponse({
