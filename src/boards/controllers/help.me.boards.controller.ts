@@ -22,11 +22,12 @@ import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { ApiAddHelpMeBoard } from '../swagger-decorators/helpMeBoard/add-help-me-board-decorator';
 import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/creare.help.me.board.dto';
 import { HelpMeBoard } from '../entities/help-me-board.entity';
-// import { PageByHelpMeBoardResponseDTO } from '../dto/helpMeBoard/response.help.me.board.dto';
+import { PageByHelpMeBoardResponseDTO } from '../dto/helpMeBoard/response.help.me.board.dto';
 import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 import { oneHelpMeBoardResponseDTO } from '../dto/helpMeBoard/one.response.help.me.board.dto';
 import { ApiGetOneHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-one-help-me-board.dtd';
 import { ApiUpdateHelpMeBoard } from '../swagger-decorators/helpMeBoard/patch-help-me-board.decorator';
+import { ApiGetPageHelpMeBoards } from '../swagger-decorators/helpMeBoard/get-page-help-me-board.decorator';
 
 @Controller('HelpMeBoard')
 @ApiTags('HelpMeBoard API')
@@ -50,12 +51,12 @@ export class HelpMeBoardController {
   @UseGuards(JwtAccessTokenGuard)
   @UseInterceptors(FilesInterceptor('files', 3))
   @ApiUploadHelpMeBoardImages()
-  async uploadImage(
+  uploadImage(
     @GetUserId() userId: number,
     @Query('helpMeBoardId') boardId: number,
     @UploadedFiles() files: Express.Multer.File[],
   ): Promise<CreateHelpMeBoardImageDto[]> {
-    return await this.boardImagesService.createHelpMeBoardImages(
+    return this.boardImagesService.createHelpMeBoardImages(
       boardId,
       files,
       userId,
@@ -63,32 +64,33 @@ export class HelpMeBoardController {
   }
 
   // --- 이 기능은 아직 프론트와 상의중인 기능입니다 ---
-  // @Get('')
-  // // @ApiGetPageBoards()
-  // async findPageBoards(
-  //   @Query('page') page = 1,
-  //   @Query('limit') limit = 30,
-  // ): Promise<{ data: PageByHelpMeBoardResponseDTO[]; total: number }> {
-  //   return await this.helpMeBoardService.findPagedHelpMeBoards(page, limit); //여기서 await 안걸고 넘겨도, 서비스딴에서 await 걸려서 넘어옴. async 쓸필요 x
-  // }
+  @Get('')
+  @ApiGetPageHelpMeBoards()
+  findPageBoards(
+    @Query('page') page = 1,
+  ): Promise<{ data: PageByHelpMeBoardResponseDTO[]; total: number }> {
+    return this.helpMeBoardService.findPagedHelpMeBoards(page);
+  }
 
   @Get('/unit') //하나의 게시판 불러오기
   @UseGuards(JwtOptionalGuard)
   @ApiGetOneHelpMeBoard()
-  async findOne(
+  findOne(
     @Query('boardId') boardId: number,
     @GetUserId() userId: number,
   ): Promise<oneHelpMeBoardResponseDTO> {
-    return await this.helpMeBoardService.findOneHelpMeBoard(boardId, userId);
+    return this.helpMeBoardService.findOneHelpMeBoard(boardId, userId);
   }
 
   @Patch('')
+  @UseGuards(JwtOptionalGuard)
   @ApiUpdateHelpMeBoard()
-  async editBoard(
-    @Query('boardId') boardId: number,
+  editBoard(
+    @GetUserId() userId: number,
+    @Query('helpMeBoardoardId') boardId: number,
     @Body() boardData: Partial<HelpMeBoard>,
   ): Promise<HelpMeBoard> {
-    return await this.helpMeBoardService.updateBoard(boardId, boardData);
+    return this.helpMeBoardService.updateBoard(boardId, userId, boardData);
   }
 
   @Patch('/images')
@@ -111,11 +113,10 @@ export class HelpMeBoardController {
 
   @Delete('')
   @UseGuards(JwtAccessTokenGuard)
-  // @ApiDeleteBoard()
-  async deleteBoard(
+  deleteBoard(
     @Query('helpMeBoardId') boardId: number,
     @GetUserId() userId: number,
   ) {
-    await this.helpMeBoardService.deleteBoard(boardId, userId);
+    this.helpMeBoardService.deleteBoard(boardId, userId);
   }
 }

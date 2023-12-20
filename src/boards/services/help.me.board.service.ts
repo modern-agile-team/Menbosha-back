@@ -19,10 +19,11 @@ export class HelpMeBoardService {
     }
   }
 
+  // -----이 기능은 프론트와 상의중인 기능입니다 -----
   async findPagedHelpMeBoards(
     page: number,
-    limit: number,
   ): Promise<{ data: PageByHelpMeBoardResponseDTO[]; total: number }> {
+    const limit = 10;
     const skip = (page - 1) * limit;
     const take = limit;
     const boards = await this.helpMeBoardRepository.findPageByHelpMeBoards(
@@ -84,6 +85,7 @@ export class HelpMeBoardService {
   }
 
   async updateBoard(
+    userId: number,
     boardId: number,
     boardData: Partial<CreateHelpMeBoardDto>,
   ): Promise<HelpMeBoard | undefined> {
