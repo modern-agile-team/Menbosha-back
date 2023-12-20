@@ -49,7 +49,8 @@ export function ApiGetChatUnreadCounts() {
     ApiQuery({
       name: 'after',
       type: 'number',
-      description: 'getTime() 메서드를 통해 얻은 number',
+      description:
+        'getTime() 메서드를 통해 얻은 number.레퍼런스 링크 https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Date/getTime',
     }),
     ApiParam({
       name: 'roomId',
