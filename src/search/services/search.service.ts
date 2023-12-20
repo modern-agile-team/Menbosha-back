@@ -10,14 +10,19 @@ import { SearchAllMentorsDto } from '../dtos/search-all-mentors.dto';
 @Injectable()
 export class SearchService {
   constructor(private searchRepository: SearchRepository) {}
-  async searchAllBoardsAndMentorsForPageSize(searchQuery: string) {
+  async searchAllBoardsAndMentorsForPageSize(
+    searchQuery: string,
+  ): Promise<SearchAllPageSizeDto> {
     const [helpMeBoardsCount, mentorsCount] =
       await this.searchRepository.searchAllBoardsAndMentorsCount(searchQuery);
 
     return new SearchAllPageSizeDto(helpMeBoardsCount, mentorsCount);
   }
 
-  async searchAllBoardsAndMentors(searchQuery: string) {
+  async searchAllBoardsAndMentors(searchQuery: string): Promise<{
+    helpMeBoards: SearchAllHelpMeBoardsDto[];
+    mentors: SearchAllMentorsDto[];
+  }> {
     const [helpMeBoards, mentors] =
       await this.searchRepository.searchAllBoardsAndMentors(searchQuery);
 
