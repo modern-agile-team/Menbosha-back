@@ -1,5 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 
 export function ApiGetPageHelpMeBoards() {
   return applyDecorators(
@@ -62,6 +62,6 @@ export function ApiGetPageHelpMeBoards() {
         },
       },
     }),
-    ApiParam({ name: 'page', type: Number }),
+    ApiQuery({ name: 'page', type: Number }),
   );
 }
