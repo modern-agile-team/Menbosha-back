@@ -42,6 +42,7 @@ export class SearchRepository {
 
   async searchAllBoardsAndMentors(
     searchQuery: string,
+    skip: number,
   ): Promise<[SearchAllHelpMeBoardsDto[], SearchAllMentorsDto[]]> {
     return Promise.all([
       this.entityManager
@@ -71,6 +72,8 @@ export class SearchRepository {
         .orWhere(`MATCH(user.name) AGAINST (:searchQuery IN BOOLEAN MODE)`, {
           searchQuery,
         })
+        .skip(skip)
+        .take(10)
         .getMany(),
 
       this.entityManager
@@ -90,6 +93,8 @@ export class SearchRepository {
           searchQuery,
         })
         .andWhere('user.isMentor = true')
+        .skip(skip)
+        .take(10)
         .getMany(),
     ]);
   }

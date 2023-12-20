@@ -17,6 +17,7 @@ export class SearchAllHelpMeBoardsDto
 {
   @ApiProperty({
     description: '도와주세요 게시글 고유 id',
+    format: 'integer',
   })
   id: number;
 
@@ -41,14 +42,29 @@ export class SearchAllHelpMeBoardsDto
   user: SearchUserDto;
 
   @ApiProperty({
-    isArray: true,
-    type: 'object',
-    description: '도와주세요 게시판의 이미지',
+    description: '도와주세요 게시판의 이미지 배열',
+    type: 'array',
+    items: {
+      type: 'object',
+      properties: {
+        imageUrl: {
+          type: 'string',
+          description: '도와주세요 게시판의 이미지 url',
+        },
+      },
+    },
   })
   helpMeBoardImages: { imageUrl: string }[] | [];
 
   @ApiProperty({
-    description: '작성자 고유 id',
+    description: '카테고리 리스트',
+    type: 'object',
+    properties: {
+      categoryName: {
+        description: '카테고리의 이름',
+        type: 'string',
+      },
+    },
   })
   categoryList: Pick<CategoryList, 'categoryName'>;
 
