@@ -18,13 +18,13 @@ export class UserIntro {
   @Column({ name: 'main_field' })
   mainField: string;
 
-  @Column({ name: 'interuduce' })
-  interuduce: string;
+  @Column({ name: 'introduce' })
+  introduce: string;
 
   @Column({ name: 'career' })
   career: string;
 
-  @OneToOne(() => User, (user: User) => user.userIntor, {
+  @OneToOne(() => User, (user: User) => user.userIntro, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'user_id' })
