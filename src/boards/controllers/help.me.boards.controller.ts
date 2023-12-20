@@ -28,6 +28,8 @@ import { oneHelpMeBoardResponseDTO } from '../dto/helpMeBoard/one.response.help.
 import { ApiGetOneHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-one-help-me-board.dtd';
 import { ApiUpdateHelpMeBoard } from '../swagger-decorators/helpMeBoard/patch-help-me-board.decorator';
 import { ApiGetPageHelpMeBoards } from '../swagger-decorators/helpMeBoard/get-page-help-me-board.decorator';
+import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dto';
+import { HelpMeBoardResponseDTO } from '../dto/helpMeBoard/update.help.me.board.response.dto';
 
 @Controller('HelpMeBoard')
 @ApiTags('HelpMeBoard API')
@@ -83,14 +85,14 @@ export class HelpMeBoardController {
   }
 
   @Patch('')
-  @UseGuards(JwtOptionalGuard)
+  @UseGuards(JwtAccessTokenGuard)
   @ApiUpdateHelpMeBoard()
   editBoard(
     @GetUserId() userId: number,
-    @Query('helpMeBoardoardId') boardId: number,
-    @Body() boardData: Partial<HelpMeBoard>,
-  ): Promise<HelpMeBoard> {
-    return this.helpMeBoardService.updateBoard(boardId, userId, boardData);
+    @Query('boardId') boardId: number,
+    @Body() boardData: UpdateHelpMeBoardDto,
+  ): Promise<HelpMeBoardResponseDTO> {
+    return this.helpMeBoardService.updateBoard(userId, boardId, boardData);
   }
 
   @Patch('/images')

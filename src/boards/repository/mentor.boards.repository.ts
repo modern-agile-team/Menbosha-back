@@ -33,13 +33,6 @@ export class MentorBoardRepository {
     });
   }
 
-  async findBoardById(id: number): Promise<MentorBoard> {
-    return await this.entityManager.findOne(MentorBoard, {
-      relations: ['user', 'user.userImage'],
-      where: { id },
-    });
-  }
-
   async findMentorBoardById(id: number): Promise<MentorBoard> {
     return await this.entityManager.findOne(MentorBoard, {
       relations: ['user', 'user.userImage'],
@@ -47,7 +40,7 @@ export class MentorBoardRepository {
     });
   }
 
-  async updateBoard(
+  async updateMentorBoard(
     boardData: Partial<UpdateMentorBoardDto>,
   ): Promise<MentorBoard> {
     return await this.entityManager.save(MentorBoard, boardData);

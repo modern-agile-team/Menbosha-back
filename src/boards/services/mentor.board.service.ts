@@ -60,7 +60,7 @@ export class MentorBoardService {
     userId: number,
   ): Promise<oneMentorBoardResponseDTO> {
     const mentorBoard =
-      await this.mentorBoardRepository.findBoardById(mentorBoardId);
+      await this.mentorBoardRepository.findMentorBoardById(mentorBoardId);
     const unitowner = mentorBoard.userId === userId;
     console.log(mentorBoardId);
 
@@ -88,7 +88,7 @@ export class MentorBoardService {
     boardData: UpdateMentorBoardDto,
   ): Promise<MentorBoardResponseDTO> {
     const existingBoard =
-      await this.mentorBoardRepository.findBoardById(mentorBoardId);
+      await this.mentorBoardRepository.findMentorBoardById(mentorBoardId);
     for (const key in boardData) {
       if (boardData.hasOwnProperty(key)) {
         existingBoard[key] = boardData[key];
@@ -96,7 +96,7 @@ export class MentorBoardService {
     }
 
     const updatedBoard =
-      await this.mentorBoardRepository.updateBoard(existingBoard);
+      await this.mentorBoardRepository.updateMentorBoard(existingBoard);
     const unitowner = userId === updatedBoard.userId;
     return {
       id: updatedBoard.id,
@@ -116,7 +116,8 @@ export class MentorBoardService {
   }
 
   async deleteBoard(mentorBoardId: number, userId: number): Promise<void> {
-    const board = await this.mentorBoardRepository.findBoardById(mentorBoardId);
+    const board =
+      await this.mentorBoardRepository.findMentorBoardById(mentorBoardId);
 
     if (!board) {
       throw new NotFoundException('존재하지 않는 게시물입니다.');

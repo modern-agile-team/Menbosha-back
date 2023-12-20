@@ -4,6 +4,8 @@ import { oneHelpMeBoardResponseDTO } from '../dto/helpMeBoard/one.response.help.
 import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/creare.help.me.board.dto';
 import { HelpMeBoard } from '../entities/help-me-board.entity';
 import { PageByHelpMeBoardResponseDTO } from '../dto/helpMeBoard/response.help.me.board.dto';
+import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dto';
+import { HelpMeBoardResponseDTO } from '../dto/helpMeBoard/update.help.me.board.response.dto';
 
 @Injectable()
 export class HelpMeBoardService {
@@ -60,7 +62,7 @@ export class HelpMeBoardService {
     boardId: number,
     userId: number,
   ): Promise<oneHelpMeBoardResponseDTO> {
-    const board = await this.helpMeBoardRepository.findBoardById(boardId);
+    const board = await this.helpMeBoardRepository.findHelpMeBoardById(boardId);
     const unitowner = board.userId === userId;
     if (!board) {
       throw new Error('게시물을 찾을 수 없습니다.');
@@ -87,24 +89,38 @@ export class HelpMeBoardService {
   async updateBoard(
     userId: number,
     boardId: number,
-    boardData: Partial<CreateHelpMeBoardDto>,
-  ): Promise<HelpMeBoard | undefined> {
+    boardData: UpdateHelpMeBoardDto,
+  ): Promise<HelpMeBoardResponseDTO> {
     const existingBoard =
-      await this.helpMeBoardRepository.findBoardById(boardId);
+      await this.helpMeBoardRepository.findHelpMeBoardById(boardId);
     for (const key in boardData) {
       if (boardData.hasOwnProperty(key)) {
         existingBoard[key] = boardData[key];
       }
     }
-    const updatedBoard = await this.helpMeBoardRepository.updateHelpMeBoard(
-      boardId,
-      existingBoard,
-    );
-    return updatedBoard;
+    const updatedBoard =
+      await this.helpMeBoardRepository.updateHelpMeBoard(existingBoard);
+    const unitowner = userId === updatedBoard.userId;
+    return {
+      id: updatedBoard.id,
+      head: updatedBoard.head,
+      body: updatedBoard.body,
+      createdAt: updatedBoard.createdAt,
+      updatedAt: updatedBoard.updatedAt,
+      categoryId: updatedBoard.categoryId,
+      user: {
+        name: updatedBoard.user.name,
+        userImage: updatedBoard.user.userImage
+          ? updatedBoard.user.userImage
+          : [],
+      },
+
+      unitowner: unitowner,
+    };
   }
 
   async deleteBoard(boardId: number, userId: number): Promise<void> {
-    const board = await this.helpMeBoardRepository.findBoardById(boardId);
+    const board = await this.helpMeBoardRepository.findHelpMeBoardById(boardId);
 
     if (!board) {
       throw new Error('존재하지 않는 게시물입니다.');
