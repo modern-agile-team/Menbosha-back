@@ -6,14 +6,13 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { SearchAllHelpMeBoardsDto } from '../dtos/search-all-help-me-boards.dto';
-import { SearchAllMentorsDto } from '../dtos/search-all-mentors.dto';
+import { SearchAllPageSizeDto } from '../dtos/search-all-page-size.dto';
 
 export function ApiSearchAllBoardsAndMentorsForPageSize() {
   return applyDecorators(
     ApiOperation({
-      summary: '도와주세요 게시판 및 멘토 유저 검색 API',
-      description: `도와주세요 게시판의 제목, 본문, 작성자 이름 및 멘토 유저의 이름을 검색합니다.`,
+      summary: '도와주세요 게시판 및 멘토 유저 검색 결과 페이지 사이즈',
+      description: `도와주세요 게시판의 제목, 본문, 작성자 이름 및 멘토 유저의 이름을 검색하고 page의 최대 크기를 return 합니다.`,
     }),
     ApiResponse({
       status: 200,
@@ -21,36 +20,21 @@ export function ApiSearchAllBoardsAndMentorsForPageSize() {
       schema: {
         properties: {
           statusCode: {
-            example: 200,
             type: 'number',
+            example: 200,
           },
           contents: {
-            type: 'object',
-            properties: {
-              helpMeBoards: {
-                type: 'array',
-                items: {
-                  $ref: getSchemaPath(SearchAllHelpMeBoardsDto),
-                },
-              },
-              mentors: {
-                type: 'array',
-                items: {
-                  $ref: getSchemaPath(SearchAllMentorsDto),
-                },
-              },
-            },
+            $ref: getSchemaPath(SearchAllPageSizeDto),
           },
         },
       },
     }),
     ApiBadRequestResponse({
-      description: '페이지 최소값 및 검색어 길이 불충족',
+      description: '검색어 길이 불충족',
       content: {
         JSON: {
           example: {
             message: [
-              'page must not be less than 1',
               'searchQuery must be longer than or equal to 2 characters',
             ],
             error: 'Bad Request',
@@ -59,6 +43,6 @@ export function ApiSearchAllBoardsAndMentorsForPageSize() {
         },
       },
     }),
-    ApiExtraModels(SearchAllHelpMeBoardsDto, SearchAllMentorsDto),
+    ApiExtraModels(SearchAllPageSizeDto),
   );
 }

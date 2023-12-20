@@ -20,6 +20,7 @@ import { SearchAllHelpMeBoardsDto } from '../dtos/search-all-help-me-boards.dto'
 import { SearchAllMentorsDto } from '../dtos/search-all-mentors.dto';
 import { SearchAllPageSizeDto } from '../dtos/search-all-page-size.dto';
 import { SearchAllBoardsAndMentorsQueryDto } from '../dtos/search-all-boards-and-mentors-query.dto';
+import { ApiSearchAllBoardsAndMentors } from '../swagger-decorators/search-all-boards-and-mentors.swagger';
 import { ApiSearchAllBoardsAndMentorsForPageSize } from '../swagger-decorators/search-all-boards-and-mentors-for-page-size.swagger';
 
 @ApiTags('SEARCH')
@@ -36,6 +37,7 @@ export class SearchController {
   constructor(private searchService: SearchService) {}
 
   @Get('count')
+  @ApiSearchAllBoardsAndMentorsForPageSize()
   searchAllBoardsAndMentorsForPageSize(
     @Query()
     searchAllBoardsAndMentorsQueryDto: SearchAllBoardsAndMentorsQueryDto,
@@ -46,7 +48,7 @@ export class SearchController {
   }
 
   @Get('all')
-  @ApiSearchAllBoardsAndMentorsForPageSize()
+  @ApiSearchAllBoardsAndMentors()
   searchAllBoardsAndMentors(
     @Query()
     searchAllBoardsAndMentorsQueryDto: SearchAllBoardsAndMentorsQueryDto,
