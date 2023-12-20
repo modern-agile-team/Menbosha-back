@@ -11,17 +11,24 @@ import { EntityManager } from 'typeorm';
 @Injectable()
 export class SearchRepository {
   constructor(private entityManager: EntityManager) {}
-  async searchAllMentorBoardsForCount(searchQuery: string) {
+  async searchAllHelpMeBoardsForCount(searchQuery: string) {
     this.entityManager
-      .getRepository(MentorBoard)
-      .createQueryBuilder('mentorBoard')
+      .getRepository(HelpMeBoard)
+      .createQueryBuilder('helpMeBoard')
+      .leftJoinAndMapMany(
+        'helpMeBoard.user',
+        User,
+        'user',
+        'user.id = helpMeBoard.userId',
+      )
+      .leftJoinAndSelect('user.userImage', 'userImage')
       .where(`MATCH(head) AGAINST (:searchQuery IN BOOLEAN MODE)`, {
         searchQuery,
       })
       .orWhere(`MATCH(body) AGAINST (:searchQuery IN BOOLEAN MODE)`, {
         searchQuery,
       })
-      .leftJoinAndMapMany();
+      .leftJoinAndMapMany('');
 
     return this.entityManager
       .createQueryBuilder(HelpMeBoard, 'board')
