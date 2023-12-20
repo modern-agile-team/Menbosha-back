@@ -89,7 +89,7 @@ export class HelpMeBoardController {
   @ApiUpdateHelpMeBoard()
   editBoard(
     @GetUserId() userId: number,
-    @Query('boardId') boardId: number,
+    @Query('helpMeBoardId') boardId: number,
     @Body() boardData: UpdateHelpMeBoardDto,
   ): Promise<HelpMeBoardResponseDTO> {
     return this.helpMeBoardService.updateBoard(userId, boardId, boardData);

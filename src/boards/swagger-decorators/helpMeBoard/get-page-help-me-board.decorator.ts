@@ -5,7 +5,7 @@ export function ApiGetPageHelpMeBoards() {
   return applyDecorators(
     ApiOperation({
       summary: '페이지별 멘티 게시판 불러오는 API',
-      description: '페이지별 멘티 게시판 불러오는 API',
+      description: '(Param)  page - 1',
     }),
     ApiResponse({
       status: 200,
