@@ -7,7 +7,8 @@ export class SearchAllPageSizeDto {
   @ApiProperty({ description: '멘토 유저 검색 최대 페이지' })
   mentorPageSize: number;
 
-  constructor(searchAllPageSizeDto: Partial<SearchAllPageSizeDto>) {
-    Object.assign(Math.ceil(searchAllPageSizeDto / 10), this);
+  constructor(helpMeBoardsCount: number, mentorsCount: number) {
+    this.helpMeBoardPageSize = Math.ceil(helpMeBoardsCount / 10);
+    this.mentorPageSize = Math.ceil(mentorsCount / 10);
   }
 }

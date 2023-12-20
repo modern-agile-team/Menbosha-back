@@ -2,19 +2,16 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 // import { PageByMentorBoardResponseDTO } from 'src/boards/dto/boards.response.dto';
 import { SearchRepository } from '../repositories/search.repository';
 import { PageByMentorBoardResponseDTO } from 'src/boards/dto/mentorBoard/response.mentor.boards.dto';
+import { SearchAllPageSizeDto } from '../dtos/search-all-page-size.dto';
 
 @Injectable()
 export class SearchService {
   constructor(private searchRepository: SearchRepository) {}
   async searchAllBoardsAndMentorsForPageSize(searchQuery: string) {
-    const take = 10;
     const [helpMeBoardsCount, mentorsCount] =
       await this.searchRepository.searchAllHelpMeBoardsForCount(searchQuery);
 
-    return {
-      helpMeBoardsPageSize: Math.ceil(helpMeBoardsCount / take),
-      mentorsPageSize: Math.ceil(mentorsCount / take),
-    };
+    return new SearchAllPageSizeDto(helpMeBoardsCount, mentorsCount);
   }
 
   async searchBoardsByHeadOrBodyOrUserName(

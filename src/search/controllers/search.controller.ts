@@ -1,4 +1,5 @@
 import {
+  ClassSerializerInterceptor,
   Controller,
   Get,
   Param,
@@ -17,7 +18,7 @@ import { ApiSearchBoardsByUserName } from '../swagger-decorators/search-boards-b
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
 
 @ApiTags('SEARCH')
-@UseInterceptors(SuccessResponseInterceptor)
+@UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
 @UsePipes(ValidationPipe)
 @Controller('search')
 export class SearchController {
