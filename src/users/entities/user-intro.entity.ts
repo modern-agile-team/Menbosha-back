@@ -24,7 +24,7 @@ export class UserIntro {
   @Column({ name: 'career' })
   career: string;
 
-  @OneToOne(() => User, (userId: User) => userId.userImage, {
+  @OneToOne(() => User, (user: User) => user.userIntor, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'user_id' })
