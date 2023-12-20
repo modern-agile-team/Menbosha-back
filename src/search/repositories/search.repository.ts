@@ -13,7 +13,7 @@ import { EntityManager } from 'typeorm';
 @Injectable()
 export class SearchRepository {
   constructor(private entityManager: EntityManager) {}
-  async searchAllHelpMeBoardsForCount(searchQuery: string, take: number) {
+  async searchAllHelpMeBoardsForCount(searchQuery: string): Promise<number[]> {
     return Promise.all([
       this.entityManager
         .getRepository(HelpMeBoard)
@@ -43,9 +43,8 @@ export class SearchRepository {
         .orWhere(`MATCH(user.name) AGAINST (:searchQuery IN BOOLEAN MODE)`, {
           searchQuery,
         })
-        .skip(0)
-        .take(take)
         .getCount(),
+
       this.entityManager
         .getRepository(User)
         .createQueryBuilder('user')
@@ -63,8 +62,6 @@ export class SearchRepository {
           searchQuery,
         })
         .andWhere('user.isMentor = true')
-        .skip(0)
-        .take(take)
         .getCount(),
     ]);
   }
