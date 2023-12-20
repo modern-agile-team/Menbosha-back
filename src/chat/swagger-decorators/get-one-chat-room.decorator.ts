@@ -7,6 +7,7 @@ import {
   ApiOperation,
   ApiParam,
   ApiResponse,
+  getSchemaPath,
 } from '@nestjs/swagger';
 import { ChatRoomsDto } from '../dto/chat-rooms.dto';
 
@@ -19,7 +20,15 @@ export function ApiGetOneChatRoom() {
     ApiResponse({
       status: 200,
       description: '성공적으로 채팅방 (단일)조회',
-      type: ChatRoomsDto,
+      schema: {
+        properties: {
+          statusCode: { example: 200, type: 'number' },
+          data: {
+            type: 'object',
+            $ref: getSchemaPath(ChatRoomsDto),
+          },
+        },
+      },
     }),
     ApiBadRequestResponse({
       description: '유효성 검사 실패',
@@ -58,7 +67,7 @@ export function ApiGetOneChatRoom() {
       description: '채팅방의 id',
       required: true,
       type: 'string',
-      format: 'objectId',
+      format: 'ObjectId',
     }),
     ApiExtraModels(ChatRoomsDto),
   );

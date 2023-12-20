@@ -6,26 +6,30 @@ import { ChatImages } from '../schemas/chat-images.schemas';
 import mongoose from 'mongoose';
 import { ChatRoomsDto } from '../dto/chat-rooms.dto';
 import { ChatsDto } from '../dto/chats.dto';
+import { ChatImagesDto } from '../dto/chat-images.dto';
+import { AggregateChatRoomsDto } from '../dto/aggregate-chat-rooms.dto';
 
 @Injectable()
 export class ChatRepository {
   constructor(
     @InjectModel(ChatRooms.name)
-    private readonly chatRoomModel: mongoose.Model<ChatRooms>,
+    private readonly chatRoomsModel: mongoose.Model<ChatRooms>,
     @InjectModel(Chats.name)
-    private readonly chatModel: mongoose.Model<Chats>,
+    private readonly chatsModel: mongoose.Model<Chats>,
     @InjectModel(ChatImages.name)
-    private readonly chatImageModel: mongoose.Model<ChatImages>,
+    private readonly chatImagesModel: mongoose.Model<ChatImages>,
   ) {}
 
-  /**
-   *  @todo 재사용성 높은 코드로 고치기
-   *
-   */
   findAllChatRooms(
     filter: mongoose.FilterQuery<ChatRooms>,
   ): Promise<ChatRoomsDto[]> {
-    return this.chatRoomModel.find(filter);
+    return this.chatRoomsModel.find(filter);
+  }
+
+  aggregateChatRooms(
+    pipeline: mongoose.PipelineStage[],
+  ): Promise<AggregateChatRoomsDto[]> {
+    return this.chatRoomsModel.aggregate(pipeline);
   }
 
   /**
@@ -36,29 +40,20 @@ export class ChatRepository {
   findOneChatRoom(
     filter: mongoose.FilterQuery<ChatRooms>,
   ): Promise<ChatRoomsDto> {
-    return this.chatRoomModel.findOne(filter);
+    return this.chatRoomsModel.findOne(filter);
   }
 
-  /**
-   *  @todo 재사용성 높은 코드로 고치기
-   *
-   */
   async createChatRoom<DocContents = mongoose.AnyKeys<ChatRooms>>(
     doc: DocContents,
   ): Promise<ChatRoomsDto> {
-    return this.chatRoomModel.create(doc);
+    return this.chatRoomsModel.create(doc);
   }
 
-  /**
-   *
-   * @param filter
-   * @param update
-   */
   async updateOneChatRoom(
-    filter?: mongoose.FilterQuery<ChatRooms>,
-    update?: mongoose.UpdateQuery<ChatRooms>,
+    filter: mongoose.FilterQuery<ChatRooms>,
+    update: mongoose.UpdateQuery<ChatRooms>,
   ): Promise<void> {
-    const updatedChatRoom = await this.chatRoomModel.updateOne(filter, update);
+    const updatedChatRoom = await this.chatRoomsModel.updateOne(filter, update);
 
     if (!updatedChatRoom.modifiedCount) {
       throw new InternalServerErrorException(
@@ -67,95 +62,41 @@ export class ChatRepository {
     }
   }
 
-  /**
-   *
-   * @param filter
-   * @returns
-   */
   findAllChats(filter: mongoose.FilterQuery<Chats>): Promise<ChatsDto[]> {
-    return this.chatModel.find(filter);
+    return this.chatsModel.find(filter);
   }
 
-  /**
-   *  @todo 재사용성 높은 코드로 고치기
-   *
-   */
+  findOneChat(filter: mongoose.FilterQuery<Chats>): Promise<ChatsDto> {
+    return this.chatsModel.findOne(filter);
+  }
+
+  findOneChatImages(
+    filter: mongoose.FilterQuery<ChatImages>,
+  ): Promise<ChatImages> {
+    return this.chatImagesModel.findOne(filter);
+  }
+
   async updateManyChats(
     filter: mongoose.FilterQuery<Chats>,
     update: mongoose.UpdateQuery<Chats>,
   ): Promise<void> {
-    await this.chatModel.updateMany(filter, update);
+    await this.chatsModel.updateMany(filter, update);
   }
 
   async createChat<DocContents = mongoose.AnyKeys<Chats>>(
     doc: DocContents,
   ): Promise<ChatsDto> {
-    const returnedChat = await this.chatModel.create(doc);
-
-    await this.updateOneChatRoom(
-      { _id: returnedChat.chatRoomId },
-      {
-        $push: { chatIds: returnedChat._id },
-      },
-    );
-
-    return returnedChat;
+    return this.chatsModel.create(doc);
   }
 
-  /**
-   *  @todo 재사용성 높은 코드로 고치기
-   *
-   */
-  async createChatImage(
-    roomId: mongoose.Types.ObjectId,
-    myId: number,
-    receiverId: number,
-    imageUrl: string,
-  ): Promise<ChatsDto> {
-    const returnedChat = await this.createChat({
-      chatRoomId: roomId,
-      sender: myId,
-      receiver: receiverId,
-      content: imageUrl,
-    });
-
-    await this.chatImageModel.create({
-      chatId: returnedChat._id,
-      imageUrl: returnedChat.content,
-    });
-
-    await this.updateOneChatRoom(
-      { _id: returnedChat.chatRoomId },
-      {
-        $push: { chatIds: returnedChat._id },
-      },
-    );
-
-    return returnedChat;
+  async createChatImage<DocContents = mongoose.AnyKeys<ChatImages>>(
+    doc: DocContents,
+  ): Promise<ChatImagesDto> {
+    return this.chatImagesModel.create(doc);
   }
-
-  // async getChatNotifications(userId: number): Promise<Chats[]> {
-  //   const notifications = await this.chatModel
-  //     .find({
-  //       $and: [{ receiver: userId }, { isSeen: false }],
-  //     })
-  //     .select({
-  //       _id: 1,
-  //       chatRoomId: 1,
-  //       content: 1,
-  //       sender: 1,
-  //       receiver: 1,
-  //       isSeen: 1,
-  //       createdAt: 1,
-  //     })
-  //     .sort({ createdAt: -1 });
-  //   // .lean();
-
-  //   return notifications;
-  // }
 
   // async getUnreadCounts(roomId: mongoose.Types.ObjectId, after: number) {
-  //   return this.chatModel.count({
+  //   return this.chatsModel.count({
   //     $and: [{ chatRoomId: roomId }, { createdAt: { $gt: new Date(after) } }],
   //   });
   // }

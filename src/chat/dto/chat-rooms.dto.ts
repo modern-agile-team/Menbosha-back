@@ -45,9 +45,10 @@ export class ChatRoomsDto implements Omit<ChatRooms, 'unprotectedData'> {
 
   @ApiProperty({
     description: '채팅방 삭제 날짜',
+    default: null,
   })
   @Exclude()
-  deletedAt: Date;
+  deletedAt: Date | null;
 
   constructor(chatRoomDto: Partial<ChatRoomsDto> = {}) {
     this._id = chatRoomDto._id;

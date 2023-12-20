@@ -163,32 +163,13 @@ export class ChatController {
   createChatImage(
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
     @GetUserId() senderId: number,
-    @Body() body: ReceivedUserDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.chatService.createChatImage(
-      roomId,
-      senderId,
-      body.receiverId,
-      file,
-    );
+    return this.chatService.createChatImage(roomId, senderId, file);
   }
 
-  // @UseGuards(JwtAccessTokenGuard)
-  // @ApiGetChatNotifications()
-  // @Get('chat/notice')
-  // async getChatNotifications(@GetUserId() userId: number) {
-  //   const returnedChatNotifications =
-  //     await this.chatService.getChatNotifications(userId);
-  //   return plainToInstance(
-  //     GetNotificationsResponseFromChatsDto,
-  //     returnedChatNotifications,
-  //     { excludeExtraneousValues: true },
-  //   );
-  // }
-
   // @ApiGetChatUnreadCounts()
-  // @Get(':roomId/chat/unreads')
+  // @Get(':roomId/chat/unReads')
   //  getUnreadCounts(
   //   @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
   //   @Query('after', ParseIntPipe) after: number,

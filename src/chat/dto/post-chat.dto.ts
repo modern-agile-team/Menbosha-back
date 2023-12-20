@@ -1,5 +1,5 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsMongoId, IsNumber, IsOptional, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsMongoId, IsNumber, IsString } from 'class-validator';
 import mongoose from 'mongoose';
 
 export class PostChatDto {
@@ -11,12 +11,11 @@ export class PostChatDto {
   })
   roomId: mongoose.Types.ObjectId;
 
-  @ApiPropertyOptional({
-    example: '안녕하세요',
+  @ApiProperty({
+    example: ['안녕하세요', 'imageUrl'],
     description: '채팅 내용',
   })
   @IsString()
-  @IsOptional()
   content: string;
 
   @ApiProperty({
@@ -32,13 +31,4 @@ export class PostChatDto {
   })
   @IsNumber()
   receiverId: number;
-
-  @ApiPropertyOptional({
-    example:
-      'https://ma6-main.s3.ap-northeast-2.amazonaws.com/1_1696831127634.jpeg',
-    description: '이미지 url',
-  })
-  @IsOptional()
-  @IsString()
-  imageUrl: string;
 }
