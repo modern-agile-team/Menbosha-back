@@ -48,7 +48,7 @@ export class SearchRepository {
       this.entityManager
         .getRepository(HelpMeBoard)
         .createQueryBuilder('helpMeBoard')
-        .innerJoin('helpMeBoard.user', 'user', 'user.id = helpMeBoard.userId')
+        .innerJoin('helpMeBoard.user', 'user')
         .innerJoin('user.userImage', 'userImage')
         .leftJoin('helpMeBoard.helpMeBoardImages', 'helpMeBoardImages')
         .innerJoin('helpMeBoard.categoryList', 'categoryList')
@@ -72,8 +72,8 @@ export class SearchRepository {
         .orWhere(`MATCH(user.name) AGAINST (:searchQuery IN BOOLEAN MODE)`, {
           searchQuery,
         })
-        .skip(skip)
-        .take(10)
+        .offset(skip)
+        .limit(10)
         .getMany(),
 
       this.entityManager
@@ -93,8 +93,8 @@ export class SearchRepository {
           searchQuery,
         })
         .andWhere('user.isMentor = true')
-        .skip(skip)
-        .take(10)
+        .offset(skip)
+        .limit(10)
         .getMany(),
     ]);
   }

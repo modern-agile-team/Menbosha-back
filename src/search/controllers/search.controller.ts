@@ -37,9 +37,12 @@ export class SearchController {
 
   @Get('count')
   searchAllBoardsAndMentorsForPageSize(
-    @Query('searchQuery') searchQuery: string,
+    @Query()
+    searchAllBoardsAndMentorsQueryDto: SearchAllBoardsAndMentorsQueryDto,
   ): Promise<SearchAllPageSizeDto> {
-    return this.searchService.searchAllBoardsAndMentorsForPageSize(searchQuery);
+    return this.searchService.searchAllBoardsAndMentorsForPageSize(
+      searchAllBoardsAndMentorsQueryDto.searchQuery,
+    );
   }
 
   @Get('all')

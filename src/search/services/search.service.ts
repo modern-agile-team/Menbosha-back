@@ -28,6 +28,7 @@ export class SearchService {
   }> {
     const { searchQuery, page } = searchAllBoardsAndMentorsQueryDto;
     const skip = (page - 1) * 10;
+
     const [helpMeBoards, mentors] =
       await this.searchRepository.searchAllBoardsAndMentors(searchQuery, skip);
 

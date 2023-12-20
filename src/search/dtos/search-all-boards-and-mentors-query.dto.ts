@@ -1,16 +1,17 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { Length, Min } from 'class-validator';
 
 export class SearchAllBoardsAndMentorsQueryDto {
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: '검색할 페이지 number',
     format: 'integer',
     minimum: 1,
+    default: 1,
   })
   @Type(() => Number)
   @Min(1)
-  page: number;
+  page?: number = 1;
 
   @ApiProperty({
     description: '검색어',
