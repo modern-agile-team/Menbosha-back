@@ -31,8 +31,10 @@ export class SearchController {
     return this.searchService.searchAllBoardsAndMentorsForPageSize(searchQuery);
   }
 
-  @Get()
-  searchAllBoardsAndMentors() {}
+  @Get('all')
+  searchAllBoardsAndMentors(@Query('searchQuery') searchQuery: string) {
+    return this.searchService.searchAllBoardsAndMentors(searchQuery);
+  }
 
   @ApiSearchBoardsByHeadOrBodyOrUserName()
   @Get('boards/:category')

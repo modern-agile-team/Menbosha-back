@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { HelpMeBoardImage } from 'src/boards/entities/help-me-board-image.entity';
 import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
-import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
-import { CategoryList } from 'src/common/entity/category-list.entity';
-import { UserImage } from 'src/users/entities/user-image.entity';
 import { User } from 'src/users/entities/user.entity';
 import { EntityManager } from 'typeorm';
 
@@ -13,7 +10,35 @@ import { EntityManager } from 'typeorm';
 @Injectable()
 export class SearchRepository {
   constructor(private entityManager: EntityManager) {}
-  async searchAllHelpMeBoardsForCount(searchQuery: string): Promise<number[]> {
+  searchAllBoardsAndMentorsCount(searchQuery: string): Promise<number[]> {
+    return Promise.all([
+      this.entityManager
+        .getRepository(HelpMeBoard)
+        .createQueryBuilder('helpMeBoard')
+        .innerJoin('helpMeBoard.user', 'user', 'user.id = helpMeBoard.userId')
+        .where(`MATCH(head) AGAINST (:searchQuery IN BOOLEAN MODE)`, {
+          searchQuery,
+        })
+        .orWhere(`MATCH(body) AGAINST (:searchQuery IN BOOLEAN MODE)`, {
+          searchQuery,
+        })
+        .orWhere(`MATCH(user.name) AGAINST (:searchQuery IN BOOLEAN MODE)`, {
+          searchQuery,
+        })
+        .getCount(),
+
+      this.entityManager
+        .getRepository(User)
+        .createQueryBuilder('user')
+        .where('MATCH(name) AGAINST (:searchQuery IN BOOLEAN MODE)', {
+          searchQuery,
+        })
+        .andWhere('user.isMentor = true')
+        .getCount(),
+    ]);
+  }
+
+  async searchAllBoardsAndMentors(searchQuery: string) {
     return Promise.all([
       this.entityManager
         .getRepository(HelpMeBoard)
@@ -43,7 +68,7 @@ export class SearchRepository {
         .orWhere(`MATCH(user.name) AGAINST (:searchQuery IN BOOLEAN MODE)`, {
           searchQuery,
         })
-        .getCount(),
+        .getMany(),
 
       this.entityManager
         .getRepository(User)
@@ -62,7 +87,7 @@ export class SearchRepository {
           searchQuery,
         })
         .andWhere('user.isMentor = true')
-        .getCount(),
+        .getMany(),
     ]);
   }
 

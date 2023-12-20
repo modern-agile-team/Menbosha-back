@@ -9,9 +9,14 @@ export class SearchService {
   constructor(private searchRepository: SearchRepository) {}
   async searchAllBoardsAndMentorsForPageSize(searchQuery: string) {
     const [helpMeBoardsCount, mentorsCount] =
-      await this.searchRepository.searchAllHelpMeBoardsForCount(searchQuery);
+      await this.searchRepository.searchAllBoardsAndMentorsCount(searchQuery);
 
     return new SearchAllPageSizeDto(helpMeBoardsCount, mentorsCount);
+  }
+
+  async searchAllBoardsAndMentors(searchQuery: string) {
+    const [helpMeBoards, mentors] =
+      await this.searchRepository.searchAllBoardsAndMentors(searchQuery);
   }
 
   async searchBoardsByHeadOrBodyOrUserName(
