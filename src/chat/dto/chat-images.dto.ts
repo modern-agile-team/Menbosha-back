@@ -24,7 +24,7 @@ export class ChatImagesDto implements Omit<ChatImages, 'unprotectedData'> {
   chatRoomId: Types.ObjectId;
 
   @ApiProperty({
-    description: '채탕 송신 유저 id',
+    description: '채팅 송신 유저 id',
     format: 'integer',
   })
   @Expose()
