@@ -3,6 +3,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { SearchRepository } from '../repositories/search.repository';
 import { PageByMentorBoardResponseDTO } from 'src/boards/dto/mentorBoard/response.mentor.boards.dto';
 import { SearchAllPageSizeDto } from '../dtos/search-all-page-size.dto';
+import { SearchAllHelpMeBoardsDto } from '../dtos/search-all-help-me-boards.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class SearchService {
@@ -17,6 +19,10 @@ export class SearchService {
   async searchAllBoardsAndMentors(searchQuery: string) {
     const [helpMeBoards, mentors] =
       await this.searchRepository.searchAllBoardsAndMentors(searchQuery);
+    const helpMeBoardsDtos = plainToInstance(
+      SearchAllHelpMeBoardsDto,
+      helpMeBoards,
+    );
   }
 
   async searchBoardsByHeadOrBodyOrUserName(

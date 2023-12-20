@@ -4,11 +4,16 @@ import { CategoryList } from 'src/common/entity/category-list.entity';
 import { SearchUserDto } from './search-user-dto';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class SearchAllHelpMeBoards
+export class SearchAllHelpMeBoardsDto
   implements
     Omit<
       HelpMeBoard,
-      'categoryList' | 'categoryId' | 'updatedAt' | 'user' | 'userId'
+      | 'categoryList'
+      | 'categoryId'
+      | 'updatedAt'
+      | 'user'
+      | 'userId'
+      | 'helpMeBoardImages'
     >
 {
   @ApiProperty({
@@ -41,12 +46,24 @@ export class SearchAllHelpMeBoards
     type: 'object',
     description: '도와주세요 게시판의 이미지',
   })
-  helpMeBoardImages: Partial<HelpMeBoardImage[]> | [];
+  helpMeBoardImages: { imageUrl: string }[] | [];
 
   @ApiProperty({
     description: '작성자 고유 id',
   })
-  categoryList: Partial<CategoryList>;
+  categoryList: Pick<CategoryList, 'categoryName'>;
 
-  constructor() {}
+  constructor(searchAllHelpMeBoardsDto: SearchAllHelpMeBoardsDto) {
+    this.id = searchAllHelpMeBoardsDto.id;
+    this.head = searchAllHelpMeBoardsDto.head;
+    this.body = searchAllHelpMeBoardsDto.body;
+    this.createdAt = searchAllHelpMeBoardsDto.createdAt;
+    this.user = searchAllHelpMeBoardsDto.user;
+    this.helpMeBoardImages = searchAllHelpMeBoardsDto.helpMeBoardImages.map(
+      (helpMeBoardImage: HelpMeBoardImage) => {
+        return { imageUrl: helpMeBoardImage.imageUrl };
+      },
+    );
+    this.categoryList = searchAllHelpMeBoardsDto.categoryList;
+  }
 }
