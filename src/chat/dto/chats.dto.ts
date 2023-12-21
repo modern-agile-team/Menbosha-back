@@ -1,10 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { TransformMongoId } from './transform/transform-mongo-id';
-import { Chats } from '../schemas/chats.schemas';
 import { Expose } from 'class-transformer';
 import mongoose from 'mongoose';
 
-export class ChatsDto implements Omit<Chats, 'unprotectedData'> {
+export class ChatsDto {
   @ApiProperty({
     description: '채팅 id',
     type: 'string',
@@ -36,12 +35,6 @@ export class ChatsDto implements Omit<Chats, 'unprotectedData'> {
   senderId: number;
 
   @ApiProperty({
-    description: '채팅을 받은 유저의 id',
-  })
-  @Expose()
-  receiverId: number;
-
-  @ApiProperty({
     description: '채팅 확인 여부',
   })
   @Expose()
@@ -58,7 +51,6 @@ export class ChatsDto implements Omit<Chats, 'unprotectedData'> {
     this.chatRoomId = chatDto.chatRoomId;
     this.content = chatDto.content;
     this.senderId = chatDto.senderId;
-    this.receiverId = chatDto.receiverId;
     this.isSeen = chatDto.isSeen;
     this.createdAt = chatDto.createdAt;
   }

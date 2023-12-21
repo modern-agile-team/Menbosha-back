@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import { Chats } from './chats.schemas';
+import { Chat } from './chats.schemas';
 
 const options: SchemaOptions = {
   collection: 'chat_rooms',
@@ -12,10 +12,10 @@ export class ChatRooms {
   _id: mongoose.Types.ObjectId;
 
   @Prop({
-    type: [{ type: mongoose.Types.ObjectId, ref: Chats.name }],
+    type: [Chat],
     default: [],
   })
-  chatIds: mongoose.Types.ObjectId[];
+  chats: Chat[];
 
   @Prop({ required: true })
   hostId: number;
@@ -30,7 +30,7 @@ export class ChatRooms {
 
   readonly unprotectedData: {
     _id: mongoose.Types.ObjectId;
-    chatIds: mongoose.Types.ObjectId[];
+    chats: Chat[];
     hostId: number;
     guestId: number;
     createdAt: Date;
@@ -43,7 +43,7 @@ export const ChatRoomsSchema = SchemaFactory.createForClass(ChatRooms);
 ChatRoomsSchema.virtual('unprotectedData').get(function (this: ChatRooms) {
   return {
     _id: this._id,
-    chatIds: this.chatIds,
+    chats: this.chats,
     hostId: this.hostId,
     guestId: this.guestId,
     createdAt: this.createdAt,
