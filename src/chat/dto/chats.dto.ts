@@ -2,8 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { TransformMongoId } from './transform/transform-mongo-id';
 import { Expose } from 'class-transformer';
 import mongoose from 'mongoose';
+import { Chat } from '../schemas/chats.schemas';
 
-export class ChatsDto {
+export class ChatsDto implements Chat {
   @ApiProperty({
     description: '채팅 id',
     type: 'string',
@@ -23,16 +24,16 @@ export class ChatsDto {
   chatRoomId: mongoose.Types.ObjectId;
 
   @ApiProperty({
-    description: '채팅 내용',
-  })
-  @Expose()
-  content: string;
-
-  @ApiProperty({
     description: '채팅을 전송한 유저의 id',
   })
   @Expose()
   senderId: number;
+
+  @ApiProperty({
+    description: '채팅 내용',
+  })
+  @Expose()
+  content: string;
 
   @ApiProperty({
     description: '채팅 확인 여부',
