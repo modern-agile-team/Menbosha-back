@@ -19,10 +19,14 @@ CMD ["npm", "run", "start:prod"]
 EXPOSE 3000
 
 
+# redis 이미지 사용
 FROM redis:6.2.6-alpine AS redis
 
+# 작업 디렉토리 설정
 COPY redis.conf /usr/local/etc/redis/redis.conf
 
+# redis 실행
 CMD ["redis-server", "/usr/local/etc/redis/redis.conf"]
 
+# redis를 실행할 포트
 EXPOSE 6379
