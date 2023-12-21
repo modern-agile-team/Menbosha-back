@@ -12,9 +12,9 @@ export class SuccessResponseInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const statusCode = context.getArgByIndex(1).statusCode;
     return next.handle().pipe(
-      map((data) => ({
+      map((contents) => ({
         statusCode,
-        data,
+        contents,
       })),
     );
   }

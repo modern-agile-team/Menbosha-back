@@ -1,4 +1,5 @@
 import {
+  ClassSerializerInterceptor,
   Controller,
   Get,
   Param,
@@ -15,13 +16,50 @@ import { ApiSearchBoardsByBody } from '../swagger-decorators/search-boards-by-bo
 import { ApiSearchBoardsByHead } from '../swagger-decorators/search-boards-by-head.decorator';
 import { ApiSearchBoardsByUserName } from '../swagger-decorators/search-boards-by-user-name.decorator';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
+import { SearchAllPageSizeDto } from '../dtos/search-all-page-size.dto';
+import { SearchAllBoardsAndMentorsQueryDto } from '../dtos/search-all-boards-and-mentors-query.dto';
+import { ApiSearchAllBoardsAndMentors } from '../swagger-decorators/search-all-boards-and-mentors.swagger';
+import { ApiSearchAllBoardsAndMentorsForPageSize } from '../swagger-decorators/search-all-boards-and-mentors-for-page-size.swagger';
+import { SearchAllHelpMeBoardDto } from '../dtos/search-all-help-me-board.dto';
+import { SearchAllMentorDto } from '../dtos/search-all-mentor.dto';
 
 @ApiTags('SEARCH')
-@UseInterceptors(SuccessResponseInterceptor)
-@UsePipes(ValidationPipe)
+@UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
+@UsePipes(
+  new ValidationPipe({
+    transform: true,
+    whitelist: true,
+    forbidNonWhitelisted: true,
+  }),
+)
 @Controller('search')
 export class SearchController {
   constructor(private searchService: SearchService) {}
+
+  @Get('all')
+  @ApiSearchAllBoardsAndMentors()
+  searchAllBoardsAndMentors(
+    @Query()
+    searchAllBoardsAndMentorsQueryDto: SearchAllBoardsAndMentorsQueryDto,
+  ): Promise<{
+    helpMeBoards: SearchAllHelpMeBoardDto[];
+    mentors: SearchAllMentorDto[];
+  }> {
+    return this.searchService.searchAllBoardsAndMentors(
+      searchAllBoardsAndMentorsQueryDto,
+    );
+  }
+
+  @Get('all/count')
+  @ApiSearchAllBoardsAndMentorsForPageSize()
+  searchAllBoardsAndMentorsForPageSize(
+    @Query()
+    searchAllBoardsAndMentorsQueryDto: SearchAllBoardsAndMentorsQueryDto,
+  ): Promise<SearchAllPageSizeDto> {
+    return this.searchService.searchAllBoardsAndMentorsForPageSize(
+      searchAllBoardsAndMentorsQueryDto.searchQuery,
+    );
+  }
 
   @ApiSearchBoardsByHeadOrBodyOrUserName()
   @Get('boards/:category')
