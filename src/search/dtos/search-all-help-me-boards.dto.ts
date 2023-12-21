@@ -68,12 +68,10 @@ export class SearchAllHelpMeBoardsDto
   })
   categoryList: Pick<CategoryList, 'categoryName'>;
 
-  constructor(
-    searchAllHelpMeBoardsDto: Partial<SearchAllHelpMeBoardsDto> = {},
-  ) {
+  constructor(searchAllHelpMeBoardsDto: SearchAllHelpMeBoardsDto) {
     this.id = searchAllHelpMeBoardsDto.id;
     this.head = searchAllHelpMeBoardsDto.head;
-    this.body = searchAllHelpMeBoardsDto.body;
+    this.body = searchAllHelpMeBoardsDto.body.substring(0, 30);
     this.createdAt = searchAllHelpMeBoardsDto.createdAt;
     this.user = searchAllHelpMeBoardsDto.user;
     this.helpMeBoardImages = searchAllHelpMeBoardsDto.helpMeBoardImages;

@@ -33,7 +33,9 @@ export class SearchService {
       await this.searchRepository.searchAllBoardsAndMentors(searchQuery, skip);
 
     return {
-      helpMeBoards: plainToInstance(SearchAllHelpMeBoardsDto, helpMeBoards),
+      helpMeBoards: helpMeBoards.map(
+        (helpMeBoard) => new SearchAllHelpMeBoardsDto(helpMeBoard),
+      ),
       mentors: plainToInstance(SearchAllMentorsDto, mentors),
     };
   }
