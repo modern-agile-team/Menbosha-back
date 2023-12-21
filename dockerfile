@@ -1,5 +1,5 @@
 # Node.js 버전을 기반으로 하는 도커 이미지 사용
-FROM node:18.16.0-alpine
+FROM node:18.16.0-alpine AS build
 
 # 작업 디렉토리 설정
 WORKDIR /home/app
@@ -17,3 +17,12 @@ CMD ["npm", "run", "start:prod"]
 
 # 애플리케이션을 실행할 포트
 EXPOSE 3000
+
+
+FROM redis:6.2.6-alpine AS redis
+
+COPY redis.conf /usr/local/etc/redis/redis.conf
+
+CMD ["redis-server", "/usr/local/etc/redis/redis.conf"]
+
+EXPOSE 6379
