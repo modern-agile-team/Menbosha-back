@@ -49,7 +49,7 @@ export class SearchAllHelpMeBoardsDto
       properties: {
         imageUrl: {
           type: 'string',
-          description: '도와주세요 게시판의 이미지 url',
+          description: '도와주세요 게시판의 이미지 url. 한개만 가져옴',
         },
       },
     },
