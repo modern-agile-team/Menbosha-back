@@ -23,6 +23,7 @@ import { ApiDeleteAccount } from '../swagger-decorators/delete-account.decorator
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { JwtRefreshTokenGuard } from 'src/config/guards/jwt-refresh-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
+import { RedisService } from 'src/common/redis/redis.service';
 
 @Controller('auth')
 @ApiTags('auth API')
@@ -31,6 +32,7 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly tokenService: TokenService,
     private readonly s3Service: S3Service,
+    private readonly redisService: RedisService,
   ) {}
 
   @ApiNaverLogin()
@@ -51,6 +53,8 @@ export class AuthController {
       socialAccessToken,
       socialRefreshToken,
     );
+
+    await this.redisService.setToken(String(userId), refreshToken);
 
     res.cookie('refresh_token', refreshToken, {
       httpOnly: true,
@@ -80,6 +84,8 @@ export class AuthController {
       socialAccessToken,
       socialRefreshToken,
     );
+
+    await this.redisService.setToken(String(userId), refreshToken);
 
     res.cookie('refresh_Token', refreshToken, {
       httpOnly: true,

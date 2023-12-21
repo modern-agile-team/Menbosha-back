@@ -6,9 +6,10 @@ import { S3Service } from 'src/common/s3/s3.service';
 import { UserImageRepository } from 'src/users/repositories/user-image.repository';
 import { TokenRepository } from './repositories/token.repository';
 import { TokenService } from './services/token.service';
+import { RedisModule } from 'src/common/redis/redis.module';
 
 @Module({
-  imports: [],
+  imports: [RedisModule],
   exports: [TokenService, TokenRepository],
   controllers: [AuthController],
   providers: [

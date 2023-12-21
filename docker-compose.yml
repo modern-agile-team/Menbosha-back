@@ -9,3 +9,14 @@ services:
     restart: always
     environment:
       - TZ=Asia/Seoul
+
+  redis:
+    image: redis:6.2.6-alpine
+    command: redis-server --port 6379
+    env_file:
+      - .env
+    ports:
+      - 6379:6379
+    volumes:
+      - ./redis-data:/data
+    restart: always
