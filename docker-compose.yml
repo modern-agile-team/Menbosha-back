@@ -1,6 +1,9 @@
 version: '3'
 services:
   ma6-main:
+    build:
+      context: .
+      dockerfile: dockerfile
     image: 2swo/ma6-menbosha-back
     ports:
       - '3000:3000'
@@ -9,3 +12,17 @@ services:
     restart: always
     environment:
       - TZ=Asia/Seoul
+
+  redis:
+    build:
+      context: .
+      dockerfile: dockerfile.redis
+    image: redis:6.2.6-alpine
+    command: redis-server --port 6379
+    env_file:
+      - .env
+    ports:
+      - 6379:6379
+    volumes:
+      - ./redis-data:/data
+    restart: always

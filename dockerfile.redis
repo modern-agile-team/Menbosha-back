@@ -1,0 +1,9 @@
+FROM redis:6.2.6-alpine
+
+# Copy custom Redis configuration file
+COPY redis.conf /usr/local/etc/redis/redis.conf
+
+# Set Redis server to use the custom configuration file
+CMD ["redis-server", "/usr/local/etc/redis/redis.conf"]
+
+EXPOSE 6379
