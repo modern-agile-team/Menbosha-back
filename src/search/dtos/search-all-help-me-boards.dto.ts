@@ -27,7 +27,8 @@ export class SearchAllHelpMeBoardsDto
   head: string;
 
   @ApiProperty({
-    description: '도와주세요 게시글 본문',
+    description: '도와주세요 게시글 본문. 30글자까지 자름',
+    maxLength: 30,
   })
   body: string;
 
