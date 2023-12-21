@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { User } from 'src/users/entities/user.entity';
-import { UserIntro } from 'src/users/entities/user-intro.entity';
 import { UserImage } from 'src/users/entities/user-image.entity';
+import { UserIntro } from 'src/users/entities/user-intro.entity';
 
-export class SearchAllMentorsDto
-  implements Pick<User, 'id' | 'name' | 'userImage' | 'userIntro' | 'isMentor'>
+export class SearchAllMentorDto
+  implements Pick<User, 'id' | 'name' | 'isMentor'>
 {
   @ApiProperty({
     description: '멘토 유저 고유 id',
@@ -26,7 +26,7 @@ export class SearchAllMentorsDto
       },
     },
   })
-  userImage: UserImage;
+  userImage: Pick<UserImage, 'imageUrl'>;
 
   @ApiProperty({
     description: '멘토 유저 소개 object',
@@ -42,7 +42,7 @@ export class SearchAllMentorsDto
       },
     },
   })
-  userIntro: UserIntro;
+  userIntro: Pick<UserIntro, 'mainField' | 'introduce'>;
 
   @ApiProperty({
     description: '멘토 여부',
@@ -50,7 +50,7 @@ export class SearchAllMentorsDto
   })
   isMentor: boolean = true;
 
-  constructor(searchAllMentorsDto: Partial<SearchAllMentorsDto> = {}) {
+  constructor(searchAllMentorsDto: Partial<SearchAllMentorDto> = {}) {
     this.id = searchAllMentorsDto.id;
     this.name = searchAllMentorsDto.name;
     this.userImage = searchAllMentorsDto.userImage;

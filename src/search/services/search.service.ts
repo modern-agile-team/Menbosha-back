@@ -3,10 +3,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { SearchRepository } from '../repositories/search.repository';
 import { PageByMentorBoardResponseDTO } from 'src/boards/dto/mentorBoard/response.mentor.boards.dto';
 import { SearchAllPageSizeDto } from '../dtos/search-all-page-size.dto';
-import { SearchAllHelpMeBoardsDto } from '../dtos/search-all-help-me-boards.dto';
 import { plainToInstance } from 'class-transformer';
-import { SearchAllMentorsDto } from '../dtos/search-all-mentors.dto';
 import { SearchAllBoardsAndMentorsQueryDto } from '../dtos/search-all-boards-and-mentors-query.dto';
+import { SearchAllHelpMeBoardDto } from '../dtos/search-all-help-me-board.dto';
+import { SearchAllMentorDto } from '../dtos/search-all-mentor.dto';
 
 @Injectable()
 export class SearchService {
@@ -23,8 +23,8 @@ export class SearchService {
   async searchAllBoardsAndMentors(
     searchAllBoardsAndMentorsQueryDto: SearchAllBoardsAndMentorsQueryDto,
   ): Promise<{
-    helpMeBoards: SearchAllHelpMeBoardsDto[];
-    mentors: SearchAllMentorsDto[];
+    helpMeBoards: SearchAllHelpMeBoardDto[];
+    mentors: SearchAllMentorDto[];
   }> {
     const { searchQuery, page } = searchAllBoardsAndMentorsQueryDto;
     const skip = (page - 1) * 10;
@@ -34,9 +34,9 @@ export class SearchService {
 
     return {
       helpMeBoards: helpMeBoards.map(
-        (helpMeBoard) => new SearchAllHelpMeBoardsDto(helpMeBoard),
+        (helpMeBoard) => new SearchAllHelpMeBoardDto(helpMeBoard),
       ),
-      mentors: plainToInstance(SearchAllMentorsDto, mentors),
+      mentors: plainToInstance(SearchAllMentorDto, mentors),
     };
   }
 

@@ -6,8 +6,8 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { SearchAllHelpMeBoardsDto } from '../dtos/search-all-help-me-boards.dto';
-import { SearchAllMentorsDto } from '../dtos/search-all-mentors.dto';
+import { SearchAllHelpMeBoardDto } from '../dtos/search-all-help-me-board.dto';
+import { SearchAllMentorDto } from '../dtos/search-all-mentor.dto';
 
 export function ApiSearchAllBoardsAndMentors() {
   return applyDecorators(
@@ -30,13 +30,13 @@ export function ApiSearchAllBoardsAndMentors() {
               helpMeBoards: {
                 type: 'array',
                 items: {
-                  $ref: getSchemaPath(SearchAllHelpMeBoardsDto),
+                  $ref: getSchemaPath(SearchAllHelpMeBoardDto),
                 },
               },
               mentors: {
                 type: 'array',
                 items: {
-                  $ref: getSchemaPath(SearchAllMentorsDto),
+                  $ref: getSchemaPath(SearchAllMentorDto),
                 },
               },
             },
@@ -59,6 +59,6 @@ export function ApiSearchAllBoardsAndMentors() {
         },
       },
     }),
-    ApiExtraModels(SearchAllHelpMeBoardsDto, SearchAllMentorsDto),
+    ApiExtraModels(SearchAllHelpMeBoardDto, SearchAllMentorDto),
   );
 }

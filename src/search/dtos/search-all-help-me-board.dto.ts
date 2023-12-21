@@ -3,7 +3,7 @@ import { CategoryList } from 'src/common/entity/category-list.entity';
 import { SearchUserDto } from './search-user-dto';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class SearchAllHelpMeBoardsDto
+export class SearchAllHelpMeBoardDto
   implements
     Omit<
       HelpMeBoard,
@@ -69,7 +69,7 @@ export class SearchAllHelpMeBoardsDto
   })
   categoryList: Pick<CategoryList, 'categoryName'>;
 
-  constructor(searchAllHelpMeBoardsDto: SearchAllHelpMeBoardsDto) {
+  constructor(searchAllHelpMeBoardsDto: SearchAllHelpMeBoardDto) {
     this.id = searchAllHelpMeBoardsDto.id;
     this.head = searchAllHelpMeBoardsDto.head;
     this.body = searchAllHelpMeBoardsDto.body.substring(0, 30);

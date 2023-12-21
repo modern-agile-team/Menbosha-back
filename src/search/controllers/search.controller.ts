@@ -16,12 +16,12 @@ import { ApiSearchBoardsByBody } from '../swagger-decorators/search-boards-by-bo
 import { ApiSearchBoardsByHead } from '../swagger-decorators/search-boards-by-head.decorator';
 import { ApiSearchBoardsByUserName } from '../swagger-decorators/search-boards-by-user-name.decorator';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
-import { SearchAllHelpMeBoardsDto } from '../dtos/search-all-help-me-boards.dto';
-import { SearchAllMentorsDto } from '../dtos/search-all-mentors.dto';
 import { SearchAllPageSizeDto } from '../dtos/search-all-page-size.dto';
 import { SearchAllBoardsAndMentorsQueryDto } from '../dtos/search-all-boards-and-mentors-query.dto';
 import { ApiSearchAllBoardsAndMentors } from '../swagger-decorators/search-all-boards-and-mentors.swagger';
 import { ApiSearchAllBoardsAndMentorsForPageSize } from '../swagger-decorators/search-all-boards-and-mentors-for-page-size.swagger';
+import { SearchAllHelpMeBoardDto } from '../dtos/search-all-help-me-board.dto';
+import { SearchAllMentorDto } from '../dtos/search-all-mentor.dto';
 
 @ApiTags('SEARCH')
 @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
@@ -42,8 +42,8 @@ export class SearchController {
     @Query()
     searchAllBoardsAndMentorsQueryDto: SearchAllBoardsAndMentorsQueryDto,
   ): Promise<{
-    helpMeBoards: SearchAllHelpMeBoardsDto[];
-    mentors: SearchAllMentorsDto[];
+    helpMeBoards: SearchAllHelpMeBoardDto[];
+    mentors: SearchAllMentorDto[];
   }> {
     return this.searchService.searchAllBoardsAndMentors(
       searchAllBoardsAndMentorsQueryDto,
