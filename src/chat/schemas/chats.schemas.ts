@@ -13,8 +13,8 @@ export class Chat {
   @Prop({ required: true })
   content: string;
 
-  @Prop({ required: true, default: false })
-  isSeen: boolean;
+  @Prop({ required: true })
+  unSeenUser: number[];
 
   @Prop({ default: Date.now })
   createdAt: Date;

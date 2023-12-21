@@ -18,10 +18,7 @@ export class ChatRooms {
   chats: Chat[];
 
   @Prop({ required: true })
-  hostId: number;
-
-  @Prop({ required: true })
-  guestId: number;
+  chatUsers: number[] | [null];
 
   createdAt: Date;
 
@@ -44,8 +41,7 @@ ChatRoomsSchema.virtual('unprotectedData').get(function (this: ChatRooms) {
   return {
     _id: this._id,
     chats: this.chats,
-    hostId: this.hostId,
-    guestId: this.guestId,
+    chatUsers: this.chatUsers,
     createdAt: this.createdAt,
     deletedAt: this.deletedAt,
   };
