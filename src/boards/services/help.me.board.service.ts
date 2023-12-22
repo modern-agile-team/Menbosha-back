@@ -27,10 +27,9 @@ export class HelpMeBoardService {
   ): Promise<{ data: PageByHelpMeBoardResponseDTO[]; total: number }> {
     const limit = 10;
     const skip = (page - 1) * limit;
-    const take = limit;
     const boards = await this.helpMeBoardRepository.findPageByHelpMeBoards(
       skip,
-      take,
+      limit,
     );
     const total = await this.helpMeBoardRepository.findTotalBoards();
 
@@ -82,7 +81,7 @@ export class HelpMeBoardService {
         id: image.id,
         imageUrl: image.imageUrl,
       })),
-      unitowner: unitOwner,
+      unitOwner: unitOwner,
     };
   }
 
@@ -115,7 +114,7 @@ export class HelpMeBoardService {
           : [],
       },
 
-      unitowner: unitOwner,
+      unitOwner: unitOwner,
     };
   }
 
