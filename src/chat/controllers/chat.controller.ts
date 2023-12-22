@@ -143,16 +143,16 @@ export class ChatController {
    * @param roomId
    * @returns
    */
-  // @UseGuards(JwtAccessTokenGuard)
-  // @ApiDeleteChatRoom()
-  // @HttpCode(HttpStatus.NO_CONTENT)
-  // @Delete(':roomId')
-  // deleteChatRoom(
-  //   @GetUserId() userId: number,
-  //   @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  // ) {
-  //   return this.chatService.deleteChatRoom(userId, roomId);
-  // }
+  @UseGuards(JwtAccessTokenGuard)
+  @ApiDeleteChatRoom()
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(':roomId')
+  deleteChatRoom(
+    @GetUserId() userId: number,
+    @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
+  ) {
+    return this.chatService.deleteChatRoom(userId, roomId);
+  }
 
   // @UseGuards(JwtAccessTokenGuard)
   // @ApiGetChats()

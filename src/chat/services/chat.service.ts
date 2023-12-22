@@ -162,23 +162,34 @@ export class ChatService {
    * @param roomId
    * @returns
    */
-  // async deleteChatRoom(
-  //   myId: number,
-  //   roomId: mongoose.Types.ObjectId,
-  // ): Promise<void> {
-  //   const existChatRoom = await this.findOneChatRoomOrFail(roomId);
+  async deleteChatRoom(
+    myId: number,
+    roomId: mongoose.Types.ObjectId,
+  ): Promise<void> {
+    const existChatRoom = await this.findOneChatRoomOrFail(roomId);
 
-  //   if (!(existChatRoom.hostId === myId || existChatRoom.guestId === myId)) {
-  //     throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
-  //   }
+    if (!existChatRoom.chatMembers.includes(myId)) {
+      throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
+    } else if (
+      existChatRoom.chatMembers.length === 1 &&
+      existChatRoom.chatMembers.includes(myId)
+    ) {
+      return this.chatRepository.updateOneChatRoom(
+        { _id: roomId },
+        {
+          $pull: { chatMembers: myId },
+          deletedAt: new Date(),
+        },
+      );
+    }
 
-  //   return this.chatRepository.updateOneChatRoom(
-  //     { _id: roomId },
-  //     {
-  //       deletedAt: new Date(),
-  //     },
-  //   );
-  // }
+    return this.chatRepository.updateOneChatRoom(
+      { _id: roomId },
+      {
+        $pull: { chatMembers: myId },
+      },
+    );
+  }
 
   // async findAllChats(
   //   userId: number,
