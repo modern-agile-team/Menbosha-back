@@ -14,7 +14,7 @@ export class Chat {
   content: string;
 
   @Prop({ required: true })
-  unSeenUser: number[];
+  seenUsers: number[] | [null];
 
   @Prop({ default: Date.now })
   createdAt: Date;
