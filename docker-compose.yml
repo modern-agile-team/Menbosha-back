@@ -9,3 +9,12 @@ services:
     restart: always
     environment:
       - TZ=Asia/Seoul
+
+  redis:
+    image: 2swo/redis
+    command: redis-server --port 6379
+    env_file:
+      - .env
+    ports:
+      - 6379:6379
+    restart: always

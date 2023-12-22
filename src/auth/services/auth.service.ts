@@ -98,6 +98,7 @@ export class AuthService implements AuthServiceInterface {
         userInfoHeader = {
           headers: {
             Authorization: `Bearer ${socialAccessToken}`,
+            'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
           },
         };
       }
