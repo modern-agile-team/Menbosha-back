@@ -63,7 +63,7 @@ export class HelpMeBoardService {
     userId: number,
   ): Promise<oneHelpMeBoardResponseDTO> {
     const board = await this.helpMeBoardRepository.findHelpMeBoardById(boardId);
-    const unitowner = board.userId === userId;
+    const unitOwner = board.userId === userId;
     if (!board) {
       throw new Error('게시물을 찾을 수 없습니다.');
     }
@@ -82,7 +82,7 @@ export class HelpMeBoardService {
         id: image.id,
         imageUrl: image.imageUrl,
       })),
-      unitowner: unitowner,
+      unitowner: unitOwner,
     };
   }
 
