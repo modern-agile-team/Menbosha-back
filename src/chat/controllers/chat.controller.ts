@@ -96,6 +96,18 @@ export class ChatController {
   //   return this.chatService.findAllChatRoomsWithUserAndChat(userId);
   // }
 
+  @UseGuards(JwtAccessTokenGuard)
+  @Get('check')
+  findOneChatRoomByUserIds(
+    @GetUserId() userId: number,
+    @Body() receivedUserDto: ReceivedUserDto,
+  ) {
+    return this.chatService.findOneChatRoomByUserIds(
+      userId,
+      receivedUserDto.receiverId,
+    );
+  }
+
   /**
    *
    * @param roomId

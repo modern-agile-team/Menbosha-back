@@ -52,7 +52,8 @@ export class ChatService {
   findAllChatRooms(myId: number): Promise<ChatRoomsDto[]> {
     return this.chatRepository.findAllChatRooms({
       $and: [
-        { $or: [{ hostId: myId }, { guestId: myId }] },
+        { originalMembers: myId },
+        { chatMembers: myId },
         { deletedAt: null },
       ],
     });
@@ -69,6 +70,24 @@ export class ChatService {
     const returnedRoom = await this.chatRepository.findOneChatRoom({
       _id: roomId,
       deletedAt: null,
+    });
+
+    if (!returnedRoom) {
+      throw new NotFoundException('해당 채팅방이 없습니다.');
+    }
+
+    return new ChatRoomsDto(returnedRoom);
+  }
+
+  async findOneChatRoomByUserIds(
+    myId: number,
+    guestId: number,
+  ): Promise<ChatRoomsDto> {
+    const returnedRoom = await this.chatRepository.findOneChatRoom({
+      originalMembers: { $all: [myId, guestId] },
+      chatMembers: { $all: [myId, guestId] },
+      deletedAt: null,
+      chatRoomType: ChatRoomType.OneOnOne,
     });
 
     if (!returnedRoom) {
