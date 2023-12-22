@@ -82,19 +82,19 @@ export class ChatController {
     });
   }
 
-  /**
-   *
-   * @param userId
-   * @returns
-   */
-  @UseGuards(JwtAccessTokenGuard)
-  @ApiGetChatRoomsNew()
-  @Get('new-api')
-  findAllChatRoomsWithUserAndChat(
-    @GetUserId() userId: number,
-  ): Promise<ResponseGetChatRoomsDto[]> {
-    return this.chatService.findAllChatRoomsWithUserAndChat(userId);
-  }
+  // /**
+  //  *
+  //  * @param userId
+  //  * @returns
+  //  */
+  // @UseGuards(JwtAccessTokenGuard)
+  // @ApiGetChatRoomsNew()
+  // @Get('new-api')
+  // findAllChatRoomsWithUserAndChat(
+  //   @GetUserId() userId: number,
+  // ): Promise<ResponseGetChatRoomsDto[]> {
+  //   return this.chatService.findAllChatRoomsWithUserAndChat(userId);
+  // }
 
   /**
    *
@@ -113,7 +113,7 @@ export class ChatController {
    *
    * @param userId
    * @param receivedUserDto
-   * @returns
+   * @returns 완료
    */
   @UseGuards(JwtAccessTokenGuard)
   @ApiCreateChatRoom()
@@ -131,30 +131,30 @@ export class ChatController {
    * @param roomId
    * @returns
    */
-  @UseGuards(JwtAccessTokenGuard)
-  @ApiDeleteChatRoom()
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @Delete(':roomId')
-  deleteChatRoom(
-    @GetUserId() userId: number,
-    @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  ) {
-    return this.chatService.deleteChatRoom(userId, roomId);
-  }
+  // @UseGuards(JwtAccessTokenGuard)
+  // @ApiDeleteChatRoom()
+  // @HttpCode(HttpStatus.NO_CONTENT)
+  // @Delete(':roomId')
+  // deleteChatRoom(
+  //   @GetUserId() userId: number,
+  //   @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
+  // ) {
+  //   return this.chatService.deleteChatRoom(userId, roomId);
+  // }
 
-  @UseGuards(JwtAccessTokenGuard)
-  @ApiGetChats()
-  @Get(':roomId/chat')
-  async findChats(
-    @GetUserId() userId: number,
-    @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  ): Promise<ChatsDto[]> {
-    const returnedChats = await this.chatService.findAllChats(userId, roomId);
+  // @UseGuards(JwtAccessTokenGuard)
+  // @ApiGetChats()
+  // @Get(':roomId/chat')
+  // async findChats(
+  //   @GetUserId() userId: number,
+  //   @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
+  // ): Promise<ChatsDto[]> {
+  //   const returnedChats = await this.chatService.findAllChats(userId, roomId);
 
-    return plainToInstance(ChatsDto, returnedChats, {
-      excludeExtraneousValues: true,
-    });
-  }
+  //   return plainToInstance(ChatsDto, returnedChats, {
+  //     excludeExtraneousValues: true,
+  //   });
+  // }
 
   @UseGuards(JwtAccessTokenGuard)
   @ApiCreateChatImage()

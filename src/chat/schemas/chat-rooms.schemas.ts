@@ -19,7 +19,10 @@ export class ChatRooms {
   chats: Chat[] | [];
 
   @Prop({ required: true })
-  chatUsers: number[] | [null];
+  originalMembers: number[];
+
+  @Prop({ required: true })
+  chatMembers: number[];
 
   @Prop({ required: true })
   chatRoomType: ChatRoomType;
@@ -34,7 +37,8 @@ export class ChatRooms {
   readonly unprotectedData: {
     _id: mongoose.Types.ObjectId;
     chats: Chat[] | [];
-    chatUsers: number[] | [null];
+    originalMembers: number[];
+    chatMembers: number[];
     chatRoomType: ChatRoomType;
     createdAt: Date;
     updatedAt: Date;
@@ -48,7 +52,8 @@ ChatRoomsSchema.virtual('unprotectedData').get(function (this: ChatRooms) {
   return {
     _id: this._id,
     chats: this.chats,
-    chatUsers: this.chatUsers,
+    originalMembers: this.originalMembers,
+    chatMembers: this.chatMembers,
     chatRoomType: this.chatRoomType,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,

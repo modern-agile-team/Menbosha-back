@@ -37,13 +37,15 @@ export class ChatsDto implements Chat {
 
   @ApiProperty({
     type: 'array',
-    description: '채팅 확인 안한 유저들 id 배열',
+    description: '채팅 확인한 유저들 id 배열',
   })
   @Expose()
-  unSeenUser: number[];
+  seenUsers: number[];
 
   @ApiProperty({
     description: '생성 날짜',
+    type: 'string',
+    format: 'date-time',
   })
   @Expose()
   createdAt: Date;
@@ -53,7 +55,7 @@ export class ChatsDto implements Chat {
     this.chatRoomId = chatDto.chatRoomId;
     this.content = chatDto.content;
     this.senderId = chatDto.senderId;
-    this.unSeenUser = chatDto.unSeenUser;
+    this.seenUsers = chatDto.seenUsers;
     this.createdAt = chatDto.createdAt;
   }
 }

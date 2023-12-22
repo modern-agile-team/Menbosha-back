@@ -3,7 +3,7 @@ import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { LookupChatsDto } from './lookup-chat-dto';
 
 export class AggregateChatRoomsDto extends OmitType(ChatRoomsDto, [
-  'chatIds',
+  'chats',
   'deletedAt',
 ]) {
   @ApiProperty({
@@ -20,8 +20,8 @@ export class AggregateChatRoomsDto extends OmitType(ChatRoomsDto, [
     super();
 
     this._id = aggregateChatRoomsDto._id;
-    this.hostId = aggregateChatRoomsDto.hostId;
-    this.guestId = aggregateChatRoomsDto.guestId;
+    this.originalMembers = aggregateChatRoomsDto.originalMembers;
+    this.chatMembers = aggregateChatRoomsDto.chatMembers;
     this.createdAt = aggregateChatRoomsDto.createdAt;
     this.chatCount = aggregateChatRoomsDto.chatCount;
     this.chat = aggregateChatRoomsDto.chat;

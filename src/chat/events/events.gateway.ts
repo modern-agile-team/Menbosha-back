@@ -85,9 +85,8 @@ export class EventsGateway
     @MessageBody() postChatDto: PostChatDto,
     @ConnectedSocket() socket: Socket,
   ) {
-    const returnedChat = await this.chatService.createChat(postChatDto);
-
-    socket.to(postChatDto.roomId.toString()).emit('message', returnedChat);
+    // const returnedChat = await this.chatService.createChat(postChatDto);
+    // socket.to(postChatDto.roomId.toString()).emit('message', returnedChat);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

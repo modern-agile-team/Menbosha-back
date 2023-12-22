@@ -4,6 +4,8 @@ import { TransformMongoId } from './transform/transform-mongo-id';
 import mongoose from 'mongoose';
 import { ChatRooms } from '../schemas/chat-rooms.schemas';
 import { TransformMongoIdToPlainOnly } from './transform/transform-mongo-id-to-plain-only';
+import { ChatRoomType } from '../constants/chat-rooms-enum';
+import { Chat } from '../schemas/chats.schemas';
 
 export class ChatRoomsDto implements Omit<ChatRooms, 'unprotectedData'> {
   @ApiProperty({
@@ -15,27 +17,33 @@ export class ChatRoomsDto implements Omit<ChatRooms, 'unprotectedData'> {
   @Expose()
   _id: mongoose.Types.ObjectId;
 
-  @ApiProperty({
-    description: '채팅방에 속한 유저의 id',
-  })
-  @Expose()
-  hostId: number;
+  @Exclude()
+  originalMembers: number[];
 
   @ApiProperty({
-    description: '채팅방에 속한 유저의 id',
+    description: '채팅방에 속한 현재 유저들의 id',
   })
   @Expose()
-  guestId: number;
+  chatMembers: number[];
 
   @ApiProperty({
-    description: '해당 채팅방 채팅 내역 id',
-    type: 'string',
+    description: '해당 채팅방 채팅 내역',
+    type: 'object',
     isArray: true,
-    format: 'ObjectId',
+    default: [],
   })
   @Expose()
   @TransformMongoIdToPlainOnly()
-  chatIds: mongoose.Types.ObjectId[] | [];
+  chats: Chat[] | [];
+
+  @ApiProperty({
+    description: '해당 채팅방 채팅 내역',
+    type: 'object',
+    isArray: true,
+    enum: ChatRoomType,
+  })
+  @Expose()
+  chatRoomType: ChatRoomType;
 
   @ApiProperty({
     description: '채팅방 생성 날짜',
@@ -44,17 +52,25 @@ export class ChatRoomsDto implements Omit<ChatRooms, 'unprotectedData'> {
   createdAt: Date;
 
   @ApiProperty({
+    description: '채팅방 업데이트 날짜',
+  })
+  @Expose()
+  updatedAt: Date;
+
+  @ApiProperty({
     description: '채팅방 삭제 날짜',
     default: null,
   })
   @Exclude()
   deletedAt: Date | null;
 
-  constructor(chatRoomDto: Partial<ChatRoomsDto> = {}) {
-    this._id = chatRoomDto._id;
-    this.hostId = chatRoomDto.hostId;
-    this.guestId = chatRoomDto.guestId;
-    this.chatIds = chatRoomDto.chatIds;
-    this.createdAt = chatRoomDto.createdAt;
+  constructor(chatRoomsDto: Partial<ChatRoomsDto> = {}) {
+    this._id = chatRoomsDto._id;
+    this.originalMembers = chatRoomsDto.originalMembers;
+    this.chatMembers = chatRoomsDto.chatMembers;
+    this.chats = chatRoomsDto.chats;
+    this.chatRoomType = chatRoomsDto.chatRoomType;
+    this.createdAt = chatRoomsDto.createdAt;
+    this.updatedAt = chatRoomsDto.updatedAt;
   }
 }

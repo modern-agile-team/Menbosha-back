@@ -1,7 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ChatRooms } from '../schemas/chat-rooms.schemas';
-import { Chats } from '../schemas/chats.schemas';
 import { ChatImages } from '../schemas/chat-images.schemas';
 import mongoose from 'mongoose';
 import { ChatRoomsDto } from '../dto/chat-rooms.dto';
@@ -14,8 +13,6 @@ export class ChatRepository {
   constructor(
     @InjectModel(ChatRooms.name)
     private readonly chatRoomsModel: mongoose.Model<ChatRooms>,
-    @InjectModel(Chats.name)
-    private readonly chatsModel: mongoose.Model<Chats>,
     @InjectModel(ChatImages.name)
     private readonly chatImagesModel: mongoose.Model<ChatImages>,
   ) {}
@@ -62,13 +59,13 @@ export class ChatRepository {
     }
   }
 
-  findAllChats(filter: mongoose.FilterQuery<Chats>): Promise<ChatsDto[]> {
-    return this.chatsModel.find(filter);
-  }
+  // findAllChats(filter: mongoose.FilterQuery<Chats>): Promise<ChatsDto[]> {
+  //   return this.chatsModel.find(filter);
+  // }
 
-  findOneChat(filter: mongoose.FilterQuery<Chats>): Promise<ChatsDto> {
-    return this.chatsModel.findOne(filter);
-  }
+  // findOneChat(filter: mongoose.FilterQuery<Chats>): Promise<ChatsDto> {
+  //   return this.chatsModel.findOne(filter);
+  // }
 
   findOneChatImages(
     filter: mongoose.FilterQuery<ChatImages>,
@@ -76,18 +73,18 @@ export class ChatRepository {
     return this.chatImagesModel.findOne(filter);
   }
 
-  async updateManyChats(
-    filter: mongoose.FilterQuery<Chats>,
-    update: mongoose.UpdateQuery<Chats>,
-  ): Promise<void> {
-    await this.chatsModel.updateMany(filter, update);
-  }
+  // async updateManyChats(
+  //   filter: mongoose.FilterQuery<Chats>,
+  //   update: mongoose.UpdateQuery<Chats>,
+  // ): Promise<void> {
+  //   await this.chatsModel.updateMany(filter, update);
+  // }
 
-  async createChat<DocContents = mongoose.AnyKeys<Chats>>(
-    doc: DocContents,
-  ): Promise<ChatsDto> {
-    return this.chatsModel.create(doc);
-  }
+  // async createChat<DocContents = mongoose.AnyKeys<Chats>>(
+  //   doc: DocContents,
+  // ): Promise<ChatsDto> {
+  //   return this.chatsModel.create(doc);
+  // }
 
   async createChatImage<DocContents = mongoose.AnyKeys<ChatImages>>(
     doc: DocContents,

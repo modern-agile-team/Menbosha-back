@@ -23,14 +23,9 @@ export class ResponsePostChatDto implements Omit<ChatsDto, 'chatRoomId'> {
   senderId: number;
 
   @ApiProperty({
-    description: '채팅을 받은 유저의 id',
-  })
-  receiverId: number;
-
-  @ApiProperty({
     description: '채팅 확인 여부',
   })
-  isSeen: boolean;
+  seenUsers: number[];
 
   @ApiProperty({
     description: '생성 날짜',
@@ -41,8 +36,7 @@ export class ResponsePostChatDto implements Omit<ChatsDto, 'chatRoomId'> {
     this._id = responseChatDto._id;
     this.content = responseChatDto.content;
     this.senderId = responseChatDto.senderId;
-    this.receiverId = responseChatDto.receiverId;
-    this.isSeen = responseChatDto.isSeen;
+    this.seenUsers = responseChatDto.seenUsers;
     this.createdAt = responseChatDto.createdAt;
   }
 }
