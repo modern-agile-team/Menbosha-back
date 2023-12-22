@@ -173,7 +173,8 @@ export class TokenService {
     const payload = {
       sub: 'accessToken',
       userId,
-      exp: Math.floor(Date.now() / 1000) + 60 * 60, // 1시간
+      // exp: Math.floor(Date.now() / 1000) + 60 * 60, // 1시간
+      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30, // 30일 (개발용)
     };
 
     const accessToken = jwt.sign(payload, jwtSecretKey);
@@ -186,7 +187,8 @@ export class TokenService {
     const payload = {
       sub: 'refreshToken',
       userId,
-      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, // 7일
+      // exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, // 7일
+      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30 * 3, // 90일 (개발용)
     };
     const refreshToken = jwt.sign(payload, jwtSecretKey);
 
