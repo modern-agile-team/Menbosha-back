@@ -20,7 +20,7 @@ import { ApiUpdateHelpMeBoardImage } from '../swagger-decorators/helpMeBoard/pat
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { ApiAddHelpMeBoard } from '../swagger-decorators/helpMeBoard/add-help-me-board-decorator';
-import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/creare.help.me.board.dto';
+import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/create.help.me.board.dto';
 import { HelpMeBoard } from '../entities/help-me-board.entity';
 import { PageByHelpMeBoardResponseDTO } from '../dto/helpMeBoard/response.help.me.board.dto';
 import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
@@ -84,6 +84,11 @@ export class HelpMeBoardController {
   ): Promise<oneHelpMeBoardResponseDTO> {
     return this.helpMeBoardService.findOneHelpMeBoard(boardId, userId);
   }
+
+  // @Get('/page')
+  // findpagenumber(
+  //   @Query('page') page = 1,
+  // ): Promise<{data: PageByHelpMeBoardResponseDTO[]}>
 
   @Patch('')
   @UseGuards(JwtAccessTokenGuard)

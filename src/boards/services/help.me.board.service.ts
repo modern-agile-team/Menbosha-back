@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { HelpMeBoardRepository } from '../repository/help.me.board.repository';
 import { oneHelpMeBoardResponseDTO } from '../dto/helpMeBoard/one.response.help.me.board.dto';
-import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/creare.help.me.board.dto';
+import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/create.help.me.board.dto';
 import { HelpMeBoard } from '../entities/help-me-board.entity';
 import { PageByHelpMeBoardResponseDTO } from '../dto/helpMeBoard/response.help.me.board.dto';
 import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dto';
@@ -100,7 +100,7 @@ export class HelpMeBoardService {
     }
     const updatedBoard =
       await this.helpMeBoardRepository.updateHelpMeBoard(existingBoard);
-    const unitowner = userId === updatedBoard.userId;
+    const unitOwner = userId === updatedBoard.userId;
     return {
       id: updatedBoard.id,
       head: updatedBoard.head,
@@ -115,7 +115,7 @@ export class HelpMeBoardService {
           : [],
       },
 
-      unitowner: unitowner,
+      unitowner: unitOwner,
     };
   }
 
