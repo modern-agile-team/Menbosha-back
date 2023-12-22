@@ -63,17 +63,21 @@ export class UserService {
     const total = await this.userRepository.findTotalMentors();
 
     const mentorResponse: PageByMentorListResponseDTO[] = await Promise.all(
-      mentors.map(async (user) => {
-        return {
-          id: user.id,
-          name: user.name,
-          userImage: user.userImage ? user.userImage : [],
-          userIntro: {
-            introduce: user.userIntro.introduce.substring(0, 30),
-            mainField: user.userIntro.mainField.substring(0, 30),
-          },
-        };
-      }),
+      mentors
+        .filter((user) => user.isMentor === true) //filter로 user.isMentor = true인 경우만 불러오기
+        .map(async (user) => {
+          return {
+            id: user.id,
+            name: user.name,
+            userImage: user.userImage ? user.userImage : [],
+            userIntro: user.userIntro
+              ? {
+                  introduce: user.userIntro.introduce.substring(0, 30),
+                  mainField: user.userIntro.mainField.substring(0, 30),
+                }
+              : null, // introduce나 mainField가 없는경우 null값
+          };
+        }),
     );
     return { data: mentorResponse, total };
   }
