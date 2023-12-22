@@ -11,12 +11,10 @@ services:
       - TZ=Asia/Seoul
 
   redis:
-    image: redis:6.2.6-alpine
+    image: 2swo/redis
     command: redis-server --port 6379
     env_file:
       - .env
     ports:
       - 6379:6379
-    volumes:
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
     restart: always
