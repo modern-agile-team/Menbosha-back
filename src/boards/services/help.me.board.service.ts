@@ -21,6 +21,14 @@ export class HelpMeBoardService {
     }
   }
 
+  async countPagedHelpMeBoards() {
+    const limit = 10;
+    const total = await this.helpMeBoardRepository.findTotalBoards();
+    const Page = total / limit;
+    const totalPage = Math.round(Page);
+    return { total, totalPage };
+  }
+
   // -----이 기능은 프론트와 상의중인 기능입니다 -----
   async findPagedHelpMeBoards(
     page: number,

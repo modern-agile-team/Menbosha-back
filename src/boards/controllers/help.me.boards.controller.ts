@@ -75,6 +75,11 @@ export class HelpMeBoardController {
     return this.helpMeBoardService.findPagedHelpMeBoards(page);
   }
 
+  @Get('/page')
+  countPageBoards() {
+    return this.helpMeBoardService.countPagedHelpMeBoards();
+  }
+
   @Get('/unit') //하나의 게시판 불러오기
   @UseGuards(JwtOptionalGuard)
   @ApiGetOneHelpMeBoard()
