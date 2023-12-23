@@ -25,7 +25,7 @@ export class HelpMeBoardService {
     const limit = 10;
     const total = await this.helpMeBoardRepository.findTotalBoards();
     const Page = total / limit;
-    const totalPage = Math.round(Page);
+    const totalPage = Math.ceil(Page);
     return { total, totalPage };
   }
 
