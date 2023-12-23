@@ -98,62 +98,50 @@ export class ChatService {
   }
 
   async createChatRoom(myId: number, guestId: number): Promise<ChatRoomsDto> {
-    try {
-      const isChatRoom = await this.chatRepository.findOneChatRoom({
-        $and: [
-          { originalMembers: myId },
-          { originalMembers: guestId },
-          { deletedAt: null },
-          { chatRoomType: ChatRoomType.OneOnOne },
-        ],
+    const isChatRoom = await this.chatRepository.findOneChatRoom({
+      $and: [
+        { originalMembers: myId },
+        { originalMembers: guestId },
+        { deletedAt: null },
+        { chatRoomType: ChatRoomType.OneOnOne },
+      ],
+    });
+
+    if (!isChatRoom) {
+      const returnedChatRoom = await this.chatRepository.createChatRoom({
+        originalMembers: [myId, guestId],
+        chatMembers: [~myId, guestId],
+        chatRoomType: ChatRoomType.OneOnOne,
       });
 
-      if (!isChatRoom) {
-        const returnedChatRoom = await this.chatRepository.createChatRoom({
-          originalMembers: [myId, guestId],
-          chatMembers: [myId, guestId],
-          chatRoomType: ChatRoomType.OneOnOne,
-        });
-
-        return new ChatRoomsDto(returnedChatRoom);
-      }
-
-      if (
-        isChatRoom.chatMembers.filter(
-          (userId) => userId === myId || userId === guestId,
-        ).length === 2
-      ) {
-        throw new ConflictException('해당 유저들의 채팅방이 이미 존재합니다.');
-      }
-
-      isChatRoom.chatMembers.includes(myId)
-        ? (await this.chatRepository.updateOneChatRoom(
-            { _id: isChatRoom._id },
-            {
-              $push: { chatMembers: guestId },
-            },
-          ),
-          isChatRoom.chatMembers.push(guestId))
-        : (await this.chatRepository.updateOneChatRoom(
-            { _id: isChatRoom._id },
-            {
-              $push: { chatMembers: myId },
-            },
-          ),
-          isChatRoom.chatMembers.push(myId));
-
-      return new ChatRoomsDto(isChatRoom);
-    } catch (error) {
-      console.error('채팅룸 생성 실패: ', error);
-
-      if (error.code === 11000) {
-        throw new ConflictException(
-          '채팅룸 생성 실패. 서버에서 에러가 발생했습니다.',
-        );
-      }
-
-      throw error;
+      return new ChatRoomsDto(returnedChatRoom);
     }
+
+    if (
+      isChatRoom.chatMembers.filter(
+        (userId) => userId === myId || userId === guestId,
+      ).length === 2
+    ) {
+      throw new ConflictException('해당 유저들의 채팅방이 이미 존재합니다.');
+    }
+
+    isChatRoom.chatMembers.includes(myId)
+      ? (await this.chatRepository.updateOneChatRoom(
+          { _id: isChatRoom._id },
+          {
+            $push: { chatMembers: guestId },
+          },
+        ),
+        isChatRoom.chatMembers.push(guestId))
+      : (await this.chatRepository.updateOneChatRoom(
+          { _id: isChatRoom._id },
+          {
+            $push: { chatMembers: myId },
+          },
+        ),
+        isChatRoom.chatMembers.push(myId));
+
+    return new ChatRoomsDto(isChatRoom);
   }
 
   /**
@@ -170,23 +158,13 @@ export class ChatService {
 
     if (!existChatRoom.chatMembers.includes(myId)) {
       throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
-    } else if (
-      existChatRoom.chatMembers.length === 1 &&
-      existChatRoom.chatMembers.includes(myId)
-    ) {
-      return this.chatRepository.updateOneChatRoom(
-        { _id: roomId },
-        {
-          $pull: { chatMembers: myId },
-          deletedAt: new Date(),
-        },
-      );
     }
 
     return this.chatRepository.updateOneChatRoom(
       { _id: roomId },
       {
         $pull: { chatMembers: myId },
+        deletedAt: existChatRoom.chatMembers.length === 1 ? new Date() : null,
       },
     );
   }
