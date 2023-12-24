@@ -21,6 +21,7 @@ import { AggregateChatRoomsDto } from '../dto/aggregate-chat-rooms.dto';
 import { ChatsDto } from '../dto/chats.dto';
 import { ChatImagesDto } from '../dto/chat-images.dto';
 import { ChatRoomType } from '../constants/chat-rooms-enum';
+import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 // import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 
 @Injectable()
@@ -119,20 +120,25 @@ export class ChatService {
    * 둘 다 없다면 새로운 채팅방 개설.
    * @todo 나중에 new option을 활용해서 push메서드를 사용하지 않는 방향으로 개선할 예정(아마)
    */
-  async createChatRoom(myId: number, guestId: number): Promise<ChatRoomsDto> {
+  async createChatRoom(
+    myId: number,
+    createChatRoomBodyDto: CreateChatRoomBodyDto,
+  ): Promise<ChatRoomsDto> {
+    const { receiverId, chatRoomType } = createChatRoomBodyDto;
+
     const existChatRoom = await this.chatRepository.findOneChatRoom({
       $and: [
-        { originalMembers: { $all: [myId, guestId] } },
+        { originalMembers: { $all: [myId, receiverId] } },
         { deletedAt: null },
-        { chatRoomType: ChatRoomType.OneOnOne },
+        { chatRoomType: chatRoomType },
       ],
     });
 
     if (!existChatRoom) {
       const returnedChatRoom = await this.chatRepository.createChatRoom({
-        originalMembers: [myId, guestId],
-        chatMembers: [myId, guestId],
-        chatRoomType: ChatRoomType.OneOnOne,
+        originalMembers: [myId, receiverId],
+        chatMembers: [myId, receiverId],
+        chatRoomType: chatRoomType,
       });
 
       return new ChatRoomsDto(returnedChatRoom);
@@ -140,7 +146,7 @@ export class ChatService {
 
     const { chatMembers, _id } = existChatRoom;
 
-    const pushUserId = chatMembers.includes(myId) ? guestId : myId;
+    const pushUserId = chatMembers.includes(myId) ? receiverId : myId;
 
     if (chatMembers.length === 2) {
       throw new ConflictException('해당 유저들의 채팅방이 이미 존재합니다.');
@@ -278,96 +284,98 @@ export class ChatService {
     return new ChatImagesDto(returnedChatImage);
   }
 
-  // async findAllChatRoomsWithUserAndChat(
-  //   myId: number,
-  // ): Promise<ResponseGetChatRoomsDto[]> {
-  //   const returnedChatRoomsAggregate =
-  //     await this.chatRepository.aggregateChatRooms([
-  //       {
-  //         $match: {
-  //           $or: [{ hostId: myId }, { guestId: myId }],
-  //           deletedAt: null,
-  //         },
-  //       },
-  //       {
-  //         $lookup: {
-  //           from: 'chats',
-  //           localField: 'chatIds',
-  //           foreignField: '_id',
-  //           as: 'chats',
-  //         },
-  //       },
-  //       {
-  //         $addFields: {
-  //           chatCount: {
-  //             $size: '$chats',
-  //           },
-  //         },
-  //       },
-  //       { $sort: { 'chats.createdAt': -1 } },
-  //       {
-  //         $project: {
-  //           _id: 1,
-  //           hostId: 1,
-  //           guestId: 1,
-  //           createdAt: 1,
-  //           chatCount: 1,
-  //           chat: {
-  //             content: { $arrayElemAt: ['$chats.content', 0] },
-  //             isSeen: { $arrayElemAt: ['$chats.isSeen', 0] },
-  //             createdAt: { $arrayElemAt: ['$chats.createdAt', 0] },
-  //           },
-  //         },
-  //       },
-  //     ]);
+  /**
+   * @param myId
+   * @returns 각 채팅방의 채팅 상대방 멤버들의 정보와 가장 최신 채팅 내용을 매핑한 객체들의 배열을 return
+   * @todo 채팅 전송 및 생성 로직 만든 후 다시 재점검
+   */
+  async findAllChatRoomsWithUserAndChat(
+    myId: number,
+  ): Promise<ResponseGetChatRoomsDto[]> {
+    const returnedChatRoomsAggregate =
+      await this.chatRepository.aggregateChatRooms([
+        {
+          $match: {
+            chatMembers: myId,
+            deletedAt: null,
+          },
+        },
+        {
+          $addFields: {
+            chatCount: {
+              $size: '$chats',
+            },
+          },
+        },
+        { $sort: { 'chats.createdAt': -1 } },
+        {
+          $project: {
+            _id: 1,
+            chatMembers: 1,
+            createdAt: 1,
+            chatCount: 1,
+            chat: {
+              content: { $arrayElemAt: ['$chats.content', 0] },
+              seenUsers: { $arrayElemAt: ['$chats.isSeen', 0] },
+              createdAt: { $arrayElemAt: ['$chats.createdAt', 0] },
+            },
+          },
+        },
+      ]);
 
-  //   if (!returnedChatRoomsAggregate) {
-  //     return null;
-  //   }
+    if (!returnedChatRoomsAggregate) {
+      return null;
+    }
 
-  //   const userIds = returnedChatRoomsAggregate.map((userId) => {
-  //     return userId.hostId === myId ? userId.guestId : userId.hostId;
-  //   });
+    const userIds = returnedChatRoomsAggregate.map((chatRoom) => {
+      return chatRoom.chatMembers.filter((userId) => userId !== myId);
+    });
 
-  //   const targetUsers = await this.userService.findAll({
-  //     select: {
-  //       id: true,
-  //       name: true,
-  //       userImage: {
-  //         imageUrl: true,
-  //       },
-  //     },
-  //     relations: {
-  //       userImage: true,
-  //     },
-  //     where: {
-  //       id: In(userIds),
-  //     },
-  //   });
+    const targetUsers = await this.userService.findAll({
+      select: {
+        id: true,
+        name: true,
+        userImage: {
+          imageUrl: true,
+        },
+      },
+      relations: {
+        userImage: true,
+      },
+      where: {
+        id: In(userIds),
+      },
+    });
 
-  //   const chatUsersDtoArray = targetUsers.map((user) => {
-  //     return new ChatUserDto({
-  //       id: user.id,
-  //       name: user.name,
-  //       userImage: user.userImage.imageUrl,
-  //     });
-  //   });
+    const chatUsersDtoArray = targetUsers.map((user) => {
+      return new ChatUserDto({
+        id: user.id,
+        name: user.name,
+        userImage: user.userImage.imageUrl,
+      });
+    });
 
-  //   const aggregateChatRoomsDto = returnedChatRoomsAggregate.map((chat) => {
-  //     return new AggregateChatRoomsDto(chat);
-  //   });
+    const aggregateChatRoomsDto = returnedChatRoomsAggregate.map((chat) => {
+      return new AggregateChatRoomsDto(chat);
+    });
 
-  //   return aggregateChatRoomsDto.map((aggregateChatRoomDto) => {
-  //     const chatUsersDto = chatUsersDtoArray.find((user) => {
-  //       // return (
-  //       // user.id === aggregateChatRoomDto.hostId ||
-  //       // user.id === aggregateChatRoomDto.guestId
-  //       // );
-  //     });
+    return aggregateChatRoomsDto.map((aggregateChatRoomDto) => {
+      const { chatMembers } = aggregateChatRoomDto;
+      const chatUserDto = [];
 
-  //     return new ResponseGetChatRoomsDto(aggregateChatRoomDto, chatUsersDto);
-  //   });
-  // }
+      chatMembers.forEach((chatMemberId) => {
+        const matchingUser = chatUsersDtoArray.find((user) => {
+          return user.id === chatMemberId;
+        });
+
+        if (matchingUser) {
+          chatUserDto.push(matchingUser);
+        }
+      });
+
+      return new ResponseGetChatRoomsDto(aggregateChatRoomDto, chatUserDto);
+    });
+  }
 
   // async getUnreadCounts(roomId: mongoose.Types.ObjectId, after: number) {
   //   const returnedRoom = await this.chatRoomsModel.findOne({ _id: roomId });

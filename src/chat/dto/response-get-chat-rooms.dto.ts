@@ -11,9 +11,9 @@ export class ResponseGetChatRoomsDto {
   @ApiProperty({
     description: '채팅 상대 유저의 정보',
   })
-  chatPartner: ChatUserDto;
+  chatPartner: ChatUserDto[];
 
-  constructor(chatRoomsDto: AggregateChatRoomsDto, chatUserDto: ChatUserDto) {
+  constructor(chatRoomsDto: AggregateChatRoomsDto, chatUserDto: ChatUserDto[]) {
     this.chatRooms = chatRoomsDto;
     this.chatPartner = chatUserDto;
   }

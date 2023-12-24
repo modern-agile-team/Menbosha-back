@@ -40,6 +40,7 @@ import { ApiGetChatRoomsNew } from '../swagger-decorators/get-chat-rooms-new.dec
 import { Observable } from 'rxjs';
 import { ChatsDto } from '../dto/chats.dto';
 import { ApiGetChatNotificationSse } from '../swagger-decorators/get-chat-notification-Sse.decorator';
+import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 /**
  * @todo 1:1 채팅 컨트롤러 서비스 완성
  */
@@ -85,19 +86,19 @@ export class ChatController {
     });
   }
 
-  // /**
-  //  *
-  //  * @param userId
-  //  * @returns
-  //  */
-  // @UseGuards(JwtAccessTokenGuard)
-  // @ApiGetChatRoomsNew()
-  // @Get('new-api')
-  // findAllChatRoomsWithUserAndChat(
-  //   @GetUserId() userId: number,
-  // ): Promise<ResponseGetChatRoomsDto[]> {
-  //   return this.chatService.findAllChatRoomsWithUserAndChat(userId);
-  // }
+  /**
+   *
+   * @param userId
+   * @returns
+   */
+  @UseGuards(JwtAccessTokenGuard)
+  @ApiGetChatRoomsNew()
+  @Get('new-api')
+  findAllChatRoomsWithUserAndChat(
+    @GetUserId() userId: number,
+  ): Promise<ResponseGetChatRoomsDto[]> {
+    return this.chatService.findAllChatRoomsWithUserAndChat(userId);
+  }
 
   @UseGuards(JwtAccessTokenGuard)
   @Get('check')
@@ -135,9 +136,9 @@ export class ChatController {
   @Post()
   createChatRoom(
     @GetUserId() userId: number,
-    @Body() receivedUserDto: ReceivedUserDto,
+    @Body() createChatRoomBodyDto: CreateChatRoomBodyDto,
   ): Promise<ChatRoomsDto> {
-    return this.chatService.createChatRoom(userId, receivedUserDto.receiverId);
+    return this.chatService.createChatRoom(userId, createChatRoomBodyDto);
   }
 
   /**
