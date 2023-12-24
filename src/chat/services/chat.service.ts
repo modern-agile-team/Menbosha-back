@@ -22,6 +22,7 @@ import { ChatsDto } from '../dto/chats.dto';
 import { ChatImagesDto } from '../dto/chat-images.dto';
 import { ChatRoomType } from '../constants/chat-rooms-enum';
 import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
+import { plainToInstance } from 'class-transformer';
 // import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 
 @Injectable()
@@ -188,6 +189,13 @@ export class ChatService {
     );
   }
 
+  /**
+   *
+   * @param myId
+   * @param roomId
+   * @returns
+   * @todo 챗들 Object로 출력되는거 고치기
+   */
   async findAllChats(
     myId: number,
     roomId: mongoose.Types.ObjectId,
@@ -206,50 +214,57 @@ export class ChatService {
     return new ChatRoomsDto(returnedChatRoom);
   }
 
-  // async createChat({
-  //   roomId,
-  //   content,
-  //   senderId,
-  //   receiverId,
-  // }): Promise<ResponsePostChatDto> {
-  //   const returnedChatRoom = await this.findOneChatRoomOrFail(roomId);
+  async createChat({
+    roomId,
+    content,
+    senderId,
+    receiverId,
+  }): Promise<ChatsDto> {
+    const returnedChatRoom = await this.chatRepository.findOneChatRoom({
+      _id: roomId,
+      originalMembers: { $all: [senderId, receiverId] },
+      chatMembers: { $all: [senderId, receiverId] },
+      deletedAt: null,
+    });
 
-  //   if (
-  //     !(
-  //       (returnedChatRoom.hostId === senderId ||
-  //         returnedChatRoom.hostId === receiverId) &&
-  //       (returnedChatRoom.guestId === senderId ||
-  //         returnedChatRoom.guestId === receiverId)
-  //     )
-  //   ) {
-  //     throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
-  //   }
+    if (!returnedChatRoom) {
+      throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
+    }
 
-  //   const returnedChat = await this.chatRepository.createChat({
-  //     chatRoomId: returnedChatRoom._id,
-  //     content: content,
-  //     senderId: senderId,
-  //     receiverId: receiverId,
-  //   });
+    const newChat: ChatsDto = {
+      _id: new mongoose.Types.ObjectId(),
+      chatRoomId: new mongoose.Types.ObjectId(roomId),
+      senderId: senderId,
+      content: content,
+      seenUsers: [senderId],
+      createdAt: new Date(),
+    };
 
-  //   await this.chatRepository.updateOneChatRoom(
-  //     { _id: returnedChat.chatRoomId },
-  //     {
-  //       $push: { chatIds: returnedChat._id },
-  //     },
-  //   );
+    const updatedChatRoom = await this.chatRepository.createChat(
+      {
+        _id: roomId,
+      },
+      {
+        $push: { chats: newChat },
+      },
+      { new: true },
+    );
 
-  //   const chatsDto = new ChatsDto(returnedChat);
+    const { chats } = updatedChatRoom;
 
-  //   if (chatsDto) {
-  //     const subject = this.subjectMap.get(receiverId);
-  //     if (subject) {
-  //       subject.next(chatsDto);
-  //     }
-  //   }
+    const updatedChat = chats[chats.length - 1];
 
-  //   return chatsDto;
-  // }
+    const chatsDto = new ChatsDto(updatedChat);
+
+    if (chatsDto) {
+      const subject = this.subjectMap.get(receiverId);
+      if (subject) {
+        subject.next(chatsDto);
+      }
+    }
+
+    return chatsDto;
+  }
 
   async createChatImage(
     roomId: mongoose.Types.ObjectId,
@@ -282,7 +297,8 @@ export class ChatService {
   /**
    * @param myId
    * @returns 각 채팅방의 채팅 상대방 멤버들의 정보와 가장 최신 채팅 내용을 매핑한 객체들의 배열을 return
-   * @todo 채팅 전송 및 생성 로직 만든 후 다시 재점검
+   * @todo sort 고치기
+   *
    */
   async findAllChatRoomsWithUserAndChat(
     myId: number,
@@ -311,7 +327,7 @@ export class ChatService {
             chatCount: 1,
             chat: {
               content: { $arrayElemAt: ['$chats.content', 0] },
-              seenUsers: { $arrayElemAt: ['$chats.isSeen', 0] },
+              seenUsers: { $arrayElemAt: ['$chats.seenUsers', 0] },
               createdAt: { $arrayElemAt: ['$chats.createdAt', 0] },
             },
           },

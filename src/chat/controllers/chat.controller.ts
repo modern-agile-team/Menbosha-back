@@ -24,7 +24,7 @@ import { ParseObjectIdPipe } from '../validation-pipe/parse-object-id.pipe';
 import { ApiCreateChatRoom } from '../swagger-decorators/create-chat-room.decorator';
 import { ApiGetChatRooms } from '../swagger-decorators/get-chat-rooms.decorator';
 import { ApiGetOneChatRoom } from '../swagger-decorators/get-one-chat-room.decorator';
-import { ApiDeleteChatRoom } from '../swagger-decorators/delete-chat-room.decorator';
+import { ApiLeaveChatRoom } from '../swagger-decorators/leave-chat-room.decorator';
 import { ApiGetChats } from '../swagger-decorators/get-chats.decorator';
 // import { ApiGetChatUnreadCounts } from '../swagger-decorators/get-chat-unread-counts.decorator';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
@@ -145,10 +145,10 @@ export class ChatController {
    *
    * @param userId
    * @param roomId
-   * @returns
+   * @returns 채팅창 나가기
    */
   @UseGuards(JwtAccessTokenGuard)
-  @ApiDeleteChatRoom()
+  @ApiLeaveChatRoom()
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':roomId')
   leaveChatRoom(
@@ -162,7 +162,8 @@ export class ChatController {
    *
    * @param userId
    * @param roomId
-   * @returns
+   * @returns chats
+   * @todo 채팅 생성 및 전송 로직 수정 이후 다시 확인
    */
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChats()

@@ -75,11 +75,13 @@ export class ChatRepository {
   //   await this.chatsModel.updateMany(filter, update);
   // }
 
-  // async createChat<DocContents = mongoose.AnyKeys<Chats>>(
-  //   doc: DocContents,
-  // ): Promise<ChatsDto> {
-  //   return this.chatsModel.create(doc);
-  // }
+  async createChat(
+    id: mongoose.Types.ObjectId | any,
+    update: mongoose.UpdateQuery<ChatRooms>,
+    options?: mongoose.QueryOptions<ChatRooms> | null,
+  ): Promise<ChatRoomsDto> {
+    return this.chatRoomsModel.findByIdAndUpdate(id, update, options);
+  }
 
   async createChatImage<DocContents = mongoose.AnyKeys<ChatImages>>(
     doc: DocContents,

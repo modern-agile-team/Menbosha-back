@@ -9,7 +9,7 @@ import {
   ApiParam,
 } from '@nestjs/swagger';
 
-export function ApiDeleteChatRoom() {
+export function ApiLeaveChatRoom() {
   return applyDecorators(
     ApiOperation({
       summary: '채팅룸 삭제',
