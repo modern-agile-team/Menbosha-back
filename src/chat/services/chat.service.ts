@@ -179,7 +179,6 @@ export class ChatService {
     if (!existChatRoom.chatMembers.includes(myId)) {
       throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
     }
-
     return this.chatRepository.updateOneChatRoom(
       { _id: roomId },
       {
@@ -189,27 +188,23 @@ export class ChatService {
     );
   }
 
-  // async findAllChats(
-  //   userId: number,
-  //   roomId: mongoose.Types.ObjectId,
-  // ): Promise<ChatsDto[]> {
-  //   await this.findOneChatRoomOrFail(roomId);
+  async findAllChats(
+    myId: number,
+    roomId: mongoose.Types.ObjectId,
+  ): Promise<ChatRoomsDto> {
+    await this.findOneChatRoomOrFail(roomId);
 
-  //   await this.chatRepository.updateManyChats(
-  //     {
-  //       $and: [
-  //         { receiverId: userId },
-  //         { chatRoomId: roomId },
-  //         { isSeen: false },
-  //       ],
-  //     },
-  //     { $set: { isSeen: true } },
-  //   );
+    await this.chatRepository.updateOneChatRoom(
+      { 'chats.roomId': roomId, 'chats.seenUsers': { $ne: myId } },
+      { $push: { 'chats.seenUsers': myId } },
+    );
 
-  //   return this.chatRepository.findAllChats({
-  //     chatRoomId: new mongoose.Types.ObjectId(roomId),
-  //   });
-  // }
+    const returnedChatRoom = await this.chatRepository.findOneChatRoom({
+      _id: roomId,
+    });
+
+    return new ChatRoomsDto(returnedChatRoom);
+  }
 
   // async createChat({
   //   roomId,

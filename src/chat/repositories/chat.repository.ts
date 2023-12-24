@@ -49,14 +49,9 @@ export class ChatRepository {
   async updateOneChatRoom(
     filter: mongoose.FilterQuery<ChatRooms>,
     update: mongoose.UpdateQuery<ChatRooms>,
+    options?: mongoose.QueryOptions<ChatRooms>,
   ): Promise<void> {
-    const updatedChatRoom = await this.chatRoomsModel.updateOne(filter, update);
-
-    if (!updatedChatRoom.modifiedCount) {
-      throw new InternalServerErrorException(
-        '업데이트 중 알 수 없는 오류 발생',
-      );
-    }
+    await this.chatRoomsModel.updateOne(filter, update, options);
   }
 
   // findAllChats(filter: mongoose.FilterQuery<Chats>): Promise<ChatsDto[]> {

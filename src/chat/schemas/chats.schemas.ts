@@ -13,8 +13,8 @@ export class Chat {
   @Prop({ required: true })
   content: string;
 
-  @Prop({ required: true })
-  seenUsers: number[] | [null];
+  @Prop({ default: [] })
+  seenUsers: number[] | [];
 
   @Prop({ default: Date.now })
   createdAt: Date;
