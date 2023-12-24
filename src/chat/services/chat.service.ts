@@ -49,6 +49,11 @@ export class ChatService {
     );
   }
 
+  /**
+   *
+   * @param myId
+   * @returns 1:1, 단톡 관련 없이 삭제된 채팅방 이외에 다 불러옴
+   */
   findAllChatRooms(myId: number): Promise<ChatRoomsDto[]> {
     return this.chatRepository.findAllChatRooms({
       $and: [
@@ -62,7 +67,7 @@ export class ChatService {
   /**
    *
    * @param roomId
-   * @returns
+   * @returns 채팅방을 1개 return. 없을 시에 에러 던짐.(roomId)
    */
   async findOneChatRoomOrFail(
     roomId: mongoose.Types.ObjectId,
@@ -79,6 +84,13 @@ export class ChatService {
     return new ChatRoomsDto(returnedRoom);
   }
 
+  /**
+   *
+   * @param myId
+   * @param guestId
+   * @returns userId를 통해 채팅방을 조회.
+   *  아마 유저에게 채팅을 걸기 전 해당 유저와의 채팅방이 있는지 확인하기위 호출하는 api로 쓰일 예정
+   */
   async findOneChatRoomByUserIds(
     myId: number,
     guestId: number,
@@ -97,6 +109,16 @@ export class ChatService {
     return new ChatRoomsDto(returnedRoom);
   }
 
+  /**
+   *
+   * @param myId
+   * @param guestId
+   * @returns 채팅방 생성 로직. 해당 채팅방의 원본 멤버를 통해 채팅방의 유무를 검사함.
+   * 만약에 둘다 현재 참가중인 1:1 채팅방이 있다면 conflict error를 던짐.
+   * 둘 중에 하나만 있다면 없는 유저를 기존 채팅방으로 다시 초대.
+   * 둘 다 없다면 새로운 채팅방 개설.
+   * @todo 나중에 new option을 활용해서 push메서드를 사용하지 않는 방향으로 개선할 예정(아마)
+   */
   async createChatRoom(myId: number, guestId: number): Promise<ChatRoomsDto> {
     const existChatRoom = await this.chatRepository.findOneChatRoom({
       $and: [
@@ -139,9 +161,10 @@ export class ChatService {
    *
    * @param myId
    * @param roomId
-   * @returns
+   * @returns 채팅방 나가기 로직.
+   * 채팅방 내의 모든 유저가 나가면 채팅방 삭제 처리.
    */
-  async deleteChatRoom(
+  async leaveChatRoom(
     myId: number,
     roomId: mongoose.Types.ObjectId,
   ): Promise<void> {

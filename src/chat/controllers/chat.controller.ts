@@ -40,7 +40,9 @@ import { ApiGetChatRoomsNew } from '../swagger-decorators/get-chat-rooms-new.dec
 import { Observable } from 'rxjs';
 import { ChatsDto } from '../dto/chats.dto';
 import { ApiGetChatNotificationSse } from '../swagger-decorators/get-chat-notification-Sse.decorator';
-
+/**
+ * @todo 1:1 채팅 컨트롤러 서비스 완성
+ */
 @ApiTags('CHAT')
 @UsePipes(
   new ValidationPipe({
@@ -58,6 +60,7 @@ export class ChatController {
    *
    * @param userId
    * @returns
+   * @todo 추후 다른 기능들에서도 호출이 필요할 경우 service코드에 별도의 비즈니스 로직 추가
    */
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChatNotificationSse()
@@ -125,7 +128,7 @@ export class ChatController {
    *
    * @param userId
    * @param receivedUserDto
-   * @returns 완료
+   * @returns 채팅방 생성
    */
   @UseGuards(JwtAccessTokenGuard)
   @ApiCreateChatRoom()
@@ -147,11 +150,11 @@ export class ChatController {
   @ApiDeleteChatRoom()
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':roomId')
-  deleteChatRoom(
+  leaveChatRoom(
     @GetUserId() userId: number,
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
   ) {
-    return this.chatService.deleteChatRoom(userId, roomId);
+    return this.chatService.leaveChatRoom(userId, roomId);
   }
 
   // @UseGuards(JwtAccessTokenGuard)
