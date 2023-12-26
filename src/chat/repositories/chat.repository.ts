@@ -3,9 +3,11 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ChatRooms } from '../schemas/chat-rooms.schemas';
 import { ChatImages } from '../schemas/chat-images.schemas';
 import mongoose, {
+  Aggregate,
   AggregatePaginateModel,
   PaginateModel,
   PaginateOptions,
+  PaginateResult,
 } from 'mongoose';
 import { ChatRoomsDto } from '../dto/chat-rooms.dto';
 import { ChatsDto } from '../dto/chats.dto';
@@ -33,7 +35,7 @@ export class ChatRepository {
 
   aggregateChatRooms(
     pipeline: mongoose.PipelineStage[],
-  ): Promise<AggregateChatRoomsDto[]> {
+  ): Aggregate<Array<any>> {
     return this.chatRoomsModel.aggregate(pipeline);
   }
 
@@ -52,8 +54,20 @@ export class ChatRepository {
     query: mongoose.FilterQuery<ChatRooms>,
     options: PaginateOptions,
     callback?,
-  ): Promise<ChatRooms> {
+  ): Promise<PaginateResult<ChatRoomsDto>> {
     return this.chatRoomsPaginateModel.paginate(query, options, callback);
+  }
+
+  aggregatePaginate(
+    query: mongoose.Aggregate<ChatRooms[]>,
+    options: mongoose.PaginateOptions,
+    callback?,
+  ) {
+    return this.chatRoomsAggregatePaginateModel.aggregatePaginate(
+      query,
+      options,
+      callback,
+    );
   }
 
   async createChatRoom<DocContents = mongoose.AnyKeys<ChatRooms>>(

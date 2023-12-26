@@ -20,7 +20,6 @@ export class AggregateChatRoomsDto extends OmitType(ChatRoomsDto, [
     super();
 
     this._id = aggregateChatRoomsDto._id;
-    this.originalMembers = aggregateChatRoomsDto.originalMembers;
     this.chatMembers = aggregateChatRoomsDto.chatMembers;
     this.createdAt = aggregateChatRoomsDto.createdAt;
     this.chatCount = aggregateChatRoomsDto.chatCount;

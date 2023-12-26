@@ -41,6 +41,7 @@ import { Observable } from 'rxjs';
 import { ChatsDto } from '../dto/chats.dto';
 import { ApiGetChatNotificationSse } from '../swagger-decorators/get-chat-notification-Sse.decorator';
 import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
+import { ChatRoomPaginateResultDto } from '../dto/chat-paginate-result.dto';
 /**
  * @todo 1:1 채팅 컨트롤러 서비스 완성
  */
@@ -171,8 +172,10 @@ export class ChatController {
   async findChats(
     @GetUserId() userId: number,
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  ): Promise<ChatRoomsDto> {
-    return this.chatService.findAllChats(userId, roomId);
+  ): Promise<ChatRoomsDto[]> {
+    const returned = await this.chatService.findAllChats(userId, roomId);
+    // console.log(returned);
+    return returned;
   }
 
   @UseGuards(JwtAccessTokenGuard)
