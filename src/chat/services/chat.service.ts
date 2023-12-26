@@ -200,7 +200,7 @@ export class ChatService {
   async findAllChats(
     myId: number,
     roomId: mongoose.Types.ObjectId,
-  ): Promise<ChatRoomsDto[]> {
+  ): Promise<ChatRoomsDto> {
     const page = 1;
     const pageSize = 10;
     await this.findOneChatRoomOrFail(roomId);
@@ -213,48 +213,78 @@ export class ChatService {
       { arrayFilters: [{ 'elem.seenUsers': { $ne: myId } }] },
     );
 
+    // const returnedChatRoom: ChatRoomsDto[] =
+    //   await this.chatRepository.aggregateChatRooms([
+    //     {
+    //       $match: { _id: new mongoose.Types.ObjectId(roomId), deletedAt: null },
+    //     },
+    //     { $sort: { 'chats.createdAt': -1 } },
+    //     {
+    //       $addFields: {
+    //         chatsCount: { $size: '$chats' },
+    //         sortedChat: { $slice: ['$chats', (page - 1) * pageSize, pageSize] },
+    //       },
+    //     },
+    //     {
+    //       $project: {
+    //         _id: 1,
+    //         chatMembers: 1,
+    //         chatsCount: 1,
+    //         // chats: 1,
+    //         chats: '$sortedChat',
+    //         chatRoomType: 1,
+    //         createdAt: 1,
+    //         updatedAt: 1,
+    //       },
+    //     },
+    //   ]);
     const returnedChatRoom: ChatRoomsDto[] =
       await this.chatRepository.aggregateChatRooms([
         {
           $match: { _id: new mongoose.Types.ObjectId(roomId), deletedAt: null },
         },
-        { $sort: { 'chats.createdAt': -1 } },
+        {
+          $unwind: '$chats',
+        },
+        {
+          $sort: { 'chats.createdAt': -1 },
+        },
+        {
+          $group: {
+            _id: '$_id',
+            chatMembers: { $first: '$chatMembers' },
+            chats: { $push: '$chats' },
+            chatRoomType: { $first: '$chatRoomType' },
+            createdAt: { $first: '$createdAt' },
+            updatedAt: { $first: '$updatedAt' },
+          },
+        },
         {
           $addFields: {
             chatsCount: { $size: '$chats' },
             sortedChat: { $slice: ['$chats', (page - 1) * pageSize, pageSize] },
           },
         },
-        // { $sort: { 'chats.createdAt': -1 } },
         {
           $project: {
             _id: 1,
             chatMembers: 1,
             chatsCount: 1,
-            // chats: 1,
             chats: '$sortedChat',
-            // $slice: [$]
-
-            // $slice: ['$sortedChat', (page - 1) * pageSize, pageSize],
-            // _id: 'chats._id',
-            // chatRoomId: 'chats.chatRoomId',
-            // senderId: 'chats.senderId',
-            // content: 'chats.content',
-            // seenUsers: 'chats.seenUsers',
-            // createdAt: 'chats.createdAt',
-            // },
             chatRoomType: 1,
             createdAt: 1,
             updatedAt: 1,
           },
         },
       ]);
+
     // const returnedChatRoom = await this.chatRepository.findOneChatRoom({
     //   _id: roomId,
     // });
-    console.log(returnedChatRoom);
+    console.log(returnedChatRoom[0].chats);
+    return new ChatRoomsDto(returnedChatRoom[0]);
 
-    return plainToInstance(ChatRoomsDto, returnedChatRoom);
+    // return plainToInstance(ChatRoomsDto, returnedChatRoom);
   }
 
   async createChat({

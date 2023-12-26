@@ -172,7 +172,7 @@ export class ChatController {
   async findChats(
     @GetUserId() userId: number,
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  ): Promise<ChatRoomsDto[]> {
+  ): Promise<ChatRoomsDto> {
     const returned = await this.chatService.findAllChats(userId, roomId);
     // console.log(returned);
     return returned;

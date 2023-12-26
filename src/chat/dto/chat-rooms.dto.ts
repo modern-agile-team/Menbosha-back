@@ -30,7 +30,7 @@ export class ChatRoomsDto implements Omit<ChatRooms, 'unprotectedData'> {
   @ApiProperty({
     description: '해당 채팅방 채팅 내역',
     type: 'object',
-    // isArray: true,
+    isArray: true,
     default: [],
   })
   @Expose()
@@ -69,8 +69,8 @@ export class ChatRoomsDto implements Omit<ChatRooms, 'unprotectedData'> {
     this._id = chatRoomsDto._id;
     this.originalMembers = chatRoomsDto.originalMembers;
     this.chatMembers = chatRoomsDto.chatMembers;
-    // this.chats = plainToInstance(ChatsDto, chatRoomsDto.chats);
-    this.chats = chatRoomsDto.chats;
+    this.chats = plainToInstance(ChatsDto, chatRoomsDto.chats);
+    // this.chats = chatRoomsDto.chats;
     this.chatRoomType = chatRoomsDto.chatRoomType;
     this.createdAt = chatRoomsDto.createdAt;
     this.updatedAt = chatRoomsDto.updatedAt;
