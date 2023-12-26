@@ -215,35 +215,34 @@ export class ChatService {
 
     const returnedChatRoom: ChatRoomsDto[] =
       await this.chatRepository.aggregateChatRooms([
-        { $match: { _id: new mongoose.Types.ObjectId(roomId) } },
-        { $addFields: { chatsCount: { $size: '$chats' } } },
-        { $sort: { 'chats.createdAt': -1 } },
-        { $unwind: '$chats' },
         {
-          $group: {
-            _id: '$_id',
-            chatMembers: { $first: '$chatMembers' },
-            chats: { $push: '$chats' },
-            chatRoomType: { $first: '$chatRoomType' },
-            createdAt: { $first: '$createdAt' },
-            updatedAt: { $first: '$updatedAt' },
+          $match: { _id: new mongoose.Types.ObjectId(roomId), deletedAt: null },
+        },
+        { $sort: { 'chats.createdAt': -1 } },
+        {
+          $addFields: {
+            chatsCount: { $size: '$chats' },
+            sortedChat: { $slice: ['$chats', (page - 1) * pageSize, pageSize] },
           },
         },
+        // { $sort: { 'chats.createdAt': -1 } },
         {
           $project: {
             _id: 1,
             chatMembers: 1,
             chatsCount: 1,
             // chats: 1,
-            chats: {
-              $slice: ['$chats', (page - 1) * pageSize, pageSize],
-              // _id: 'chats._id',
-              // chatRoomId: 'chats.chatRoomId',
-              // senderId: 'chats.senderId',
-              // content: 'chats.content',
-              // seenUsers: 'chats.seenUsers',
-              // createdAt: 'chats.createdAt',
-            },
+            chats: '$sortedChat',
+            // $slice: [$]
+
+            // $slice: ['$sortedChat', (page - 1) * pageSize, pageSize],
+            // _id: 'chats._id',
+            // chatRoomId: 'chats.chatRoomId',
+            // senderId: 'chats.senderId',
+            // content: 'chats.content',
+            // seenUsers: 'chats.seenUsers',
+            // createdAt: 'chats.createdAt',
+            // },
             chatRoomType: 1,
             createdAt: 1,
             updatedAt: 1,
@@ -369,7 +368,25 @@ export class ChatService {
             },
           },
         },
-        // { $sort: { 'chats.createdAt': -1 } },
+        {
+          $set: {
+            latestChat: {
+              $arrayElemAt: [
+                // 출력되는 값은 1개기 때문에 배열 형태에서 빼내기 위해서 arrayElemAt을 통해 0번 인덱스를 지정
+                // 혹은 addFields를 이용해도 되는데 코드가 너무 길어질 것 같음.
+                {
+                  $filter: {
+                    input: '$chats',
+                    cond: {
+                      $eq: ['$$this.createdAt', { $max: '$chats.createdAt' }],
+                    },
+                  },
+                },
+                0,
+              ],
+            },
+          },
+        },
         {
           $project: {
             _id: 1,
@@ -378,19 +395,14 @@ export class ChatService {
             createdAt: 1,
             updatedAt: 1,
             chatCount: 1,
-            // chat: {
-            //   content: { $arrayElemAt: ['$chats.content', ]}
-            // },
             chat: {
-              content: { $arrayElemAt: ['$chats.content', 0] },
-              seenUsers: { $arrayElemAt: ['$chats.seenUsers', 0] },
-              createdAt: { $arrayElemAt: ['$chats.createdAt', 0] },
+              content: '$latestChat.content',
+              seenUsers: '$latestChat.seenUsers',
+              createdAt: '$latestChat.createdAt',
             },
           },
         },
       ]);
-    // .facet({});
-    console.log(returnedChatRoomsAggregate);
 
     if (!returnedChatRoomsAggregate) {
       return null;
