@@ -1,4 +1,3 @@
-import { ChatRepository } from '../repositories/ChatRepository';
 import {
   ConflictException,
   ForbiddenException,
@@ -23,6 +22,7 @@ import { ChatImagesDto } from '../dto/chat-images.dto';
 import { ChatRoomType } from '../constants/chat-rooms-enum';
 import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 import { plainToInstance } from 'class-transformer';
+import { ChatRepository } from '../repositories/chat.repository';
 // import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 
 @Injectable()
@@ -210,9 +210,14 @@ export class ChatService {
       { arrayFilters: [{ 'elem.seenUsers': { $ne: myId } }] },
     );
 
-    const returnedChatRoom = await this.chatRepository.findOneChatRoom({
-      _id: roomId,
-    });
+    const returnedChatRoom = await this.chatRepository.paginateOneChatRoom(
+      {},
+      { read: { pref: 'chats', tags: ['tag1', 'tag2'] } },
+    );
+
+    // const returnedChatRoom = await this.chatRepository.findOneChatRoom({
+    //   _id: roomId,
+    // });
 
     return new ChatRoomsDto(returnedChatRoom);
   }

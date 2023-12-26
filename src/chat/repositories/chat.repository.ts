@@ -16,7 +16,7 @@ export class ChatRepository {
     @InjectModel(ChatImages.name)
     private readonly chatImagesModel: mongoose.Model<ChatImages>,
     @InjectModel(ChatRooms.name)
-    private chatRoomsPaginateModel: PaginateModel<ChatRooms>,
+    private readonly chatRoomsPaginateModel: PaginateModel<ChatRooms>,
   ) {}
 
   findAllChatRooms(
@@ -46,7 +46,7 @@ export class ChatRepository {
     query: mongoose.FilterQuery<ChatRooms>,
     options: PaginateOptions,
     callback?,
-  ) {
+  ): Promise<ChatRoomsDto> {
     return this.chatRoomsPaginateModel.paginate(query, options, callback);
   }
 

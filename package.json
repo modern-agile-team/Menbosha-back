@@ -33,6 +33,7 @@
     "@nestjs/swagger": "^7.1.10",
     "@nestjs/typeorm": "^10.0.0",
     "@nestjs/websockets": "^10.2.5",
+    "@types/mongoose-aggregate-paginate-v2": "^1.0.12",
     "aws-sdk": "^2.1443.0",
     "axios": "^1.5.1",
     "cache-manager": "^5.3.1",
