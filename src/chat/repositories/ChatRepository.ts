@@ -2,9 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ChatRooms } from '../schemas/chat-rooms.schemas';
 import { ChatImages } from '../schemas/chat-images.schemas';
-import mongoose, { PaginateModel } from 'mongoose';
+import mongoose from 'mongoose';
 import { ChatRoomsDto } from '../dto/chat-rooms.dto';
-import { ChatsDto } from '../dto/chats.dto';
 import { ChatImagesDto } from '../dto/chat-images.dto';
 import { AggregateChatRoomsDto } from '../dto/aggregate-chat-rooms.dto';
 
@@ -15,8 +14,6 @@ export class ChatRepository {
     private readonly chatRoomsModel: mongoose.Model<ChatRooms>,
     @InjectModel(ChatImages.name)
     private readonly chatImagesModel: mongoose.Model<ChatImages>,
-    @InjectModel(ChatRooms.name)
-    private chatRoomsPaginateModel: PaginateModel<ChatRooms>,
   ) {}
 
   findAllChatRooms(
@@ -42,8 +39,6 @@ export class ChatRepository {
     return this.chatRoomsModel.findOne(filter);
   }
 
-  paginateOneChatRoom() {}
-
   async createChatRoom<DocContents = mongoose.AnyKeys<ChatRooms>>(
     doc: DocContents,
   ): Promise<ChatRoomsDto> {
@@ -56,6 +51,7 @@ export class ChatRepository {
     options?: mongoose.QueryOptions<ChatRooms>,
   ): Promise<void> {
     await this.chatRoomsModel.updateOne(filter, update, options);
+    this.chatRoomsModel.mongoosePaginate();
   }
 
   async updateManyChatRoom(
@@ -69,11 +65,9 @@ export class ChatRepository {
   // findAllChats(filter: mongoose.FilterQuery<Chats>): Promise<ChatsDto[]> {
   //   return this.chatsModel.find(filter);
   // }
-
   // findOneChat(filter: mongoose.FilterQuery<Chats>): Promise<ChatsDto> {
   //   return this.chatsModel.findOne(filter);
   // }
-
   findOneChatImages(
     filter: mongoose.FilterQuery<ChatImages>,
   ): Promise<ChatImages> {
@@ -86,7 +80,6 @@ export class ChatRepository {
   // ): Promise<void> {
   //   await this.chatsModel.updateMany(filter, update);
   // }
-
   async createChat(
     id: mongoose.Types.ObjectId | any,
     update: mongoose.UpdateQuery<ChatRooms>,
@@ -100,10 +93,4 @@ export class ChatRepository {
   ): Promise<ChatImagesDto> {
     return this.chatImagesModel.create(doc);
   }
-
-  // async getUnreadCounts(roomId: mongoose.Types.ObjectId, after: number) {
-  //   return this.chatsModel.count({
-  //     $and: [{ chatRoomId: roomId }, { createdAt: { $gt: new Date(after) } }],
-  //   });
-  // }
 }

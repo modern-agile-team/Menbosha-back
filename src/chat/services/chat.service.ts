@@ -1,4 +1,4 @@
-import { ChatRepository } from '../repositories/chat.repository';
+import { ChatRepository } from '../repositories/ChatRepository';
 import {
   ConflictException,
   ForbiddenException,
