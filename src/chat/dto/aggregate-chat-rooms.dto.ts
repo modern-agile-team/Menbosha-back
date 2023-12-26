@@ -21,7 +21,9 @@ export class AggregateChatRoomsDto extends OmitType(ChatRoomsDto, [
 
     this._id = aggregateChatRoomsDto._id;
     this.chatMembers = aggregateChatRoomsDto.chatMembers;
+    this.chatRoomType = aggregateChatRoomsDto.chatRoomType;
     this.createdAt = aggregateChatRoomsDto.createdAt;
+    this.updatedAt = aggregateChatRoomsDto.updatedAt;
     this.chatCount = aggregateChatRoomsDto.chatCount;
     this.chat = aggregateChatRoomsDto.chat;
   }

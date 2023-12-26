@@ -358,17 +358,29 @@ export class ChatService {
         {
           $addFields: {
             chatCount: {
-              $size: '$chats',
+              $size: {
+                $filter: {
+                  input: '$chats',
+                  as: 'chat',
+                  cond: { $not: { $in: [myId, '$$chat.seenUsers'] } },
+                  // as를 통해 정의된 chat이라는 별칭을 참조하기 위해 $$를 붙임.
+                },
+              },
             },
           },
         },
-        { $sort: { 'chats.createdAt': -1 } },
+        // { $sort: { 'chats.createdAt': -1 } },
         {
           $project: {
             _id: 1,
             chatMembers: 1,
+            chatRoomType: 1,
             createdAt: 1,
+            updatedAt: 1,
             chatCount: 1,
+            // chat: {
+            //   content: { $arrayElemAt: ['$chats.content', ]}
+            // },
             chat: {
               content: { $arrayElemAt: ['$chats.content', 0] },
               seenUsers: { $arrayElemAt: ['$chats.seenUsers', 0] },
@@ -377,6 +389,8 @@ export class ChatService {
           },
         },
       ]);
+    // .facet({});
+    console.log(returnedChatRoomsAggregate);
 
     if (!returnedChatRoomsAggregate) {
       return null;
@@ -413,6 +427,8 @@ export class ChatService {
     const aggregateChatRoomsDto = returnedChatRoomsAggregate.map((chat) => {
       return new AggregateChatRoomsDto(chat);
     });
+
+    console.log(aggregateChatRoomsDto);
 
     return aggregateChatRoomsDto.map((aggregateChatRoomDto) => {
       const { chatMembers } = aggregateChatRoomDto;
