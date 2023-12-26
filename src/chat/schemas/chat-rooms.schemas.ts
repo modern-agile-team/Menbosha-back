@@ -3,6 +3,7 @@ import { Chat } from './chats.schemas';
 import mongoose from 'mongoose';
 import { ChatRoomType } from '../constants/chat-rooms-enum';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
+import mongooseAggregatePaginate from 'mongoose-aggregate-paginate-v2';
 
 const options: SchemaOptions = {
   collection: 'chat_rooms',
@@ -49,7 +50,7 @@ export class ChatRooms {
 
 export const ChatRoomsSchema = SchemaFactory.createForClass(ChatRooms);
 
-ChatRoomsSchema.plugin(mongoosePaginate);
+ChatRoomsSchema.plugin(mongoosePaginate).plugin(mongooseAggregatePaginate);
 
 ChatRoomsSchema.virtual('unprotectedData').get(function (this: ChatRooms) {
   return {
