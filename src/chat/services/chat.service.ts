@@ -203,8 +203,11 @@ export class ChatService {
     await this.findOneChatRoomOrFail(roomId);
 
     await this.chatRepository.updateOneChatRoom(
-      { 'chats.roomId': roomId, 'chats.seenUsers': { $ne: myId } },
-      { $push: { 'chats.seenUsers': myId } },
+      {
+        _id: roomId,
+      },
+      { $push: { 'chats.$[elem].seenUsers': myId } },
+      { arrayFilters: [{ 'elem.seenUsers': { $ne: myId } }] },
     );
 
     const returnedChatRoom = await this.chatRepository.findOneChatRoom({

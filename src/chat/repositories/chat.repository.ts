@@ -54,6 +54,14 @@ export class ChatRepository {
     await this.chatRoomsModel.updateOne(filter, update, options);
   }
 
+  async updateManyChatRoom(
+    filter: mongoose.FilterQuery<ChatRooms>,
+    update: mongoose.UpdateQuery<ChatRooms>,
+    options?: mongoose.QueryOptions<ChatRooms>,
+  ) {
+    return this.chatRoomsModel.updateMany(filter, update, options);
+  }
+
   // findAllChats(filter: mongoose.FilterQuery<Chats>): Promise<ChatsDto[]> {
   //   return this.chatsModel.find(filter);
   // }
