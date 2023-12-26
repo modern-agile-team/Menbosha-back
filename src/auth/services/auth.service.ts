@@ -74,6 +74,8 @@ export class AuthService implements AuthServiceInterface {
       const token = (await axios.post(tokenUrl, tokenBody, tokenHeader)).data;
       const socialAccessToken = token.access_token;
       const socialRefreshToken = token.refresh_token;
+      console.log('소셜 액세스 토큰:', socialAccessToken);
+      console.log('소셜 리프레시 토큰:', socialRefreshToken);
 
       if (provider === 'naver') {
         // 네이버 로그인 사용자 정보 조회
@@ -94,7 +96,7 @@ export class AuthService implements AuthServiceInterface {
         };
       } else if (provider === 'google') {
         // 구글 로그인 사용자 정보 조회
-        userInfoUrl = 'https://www.googleapis.com/oauth2/v1/userinfo';
+        userInfoUrl = 'https://www.googleapis.com/oauth2/v2/userinfo';
         userInfoHeader = {
           headers: {
             Authorization: `Bearer ${socialAccessToken}`,
@@ -105,6 +107,7 @@ export class AuthService implements AuthServiceInterface {
 
       const socialUserInfo = (await axios.get(userInfoUrl, userInfoHeader))
         .data;
+      console.log(socialUserInfo);
 
       const nickname =
         provider === 'naver'
