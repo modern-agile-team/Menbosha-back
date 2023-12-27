@@ -8,12 +8,4 @@ export class PageByMentorListResponseDTO {
     introduce: string;
     mainField: string;
   };
-
-  // constructor() {
-  //   // 초기값 설정
-  //   this.userIntro = {
-  //     introduce: '',
-  //     mainField: '',
-  //   };
-  // }
 }
