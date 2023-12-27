@@ -1,5 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 export function ApiGetPageNumberByHelpMeBoard() {
   return applyDecorators(
@@ -26,13 +26,5 @@ export function ApiGetPageNumberByHelpMeBoard() {
         },
       },
     }),
-    ApiHeaders([
-      {
-        name: 'access_token',
-        description: '액세스 토큰(없어도 동작합니다)',
-        required: true,
-        example: '여기에 액세스 토큰',
-      },
-    ]),
   );
 }

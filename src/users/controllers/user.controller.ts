@@ -13,6 +13,7 @@ import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { ApiGetMyInfo } from '../swagger-decorators/get-my-info-decorator';
 import { ApiGetMyInfoWithOwner } from '../swagger-decorators/get-my-info-with-owner-decorator';
 import { PageByMentorListResponseDTO } from '../dtos/page-by-mentor-list-response-dto';
+import { ApiGetPageNumberByMentor } from '../swagger-decorators/get-mentor-page-decorator';
 
 @Controller('user')
 @ApiTags('user API')
@@ -37,6 +38,7 @@ export class UserController {
   }
 
   @Get('/page')
+  @ApiGetPageNumberByMentor()
   countPageMentor() {
     return this.userService.countPageMentors();
   }
