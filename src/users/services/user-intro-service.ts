@@ -6,5 +6,5 @@ import { UserIntro } from '../entities/user-intro.entity';
 export class UserIntroService {
   constructor(private readonly userIntroRepository: UserIntroRepository) {}
 
-  //   async addUserIntro(userId: number): Promise<UserIntro> {}
+  async addUserIntro(userId: number): Promise<UserIntro> {}
 }

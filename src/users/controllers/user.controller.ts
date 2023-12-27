@@ -3,6 +3,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Post,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -16,6 +17,7 @@ import { PageByMentorListResponseDTO } from '../dtos/page-by-mentor-list-respons
 import { ApiGetPageNumberByMentor } from '../swagger-decorators/get-mentor-page-decorator';
 import { ApiGetMentorList } from '../swagger-decorators/get-mentor-list-decorator';
 import { UserIntroService } from '../services/user-intro-service';
+import { UserIntro } from '../entities/user-intro.entity';
 
 @Controller('user')
 @ApiTags('user API')
@@ -56,9 +58,12 @@ export class UserController {
     return this.userService.getMentorList(page);
   }
 
-  // @UseGuards(JwtAccessTokenGuard)
-  // @Post('/intro')
-  // addUserIntro(@GetUserId() userId: number,) {
-  //   return this.userIntroService.addUserIntro(userId);
-  // }
+  @UseGuards(JwtAccessTokenGuard)
+  @Post('/intro')
+  addUserIntro(
+    @GetUserId() userId: number,
+    userData: CreateUserIntroDto,
+  ): Promise<UserIntro> {
+    return this.userIntroService.addUserIntro(userId);
+  }
 }
