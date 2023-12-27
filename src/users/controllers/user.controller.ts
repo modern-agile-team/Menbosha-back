@@ -18,6 +18,7 @@ import { ApiGetPageNumberByMentor } from '../swagger-decorators/get-mentor-page-
 import { ApiGetMentorList } from '../swagger-decorators/get-mentor-list-decorator';
 import { UserIntroService } from '../services/user-intro-service';
 import { UserIntro } from '../entities/user-intro.entity';
+import { CreateUserIntroDto } from '../dtos/create-user-intro-dto';
 
 @Controller('user')
 @ApiTags('user API')
@@ -64,6 +65,6 @@ export class UserController {
     @GetUserId() userId: number,
     userData: CreateUserIntroDto,
   ): Promise<UserIntro> {
-    return this.userIntroService.addUserIntro(userId);
+    return this.userIntroService.addUserIntro(userId, userData);
   }
 }
