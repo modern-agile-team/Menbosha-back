@@ -1,7 +1,7 @@
 import { EntityManager } from 'typeorm';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { Injectable } from '@nestjs/common';
-import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/creare.help.me.board.dto';
+import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/create.help.me.board.dto';
 import { HelpMeBoard } from '../entities/help-me-board.entity';
 import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dto';
 

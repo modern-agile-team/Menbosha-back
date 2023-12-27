@@ -6,7 +6,7 @@ export class oneHelpMeBoardResponseDTO {
   body: string;
   createdAt: Date;
   updatedAt: Date;
-  unitowner: true | false;
+  unitOwner: true | false;
   categoryId: number;
   user: {
     name: string;

@@ -11,5 +11,5 @@ export class HelpMeBoardResponseDTO {
     name: string;
     userImage: UserImage | UserImage[];
   };
-  unitowner: true | false;
+  unitOwner: true | false;
 }

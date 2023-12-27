@@ -14,13 +14,13 @@ import { HelpMeBoardService } from '../services/help.me.board.service';
 import { BoardImagesService } from '../services/BoardImage.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateHelpMeBoardImageDto } from '../dto/helpMeBoard/create.board-image.dto';
-import { ApiUploadHelpMeBoardImages } from '../swagger-decorators/helpMeBoard/add-help-me-baord-images-decorator';
+import { ApiUploadHelpMeBoardImages } from '../swagger-decorators/helpMeBoard/add-help-me-board-images-decorator';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiUpdateHelpMeBoardImage } from '../swagger-decorators/helpMeBoard/patch-help-me-board-images-decorators';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { ApiAddHelpMeBoard } from '../swagger-decorators/helpMeBoard/add-help-me-board-decorator';
-import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/creare.help.me.board.dto';
+import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/create.help.me.board.dto';
 import { HelpMeBoard } from '../entities/help-me-board.entity';
 import { PageByHelpMeBoardResponseDTO } from '../dto/helpMeBoard/response.help.me.board.dto';
 import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
@@ -32,7 +32,7 @@ import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dt
 import { HelpMeBoardResponseDTO } from '../dto/helpMeBoard/update.help.me.board.response.dto';
 import { ApiDeleteHelpMeBoard } from '../swagger-decorators/helpMeBoard/delete-help-me-board-decorator';
 
-@Controller('HelpMeBoard')
+@Controller('helpMeBoard')
 @ApiTags('HelpMeBoard API')
 export class HelpMeBoardController {
   constructor(
@@ -73,6 +73,12 @@ export class HelpMeBoardController {
     @Query('page') page = 1,
   ): Promise<{ data: PageByHelpMeBoardResponseDTO[]; total: number }> {
     return this.helpMeBoardService.findPagedHelpMeBoards(page);
+  }
+
+  @Get('/page')
+  @ApiGetPageHelpMeBoards()
+  countPageBoards() {
+    return this.helpMeBoardService.countPagedHelpMeBoards();
   }
 
   @Get('/unit') //하나의 게시판 불러오기
