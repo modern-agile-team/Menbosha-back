@@ -32,7 +32,7 @@ import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dt
 import { HelpMeBoardResponseDTO } from '../dto/helpMeBoard/update.help.me.board.response.dto';
 import { ApiDeleteHelpMeBoard } from '../swagger-decorators/helpMeBoard/delete-help-me-board-decorator';
 
-@Controller('HelpMeBoard')
+@Controller('helpMeBoard')
 @ApiTags('HelpMeBoard API')
 export class HelpMeBoardController {
   constructor(
