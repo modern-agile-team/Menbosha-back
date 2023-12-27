@@ -15,11 +15,15 @@ import { ApiGetMyInfoWithOwner } from '../swagger-decorators/get-my-info-with-ow
 import { PageByMentorListResponseDTO } from '../dtos/page-by-mentor-list-response-dto';
 import { ApiGetPageNumberByMentor } from '../swagger-decorators/get-mentor-page-decorator';
 import { ApiGetMentorList } from '../swagger-decorators/get-mentor-list-decorator';
+import { UserIntroService } from '../services/user-intro-service';
 
 @Controller('user')
 @ApiTags('user API')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly userIntroService: UserIntroService,
+  ) {}
 
   @ApiGetMyInfo()
   @UseGuards(JwtAccessTokenGuard)
@@ -51,4 +55,10 @@ export class UserController {
   ): Promise<{ data: PageByMentorListResponseDTO[] }> {
     return this.userService.getMentorList(page);
   }
+
+  // @UseGuards(JwtAccessTokenGuard)
+  // @Post('/intro')
+  // addUserIntro(@GetUserId() userId: number,) {
+  //   return this.userIntroService.addUserIntro(userId);
+  // }
 }
