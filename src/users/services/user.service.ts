@@ -77,8 +77,8 @@ export class UserService {
             name: user.name,
             userImage: user.userImage ? user.userImage : [],
             userIntro: {
-              introduce: user.userIntro.introduce,
-              mainField: user.userIntro.mainField,
+              introduce: user.userIntro.introduce.substring(0, 30),
+              mainField: user.userIntro.mainField.substring(0, 30),
             },
           };
         }),
