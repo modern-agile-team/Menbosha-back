@@ -14,7 +14,7 @@ import { HelpMeBoardService } from '../services/help.me.board.service';
 import { BoardImagesService } from '../services/BoardImage.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateHelpMeBoardImageDto } from '../dto/helpMeBoard/create.board-image.dto';
-import { ApiUploadHelpMeBoardImages } from '../swagger-decorators/helpMeBoard/add-help-me-baord-images-decorator';
+import { ApiUploadHelpMeBoardImages } from '../swagger-decorators/helpMeBoard/add-help-me-board-images-decorator';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiUpdateHelpMeBoardImage } from '../swagger-decorators/helpMeBoard/patch-help-me-board-images-decorators';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
@@ -76,6 +76,7 @@ export class HelpMeBoardController {
   }
 
   @Get('/page')
+  @ApiGetPageHelpMeBoards()
   countPageBoards() {
     return this.helpMeBoardService.countPagedHelpMeBoards();
   }
@@ -89,11 +90,6 @@ export class HelpMeBoardController {
   ): Promise<oneHelpMeBoardResponseDTO> {
     return this.helpMeBoardService.findOneHelpMeBoard(boardId, userId);
   }
-
-  // @Get('/page')
-  // findpagenumber(
-  //   @Query('page') page = 1,
-  // ): Promise<{data: PageByHelpMeBoardResponseDTO[]}>
 
   @Patch('')
   @UseGuards(JwtAccessTokenGuard)
