@@ -66,9 +66,8 @@ export class UserRepository {
   }
 
   async findIsMentors(): Promise<number> {
-    const total = await this.entityManager.count(User, {
+    return await this.entityManager.count(User, {
       where: { isMentor: true },
     });
-    return total;
   }
 }

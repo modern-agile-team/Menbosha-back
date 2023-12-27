@@ -13,7 +13,8 @@ export function ApiGetPageNumberByMentor() {
       content: {
         JSON: {
           example: {
-            message: '페이지와 총 멘토 수를 성공적으로 불러왔습니다.',
+            total: 'number',
+            totalPage: 'number',
           },
         },
       },
