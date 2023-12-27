@@ -24,8 +24,8 @@ export class HelpMeBoardService {
   async countPagedHelpMeBoards() {
     const limit = 10;
     const total = await this.helpMeBoardRepository.findTotalBoards();
-    const Page = total / limit;
-    const totalPage = Math.ceil(Page);
+    const page = total / limit;
+    const totalPage = Math.ceil(page);
     return { total, totalPage };
   }
 

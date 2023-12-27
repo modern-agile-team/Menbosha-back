@@ -36,6 +36,11 @@ export class UserController {
     return this.userService.getMyInfoWithOwner(userId, targetId);
   }
 
+  @Get('/page')
+  countPageMentor() {
+    return this.userService.countPageMentors();
+  }
+
   @Get('mentor_list')
   getMentorList(
     @Query('page') page: 1,

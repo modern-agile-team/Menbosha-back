@@ -53,6 +53,14 @@ export class UserService {
     };
   }
 
+  async countPageMentors() {
+    const limit = 10;
+    const total = await this.userRepository.findTotalMentors();
+    const page = total / limit;
+    const totalPage = Math.ceil(page);
+    return { total, totalPage };
+  }
+
   async getMentorList(
     page: number,
   ): Promise<{ data: PageByMentorListResponseDTO[]; total: number }> {
