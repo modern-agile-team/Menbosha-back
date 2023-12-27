@@ -9,7 +9,7 @@ export function ApiGetMentorList() {
     }),
     ApiResponse({
       status: 200,
-      description: '성공적으로 멘토의 페이지와 총 멘토 수를 불러온 경우',
+      description: '성공적으로 멘토의 리스트를 가져왔을 경우',
       content: {
         JSON: {
           example: {
