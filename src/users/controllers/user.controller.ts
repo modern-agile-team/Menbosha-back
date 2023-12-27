@@ -3,6 +3,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
@@ -11,6 +12,7 @@ import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { ApiGetMyInfo } from '../swagger-decorators/get-my-info-decorator';
 import { ApiGetMyInfoWithOwner } from '../swagger-decorators/get-my-info-with-owner-decorator';
+import { PageByMentorListResponseDTO } from '../dtos/page-by-mentor-list-response-dto';
 
 @Controller('user')
 @ApiTags('user API')
@@ -32,5 +34,12 @@ export class UserController {
     @Param('targetId', ParseIntPipe) targetId: number,
   ) {
     return this.userService.getMyInfoWithOwner(userId, targetId);
+  }
+
+  @Get('mentor_list')
+  getMentorList(
+    @Query('page') page: 1,
+  ): Promise<{ data: PageByMentorListResponseDTO[]; total: number }> {
+    return this.userService.getMentorList(page);
   }
 }

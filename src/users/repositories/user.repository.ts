@@ -56,4 +56,16 @@ export class UserRepository {
     await this.entityManager.findOne(User, { where: { id: userId } });
     return await this.entityManager.delete(User, { id: userId });
   }
+
+  async findPageByMentors(skip: number, limit: number): Promise<User[]> {
+    return await this.entityManager.find(User, {
+      relations: ['userImage', 'userIntro'],
+      skip: skip,
+      take: limit,
+    });
+  }
+
+  async findTotalMentors(): Promise<number> {
+    return this.entityManager.count(User);
+  }
 }
