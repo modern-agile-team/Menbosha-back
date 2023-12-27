@@ -55,7 +55,7 @@ export class UserService {
 
   async countPageMentors() {
     const limit = 10;
-    const total = await this.userRepository.findTotalMentors();
+    const total = await this.userRepository.findIsMentors();
     const page = total / limit;
     const totalPage = Math.ceil(page);
     return { total, totalPage };
