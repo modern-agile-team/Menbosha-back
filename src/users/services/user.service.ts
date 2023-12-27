@@ -53,15 +53,21 @@ export class UserService {
     };
   }
 
+  async countPageMentors() {
+    const limit = 10;
+    const total = await this.userRepository.findIsMentors();
+    const page = total / limit;
+    const totalPage = Math.ceil(page);
+    return { total, totalPage };
+  }
+
   async getMentorList(
     page: number,
-  ): Promise<{ data: PageByMentorListResponseDTO[]; total: number }> {
+  ): Promise<{ data: PageByMentorListResponseDTO[] }> {
     const limit = 10;
     const skip = (page - 1) * limit;
     const take = limit;
     const mentors = await this.userRepository.findPageByMentors(skip, take);
-    const total = await this.userRepository.findTotalMentors();
-
     const mentorResponse: PageByMentorListResponseDTO[] = await Promise.all(
       mentors
         .filter((user) => user.isMentor === true) //filter로 user.isMentor = true인 경우만 불러오기
@@ -70,15 +76,13 @@ export class UserService {
             id: user.id,
             name: user.name,
             userImage: user.userImage ? user.userImage : [],
-            userIntro: user.userIntro
-              ? {
-                  introduce: user.userIntro.introduce.substring(0, 30),
-                  mainField: user.userIntro.mainField.substring(0, 30),
-                }
-              : null, // introduce나 mainField가 없는경우 null값
+            userIntro: {
+              introduce: user.userIntro.introduce.substring(0, 30),
+              mainField: user.userIntro.mainField.substring(0, 30),
+            },
           };
         }),
     );
-    return { data: mentorResponse, total };
+    return { data: mentorResponse };
   }
 }

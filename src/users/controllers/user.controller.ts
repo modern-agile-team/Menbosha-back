@@ -13,6 +13,8 @@ import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { ApiGetMyInfo } from '../swagger-decorators/get-my-info-decorator';
 import { ApiGetMyInfoWithOwner } from '../swagger-decorators/get-my-info-with-owner-decorator';
 import { PageByMentorListResponseDTO } from '../dtos/page-by-mentor-list-response-dto';
+import { ApiGetPageNumberByMentor } from '../swagger-decorators/get-mentor-page-decorator';
+import { ApiGetMentorList } from '../swagger-decorators/get-mentor-list-decorator';
 
 @Controller('user')
 @ApiTags('user API')
@@ -36,10 +38,17 @@ export class UserController {
     return this.userService.getMyInfoWithOwner(userId, targetId);
   }
 
+  @Get('/page')
+  @ApiGetPageNumberByMentor()
+  countPageMentor() {
+    return this.userService.countPageMentors();
+  }
+
   @Get('mentor_list')
+  @ApiGetMentorList()
   getMentorList(
     @Query('page') page: 1,
-  ): Promise<{ data: PageByMentorListResponseDTO[]; total: number }> {
+  ): Promise<{ data: PageByMentorListResponseDTO[] }> {
     return this.userService.getMentorList(page);
   }
 }

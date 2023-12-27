@@ -31,6 +31,7 @@ import { ApiGetPageHelpMeBoards } from '../swagger-decorators/helpMeBoard/get-pa
 import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dto';
 import { HelpMeBoardResponseDTO } from '../dto/helpMeBoard/update.help.me.board.response.dto';
 import { ApiDeleteHelpMeBoard } from '../swagger-decorators/helpMeBoard/delete-help-me-board-decorator';
+import { ApiGetPageNumberByHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-board-page-number.decorator';
 
 @Controller('helpMeBoard')
 @ApiTags('HelpMeBoard API')
@@ -76,7 +77,7 @@ export class HelpMeBoardController {
   }
 
   @Get('/page')
-  @ApiGetPageHelpMeBoards()
+  @ApiGetPageNumberByHelpMeBoard()
   countPageBoards() {
     return this.helpMeBoardService.countPagedHelpMeBoards();
   }
