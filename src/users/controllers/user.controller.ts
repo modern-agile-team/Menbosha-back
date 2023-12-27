@@ -46,7 +46,7 @@ export class UserController {
   @Get('mentor_list')
   getMentorList(
     @Query('page') page: 1,
-  ): Promise<{ data: PageByMentorListResponseDTO[]; total: number }> {
+  ): Promise<{ data: PageByMentorListResponseDTO[] }> {
     return this.userService.getMentorList(page);
   }
 }
