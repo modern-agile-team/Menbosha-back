@@ -9,11 +9,15 @@ import { UserRepository } from './repositories/user.repository';
 import { UserImageRepository } from './repositories/user-image.repository';
 import { UserImageService } from './services/user-image.service';
 import { AuthModule } from 'src/auth/auth.module';
+import { UserIntroRepository } from './repositories/user-intro-repositories';
+import { UserIntroService } from './services/user-intro-service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]), AuthModule],
   controllers: [UserController, UserImageController],
   providers: [
+    UserIntroService,
+    UserIntroRepository,
     S3Service,
     UserRepository,
     UserImageRepository,
