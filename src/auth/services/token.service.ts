@@ -2,10 +2,14 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { TokenRepository } from '../repositories/token.repository';
 import * as jwt from 'jsonwebtoken';
 import axios from 'axios';
+import { RedisService } from 'src/common/redis/redis.service';
 
 @Injectable()
 export class TokenService {
-  constructor(private readonly tokenRepository: TokenRepository) {}
+  constructor(
+    private readonly tokenRepository: TokenRepository,
+    private readonly redisService: RedisService,
+  ) {}
 
   async getUserTokens(userId: number) {
     const getUserTokens = await this.tokenRepository.getUserTokens(userId);
@@ -125,9 +129,12 @@ export class TokenService {
       const userId = jwt.verify(token, jwtSecretKey)['userId'];
       const tokenType = jwt.verify(token, jwtSecretKey)['sub'];
       if (tokenType === 'refreshToken') {
-        const userToken = await this.tokenRepository.getUserTokens(userId);
-        const dbRefreshToken = userToken[0].refreshToken;
-        if (token !== dbRefreshToken) {
+        // const userToken = await this.tokenRepository.getUserTokens(userId);
+        // const dbRefreshToken = userToken[0].refreshToken;
+
+        const r = await this.redisService.getToken(String(userId));
+
+        if (token !== r) {
           throw new HttpException(
             '토큰을 찾을 수 없습니다.',
             HttpStatus.NOT_FOUND,

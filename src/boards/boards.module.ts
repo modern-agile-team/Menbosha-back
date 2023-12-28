@@ -14,6 +14,7 @@ import { BoardImageRepository } from './repository/boardImage.repository';
 import { TokenService } from 'src/auth/services/token.service';
 import { TokenRepository } from 'src/auth/repositories/token.repository';
 import { HelpMeBoardImage } from './entities/help-me-board-image.entity';
+import { RedisService } from 'src/common/redis/redis.service';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { HelpMeBoardImage } from './entities/help-me-board-image.entity';
     HelpMeBoardRepository,
     MentorBoardRepository,
     TokenRepository,
+    RedisService,
   ],
 })
 @Module({})
