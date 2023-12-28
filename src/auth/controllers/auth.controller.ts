@@ -115,6 +115,8 @@ export class AuthController {
       socialRefreshToken,
     );
 
+    await this.redisService.setToken(String(userId), refreshToken);
+
     res.cookie('refresh_Token', refreshToken, {
       httpOnly: true,
       sameSite: 'Lax',

@@ -9,7 +9,7 @@ export class RedisService {
     return this.cacheManager.get<string>(userId); // ? Retrieve data from the cache
   }
   async setToken(userId: string, token: string) {
-    await this.cacheManager.set(userId, token); //  ? Set data in the cache
+    await this.cacheManager.set(userId, token, 604800); //  ? Set data in the cache for 7 days
   }
 
   async delToken(userId: string) {
