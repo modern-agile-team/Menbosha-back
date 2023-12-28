@@ -11,14 +11,15 @@ import { MentorBoard } from './entities/mentor-board.entity';
 import { HelpMeBoardRepository } from './repository/help.me.board.repository';
 import { MentorBoardRepository } from './repository/mentor.boards.repository';
 import { BoardImageRepository } from './repository/boardImage.repository';
-import { TokenService } from 'src/auth/services/token.service';
-import { TokenRepository } from 'src/auth/repositories/token.repository';
 import { HelpMeBoardImage } from './entities/help-me-board-image.entity';
-import { RedisService } from 'src/common/redis/redis.service';
+import { RedisModule } from 'src/common/redis/redis.module';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([MentorBoard, HelpMeBoard, HelpMeBoardImage]),
+    AuthModule,
+    RedisModule,
   ],
   controllers: [MentorBoardController, HelpMeBoardController],
   providers: [
@@ -26,12 +27,9 @@ import { RedisService } from 'src/common/redis/redis.service';
     MentorBoardService,
     BoardImagesService,
     S3Service,
-    TokenService,
     BoardImageRepository,
     HelpMeBoardRepository,
     MentorBoardRepository,
-    TokenRepository,
-    RedisService,
   ],
 })
 @Module({})
