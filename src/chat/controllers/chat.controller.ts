@@ -7,7 +7,6 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  ParseIntPipe,
   Post,
   Query,
   Sse,
@@ -44,6 +43,7 @@ import { ChatsDto } from '../dto/chats.dto';
 import { ApiGetChatNotificationSse } from '../swagger-decorators/get-chat-notification-Sse.decorator';
 import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 import { ChatRoomPaginateResultDto } from '../dto/chat-paginate-result.dto';
+import { PageQueryDto } from 'src/search/dtos/page-query.dto';
 /**
  * @todo 1:1 채팅 컨트롤러 서비스 완성
  */
@@ -173,10 +173,10 @@ export class ChatController {
   @Get(':roomId/chat')
   findAllChats(
     @GetUserId() userId: number,
-    @Query('page', ParseIntPipe) page: number,
+    @Query('page') pageQueryDto: PageQueryDto,
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
   ): Promise<ChatRoomsDto> {
-    return this.chatService.findAllChats(userId, roomId, page);
+    return this.chatService.findAllChats(userId, roomId, pageQueryDto.page);
   }
 
   @UseGuards(JwtAccessTokenGuard)
