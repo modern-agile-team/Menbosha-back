@@ -166,8 +166,7 @@ export class ChatController {
    *
    * @param userId
    * @param roomId
-   * @returns chats
-   * @todo 채팅 생성 및 전송 로직 수정 이후 다시 확인
+   * @returns chatRoom
    */
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChats()

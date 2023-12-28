@@ -45,7 +45,10 @@ export class ChatService {
     const subject = this.subjectMap.get(myId);
 
     return subject.asObservable().pipe(
-      map((notification: ChatsDto) => JSON.stringify(notification)),
+      map((notification: ChatsDto) => {
+        console.log(notification);
+        return JSON.stringify(notification);
+      }),
       catchError((err) => {
         this.logger.error('notificationListener : ' + err.message);
         throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -182,6 +185,7 @@ export class ChatService {
     if (!existChatRoom.chatMembers.includes(myId)) {
       throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
     }
+
     return this.chatRepository.updateOneChatRoom(
       { _id: roomId },
       {
@@ -195,8 +199,7 @@ export class ChatService {
    *
    * @param myId
    * @param roomId
-   * @returns
-   * @todo 챗들 Object로 출력되는거 고치기
+   * @returns chatRoom pagination(chats)
    */
   async findAllChats(
     myId: number,
@@ -249,16 +252,10 @@ export class ChatService {
     );
   }
 
-  async createChat({
-    roomId,
-    content,
-    senderId,
-    receiverId,
-  }): Promise<ChatsDto> {
+  async createChat({ roomId, content, senderId }): Promise<ChatsDto> {
     const returnedChatRoom = await this.chatRepository.findOneChatRoom({
       _id: roomId,
-      originalMembers: { $all: [senderId, receiverId] },
-      chatMembers: { $all: [senderId, receiverId] },
+      chatMembers: senderId,
       deletedAt: null,
     });
 
@@ -291,11 +288,21 @@ export class ChatService {
 
     const chatsDto = new ChatsDto(updatedChat);
 
+    // chatsDto &&
+    //   updatedChatRoom.chatMembers.forEach(
+    //     (chatMember) =>
+    //       chatMember !== senderId &&
+    //       this.subjectMap.get(chatMember)?.next(chatsDto),
+    //   );
     if (chatsDto) {
-      const subject = this.subjectMap.get(receiverId);
-      if (subject) {
-        subject.next(chatsDto);
-      }
+      updatedChatRoom.chatMembers.map((chatMember) => {
+        if (chatMember !== senderId) {
+          const subject = this.subjectMap.get(chatMember);
+          if (subject) {
+            subject.next(chatsDto);
+          }
+        }
+      });
     }
 
     return chatsDto;
@@ -372,6 +379,7 @@ export class ChatService {
                     cond: {
                       $eq: ['$$this.createdAt', { $max: '$chats.createdAt' }],
                       // as를 통해 정의하지 않아도 this로 접근 가능.
+                      // 혹은 reserveArray를 사용해서 가져와도 될듯.
                     },
                   },
                 },
@@ -402,7 +410,7 @@ export class ChatService {
     }
 
     const userIds = returnedChatRoomsAggregate.map((chatRoom) => {
-      return chatRoom.chatMembers.filter((userId) => userId !== myId);
+      return chatRoom.chatMembers.filter((userId: number) => userId !== myId);
     });
 
     const targetUsers = await this.userService.findAll({
