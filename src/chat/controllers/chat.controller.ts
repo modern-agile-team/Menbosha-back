@@ -169,7 +169,7 @@ export class ChatController {
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChats()
   @Get(':roomId/chat')
-  async findChats(
+  findAllChats(
     @GetUserId() userId: number,
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
   ): Promise<ChatRoomsDto> {
