@@ -21,8 +21,8 @@ import { ApiGetMentorList } from '../swagger-decorators/get-mentor-list-decorato
 import { UserIntroService } from '../services/user-intro-service';
 import { UserIntro } from '../entities/user-intro.entity';
 import { CreateUserIntroDto } from '../dtos/create-user-intro-dto';
-import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
-import { retry } from 'rxjs';
+import { UpdateUserIntroDTO } from '../dtos/update-user-intro-dto';
+import { ResponseUserIntroDto } from '../dtos/response-user-dto';
 
 @Controller('user')
 @ApiTags('user API')
@@ -72,12 +72,12 @@ export class UserController {
     return this.userIntroService.addUserIntro(userId, userData);
   }
 
-  @UseGuards(JwtOptionalGuard)
+  @UseGuards(JwtAccessTokenGuard)
   @Patch('/intro')
   patchUserIntro(
     @GetUserId() userId: number,
-    @Body() userData: CreateUserIntroDto,
-  ): Promise<UserIntro> {
-    return this.userIntroService.patchUserIntro(userId, userData);
+    @Body() userData: UpdateUserIntroDTO,
+  ): Promise<ResponseUserIntroDto> {
+    return this.userIntroService.updateUserIntro(userId, userData);
   }
 }
