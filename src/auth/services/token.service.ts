@@ -129,12 +129,9 @@ export class TokenService {
       const userId = jwt.verify(token, jwtSecretKey)['userId'];
       const tokenType = jwt.verify(token, jwtSecretKey)['sub'];
       if (tokenType === 'refreshToken') {
-        // const userToken = await this.tokenRepository.getUserTokens(userId);
-        // const dbRefreshToken = userToken[0].refreshToken;
+        const rrt = await this.redisService.getToken(String(userId)); // RedisRefreshToken
 
-        const r = await this.redisService.getToken(String(userId));
-
-        if (token !== r) {
+        if (token !== rrt) {
           throw new HttpException(
             '토큰을 찾을 수 없습니다.',
             HttpStatus.NOT_FOUND,
