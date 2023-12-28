@@ -202,9 +202,9 @@ export class ChatService {
     myId: number,
     roomId: mongoose.Types.ObjectId,
     page: number,
-  ): Promise<ChatRoomsDto> {
-    const pageSize = 10;
-    page = (page - 1) * pageSize;
+  ): Promise<AggregateChatRoomsForChatsDto> {
+    const pageSize = 20;
+    const skip = (page - 1) * pageSize;
 
     await this.findOneChatRoomOrFail(roomId);
 
@@ -221,12 +221,11 @@ export class ChatService {
         {
           $match: { _id: new mongoose.Types.ObjectId(roomId), deletedAt: null },
         },
-        { $sort: { 'chats.createdAt': -1 } },
         {
           $addFields: {
-            chatsCount: { $size: '$chats' },
+            totalCount: { $size: '$chats' },
             sortedChat: {
-              $slice: [{ $reverseArray: '$chats' }, page, pageSize],
+              $slice: [{ $reverseArray: '$chats' }, skip, pageSize],
             },
           },
         },
@@ -234,7 +233,7 @@ export class ChatService {
           $project: {
             _id: 1,
             chatMembers: 1,
-            chatsCount: 1,
+            totalCount: 1,
             chats: '$sortedChat',
             chatRoomType: 1,
             createdAt: 1,
@@ -243,7 +242,11 @@ export class ChatService {
         },
       ]);
 
-    return new AggregateChatRoomsForChatsDto(returnedChatRoom[0]);
+    return new AggregateChatRoomsForChatsDto(
+      returnedChatRoom[0],
+      page,
+      pageSize,
+    );
   }
 
   async createChat({
