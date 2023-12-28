@@ -7,7 +7,9 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Post,
+  Query,
   Sse,
   UploadedFile,
   UseGuards,
@@ -171,6 +173,7 @@ export class ChatController {
   @Get(':roomId/chat')
   findAllChats(
     @GetUserId() userId: number,
+    @Query('page', ParseIntPipe) page: number,
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
   ): Promise<ChatRoomsDto> {
     return this.chatService.findAllChats(userId, roomId);

@@ -200,9 +200,11 @@ export class ChatService {
   async findAllChats(
     myId: number,
     roomId: mongoose.Types.ObjectId,
+    page: number,
   ): Promise<ChatRoomsDto> {
-    const page = 1;
     const pageSize = 10;
+    page = (page - 1) * pageSize;
+
     await this.findOneChatRoomOrFail(roomId);
 
     await this.chatRepository.updateOneChatRoom(
@@ -223,11 +225,7 @@ export class ChatService {
           $addFields: {
             chatsCount: { $size: '$chats' },
             sortedChat: {
-              $slice: [
-                { $reverseArray: '$chats' },
-                (page - 1) * pageSize,
-                pageSize,
-              ],
+              $slice: [{ $reverseArray: '$chats' }, page, pageSize],
             },
           },
         },
