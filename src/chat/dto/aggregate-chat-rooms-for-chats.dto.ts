@@ -8,7 +8,7 @@ export class AggregateChatRoomsForChatsDto extends ChatRoomsDto {
   chatsCount: number;
 
   constructor(aggregateChatRoomsForChatsDto: AggregateChatRoomsForChatsDto) {
-    super();
+    super(aggregateChatRoomsForChatsDto);
 
     this.chatsCount = aggregateChatRoomsForChatsDto.chatsCount;
   }

@@ -24,6 +24,7 @@ import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 import { plainToInstance } from 'class-transformer';
 import { ChatRepository } from '../repositories/chat.repository';
 import { ChatRoomPaginateResultDto } from '../dto/chat-paginate-result.dto';
+import { AggregateChatRoomsForChatsDto } from '../dto/aggregate-chat-rooms-for-chats.dto';
 // import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 
 @Injectable()
@@ -215,7 +216,7 @@ export class ChatService {
       { arrayFilters: [{ 'elem.seenUsers': { $ne: myId } }] },
     );
 
-    const returnedChatRoom: ChatRoomsDto[] =
+    const returnedChatRoom: AggregateChatRoomsForChatsDto[] =
       await this.chatRepository.aggregateChatRooms([
         {
           $match: { _id: new mongoose.Types.ObjectId(roomId), deletedAt: null },
@@ -242,7 +243,7 @@ export class ChatService {
         },
       ]);
 
-    return new ChatRoomsDto(returnedChatRoom[0]);
+    return new AggregateChatRoomsForChatsDto(returnedChatRoom[0]);
   }
 
   async createChat({
