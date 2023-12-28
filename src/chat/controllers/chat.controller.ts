@@ -176,7 +176,7 @@ export class ChatController {
     @Query('page', ParseIntPipe) page: number,
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
   ): Promise<ChatRoomsDto> {
-    return this.chatService.findAllChats(userId, roomId);
+    return this.chatService.findAllChats(userId, roomId, page);
   }
 
   @UseGuards(JwtAccessTokenGuard)
