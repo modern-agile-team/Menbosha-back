@@ -173,9 +173,7 @@ export class ChatController {
     @GetUserId() userId: number,
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
   ): Promise<ChatRoomsDto> {
-    const returned = await this.chatService.findAllChats(userId, roomId);
-    // console.log(returned);
-    return returned;
+    return this.chatService.findAllChats(userId, roomId);
   }
 
   @UseGuards(JwtAccessTokenGuard)

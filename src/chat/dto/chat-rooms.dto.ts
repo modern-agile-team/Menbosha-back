@@ -3,9 +3,7 @@ import { Exclude, Expose, plainToInstance } from 'class-transformer';
 import { TransformMongoId } from './transform/transform-mongo-id';
 import mongoose from 'mongoose';
 import { ChatRooms } from '../schemas/chat-rooms.schemas';
-import { TransformMongoIdToPlainOnly } from './transform/transform-mongo-id-to-plain-only';
 import { ChatRoomType } from '../constants/chat-rooms-enum';
-import { Chat } from '../schemas/chats.schemas';
 import { ChatsDto } from './chats.dto';
 
 export class ChatRoomsDto implements Omit<ChatRooms, 'unprotectedData'> {
@@ -29,12 +27,12 @@ export class ChatRoomsDto implements Omit<ChatRooms, 'unprotectedData'> {
 
   @ApiProperty({
     description: '해당 채팅방 채팅 내역',
-    type: 'object',
+    type: [ChatsDto],
     isArray: true,
     default: [],
   })
   @Expose()
-  @TransformMongoIdToPlainOnly()
+  // @TransformMongoIdToPlainOnly()
   chats: ChatsDto[] | [];
 
   @ApiProperty({
@@ -69,8 +67,7 @@ export class ChatRoomsDto implements Omit<ChatRooms, 'unprotectedData'> {
     this._id = chatRoomsDto._id;
     this.originalMembers = chatRoomsDto.originalMembers;
     this.chatMembers = chatRoomsDto.chatMembers;
-    // this.chats = plainToInstance(ChatsDto, chatRoomsDto.chats);
-    this.chats = chatRoomsDto.chats;
+    this.chats = plainToInstance(ChatsDto, chatRoomsDto.chats);
     this.chatRoomType = chatRoomsDto.chatRoomType;
     this.createdAt = chatRoomsDto.createdAt;
     this.updatedAt = chatRoomsDto.updatedAt;

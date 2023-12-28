@@ -213,56 +213,22 @@ export class ChatService {
       { arrayFilters: [{ 'elem.seenUsers': { $ne: myId } }] },
     );
 
-    // const returnedChatRoom: ChatRoomsDto[] =
-    //   await this.chatRepository.aggregateChatRooms([
-    //     {
-    //       $match: { _id: new mongoose.Types.ObjectId(roomId), deletedAt: null },
-    //     },
-    //     { $sort: { 'chats.createdAt': -1 } },
-    //     {
-    //       $addFields: {
-    //         chatsCount: { $size: '$chats' },
-    //         sortedChat: { $slice: ['$chats', (page - 1) * pageSize, pageSize] },
-    //       },
-    //     },
-    //     {
-    //       $project: {
-    //         _id: 1,
-    //         chatMembers: 1,
-    //         chatsCount: 1,
-    //         // chats: 1,
-    //         chats: '$sortedChat',
-    //         chatRoomType: 1,
-    //         createdAt: 1,
-    //         updatedAt: 1,
-    //       },
-    //     },
-    //   ]);
     const returnedChatRoom: ChatRoomsDto[] =
       await this.chatRepository.aggregateChatRooms([
         {
           $match: { _id: new mongoose.Types.ObjectId(roomId), deletedAt: null },
         },
-        {
-          $unwind: '$chats',
-        },
-        {
-          $sort: { 'chats.createdAt': -1 },
-        },
-        {
-          $group: {
-            _id: '$_id',
-            chatMembers: { $first: '$chatMembers' },
-            chats: { $push: '$chats' },
-            chatRoomType: { $first: '$chatRoomType' },
-            createdAt: { $first: '$createdAt' },
-            updatedAt: { $first: '$updatedAt' },
-          },
-        },
+        { $sort: { 'chats.createdAt': -1 } },
         {
           $addFields: {
             chatsCount: { $size: '$chats' },
-            sortedChat: { $slice: ['$chats', (page - 1) * pageSize, pageSize] },
+            sortedChat: {
+              $slice: [
+                { $reverseArray: '$chats' },
+                (page - 1) * pageSize,
+                pageSize,
+              ],
+            },
           },
         },
         {
@@ -278,13 +244,7 @@ export class ChatService {
         },
       ]);
 
-    // const returnedChatRoom = await this.chatRepository.findOneChatRoom({
-    //   _id: roomId,
-    // });
-    console.log(returnedChatRoom[0].chats);
     return new ChatRoomsDto(returnedChatRoom[0]);
-
-    // return plainToInstance(ChatRoomsDto, returnedChatRoom);
   }
 
   async createChat({
@@ -409,6 +369,7 @@ export class ChatService {
                     input: '$chats',
                     cond: {
                       $eq: ['$$this.createdAt', { $max: '$chats.createdAt' }],
+                      // as를 통해 정의하지 않아도 this로 접근 가능.
                     },
                   },
                 },
@@ -469,8 +430,6 @@ export class ChatService {
     const aggregateChatRoomsDto = returnedChatRoomsAggregate.map((chat) => {
       return new AggregateChatRoomsDto(chat);
     });
-
-    console.log(aggregateChatRoomsDto);
 
     return aggregateChatRoomsDto.map((aggregateChatRoomDto) => {
       const { chatMembers } = aggregateChatRoomDto;
