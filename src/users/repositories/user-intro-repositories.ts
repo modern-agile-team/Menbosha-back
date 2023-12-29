@@ -18,4 +18,11 @@ export class UserIntroRepository {
     userIntro.userId = userId;
     return await this.entityManager.save(UserIntro, userIntro);
   }
+
+  async getUserIntro(userId: number): Promise<UserIntro> {
+    const userIntro = await this.entityManager.findOne(UserIntro, {
+      where: { userId: userId },
+    });
+    return userIntro;
+  }
 }
