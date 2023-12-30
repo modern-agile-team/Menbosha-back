@@ -32,7 +32,6 @@ export class ChatRoomsDto implements Omit<ChatRooms, 'unprotectedData'> {
     default: [],
   })
   @Expose()
-  // @TransformMongoIdToPlainOnly()
   chats: ChatsDto[] | [];
 
   @ApiProperty({

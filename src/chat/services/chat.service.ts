@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   ForbiddenException,
   HttpException,
@@ -309,6 +310,12 @@ export class ChatService {
 
     if (!existChatRoom.chatMembers.includes(senderId)) {
       throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
+    }
+
+    if (!file) {
+      throw new BadRequestException(
+        'File buffer is missing in the uploaded file.',
+      );
     }
 
     const uploadedImage = await this.s3Service.uploadImage(
