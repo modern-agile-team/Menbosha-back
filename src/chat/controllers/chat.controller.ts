@@ -77,7 +77,7 @@ export class ChatController {
   /**
    *
    * @param userId
-   * @returns
+   * @returns find all chat rooms by userId
    */
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChatRooms()
@@ -93,7 +93,7 @@ export class ChatController {
   /**
    *
    * @param userId
-   * @returns
+   * @returns find all chat rooms with mapped user
    */
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChatRoomsNew()
@@ -104,6 +104,12 @@ export class ChatController {
     return this.chatService.findAllChatRoomsWithUserAndChat(userId);
   }
 
+  /**
+   *
+   * @param userId
+   * @param receivedUserDto
+   * @returns findOneChatRoomByUserIds
+   */
   @UseGuards(JwtAccessTokenGuard)
   @Get('check')
   findOneChatRoomByUserIds(
@@ -119,7 +125,7 @@ export class ChatController {
   /**
    *
    * @param roomId
-   * @returns
+   * @returns find one chat room or fail
    */
   @ApiGetOneChatRoom()
   @Get(':roomId')

@@ -307,11 +307,9 @@ export class ChatService {
   ) {
     const existChatRoom = await this.findOneChatRoomOrFail(roomId);
 
-    // if (
-    //   !(existChatRoom.hostId === senderId || existChatRoom.guestId === senderId)
-    // ) {
-    //   throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
-    // }
+    if (!existChatRoom.chatMembers.includes(senderId)) {
+      throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
+    }
 
     const uploadedImage = await this.s3Service.uploadImage(
       file,
@@ -322,7 +320,7 @@ export class ChatService {
     const returnedChatImage = await this.chatRepository.createChatImage({
       chatRoomId: new mongoose.Types.ObjectId(roomId),
       senderId: senderId,
-      receiverId: uploadedImage.url,
+      imageUrl: uploadedImage.url,
     });
 
     return new ChatImagesDto(returnedChatImage);
@@ -331,8 +329,6 @@ export class ChatService {
   /**
    * @param myId
    * @returns 각 채팅방의 채팅 상대방 멤버들의 정보와 가장 최신 채팅 내용을 매핑한 객체들의 배열을 return
-   * @todo sort 고치기
-   *
    */
   async findAllChatRoomsWithUserAndChat(
     myId: number,
