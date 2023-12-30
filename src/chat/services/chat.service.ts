@@ -248,11 +248,19 @@ export class ChatService {
         },
       ]);
 
-    return new AggregateChatRoomsForChatsDto(
+    const aggregateChatRoomsForChatsDto = new AggregateChatRoomsForChatsDto(
       returnedChatRoom[0],
       page,
       pageSize,
     );
+
+    const { currentPage, lastPage } = aggregateChatRoomsForChatsDto;
+
+    if (currentPage > lastPage) {
+      throw new NotFoundException('Page not found');
+    }
+
+    return aggregateChatRoomsForChatsDto;
   }
 
   async createChat({ roomId, content, senderId }): Promise<ChatsDto> {
