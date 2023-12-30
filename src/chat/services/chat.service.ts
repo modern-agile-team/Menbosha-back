@@ -37,6 +37,11 @@ export class ChatService {
     private readonly chatRepository: ChatRepository,
   ) {}
 
+  /**
+   * @todo 현재 알람 수신은 잘 되는데 객체가 empty로 나옴. 마지막에 수정.
+   * @param myId
+   * @returns
+   */
   notificationListener(myId: number): Observable<string> {
     if (!this.subjectMap.get(myId)) {
       this.subjectMap.set(myId, new Subject<ChatsDto>());
@@ -45,10 +50,7 @@ export class ChatService {
     const subject = this.subjectMap.get(myId);
 
     return subject.asObservable().pipe(
-      map((notification: ChatsDto) => {
-        console.log(notification);
-        return JSON.stringify(notification);
-      }),
+      map((notification) => JSON.stringify(notification)),
       catchError((err) => {
         this.logger.error('notificationListener : ' + err.message);
         throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -288,22 +290,12 @@ export class ChatService {
 
     const chatsDto = new ChatsDto(updatedChat);
 
-    // chatsDto &&
-    //   updatedChatRoom.chatMembers.forEach(
-    //     (chatMember) =>
-    //       chatMember !== senderId &&
-    //       this.subjectMap.get(chatMember)?.next(chatsDto),
-    //   );
-    if (chatsDto) {
-      updatedChatRoom.chatMembers.map((chatMember) => {
-        if (chatMember !== senderId) {
-          const subject = this.subjectMap.get(chatMember);
-          if (subject) {
-            subject.next(chatsDto);
-          }
-        }
-      });
-    }
+    chatsDto &&
+      updatedChatRoom.chatMembers.forEach(
+        (chatMember) =>
+          chatMember !== senderId &&
+          this.subjectMap.get(chatMember)?.next(chatsDto),
+      );
 
     return chatsDto;
   }

@@ -38,7 +38,7 @@ import { ChatRoomsDto } from '../dto/chat-rooms.dto';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
 import { plainToInstance } from 'class-transformer';
 import { ApiGetChatRoomsNew } from '../swagger-decorators/get-chat-rooms-new.decorator';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { ChatsDto } from '../dto/chats.dto';
 import { ApiGetChatNotificationSse } from '../swagger-decorators/get-chat-notification-Sse.decorator';
 import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
