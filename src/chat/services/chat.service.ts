@@ -350,7 +350,7 @@ export class ChatService {
         },
         {
           $addFields: {
-            chatCount: {
+            unReadChatCount: {
               $size: {
                 $filter: {
                   input: '$chats',
@@ -390,7 +390,7 @@ export class ChatService {
             chatRoomType: 1,
             createdAt: 1,
             updatedAt: 1,
-            chatCount: 1,
+            unReadChatCount: 1,
             chat: {
               content: '$latestChat.content',
               seenUsers: '$latestChat.seenUsers',

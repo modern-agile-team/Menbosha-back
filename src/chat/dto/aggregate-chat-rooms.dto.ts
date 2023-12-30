@@ -9,7 +9,7 @@ export class AggregateChatRoomsDto extends OmitType(ChatRoomsDto, [
   @ApiProperty({
     description: '채팅 갯수',
   })
-  chatCount: number;
+  unReadChatCount: number;
 
   @ApiProperty({
     description: '채팅 schema에서 content, 생성 날짜, 채팅 확인 여부',
@@ -24,7 +24,7 @@ export class AggregateChatRoomsDto extends OmitType(ChatRoomsDto, [
     this.chatRoomType = aggregateChatRoomsDto.chatRoomType;
     this.createdAt = aggregateChatRoomsDto.createdAt;
     this.updatedAt = aggregateChatRoomsDto.updatedAt;
-    this.chatCount = aggregateChatRoomsDto.chatCount;
+    this.unReadChatCount = aggregateChatRoomsDto.unReadChatCount;
     this.chat = aggregateChatRoomsDto.chat;
   }
 }
