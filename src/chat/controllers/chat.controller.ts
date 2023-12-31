@@ -43,6 +43,7 @@ import { PageQueryDto } from 'src/search/dtos/page-query.dto';
 import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
 import { ChatImageDto } from '../dto/chat-image.dto';
 import { ChatRoomsWithoutChatsItemDto } from '../dto/chat-rooms-without-chats-item.dto';
+import { ApiGetOneChatRoomByUserId } from '../swagger-decorators/get-one-chat-room-by-user-id.decorator';
 /**
  * @todo 1:1 채팅 컨트롤러 서비스 완성
  */
@@ -111,6 +112,7 @@ export class ChatController {
    * @returns findOneChatRoomByUserIds
    */
   @UseGuards(JwtAccessTokenGuard)
+  @ApiGetOneChatRoomByUserId()
   @Get('check')
   findOneChatRoomByUserIds(
     @GetUserId() userId: number,

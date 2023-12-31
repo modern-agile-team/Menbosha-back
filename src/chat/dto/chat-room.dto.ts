@@ -21,13 +21,15 @@ export class ChatRoomDto implements Omit<ChatRooms, 'unprotectedData'> {
 
   @ApiProperty({
     description: '채팅방에 속한 현재 유저들의 id',
+    isArray: true,
+    type: Number,
   })
   @Expose()
   chatMembers: number[];
 
   @ApiProperty({
     description: '해당 채팅방 채팅 내역',
-    type: [ChatDto],
+    type: ChatDto,
     isArray: true,
     default: [],
   })
@@ -35,7 +37,7 @@ export class ChatRoomDto implements Omit<ChatRooms, 'unprotectedData'> {
   chats: ChatDto[] | [];
 
   @ApiProperty({
-    description: '해당 채팅방 채팅 내역',
+    description: '해당 채팅방 타입',
     type: 'object',
     isArray: true,
     enum: ChatRoomType,

@@ -7,7 +7,7 @@ export class AggregateChatRoomsDto extends OmitType(ChatRoomDto, [
   'deletedAt',
 ]) {
   @ApiProperty({
-    description: '채팅 갯수',
+    description: '읽지 않은 채팅 갯수',
   })
   unReadChatCount: number;
 

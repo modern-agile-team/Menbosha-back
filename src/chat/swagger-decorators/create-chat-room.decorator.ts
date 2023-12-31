@@ -18,7 +18,7 @@ export function ApiCreateChatRoom() {
   return applyDecorators(
     ApiOperation({
       summary: '채팅룸 생성',
-      description: 'Header - access-token, Body - received-user-dto',
+      description: 'Header - access-token, Body - CreateChatRoomBodyDto',
     }),
     ApiResponse({
       status: 201,
@@ -70,10 +70,7 @@ export function ApiCreateChatRoom() {
       content: {
         JSON: {
           example: {
-            message: [
-              '해당 유저들의 채팅방이 이미 존재합니다.',
-              '채팅룸 생성 실패. 서버에서 에러가 발생했습니다.',
-            ],
+            message: '해당 유저들의 채팅방이 이미 존재합니다.',
             error: 'Conflict',
             statusCode: 409,
           },

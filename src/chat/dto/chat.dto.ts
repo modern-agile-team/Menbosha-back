@@ -36,7 +36,8 @@ export class ChatDto implements Chat {
   content: string;
 
   @ApiProperty({
-    type: 'array',
+    isArray: true,
+    type: Number,
     description: '채팅 확인한 유저들 id 배열',
   })
   @Expose()
