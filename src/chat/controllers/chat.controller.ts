@@ -30,21 +30,18 @@ import { ApiGetChats } from '../swagger-decorators/get-chats.decorator';
 // import { ApiGetChatUnreadCounts } from '../swagger-decorators/get-chat-unread-counts.decorator';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
-// import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
-// import { ApiGetChatNotifications } from '../swagger-decorators/get-chat-notifications.decorator';
 import { ApiCreateChatImage } from '../swagger-decorators/create-chat-image.decorators';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
 import { ChatRoomsDto } from '../dto/chat-rooms.dto';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
 import { plainToInstance } from 'class-transformer';
 import { ApiGetChatRoomsNew } from '../swagger-decorators/get-chat-rooms-new.decorator';
-import { Observable, map } from 'rxjs';
-import { ChatsDto } from '../dto/chats.dto';
+import { Observable } from 'rxjs';
 import { ApiGetChatNotificationSse } from '../swagger-decorators/get-chat-notification-Sse.decorator';
 import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
-import { ChatRoomPaginateResultDto } from '../dto/chat-paginate-result.dto';
 import { PageQueryDto } from 'src/search/dtos/page-query.dto';
 import { AggregateChatRoomsForChatsDto } from '../dto/aggregate-chat-rooms-for-chats.dto';
+import { ChatImagesDto } from '../dto/chat-images.dto';
 /**
  * @todo 1:1 채팅 컨트롤러 서비스 완성
  */
@@ -115,7 +112,7 @@ export class ChatController {
   findOneChatRoomByUserIds(
     @GetUserId() userId: number,
     @Body() receivedUserDto: ReceivedUserDto,
-  ) {
+  ): Promise<ChatRoomsDto> {
     return this.chatService.findOneChatRoomByUserIds(
       userId,
       receivedUserDto.receiverId,
@@ -164,7 +161,7 @@ export class ChatController {
   leaveChatRoom(
     @GetUserId() userId: number,
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  ) {
+  ): Promise<void> {
     return this.chatService.leaveChatRoom(userId, roomId);
   }
 
@@ -193,7 +190,7 @@ export class ChatController {
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
     @GetUserId() senderId: number,
     @UploadedFile() file: Express.Multer.File,
-  ) {
+  ): Promise<ChatImagesDto> {
     return this.chatService.createChatImage(roomId, senderId, file);
   }
 
