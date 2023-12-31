@@ -387,7 +387,7 @@ export class ChatService {
                     cond: {
                       $eq: ['$$this.createdAt', { $max: '$chats.createdAt' }],
                       // as를 통해 정의하지 않아도 this로 접근 가능.
-                      // 혹은 reserveArray를 사용해서 가져와도 될듯.
+                      // 혹은 reverseArray를 사용해서 가져와도 될듯.
                     },
                   },
                 },
