@@ -28,7 +28,7 @@ export function ApiCreateChatImage() {
       schema: {
         properties: {
           statusCode: { example: 201, type: 'number' },
-          data: {
+          content: {
             type: 'object',
             $ref: getSchemaPath(ChatImageDto),
           },

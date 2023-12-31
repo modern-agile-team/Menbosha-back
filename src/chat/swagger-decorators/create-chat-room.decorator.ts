@@ -3,13 +3,16 @@ import {
   ApiBody,
   ApiConflictResponse,
   ApiExtraModels,
+  ApiForbiddenResponse,
   ApiHeaders,
+  ApiNotFoundResponse,
   ApiOperation,
   ApiResponse,
+  ApiUnauthorizedResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
 import { ReceivedUserDto } from '../dto/received-user.dto';
-import { ChatRoomsDto } from '../dto/chat-room.dto';
+import { ChatRoomDto } from '../dto/chat-room.dto';
 
 export function ApiCreateChatRoom() {
   return applyDecorators(
@@ -22,10 +25,42 @@ export function ApiCreateChatRoom() {
       description: '성공적으로 채팅방 생성',
       schema: {
         properties: {
-          statusCode: { example: 200, type: 'number' },
-          data: {
+          statusCode: { example: 201, type: 'number' },
+          content: {
             type: 'object',
-            $ref: getSchemaPath(ChatRoomsDto),
+            $ref: getSchemaPath(ChatRoomDto),
+          },
+        },
+      },
+    }),
+    ApiUnauthorizedResponse({
+      description: '우리 서비스의 액세스 토큰이 아닌 경우',
+      content: {
+        JSON: {
+          example: { statusCode: 401, message: '유효하지 않은 토큰입니다.' },
+        },
+      },
+    }),
+    ApiForbiddenResponse({
+      description: '토큰 만료 에러',
+      content: {
+        JSON: {
+          example: {
+            message: '만료된 토큰입니다.',
+            error: 'Forbidden',
+            statusCode: 403,
+          },
+        },
+      },
+    }),
+    ApiNotFoundResponse({
+      description: 'DB에서 사용자를 찾을 수 없는 경우',
+      content: {
+        JSON: {
+          example: {
+            message: '사용자를 찾을 수 없습니다.',
+            error: 'Not Found',
+            statusCode: 404,
           },
         },
       },
@@ -45,6 +80,15 @@ export function ApiCreateChatRoom() {
         },
       },
     }),
+    ApiResponse({
+      status: 411,
+      description: '액세스 토큰이 제공되지 않은 경우',
+      content: {
+        JSON: {
+          example: { statusCode: 411, message: '토큰이 제공되지 않았습니다.' },
+        },
+      },
+    }),
     ApiHeaders([
       {
         name: 'access_token',
@@ -58,6 +102,6 @@ export function ApiCreateChatRoom() {
       description: '채팅방 guestId',
       required: true,
     }),
-    ApiExtraModels(ReceivedUserDto, ChatRoomsDto),
+    ApiExtraModels(ReceivedUserDto, ChatRoomDto),
   );
 }
