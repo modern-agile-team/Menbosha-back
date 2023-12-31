@@ -11,7 +11,7 @@ import mongoose, {
   PaginateResult,
 } from 'mongoose';
 import { ChatRoomsDto } from '../dto/chat-rooms.dto';
-import { ChatImagesDto } from '../dto/chat-image.dto';
+import { ChatImageDto } from '../dto/chat-image.dto';
 
 @Injectable()
 export class ChatRepository {
@@ -109,7 +109,7 @@ export class ChatRepository {
 
   createChatImage<DocContents = mongoose.AnyKeys<ChatImages>>(
     doc: DocContents,
-  ): Promise<ChatImagesDto> {
+  ): Promise<ChatImageDto> {
     return this.chatImagesModel.create(doc);
   }
 
