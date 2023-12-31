@@ -40,7 +40,7 @@ import { Observable } from 'rxjs';
 import { ApiGetChatNotificationSse } from '../swagger-decorators/get-chat-notification-Sse.decorator';
 import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 import { PageQueryDto } from 'src/search/dtos/page-query.dto';
-import { AggregateChatRoomsForChatsDto } from '../dto/aggregate-chat-rooms-for-chats.dto';
+import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
 import { ChatImagesDto } from '../dto/chat-images.dto';
 import { ChatRoomsWithoutChatsItemDto } from '../dto/chat-rooms-without-chats-item.dto';
 /**
@@ -181,7 +181,7 @@ export class ChatController {
     @GetUserId() userId: number,
     @Query() pageQueryDto: PageQueryDto,
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  ): Promise<AggregateChatRoomsForChatsDto> {
+  ): Promise<AggregateChatRoomForChatsDto> {
     return this.chatService.findAllChats(userId, roomId, pageQueryDto.page);
   }
 

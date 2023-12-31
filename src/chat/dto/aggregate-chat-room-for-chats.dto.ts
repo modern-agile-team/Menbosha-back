@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { ChatRoomsDto } from './chat-rooms.dto';
 import { PaginationResponseDto } from 'src/common/dto/pagination-response.dto';
 
-export class AggregateChatRoomsForChatsDto
+export class AggregateChatRoomForChatsDto
   extends ChatRoomsDto
   implements PaginationResponseDto
 {
@@ -39,7 +39,7 @@ export class AggregateChatRoomsForChatsDto
   lastPage: number;
 
   constructor(
-    aggregateChatRoomsForChatsDto: AggregateChatRoomsForChatsDto,
+    aggregateChatRoomsForChatsDto: AggregateChatRoomForChatsDto,
     page: number,
     pageSize: number,
   ) {

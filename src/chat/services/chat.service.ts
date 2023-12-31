@@ -22,7 +22,7 @@ import { ChatImagesDto } from '../dto/chat-images.dto';
 import { ChatRoomType } from '../constants/chat-rooms-enum';
 import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 import { ChatRepository } from '../repositories/chat.repository';
-import { AggregateChatRoomsForChatsDto } from '../dto/aggregate-chat-rooms-for-chats.dto';
+import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
 import { ChatRoomsWithoutChatsItemDto } from '../dto/chat-rooms-without-chats-item.dto';
 // import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 
@@ -209,7 +209,7 @@ export class ChatService {
     myId: number,
     roomId: mongoose.Types.ObjectId,
     page: number,
-  ): Promise<AggregateChatRoomsForChatsDto> {
+  ): Promise<AggregateChatRoomForChatsDto> {
     const pageSize = 20;
     const skip = (page - 1) * pageSize;
 
@@ -227,7 +227,7 @@ export class ChatService {
       { arrayFilters: [{ 'elem.seenUsers': { $ne: myId } }] },
     );
 
-    const returnedChatRoom: AggregateChatRoomsForChatsDto[] =
+    const returnedChatRoom: AggregateChatRoomForChatsDto[] =
       await this.chatRepository.aggregateChatRooms([
         {
           $match: { _id: new mongoose.Types.ObjectId(roomId), deletedAt: null },
@@ -253,7 +253,7 @@ export class ChatService {
         },
       ]);
 
-    const aggregateChatRoomsForChatsDto = new AggregateChatRoomsForChatsDto(
+    const aggregateChatRoomsForChatsDto = new AggregateChatRoomForChatsDto(
       returnedChatRoom[0],
       page,
       pageSize,
