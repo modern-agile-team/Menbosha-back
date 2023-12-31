@@ -23,6 +23,7 @@ import { ChatRoomType } from '../constants/chat-rooms-enum';
 import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 import { ChatRepository } from '../repositories/chat.repository';
 import { AggregateChatRoomsForChatsDto } from '../dto/aggregate-chat-rooms-for-chats.dto';
+import { ChatRoomsWithoutChatsItemDto } from '../dto/chat-rooms-without-chats-item.dto';
 // import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 
 @Injectable()
@@ -61,7 +62,7 @@ export class ChatService {
    * @param myId
    * @returns 1:1, 단톡 관련 없이 삭제된 채팅방 이외에 다 불러옴
    */
-  findAllChatRooms(myId: number): Promise<ChatRoomsDto[]> {
+  findAllChatRooms(myId: number): Promise<ChatRoomsWithoutChatsItemDto[]> {
     return this.chatRepository.findAllChatRooms(
       {
         $and: [

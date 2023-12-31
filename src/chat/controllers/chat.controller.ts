@@ -42,6 +42,7 @@ import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 import { PageQueryDto } from 'src/search/dtos/page-query.dto';
 import { AggregateChatRoomsForChatsDto } from '../dto/aggregate-chat-rooms-for-chats.dto';
 import { ChatImagesDto } from '../dto/chat-images.dto';
+import { ChatRoomsWithoutChatsItemDto } from '../dto/chat-rooms-without-chats-item.dto';
 /**
  * @todo 1:1 채팅 컨트롤러 서비스 완성
  */
@@ -79,10 +80,12 @@ export class ChatController {
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChatRooms()
   @Get()
-  async findAllChatRooms(@GetUserId() userId: number): Promise<ChatRoomsDto[]> {
+  async findAllChatRooms(
+    @GetUserId() userId: number,
+  ): Promise<ChatRoomsWithoutChatsItemDto[]> {
     const returnedChatRooms = await this.chatService.findAllChatRooms(userId);
 
-    return plainToInstance(ChatRoomsDto, returnedChatRooms, {
+    return plainToInstance(ChatRoomsWithoutChatsItemDto, returnedChatRooms, {
       excludeExtraneousValues: true,
     });
   }
