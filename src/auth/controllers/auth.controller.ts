@@ -24,6 +24,9 @@ import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { JwtRefreshTokenGuard } from 'src/config/guards/jwt-refresh-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { RedisService } from 'src/common/redis/redis.service';
+import { ApiGoogleLogin } from '../swagger-decorators/google-login.decorator';
+import { ApiGoogleLogout } from '../swagger-decorators/google-logout.decorator';
+import { ApiGoogleUnlink } from '../swagger-decorators/google-unlink.decorator';
 
 @Controller('auth')
 @ApiTags('auth API')
@@ -97,6 +100,7 @@ export class AuthController {
     return res.json({ accessToken, refreshToken });
   }
 
+  @ApiGoogleLogin()
   @Get('google/login')
   async googleLogin(@Query() { code }, @Res() res) {
     if (!code) {
@@ -182,12 +186,14 @@ export class AuthController {
     );
   }
 
+  @ApiGoogleLogout()
   @UseGuards(JwtAccessTokenGuard)
   @Post('google/logout')
   async googleLogout(@GetUserId() userId: number) {
     return await this.tokenService.deleteTokens(userId);
   }
 
+  @ApiGoogleUnlink()
   @UseGuards(JwtAccessTokenGuard)
   @Post('google/unlink')
   async googleUnlink(@GetUserId() userId: number) {
