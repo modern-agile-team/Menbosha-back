@@ -41,7 +41,7 @@ import { ApiGetChatNotificationSse } from '../swagger-decorators/get-chat-notifi
 import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 import { PageQueryDto } from 'src/search/dtos/page-query.dto';
 import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
-import { ChatImagesDto } from '../dto/chat-images.dto';
+import { ChatImageDto } from '../dto/chat-image.dto';
 import { ChatRoomsWithoutChatsItemDto } from '../dto/chat-rooms-without-chats-item.dto';
 /**
  * @todo 1:1 채팅 컨트롤러 서비스 완성
@@ -193,7 +193,7 @@ export class ChatController {
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
     @GetUserId() senderId: number,
     @UploadedFile() file: Express.Multer.File,
-  ): Promise<ChatImagesDto> {
+  ): Promise<ChatImageDto> {
     return this.chatService.createChatImage(roomId, senderId, file);
   }
 

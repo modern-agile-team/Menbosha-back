@@ -11,7 +11,7 @@ import mongoose, {
   PaginateResult,
 } from 'mongoose';
 import { ChatRoomsDto } from '../dto/chat-rooms.dto';
-import { ChatImagesDto } from '../dto/chat-images.dto';
+import { ChatImagesDto } from '../dto/chat-image.dto';
 
 @Injectable()
 export class ChatRepository {

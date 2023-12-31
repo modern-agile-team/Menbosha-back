@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { TransformMongoId } from './transform/transform-mongo-id';
 
-export class ChatImagesDto implements Omit<ChatImages, 'unprotectedData'> {
+export class ChatImageDto implements Omit<ChatImages, 'unprotectedData'> {
   @ApiProperty({
     description: '채팅 id',
     type: 'string',
@@ -42,7 +42,7 @@ export class ChatImagesDto implements Omit<ChatImages, 'unprotectedData'> {
   @Expose()
   createdAt: Date;
 
-  constructor(chatImagesDto: ChatImagesDto) {
+  constructor(chatImagesDto: ChatImageDto) {
     this._id = chatImagesDto._id;
     this.chatRoomId = chatImagesDto.chatRoomId;
     this.imageUrl = chatImagesDto.imageUrl;
