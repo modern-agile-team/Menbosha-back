@@ -97,7 +97,7 @@ export class ChatController {
    */
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChatRoomsNew()
-  @Get('new-api')
+  @Get('new')
   findAllChatRoomsWithUserAndChat(
     @GetUserId() userId: number,
   ): Promise<ResponseGetChatRoomsDto[]> {
