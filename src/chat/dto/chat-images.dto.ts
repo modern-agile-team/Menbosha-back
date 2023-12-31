@@ -31,7 +31,7 @@ export class ChatImagesDto implements Omit<ChatImages, 'unprotectedData'> {
   senderId: number;
 
   @ApiProperty({
-    description: '채팅 내용',
+    description: '이미지 url',
   })
   @Expose()
   imageUrl: string;
