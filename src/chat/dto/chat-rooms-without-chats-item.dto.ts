@@ -1,6 +1,6 @@
 import { OmitType } from '@nestjs/swagger';
-import { ChatRoomsDto } from './chat-rooms.dto';
+import { ChatRoomDto } from './chat-room.dto';
 
-export class ChatRoomsWithoutChatsItemDto extends OmitType(ChatRoomsDto, [
+export class ChatRoomsWithoutChatsItemDto extends OmitType(ChatRoomDto, [
   'chats',
 ] as const) {}

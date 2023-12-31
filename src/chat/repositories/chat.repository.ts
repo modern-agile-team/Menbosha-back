@@ -10,7 +10,7 @@ import mongoose, {
   PaginateOptions,
   PaginateResult,
 } from 'mongoose';
-import { ChatRoomsDto } from '../dto/chat-rooms.dto';
+import { ChatRoomDto } from '../dto/chat-room.dto';
 import { ChatImageDto } from '../dto/chat-image.dto';
 
 @Injectable()
@@ -30,7 +30,7 @@ export class ChatRepository {
     filter: mongoose.FilterQuery<ChatRooms>,
     projection?: mongoose.ProjectionType<ChatRooms>,
     options?: mongoose.QueryOptions<ChatRooms>,
-  ): Promise<ChatRoomsDto[]> {
+  ): Promise<ChatRoomDto[]> {
     return this.chatRoomsModel.find(filter, projection, options);
   }
 
@@ -47,7 +47,7 @@ export class ChatRepository {
    */
   findOneChatRoom(
     filter: mongoose.FilterQuery<ChatRooms>,
-  ): Promise<ChatRoomsDto> {
+  ): Promise<ChatRoomDto> {
     return this.chatRoomsModel.findOne(filter);
   }
 
@@ -55,7 +55,7 @@ export class ChatRepository {
     query: mongoose.FilterQuery<ChatRooms>,
     options: PaginateOptions,
     callback?,
-  ): Promise<PaginateResult<ChatRoomsDto>> {
+  ): Promise<PaginateResult<ChatRoomDto>> {
     return this.chatRoomsPaginateModel.paginate(query, options, callback);
   }
 
@@ -63,7 +63,7 @@ export class ChatRepository {
     query: mongoose.Aggregate<ChatRooms[]>,
     options: mongoose.PaginateOptions,
     callback?,
-  ): Promise<AggregatePaginateResult<ChatRoomsDto>> {
+  ): Promise<AggregatePaginateResult<ChatRoomDto>> {
     return this.chatRoomsAggregatePaginateModel.aggregatePaginate(
       query,
       options,
@@ -73,7 +73,7 @@ export class ChatRepository {
 
   async createChatRoom<DocContents = mongoose.AnyKeys<ChatRooms>>(
     doc: DocContents,
-  ): Promise<ChatRoomsDto> {
+  ): Promise<ChatRoomDto> {
     return this.chatRoomsModel.create(doc);
   }
 
@@ -103,7 +103,7 @@ export class ChatRepository {
     id: mongoose.Types.ObjectId | any,
     update: mongoose.UpdateQuery<ChatRooms>,
     options?: mongoose.QueryOptions<ChatRooms> | null,
-  ): Promise<ChatRoomsDto> {
+  ): Promise<ChatRoomDto> {
     return this.chatRoomsModel.findByIdAndUpdate(id, update, options);
   }
 

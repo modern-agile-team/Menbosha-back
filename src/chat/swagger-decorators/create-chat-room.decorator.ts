@@ -9,7 +9,7 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 import { ReceivedUserDto } from '../dto/received-user.dto';
-import { ChatRoomsDto } from '../dto/chat-rooms.dto';
+import { ChatRoomsDto } from '../dto/chat-room.dto';
 
 export function ApiCreateChatRoom() {
   return applyDecorators(

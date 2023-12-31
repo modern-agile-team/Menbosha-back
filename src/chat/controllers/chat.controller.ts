@@ -32,7 +32,7 @@ import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { ApiCreateChatImage } from '../swagger-decorators/create-chat-image.decorators';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
-import { ChatRoomsDto } from '../dto/chat-rooms.dto';
+import { ChatRoomDto } from '../dto/chat-room.dto';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
 import { plainToInstance } from 'class-transformer';
 import { ApiGetChatRoomsNew } from '../swagger-decorators/get-chat-rooms-new.decorator';
@@ -115,7 +115,7 @@ export class ChatController {
   findOneChatRoomByUserIds(
     @GetUserId() userId: number,
     @Body() receivedUserDto: ReceivedUserDto,
-  ): Promise<ChatRoomsDto> {
+  ): Promise<ChatRoomDto> {
     return this.chatService.findOneChatRoomByUserIds(
       userId,
       receivedUserDto.receiverId,
@@ -131,7 +131,7 @@ export class ChatController {
   @Get(':roomId')
   findOneChatRoomOrFail(
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  ): Promise<ChatRoomsDto> {
+  ): Promise<ChatRoomDto> {
     return this.chatService.findOneChatRoomOrFail(roomId);
   }
 
@@ -147,7 +147,7 @@ export class ChatController {
   createChatRoom(
     @GetUserId() userId: number,
     @Body() createChatRoomBodyDto: CreateChatRoomBodyDto,
-  ): Promise<ChatRoomsDto> {
+  ): Promise<ChatRoomDto> {
     return this.chatService.createChatRoom(userId, createChatRoomBodyDto);
   }
 

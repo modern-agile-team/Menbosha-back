@@ -15,7 +15,7 @@ import { In } from 'typeorm';
 import { UserService } from 'src/users/services/user.service';
 import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
-import { ChatRoomsDto } from '../dto/chat-rooms.dto';
+import { ChatRoomDto } from '../dto/chat-room.dto';
 import { AggregateChatRoomsDto } from '../dto/aggregate-chat-rooms.dto';
 import { ChatsDto } from '../dto/chats.dto';
 import { ChatImageDto } from '../dto/chat-image.dto';
@@ -82,7 +82,7 @@ export class ChatService {
    */
   async findOneChatRoomOrFail(
     roomId: mongoose.Types.ObjectId,
-  ): Promise<ChatRoomsDto> {
+  ): Promise<ChatRoomDto> {
     const returnedRoom = await this.chatRepository.findOneChatRoom({
       _id: roomId,
       deletedAt: null,
@@ -92,7 +92,7 @@ export class ChatService {
       throw new NotFoundException('해당 채팅방이 없습니다.');
     }
 
-    return new ChatRoomsDto(returnedRoom);
+    return new ChatRoomDto(returnedRoom);
   }
 
   /**
@@ -105,7 +105,7 @@ export class ChatService {
   async findOneChatRoomByUserIds(
     myId: number,
     guestId: number,
-  ): Promise<ChatRoomsDto> {
+  ): Promise<ChatRoomDto> {
     const returnedRoom = await this.chatRepository.findOneChatRoom({
       originalMembers: { $all: [myId, guestId] },
       chatMembers: { $all: [myId, guestId] },
@@ -117,7 +117,7 @@ export class ChatService {
       throw new NotFoundException('해당 채팅방이 없습니다.');
     }
 
-    return new ChatRoomsDto(returnedRoom);
+    return new ChatRoomDto(returnedRoom);
   }
 
   /**
@@ -133,7 +133,7 @@ export class ChatService {
   async createChatRoom(
     myId: number,
     createChatRoomBodyDto: CreateChatRoomBodyDto,
-  ): Promise<ChatRoomsDto> {
+  ): Promise<ChatRoomDto> {
     const { receiverId, chatRoomType } = createChatRoomBodyDto;
 
     const existChatRoom = await this.chatRepository.findOneChatRoom({
@@ -151,7 +151,7 @@ export class ChatService {
         chatRoomType: chatRoomType,
       });
 
-      return new ChatRoomsDto(returnedChatRoom);
+      return new ChatRoomDto(returnedChatRoom);
     }
 
     const { chatMembers, _id } = existChatRoom;
@@ -170,7 +170,7 @@ export class ChatService {
     ),
       chatMembers.push(pushUserId);
 
-    return new ChatRoomsDto(existChatRoom);
+    return new ChatRoomDto(existChatRoom);
   }
 
   /**

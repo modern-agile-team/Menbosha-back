@@ -6,7 +6,7 @@ import { ChatRooms } from '../schemas/chat-rooms.schemas';
 import { ChatRoomType } from '../constants/chat-rooms-enum';
 import { ChatsDto } from './chats.dto';
 
-export class ChatRoomsDto implements Omit<ChatRooms, 'unprotectedData'> {
+export class ChatRoomDto implements Omit<ChatRooms, 'unprotectedData'> {
   @ApiProperty({
     description: '채팅 방 id',
     type: 'string',
@@ -62,7 +62,7 @@ export class ChatRoomsDto implements Omit<ChatRooms, 'unprotectedData'> {
   @Exclude()
   deletedAt: Date | null;
 
-  constructor(chatRoomsDto: Partial<ChatRoomsDto> = {}) {
+  constructor(chatRoomsDto: Partial<ChatRoomDto> = {}) {
     this._id = chatRoomsDto._id;
     this.originalMembers = chatRoomsDto.originalMembers;
     this.chatMembers = chatRoomsDto.chatMembers;

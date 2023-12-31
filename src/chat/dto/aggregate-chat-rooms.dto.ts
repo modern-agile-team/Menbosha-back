@@ -1,8 +1,8 @@
-import { ChatRoomsDto } from './chat-rooms.dto';
+import { ChatRoomDto } from './chat-room.dto';
 import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { LookupChatsDto } from './lookup-chat-dto';
 
-export class AggregateChatRoomsDto extends OmitType(ChatRoomsDto, [
+export class AggregateChatRoomsDto extends OmitType(ChatRoomDto, [
   'chats',
   'deletedAt',
 ]) {

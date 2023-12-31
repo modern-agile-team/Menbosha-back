@@ -1,7 +1,7 @@
-import { ChatRoomsDto } from './chat-rooms.dto';
+import { ChatRoomDto } from './chat-room.dto';
 
-export class ChatRoomPaginateResultDto<ChatRoomsDto> {
-  docs: ChatRoomsDto[];
+export class ChatRoomPaginateResultDto<ChatRoomDto> {
+  docs: ChatRoomDto[];
   totalDocs: number;
   limit: number;
   hasPrevPage: boolean;
@@ -13,9 +13,9 @@ export class ChatRoomPaginateResultDto<ChatRoomsDto> {
   nextPage?: number | null | undefined;
   pagingCounter: number;
   meta?: any;
-  [customLabel: string]: ChatRoomsDto[] | number | boolean | null | undefined;
+  [customLabel: string]: ChatRoomDto[] | number | boolean | null | undefined;
 
-  constructor(paginateResult: ChatRoomPaginateResultDto<ChatRoomsDto>) {
+  constructor(paginateResult: ChatRoomPaginateResultDto<ChatRoomDto>) {
     Object.assign(this, paginateResult);
   }
 }

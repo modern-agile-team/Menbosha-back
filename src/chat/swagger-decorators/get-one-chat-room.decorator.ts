@@ -9,7 +9,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ChatRoomsDto } from '../dto/chat-rooms.dto';
+import { ChatRoomsDto } from '../dto/chat-room.dto';
 
 export function ApiGetOneChatRoom() {
   return applyDecorators(
