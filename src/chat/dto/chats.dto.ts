@@ -10,7 +10,7 @@ export class ChatsDto implements Chat {
     type: 'string',
     format: 'ObjectId',
   })
-  @TransformMongoId({ toPlainOnly: true })
+  @TransformMongoId()
   @Expose()
   _id: mongoose.Types.ObjectId;
 
@@ -20,7 +20,7 @@ export class ChatsDto implements Chat {
     format: 'ObjectId',
   })
   @Expose()
-  @TransformMongoId({ toPlainOnly: true })
+  @TransformMongoId()
   chatRoomId: mongoose.Types.ObjectId;
 
   @ApiProperty({

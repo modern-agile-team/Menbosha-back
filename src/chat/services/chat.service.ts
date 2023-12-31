@@ -16,15 +16,12 @@ import { UserService } from 'src/users/services/user.service';
 import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
 import { ChatRoomsDto } from '../dto/chat-rooms.dto';
-import { ResponsePostChatDto } from '../dto/response-post-chat-dto';
 import { AggregateChatRoomsDto } from '../dto/aggregate-chat-rooms.dto';
 import { ChatsDto } from '../dto/chats.dto';
 import { ChatImagesDto } from '../dto/chat-images.dto';
 import { ChatRoomType } from '../constants/chat-rooms-enum';
 import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
-import { plainToInstance } from 'class-transformer';
 import { ChatRepository } from '../repositories/chat.repository';
-import { ChatRoomPaginateResultDto } from '../dto/chat-paginate-result.dto';
 import { AggregateChatRoomsForChatsDto } from '../dto/aggregate-chat-rooms-for-chats.dto';
 // import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 

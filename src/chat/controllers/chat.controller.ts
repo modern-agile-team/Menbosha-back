@@ -77,7 +77,7 @@ export class ChatController {
   /**
    *
    * @param userId
-   * @returns find all chat rooms by userId
+   * @returns find all chat rooms by userId without chats
    */
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChatRooms()
