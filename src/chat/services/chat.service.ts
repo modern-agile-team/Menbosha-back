@@ -17,7 +17,7 @@ import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
 import { ChatRoomDto } from '../dto/chat-room.dto';
 import { AggregateChatRoomsDto } from '../dto/aggregate-chat-rooms.dto';
-import { ChatsDto } from '../dto/chats.dto';
+import { ChatDto } from '../dto/chats.dto';
 import { ChatImageDto } from '../dto/chat-image.dto';
 import { ChatRoomType } from '../constants/chat-rooms-enum';
 import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
@@ -29,7 +29,7 @@ import { ChatRoomsWithoutChatsItemDto } from '../dto/chat-rooms-without-chats-it
 @Injectable()
 export class ChatService {
   private readonly logger = new Logger(ChatService.name);
-  private readonly subjectMap: Map<number, Subject<ChatsDto>> = new Map();
+  private readonly subjectMap: Map<number, Subject<ChatDto>> = new Map();
   constructor(
     private readonly s3Service: S3Service,
     private readonly userService: UserService,
@@ -43,7 +43,7 @@ export class ChatService {
    */
   notificationListener(myId: number): Observable<string> {
     if (!this.subjectMap.get(myId)) {
-      this.subjectMap.set(myId, new Subject<ChatsDto>());
+      this.subjectMap.set(myId, new Subject<ChatDto>());
     }
 
     const subject = this.subjectMap.get(myId);
@@ -268,7 +268,7 @@ export class ChatService {
     return aggregateChatRoomsForChatsDto;
   }
 
-  async createChat({ roomId, content, senderId }): Promise<ChatsDto> {
+  async createChat({ roomId, content, senderId }): Promise<ChatDto> {
     const returnedChatRoom = await this.chatRepository.findOneChatRoom({
       _id: roomId,
       chatMembers: senderId,
@@ -279,7 +279,7 @@ export class ChatService {
       throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
     }
 
-    const newChat: ChatsDto = {
+    const newChat: ChatDto = {
       _id: new mongoose.Types.ObjectId(),
       chatRoomId: new mongoose.Types.ObjectId(roomId),
       senderId: senderId,
@@ -302,7 +302,7 @@ export class ChatService {
 
     const updatedChat = chats[chats.length - 1];
 
-    const chatsDto = new ChatsDto(updatedChat);
+    const chatsDto = new ChatDto(updatedChat);
 
     chatsDto &&
       updatedChatRoom.chatMembers.forEach(

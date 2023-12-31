@@ -4,7 +4,7 @@ import { TransformMongoId } from './transform/transform-mongo-id';
 import mongoose from 'mongoose';
 import { ChatRooms } from '../schemas/chat-rooms.schemas';
 import { ChatRoomType } from '../constants/chat-rooms-enum';
-import { ChatsDto } from './chats.dto';
+import { ChatDto } from './chats.dto';
 
 export class ChatRoomDto implements Omit<ChatRooms, 'unprotectedData'> {
   @ApiProperty({
@@ -27,12 +27,12 @@ export class ChatRoomDto implements Omit<ChatRooms, 'unprotectedData'> {
 
   @ApiProperty({
     description: '해당 채팅방 채팅 내역',
-    type: [ChatsDto],
+    type: [ChatDto],
     isArray: true,
     default: [],
   })
   @Expose()
-  chats: ChatsDto[] | [];
+  chats: ChatDto[] | [];
 
   @ApiProperty({
     description: '해당 채팅방 채팅 내역',
@@ -66,7 +66,7 @@ export class ChatRoomDto implements Omit<ChatRooms, 'unprotectedData'> {
     this._id = chatRoomsDto._id;
     this.originalMembers = chatRoomsDto.originalMembers;
     this.chatMembers = chatRoomsDto.chatMembers;
-    this.chats = plainToInstance(ChatsDto, chatRoomsDto.chats);
+    this.chats = plainToInstance(ChatDto, chatRoomsDto.chats);
     this.chatRoomType = chatRoomsDto.chatRoomType;
     this.createdAt = chatRoomsDto.createdAt;
     this.updatedAt = chatRoomsDto.updatedAt;

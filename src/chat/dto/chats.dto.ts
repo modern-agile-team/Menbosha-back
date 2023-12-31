@@ -4,7 +4,7 @@ import { Expose } from 'class-transformer';
 import mongoose from 'mongoose';
 import { Chat } from '../schemas/chats.schemas';
 
-export class ChatsDto implements Chat {
+export class ChatDto implements Chat {
   @ApiProperty({
     description: '채팅 id',
     type: 'string',
@@ -50,7 +50,7 @@ export class ChatsDto implements Chat {
   @Expose()
   createdAt: Date;
 
-  constructor(chatDto: Partial<ChatsDto> = {}) {
+  constructor(chatDto: Partial<ChatDto> = {}) {
     this._id = chatDto._id;
     this.chatRoomId = chatDto.chatRoomId;
     this.content = chatDto.content;
