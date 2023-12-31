@@ -58,7 +58,7 @@ export function ApiGetChatRoomsNew() {
         type: 'object',
         example: {
           statusCode: 404,
-          message: ['사용자를 찾을 수 없습니다.'],
+          message: '사용자를 찾을 수 없습니다.',
           error: 'Not Found',
         },
       },

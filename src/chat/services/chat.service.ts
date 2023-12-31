@@ -216,7 +216,7 @@ export class ChatService {
     const existChatRoom = await this.findOneChatRoomOrFail(roomId);
 
     if (!existChatRoom.chatMembers.includes(myId)) {
-      throw new NotFoundException('해당 채팅방이 없습니다.');
+      throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
     }
 
     await this.chatRepository.updateOneChatRoom(
