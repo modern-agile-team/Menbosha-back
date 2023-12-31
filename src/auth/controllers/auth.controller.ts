@@ -182,6 +182,20 @@ export class AuthController {
     );
   }
 
+  @UseGuards(JwtAccessTokenGuard)
+  @Post('google/logout')
+  async googleLogout(@GetUserId() userId: number) {
+    return await this.tokenService.deleteTokens(userId);
+  }
+
+  @UseGuards(JwtAccessTokenGuard)
+  @Post('google/unlink')
+  async googleUnlink(@GetUserId() userId: number) {
+    const { socialAccessToken } = await this.tokenService.getUserTokens(userId);
+    await this.tokenService.deleteTokens(userId);
+    return await this.authService.googleUnlink(socialAccessToken);
+  }
+
   @ApiDeleteAccount()
   @UseGuards(JwtAccessTokenGuard)
   @Delete('account')
