@@ -17,7 +17,7 @@ import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
 import { ChatRoomDto } from '../dto/chat-room.dto';
 import { AggregateChatRoomsDto } from '../dto/aggregate-chat-rooms.dto';
-import { ChatDto } from '../dto/chats.dto';
+import { ChatDto } from '../dto/chat.dto';
 import { ChatImageDto } from '../dto/chat-image.dto';
 import { ChatRoomType } from '../constants/chat-rooms-enum';
 import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';

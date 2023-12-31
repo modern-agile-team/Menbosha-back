@@ -5,7 +5,7 @@ import {
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger';
-import { ChatsDto } from '../dto/chats.dto';
+import { ChatsDto } from '../dto/chat.dto';
 
 export function ApiGetChatNotificationSse() {
   return applyDecorators(

@@ -4,7 +4,7 @@ import { TransformMongoId } from './transform/transform-mongo-id';
 import mongoose from 'mongoose';
 import { ChatRooms } from '../schemas/chat-rooms.schemas';
 import { ChatRoomType } from '../constants/chat-rooms-enum';
-import { ChatDto } from './chats.dto';
+import { ChatDto } from './chat.dto';
 
 export class ChatRoomDto implements Omit<ChatRooms, 'unprotectedData'> {
   @ApiProperty({

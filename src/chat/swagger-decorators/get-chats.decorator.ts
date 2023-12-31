@@ -8,7 +8,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ChatsDto } from '../dto/chats.dto';
+import { ChatsDto } from '../dto/chat.dto';
 
 export function ApiGetChats() {
   return applyDecorators(
