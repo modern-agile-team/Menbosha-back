@@ -29,8 +29,10 @@ export class ChatRepository {
 
   findAllChatRooms(
     filter: mongoose.FilterQuery<ChatRooms>,
+    projection?: mongoose.ProjectionType<ChatRooms>,
+    options?: mongoose.QueryOptions<ChatRooms>,
   ): Promise<ChatRoomsDto[]> {
-    return this.chatRoomsModel.find(filter);
+    return this.chatRoomsModel.find(filter, projection, options);
   }
 
   aggregateChatRooms(

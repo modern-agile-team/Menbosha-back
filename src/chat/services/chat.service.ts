@@ -65,13 +65,16 @@ export class ChatService {
    * @returns 1:1, 단톡 관련 없이 삭제된 채팅방 이외에 다 불러옴
    */
   findAllChatRooms(myId: number): Promise<ChatRoomsDto[]> {
-    return this.chatRepository.findAllChatRooms({
-      $and: [
-        { originalMembers: myId },
-        { chatMembers: myId },
-        { deletedAt: null },
-      ],
-    });
+    return this.chatRepository.findAllChatRooms(
+      {
+        $and: [
+          { originalMembers: myId },
+          { chatMembers: myId },
+          { deletedAt: null },
+        ],
+      },
+      { chats: 0 },
+    );
   }
 
   /**
