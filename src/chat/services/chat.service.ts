@@ -212,7 +212,11 @@ export class ChatService {
     const pageSize = 20;
     const skip = (page - 1) * pageSize;
 
-    await this.findOneChatRoomOrFail(roomId);
+    const existChatRoom = await this.findOneChatRoomOrFail(roomId);
+
+    if (!existChatRoom.chatMembers.includes(myId)) {
+      throw new NotFoundException('해당 채팅방이 없습니다.');
+    }
 
     await this.chatRepository.updateOneChatRoom(
       {

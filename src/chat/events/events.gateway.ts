@@ -69,8 +69,7 @@ export class EventsGateway
         chatRoomId: "string"
         content: 채팅내용,
         sender: 보낸 사람 id,
-        receiver: 받는 사람 id,
-        isSeen: "boolean",
+        seenUsers: [userId],
         createdAt: "Date",
       }
     };
