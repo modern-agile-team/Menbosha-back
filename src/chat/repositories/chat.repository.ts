@@ -5,14 +5,13 @@ import { ChatImages } from '../schemas/chat-images.schemas';
 import mongoose, {
   Aggregate,
   AggregatePaginateModel,
+  AggregatePaginateResult,
   PaginateModel,
   PaginateOptions,
   PaginateResult,
 } from 'mongoose';
 import { ChatRoomsDto } from '../dto/chat-rooms.dto';
-import { ChatsDto } from '../dto/chats.dto';
 import { ChatImagesDto } from '../dto/chat-images.dto';
-import { AggregateChatRoomsDto } from '../dto/aggregate-chat-rooms.dto';
 
 @Injectable()
 export class ChatRepository {
@@ -64,7 +63,7 @@ export class ChatRepository {
     query: mongoose.Aggregate<ChatRooms[]>,
     options: mongoose.PaginateOptions,
     callback?,
-  ) {
+  ): Promise<AggregatePaginateResult<ChatRoomsDto>> {
     return this.chatRoomsAggregatePaginateModel.aggregatePaginate(
       query,
       options,
@@ -86,7 +85,7 @@ export class ChatRepository {
     await this.chatRoomsModel.updateOne(filter, update, options);
   }
 
-  async updateManyChatRoom(
+  updateManyChatRoom(
     filter: mongoose.FilterQuery<ChatRooms>,
     update: mongoose.UpdateQuery<ChatRooms>,
     options?: mongoose.QueryOptions<ChatRooms>,
@@ -94,28 +93,13 @@ export class ChatRepository {
     return this.chatRoomsModel.updateMany(filter, update, options);
   }
 
-  // findAllChats(filter: mongoose.FilterQuery<Chats>): Promise<ChatsDto[]> {
-  //   return this.chatsModel.find(filter);
-  // }
-
-  // findOneChat(filter: mongoose.FilterQuery<Chats>): Promise<ChatsDto> {
-  //   return this.chatsModel.findOne(filter);
-  // }
-
   findOneChatImages(
     filter: mongoose.FilterQuery<ChatImages>,
   ): Promise<ChatImages> {
     return this.chatImagesModel.findOne(filter);
   }
 
-  // async updateManyChats(
-  //   filter: mongoose.FilterQuery<Chats>,
-  //   update: mongoose.UpdateQuery<Chats>,
-  // ): Promise<void> {
-  //   await this.chatsModel.updateMany(filter, update);
-  // }
-
-  async createChat(
+  createChat(
     id: mongoose.Types.ObjectId | any,
     update: mongoose.UpdateQuery<ChatRooms>,
     options?: mongoose.QueryOptions<ChatRooms> | null,
@@ -123,7 +107,7 @@ export class ChatRepository {
     return this.chatRoomsModel.findByIdAndUpdate(id, update, options);
   }
 
-  async createChatImage<DocContents = mongoose.AnyKeys<ChatImages>>(
+  createChatImage<DocContents = mongoose.AnyKeys<ChatImages>>(
     doc: DocContents,
   ): Promise<ChatImagesDto> {
     return this.chatImagesModel.create(doc);
