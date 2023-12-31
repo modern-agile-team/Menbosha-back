@@ -138,7 +138,7 @@ export class ChatController {
   /**
    *
    * @param userId
-   * @param receivedUserDto
+   * @param createChatRoomBodyDto
    * @returns 채팅방 생성
    */
   @UseGuards(JwtAccessTokenGuard)

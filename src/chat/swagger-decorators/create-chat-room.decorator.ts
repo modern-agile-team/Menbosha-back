@@ -11,8 +11,8 @@ import {
   ApiUnauthorizedResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ReceivedUserDto } from '../dto/received-user.dto';
 import { ChatRoomDto } from '../dto/chat-room.dto';
+import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 
 export function ApiCreateChatRoom() {
   return applyDecorators(
@@ -98,10 +98,10 @@ export function ApiCreateChatRoom() {
       },
     ]),
     ApiBody({
-      type: ReceivedUserDto,
-      description: '채팅방 guestId',
+      type: CreateChatRoomBodyDto,
+      description: '채팅 룸 생성 body',
       required: true,
     }),
-    ApiExtraModels(ReceivedUserDto, ChatRoomDto),
+    ApiExtraModels(CreateChatRoomBodyDto, ChatRoomDto),
   );
 }
