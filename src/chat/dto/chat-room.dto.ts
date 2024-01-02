@@ -16,6 +16,11 @@ export class ChatRoomDto implements Omit<ChatRooms, 'unprotectedData'> {
   @Expose()
   _id: mongoose.Types.ObjectId;
 
+  @ApiProperty({
+    description: '채팅 방에 속했던 모든 유저들의 id',
+    isArray: true,
+    type: Number,
+  })
   @Exclude()
   originalMembers: number[];
 
