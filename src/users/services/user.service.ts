@@ -1,3 +1,4 @@
+import { UserIntroRepository } from './../repositories/user-intro.repository';
 import { UserBadgeRepository } from './../repositories/user-badge.repository';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
@@ -8,6 +9,7 @@ import { PageByMentorListResponseDTO } from '../dtos/page-by-mentor-list-respons
 import { UserBadgeResponseDTO } from '../dtos/get-user-badge.dto';
 import { plainToInstance } from 'class-transformer';
 import { MyProfileResponseDTO } from '../dtos/get-my-profile.dto';
+import { MyIntroDto } from '../dtos/get-my-intro.dto';
 
 @Injectable()
 export class UserService {
@@ -15,6 +17,7 @@ export class UserService {
     private readonly userRepository: UserRepository,
     private readonly userImageRepository: UserImageRepository,
     private readonly userBadgeRepository: UserBadgeRepository,
+    private readonly userIntroRepository: UserIntroRepository,
   ) {}
 
   findAll(options: FindManyOptions<User>) {
@@ -33,10 +36,32 @@ export class UserService {
       MyProfileResponseDTO,
       await this.userRepository.getUserInfo(userId),
     );
+    const intro = plainToInstance(
+      MyIntroDto,
+      await this.userIntroRepository.getUserIntro(userId),
+    )[0];
+
     const image = (await this.userImageRepository.checkUserImage(userId))
       .imageUrl;
 
-    return { ...userInfo, image };
+    return { ...userInfo, image, intro };
+  }
+
+  async getMyRank(userId: number) {
+    if (!userId) {
+      throw new HttpException(
+        '토큰이 제공되지 않았습니다.',
+        HttpStatus.LENGTH_REQUIRED,
+      );
+    }
+
+    const rank = await this.userRepository.getUserRank(userId);
+    const badge = plainToInstance(
+      UserBadgeResponseDTO,
+      await this.userBadgeRepository.getUserBadge(userId),
+    )[0];
+
+    return { rank, badge };
   }
 
   // async getMyInfo(userId: number) {

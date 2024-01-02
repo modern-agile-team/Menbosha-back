@@ -11,4 +11,7 @@ export class MyProfileResponseDTO extends UserInfoDto {
 
   @Exclude()
   rank: number;
+
+  @Exclude()
+  hopeCategoryId: number;
 }
