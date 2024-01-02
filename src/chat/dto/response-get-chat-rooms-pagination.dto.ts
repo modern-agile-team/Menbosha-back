@@ -5,6 +5,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class ResponseGetChatRoomsPaginationDto extends PaginationResponseDto {
   @ApiProperty({
     description: '최신 채팅 내역이 포함된 chatRoom 객체',
+    type: [ResponseGetChatRoomsDto],
   })
   chatRooms: ResponseGetChatRoomsDto[];
 

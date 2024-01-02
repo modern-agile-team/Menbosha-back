@@ -7,7 +7,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
+import { ResponseGetChatRoomsPaginationDto } from '../dto/response-get-chat-rooms-pagination.dto';
 
 export function ApiGetChatRoomsNew() {
   return applyDecorators(
@@ -25,10 +25,8 @@ export function ApiGetChatRoomsNew() {
             type: 'number',
           },
           content: {
-            type: 'array',
-            items: {
-              $ref: getSchemaPath(ResponseGetChatRoomsDto),
-            },
+            type: 'object',
+            $ref: getSchemaPath(ResponseGetChatRoomsPaginationDto),
           },
         },
       },
@@ -53,12 +51,13 @@ export function ApiGetChatRoomsNew() {
       },
     }),
     ApiNotFoundResponse({
-      description: '내 정보를 찾을 수 없는 경우',
+      description:
+        '내 정보를 찾을 수 없는 경우, 존재하지 않는 페이지를 조회하는 경우',
       schema: {
         type: 'object',
         example: {
           statusCode: 404,
-          message: '사용자를 찾을 수 없습니다.',
+          message: ['사용자를 찾을 수 없습니다.', 'Page Not Found'],
           error: 'Not Found',
         },
       },
@@ -80,6 +79,6 @@ export function ApiGetChatRoomsNew() {
         example: '여기에 액세스 토큰',
       },
     ]),
-    ApiExtraModels(ResponseGetChatRoomsDto),
+    ApiExtraModels(ResponseGetChatRoomsPaginationDto),
   );
 }

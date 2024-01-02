@@ -360,7 +360,7 @@ export class ChatService {
     const pageSize = 15,
       skip = (page - 1) * pageSize;
 
-    const returnedChatRoomsAggregate =
+    const returnedChatRoomsAggregate: AggregateChatRoomsDto[] =
       await this.chatRepository.aggregateChatRooms([
         {
           $match: {
@@ -376,7 +376,6 @@ export class ChatService {
                   input: '$chats',
                   as: 'chat',
                   cond: { $not: { $in: [myId, '$$chat.seenUsers'] } },
-                  // as를 통해 정의된 chat이라는 별칭을 참조하기 위해 $$를 붙임.
                 },
               },
             },
@@ -414,15 +413,11 @@ export class ChatService {
             },
           },
         },
-        { $count: 'totalCount' },
       ]);
 
     if (!returnedChatRoomsAggregate) {
       return null;
     }
-
-    const { totalCount } =
-      returnedChatRoomsAggregate[returnedChatRoomsAggregate.length - 1];
 
     const userIds = returnedChatRoomsAggregate.map((chatRoom) => {
       return chatRoom.chatMembers.filter((userId: number) => userId !== myId);
@@ -475,12 +470,21 @@ export class ChatService {
       },
     );
 
-    return new ResponseGetChatRoomsPaginationDto(
-      responseGetChatRoomsDto,
-      totalCount,
-      page,
-      pageSize,
-    );
+    const responseGetChatRoomsPaginationDto =
+      new ResponseGetChatRoomsPaginationDto(
+        responseGetChatRoomsDto,
+        responseGetChatRoomsDto.length,
+        page,
+        pageSize,
+      );
+
+    const { currentPage, lastPage } = responseGetChatRoomsPaginationDto;
+
+    if (currentPage > lastPage) {
+      throw new NotFoundException('Page not found');
+    }
+
+    return responseGetChatRoomsPaginationDto;
   }
 
   // async getUnreadCounts(roomId: mongoose.Types.ObjectId, after: number) {

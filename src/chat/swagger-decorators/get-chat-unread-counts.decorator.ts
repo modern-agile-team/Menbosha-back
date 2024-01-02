@@ -13,7 +13,7 @@ export function ApiGetChatUnreadCounts() {
       schema: {
         properties: {
           statusCode: { example: 200, type: 'number' },
-          data: {
+          content: {
             type: 'number',
             example: 1,
           },
