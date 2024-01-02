@@ -25,6 +25,7 @@ import { ChatRepository } from '../repositories/chat.repository';
 import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
 import { ChatRoomsWithoutChatsItemDto } from '../dto/chat-rooms-without-chats-item.dto';
 import { ChatRooms } from '../schemas/chat-rooms.schemas';
+import { ResponseGetChatRoomsPaginationDto } from '../dto/response-get-chat-rooms-pagination.dto';
 // import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 
 @Injectable()
@@ -355,11 +356,11 @@ export class ChatService {
   async findAllChatRoomsWithUserAndChat(
     myId: number,
     page: number,
-  ): Promise<ResponseGetChatRoomsDto[]> {
+  ): Promise<ResponseGetChatRoomsPaginationDto> {
     const pageSize = 15,
       skip = (page - 1) * pageSize;
 
-    const returnedChatRoomsAggregate: AggregateChatRoomsDto[] =
+    const returnedChatRoomsAggregate =
       await this.chatRepository.aggregateChatRooms([
         {
           $match: {
@@ -413,11 +414,15 @@ export class ChatService {
             },
           },
         },
+        { $count: 'totalCount' },
       ]);
 
     if (!returnedChatRoomsAggregate) {
       return null;
     }
+
+    const { totalCount } =
+      returnedChatRoomsAggregate[returnedChatRoomsAggregate.length - 1];
 
     const userIds = returnedChatRoomsAggregate.map((chatRoom) => {
       return chatRoom.chatMembers.filter((userId: number) => userId !== myId);
@@ -451,22 +456,31 @@ export class ChatService {
       return new AggregateChatRoomsDto(chat);
     });
 
-    return aggregateChatRoomsDto.map((aggregateChatRoomDto) => {
-      const { chatMembers } = aggregateChatRoomDto;
-      const chatUserDto = [];
+    const responseGetChatRoomsDto = aggregateChatRoomsDto.map(
+      (aggregateChatRoomDto) => {
+        const { chatMembers } = aggregateChatRoomDto;
+        const chatUserDto = [];
 
-      chatMembers.forEach((chatMemberId) => {
-        const matchingUser = chatUsersDtoArray.find((user) => {
-          return user.id === chatMemberId;
+        chatMembers.forEach((chatMemberId) => {
+          const matchingUser = chatUsersDtoArray.find((user) => {
+            return user.id === chatMemberId;
+          });
+
+          if (matchingUser) {
+            chatUserDto.push(matchingUser);
+          }
         });
 
-        if (matchingUser) {
-          chatUserDto.push(matchingUser);
-        }
-      });
+        return new ResponseGetChatRoomsDto(aggregateChatRoomDto, chatUserDto);
+      },
+    );
 
-      return new ResponseGetChatRoomsDto(aggregateChatRoomDto, chatUserDto);
-    });
+    return new ResponseGetChatRoomsPaginationDto(
+      responseGetChatRoomsDto,
+      totalCount,
+      page,
+      pageSize,
+    );
   }
 
   // async getUnreadCounts(roomId: mongoose.Types.ObjectId, after: number) {

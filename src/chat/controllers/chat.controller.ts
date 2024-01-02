@@ -44,6 +44,7 @@ import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-cha
 import { ChatImageDto } from '../dto/chat-image.dto';
 import { ChatRoomsWithoutChatsItemDto } from '../dto/chat-rooms-without-chats-item.dto';
 import { ApiGetOneChatRoomByUserId } from '../swagger-decorators/get-one-chat-room-by-user-id.decorator';
+import { ResponseGetChatRoomsPaginationDto } from '../dto/response-get-chat-rooms-pagination.dto';
 /**
  * @todo 1:1 채팅 컨트롤러 서비스 완성
  */
@@ -102,7 +103,7 @@ export class ChatController {
   findAllChatRoomsWithUserAndChat(
     @GetUserId() userId: number,
     @Query() pageQueryDto: PageQueryDto,
-  ): Promise<ResponseGetChatRoomsDto[]> {
+  ): Promise<ResponseGetChatRoomsPaginationDto> {
     return this.chatService.findAllChatRoomsWithUserAndChat(
       userId,
       pageQueryDto.page,

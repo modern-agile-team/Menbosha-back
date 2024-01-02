@@ -30,4 +30,14 @@ export class PaginationResponseDto {
     description: 'pagination 마지막 페이지',
   })
   lastPage: number;
+
+  constructor(totalCount: number, page: number, pageSize: number) {
+    this.totalCount = totalCount;
+    this.currentPage = page;
+    this.pageSize = pageSize;
+    this.lastPage = Math.ceil(this.totalCount / pageSize);
+    this.nextPage =
+      pageSize * this.currentPage < this.totalCount ? page + 1 : null;
+    this.hasNext = pageSize * this.currentPage < this.totalCount;
+  }
 }
