@@ -101,8 +101,12 @@ export class ChatController {
   @Get('new')
   findAllChatRoomsWithUserAndChat(
     @GetUserId() userId: number,
+    @Query() pageQueryDto: PageQueryDto,
   ): Promise<ResponseGetChatRoomsDto[]> {
-    return this.chatService.findAllChatRoomsWithUserAndChat(userId);
+    return this.chatService.findAllChatRoomsWithUserAndChat(
+      userId,
+      pageQueryDto.page,
+    );
   }
 
   /**

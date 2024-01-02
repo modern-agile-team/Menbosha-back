@@ -287,6 +287,7 @@ export class ChatService {
       content: content,
       seenUsers: [senderId],
       createdAt: new Date(),
+      deletedAt: null,
     };
 
     const updatedChatRoom = await this.chatRepository.createChat(
@@ -353,7 +354,11 @@ export class ChatService {
    */
   async findAllChatRoomsWithUserAndChat(
     myId: number,
+    page: number,
   ): Promise<ResponseGetChatRoomsDto[]> {
+    const pageSize = 15,
+      skip = (page - 1) * pageSize;
+
     const returnedChatRoomsAggregate: AggregateChatRoomsDto[] =
       await this.chatRepository.aggregateChatRooms([
         {
@@ -374,18 +379,25 @@ export class ChatService {
                 },
               },
             },
-          },
-        },
-        {
-          $set: {
             latestChat: {
-              $arrayElemAt: [{ $reverseArray: '$chats' }, 0],
+              $arrayElemAt: [
+                {
+                  $filter: {
+                    input: '$chats',
+                    as: 'chat',
+                    cond: { $eq: ['$$chat.deletedAt', null] },
+                  },
+                },
+                -1,
+              ],
             },
           },
         },
         {
           $sort: { 'chats.createdAt': -1 },
         },
+        { $skip: skip },
+        { $limit: pageSize },
         {
           $project: {
             _id: 1,
@@ -406,12 +418,6 @@ export class ChatService {
     if (!returnedChatRoomsAggregate) {
       return null;
     }
-
-    // const paginatedAggregateChatRooms =
-    //   await this.chatRepository.aggregatePaginate(
-    //     returnedChatRoomsAggregate,
-    //     {},
-    //   );
 
     const userIds = returnedChatRoomsAggregate.map((chatRoom) => {
       return chatRoom.chatMembers.filter((userId: number) => userId !== myId);
