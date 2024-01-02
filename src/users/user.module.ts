@@ -9,6 +9,7 @@ import { UserRepository } from './repositories/user.repository';
 import { UserImageRepository } from './repositories/user-image.repository';
 import { UserImageService } from './services/user-image.service';
 import { AuthModule } from 'src/auth/auth.module';
+import { UserBadgeRepository } from './repositories/user-badge.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]), AuthModule],
@@ -19,6 +20,7 @@ import { AuthModule } from 'src/auth/auth.module';
     UserImageRepository,
     UserService,
     UserImageService,
+    UserBadgeRepository,
   ],
   exports: [UserService, UserRepository],
 })
