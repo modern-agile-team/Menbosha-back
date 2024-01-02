@@ -27,7 +27,13 @@ export class UserIntroRepository {
     return userIntro;
   }
 
-  async updateUserIntro(userData: UpdateUserIntroDTO): Promise<UserIntro> {
+  async findUserIntro(userId: number): Promise<UserIntro> {
+    return await this.entityManager.findOne(UserIntro, { where: { userId } });
+  }
+
+  async updateUserIntro(
+    userData: Partial<UpdateUserIntroDTO>,
+  ): Promise<UserIntro> {
     return await this.entityManager.save(UserIntro, userData);
   }
 }

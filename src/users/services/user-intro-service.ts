@@ -25,14 +25,20 @@ export class UserIntroService {
     userData: UpdateUserIntroDTO,
   ): Promise<ResponseUserIntroDto> {
     const existingUserIntro =
-      await this.userIntroRepository.getUserIntro(userId);
+      await this.userIntroRepository.findUserIntro(userId);
     for (const key in userData) {
-      if (userData.hasOwnProperty[key]) {
+      if (userData.hasOwnProperty(key)) {
         existingUserIntro[key] = userData[key];
       }
     }
     const updateUserIntro =
       await this.userIntroRepository.updateUserIntro(existingUserIntro);
-    return updateUserIntro;
+    return {
+      id: updateUserIntro.id,
+      mainFiled: updateUserIntro.mainField,
+      introduce: updateUserIntro.introduce,
+      career: updateUserIntro.career,
+      userId: updateUserIntro.userId,
+    };
   }
 }

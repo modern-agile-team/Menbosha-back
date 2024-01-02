@@ -1,12 +1,7 @@
-import { IsString } from 'class-validator';
-
 export class ResponseUserIntroDto {
-  @IsString()
-  mainField: string;
-
-  @IsString()
+  id: number;
+  mainFiled: string;
   introduce: string;
-
-  @IsString()
   career: string;
+  userId: number;
 }

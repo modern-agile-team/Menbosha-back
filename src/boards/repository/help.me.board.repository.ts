@@ -1,5 +1,4 @@
 import { EntityManager } from 'typeorm';
-import { MentorBoard } from '../entities/mentor-board.entity';
 import { Injectable } from '@nestjs/common';
 import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/create.help.me.board.dto';
 import { HelpMeBoard } from '../entities/help-me-board.entity';
@@ -48,7 +47,7 @@ export class HelpMeBoardRepository {
     return await this.entityManager.save(HelpMeBoard, boardData);
   }
 
-  async deleteBoard(board: MentorBoard): Promise<void> {
-    await this.entityManager.remove(MentorBoard, board);
+  async deleteBoard(board: HelpMeBoard): Promise<void> {
+    await this.entityManager.remove(HelpMeBoard, board);
   }
 }
