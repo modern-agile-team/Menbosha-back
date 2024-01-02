@@ -2,17 +2,13 @@ import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Subject, map } from 'rxjs';
 import mongoose from 'mongoose';
-import { Chats } from '../schemas/chats.schemas';
 
 @Injectable()
 export class NotificationService {
   private readonly logger = new Logger(NotificationService.name);
   private readonly subject = new Subject();
 
-  constructor(
-    @InjectModel(Chats.name)
-    private readonly chatModel: mongoose.Model<Chats>,
-  ) {}
+  constructor() {}
 
   notificationListener() {
     try {
@@ -29,18 +25,18 @@ export class NotificationService {
 
   async createNotification(createNotificationsDto: number) {
     try {
-      const notification = await new this.chatModel({
-        // description: createNotificationsDto.description,
-        // title: createNotificationsDto.title,
-        isSeen: false,
-      })
-        .save()
-        .catch((error) => {
-          throw new Error(error);
-        });
+      // const notification = await new this.chatModel({
+      // description: createNotificationsDto.description,
+      // title: createNotificationsDto.title,
+      //   isSeen: false,
+      // })
+      // .save()
+      // .catch((error) => {
+      //   throw new Error(error);
+      // });
 
       // send notification
-      if (notification) this.subject.next(notification);
+      // if (notification) this.subject.next(notification);
 
       return { message: 'notification sent successfully' };
     } catch (error) {

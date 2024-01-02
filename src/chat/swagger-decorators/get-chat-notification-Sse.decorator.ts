@@ -5,7 +5,7 @@ import {
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger';
-import { ChatsDto } from '../dto/chats.dto';
+import { ChatDto } from '../dto/chat.dto';
 
 export function ApiGetChatNotificationSse() {
   return applyDecorators(
@@ -16,7 +16,43 @@ export function ApiGetChatNotificationSse() {
     ApiResponse({
       status: 200,
       description: '성공적으로 SSE 연결 및 서버로부터 데이터 수신',
-      type: ChatsDto,
+      type: ChatDto,
+    }),
+    ApiResponse({
+      status: 401,
+      description: '우리 서비스의 액세스 토큰이 아닌 경우',
+      content: {
+        JSON: {
+          example: { statusCode: 401, message: '유효하지 않은 토큰입니다.' },
+        },
+      },
+    }),
+    ApiResponse({
+      status: 403,
+      description: '만료된 액세스 토큰인 경우',
+      content: {
+        JSON: {
+          example: { statusCode: 403, message: '만료된 토큰입니다.' },
+        },
+      },
+    }),
+    ApiResponse({
+      status: 404,
+      description: 'DB에서 사용자를 찾을 수 없는 경우',
+      content: {
+        JSON: {
+          example: { statusCode: 404, message: '사용자를 찾을 수 없습니다.' },
+        },
+      },
+    }),
+    ApiResponse({
+      status: 411,
+      description: '액세스 토큰이 제공되지 않은 경우',
+      content: {
+        JSON: {
+          example: { statusCode: 411, message: '토큰이 제공되지 않았습니다.' },
+        },
+      },
     }),
     ApiHeaders([
       {
@@ -26,6 +62,6 @@ export function ApiGetChatNotificationSse() {
         example: '여기에 액세스 토큰',
       },
     ]),
-    ApiExtraModels(ChatsDto),
+    ApiExtraModels(ChatDto),
   );
 }

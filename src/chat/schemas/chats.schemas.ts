@@ -1,53 +1,21 @@
-import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
+import { Prop } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 
-const options: SchemaOptions = {
-  collection: 'chats',
-  timestamps: true,
-};
-
-@Schema(options)
-export class Chats {
+export class Chat {
   _id: mongoose.Types.ObjectId;
 
-  @Prop({ type: mongoose.Types.ObjectId, ref: 'chat_rooms' })
+  @Prop({ type: mongoose.Types.ObjectId })
   chatRoomId: mongoose.Types.ObjectId;
 
   @Prop({ required: true })
   senderId: number;
 
   @Prop({ required: true })
-  receiverId: number;
-
-  @Prop({ required: true })
   content: string;
 
-  @Prop({ required: true, default: false })
-  isSeen: boolean;
+  @Prop({ default: [] })
+  seenUsers: number[] | [];
 
+  @Prop({ default: Date.now })
   createdAt: Date;
-
-  readonly unprotectedData: {
-    _id: mongoose.Types.ObjectId;
-    chatRoomId: string;
-    senderId: number;
-    receiverId: number;
-    content: string;
-    isSeen: boolean;
-    createdAt: Date;
-  };
 }
-
-export const ChatsSchema = SchemaFactory.createForClass(Chats);
-
-ChatsSchema.virtual('unprotectedData').get(function (this: Chats) {
-  return {
-    _id: this._id,
-    chatRoomId: this.chatRoomId,
-    senderId: this.senderId,
-    receiverId: this.receiverId,
-    content: this.content,
-    isSeen: this.isSeen,
-    createdAt: this.createdAt,
-  };
-});

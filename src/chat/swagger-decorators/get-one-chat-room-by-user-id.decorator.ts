@@ -2,37 +2,30 @@ import { applyDecorators } from '@nestjs/common';
 import {
   ApiExtraModels,
   ApiHeaders,
-  ApiNotFoundResponse,
   ApiOperation,
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
+import { ChatRoomDto } from '../dto/chat-room.dto';
 
-export function ApiGetChatRoomsNew() {
+export function ApiGetOneChatRoomByUserId() {
   return applyDecorators(
     ApiOperation({
-      summary:
-        '챗룸에 유저 정보를 매핑하고 최신의 챗 1개만 가져오도록 하는 api',
-      description: 'Header - user-token',
+      summary: '유저 id로 채팅룸 단일 조회',
+      description: 'Param - roomId',
     }),
     ApiResponse({
       status: 200,
+      description: '성공적으로 채팅방 (단일)조회',
       schema: {
         properties: {
-          statusCode: {
-            example: 200,
-            type: 'number',
-          },
+          statusCode: { example: 200, type: 'number' },
           content: {
-            type: 'array',
-            items: {
-              $ref: getSchemaPath(ResponseGetChatRoomsDto),
-            },
+            type: 'object',
+            $ref: getSchemaPath(ChatRoomDto),
           },
         },
       },
-      description: '성공적으로 채팅방 조회',
     }),
     ApiResponse({
       status: 401,
@@ -48,18 +41,24 @@ export function ApiGetChatRoomsNew() {
       description: '만료된 액세스 토큰인 경우',
       content: {
         JSON: {
-          example: { statusCode: 403, message: '만료된 토큰입니다.' },
+          example: {
+            statusCode: 403,
+            error: 'Forbidden',
+            message: '만료된 토큰입니다.',
+          },
         },
       },
     }),
-    ApiNotFoundResponse({
-      description: '내 정보를 찾을 수 없는 경우',
-      schema: {
-        type: 'object',
-        example: {
-          statusCode: 404,
-          message: '사용자를 찾을 수 없습니다.',
-          error: 'Not Found',
+    ApiResponse({
+      status: 404,
+      description: '채팅 조회 실패 및 유저 찾기 실패',
+      content: {
+        JSON: {
+          example: {
+            message: ['해당 채팅방이 없습니다.', '사용자를 찾을 수 없습니다.'],
+            error: 'Not Found',
+            statusCode: 404,
+          },
         },
       },
     }),
@@ -80,6 +79,6 @@ export function ApiGetChatRoomsNew() {
         example: '여기에 액세스 토큰',
       },
     ]),
-    ApiExtraModels(ResponseGetChatRoomsDto),
+    ApiExtraModels(ChatRoomDto),
   );
 }

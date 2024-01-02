@@ -1,18 +1,8 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { Length, Min } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { Length } from 'class-validator';
+import { PageQueryDto } from './page-query.dto';
 
-export class SearchAllBoardsAndMentorsQueryDto {
-  @ApiPropertyOptional({
-    description: '검색할 페이지 number',
-    format: 'integer',
-    minimum: 1,
-    default: 1,
-  })
-  @Type(() => Number)
-  @Min(1)
-  page?: number = 1;
-
+export class SearchAllBoardsAndMentorsQueryDto extends PageQueryDto {
   @ApiProperty({
     description: '검색어',
     minLength: 2,

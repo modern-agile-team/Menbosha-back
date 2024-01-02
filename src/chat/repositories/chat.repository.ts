@@ -1,34 +1,42 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ChatRooms } from '../schemas/chat-rooms.schemas';
-import { Chats } from '../schemas/chats.schemas';
 import { ChatImages } from '../schemas/chat-images.schemas';
-import mongoose from 'mongoose';
-import { ChatRoomsDto } from '../dto/chat-rooms.dto';
-import { ChatsDto } from '../dto/chats.dto';
-import { ChatImagesDto } from '../dto/chat-images.dto';
-import { AggregateChatRoomsDto } from '../dto/aggregate-chat-rooms.dto';
+import mongoose, {
+  Aggregate,
+  AggregatePaginateModel,
+  AggregatePaginateResult,
+  PaginateModel,
+  PaginateOptions,
+  PaginateResult,
+} from 'mongoose';
+import { ChatRoomDto } from '../dto/chat-room.dto';
+import { ChatImageDto } from '../dto/chat-image.dto';
 
 @Injectable()
 export class ChatRepository {
   constructor(
     @InjectModel(ChatRooms.name)
     private readonly chatRoomsModel: mongoose.Model<ChatRooms>,
-    @InjectModel(Chats.name)
-    private readonly chatsModel: mongoose.Model<Chats>,
     @InjectModel(ChatImages.name)
     private readonly chatImagesModel: mongoose.Model<ChatImages>,
+    @InjectModel(ChatRooms.name)
+    private readonly chatRoomsPaginateModel: PaginateModel<ChatRooms>,
+    @InjectModel(ChatRooms.name)
+    private readonly chatRoomsAggregatePaginateModel: AggregatePaginateModel<ChatRooms>,
   ) {}
 
   findAllChatRooms(
     filter: mongoose.FilterQuery<ChatRooms>,
-  ): Promise<ChatRoomsDto[]> {
-    return this.chatRoomsModel.find(filter);
+    projection?: mongoose.ProjectionType<ChatRooms>,
+    options?: mongoose.QueryOptions<ChatRooms>,
+  ): Promise<ChatRoomDto[]> {
+    return this.chatRoomsModel.find(filter, projection, options);
   }
 
   aggregateChatRooms(
     pipeline: mongoose.PipelineStage[],
-  ): Promise<AggregateChatRoomsDto[]> {
+  ): Aggregate<Array<any>> {
     return this.chatRoomsModel.aggregate(pipeline);
   }
 
@@ -39,35 +47,50 @@ export class ChatRepository {
    */
   findOneChatRoom(
     filter: mongoose.FilterQuery<ChatRooms>,
-  ): Promise<ChatRoomsDto> {
+  ): Promise<ChatRoomDto> {
     return this.chatRoomsModel.findOne(filter);
+  }
+
+  paginateOneChatRoom(
+    query: mongoose.FilterQuery<ChatRooms>,
+    options: PaginateOptions,
+    callback?,
+  ): Promise<PaginateResult<ChatRoomDto>> {
+    return this.chatRoomsPaginateModel.paginate(query, options, callback);
+  }
+
+  aggregatePaginate(
+    query: mongoose.Aggregate<ChatRooms[]>,
+    options: mongoose.PaginateOptions,
+    callback?,
+  ): Promise<AggregatePaginateResult<ChatRoomDto>> {
+    return this.chatRoomsAggregatePaginateModel.aggregatePaginate(
+      query,
+      options,
+      callback,
+    );
   }
 
   async createChatRoom<DocContents = mongoose.AnyKeys<ChatRooms>>(
     doc: DocContents,
-  ): Promise<ChatRoomsDto> {
+  ): Promise<ChatRoomDto> {
     return this.chatRoomsModel.create(doc);
   }
 
   async updateOneChatRoom(
     filter: mongoose.FilterQuery<ChatRooms>,
     update: mongoose.UpdateQuery<ChatRooms>,
+    options?: mongoose.QueryOptions<ChatRooms>,
   ): Promise<void> {
-    const updatedChatRoom = await this.chatRoomsModel.updateOne(filter, update);
-
-    if (!updatedChatRoom.modifiedCount) {
-      throw new InternalServerErrorException(
-        '업데이트 중 알 수 없는 오류 발생',
-      );
-    }
+    await this.chatRoomsModel.updateOne(filter, update, options);
   }
 
-  findAllChats(filter: mongoose.FilterQuery<Chats>): Promise<ChatsDto[]> {
-    return this.chatsModel.find(filter);
-  }
-
-  findOneChat(filter: mongoose.FilterQuery<Chats>): Promise<ChatsDto> {
-    return this.chatsModel.findOne(filter);
+  updateManyChatRoom(
+    filter: mongoose.FilterQuery<ChatRooms>,
+    update: mongoose.UpdateQuery<ChatRooms>,
+    options?: mongoose.QueryOptions<ChatRooms>,
+  ) {
+    return this.chatRoomsModel.updateMany(filter, update, options);
   }
 
   findOneChatImages(
@@ -76,22 +99,17 @@ export class ChatRepository {
     return this.chatImagesModel.findOne(filter);
   }
 
-  async updateManyChats(
-    filter: mongoose.FilterQuery<Chats>,
-    update: mongoose.UpdateQuery<Chats>,
-  ): Promise<void> {
-    await this.chatsModel.updateMany(filter, update);
+  createChat(
+    id: mongoose.Types.ObjectId | any,
+    update: mongoose.UpdateQuery<ChatRooms>,
+    options?: mongoose.QueryOptions<ChatRooms> | null,
+  ): Promise<ChatRoomDto> {
+    return this.chatRoomsModel.findByIdAndUpdate(id, update, options);
   }
 
-  async createChat<DocContents = mongoose.AnyKeys<Chats>>(
+  createChatImage<DocContents = mongoose.AnyKeys<ChatImages>>(
     doc: DocContents,
-  ): Promise<ChatsDto> {
-    return this.chatsModel.create(doc);
-  }
-
-  async createChatImage<DocContents = mongoose.AnyKeys<ChatImages>>(
-    doc: DocContents,
-  ): Promise<ChatImagesDto> {
+  ): Promise<ChatImageDto> {
     return this.chatImagesModel.create(doc);
   }
 

@@ -8,6 +8,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  Query,
   Sse,
   UploadedFile,
   UseGuards,
@@ -24,23 +25,28 @@ import { ParseObjectIdPipe } from '../validation-pipe/parse-object-id.pipe';
 import { ApiCreateChatRoom } from '../swagger-decorators/create-chat-room.decorator';
 import { ApiGetChatRooms } from '../swagger-decorators/get-chat-rooms.decorator';
 import { ApiGetOneChatRoom } from '../swagger-decorators/get-one-chat-room.decorator';
-import { ApiDeleteChatRoom } from '../swagger-decorators/delete-chat-room.decorator';
+import { ApiLeaveChatRoom } from '../swagger-decorators/leave-chat-room.decorator';
 import { ApiGetChats } from '../swagger-decorators/get-chats.decorator';
 // import { ApiGetChatUnreadCounts } from '../swagger-decorators/get-chat-unread-counts.decorator';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
-// import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
-// import { ApiGetChatNotifications } from '../swagger-decorators/get-chat-notifications.decorator';
 import { ApiCreateChatImage } from '../swagger-decorators/create-chat-image.decorators';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
-import { ChatRoomsDto } from '../dto/chat-rooms.dto';
+import { ChatRoomDto } from '../dto/chat-room.dto';
 import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
 import { plainToInstance } from 'class-transformer';
 import { ApiGetChatRoomsNew } from '../swagger-decorators/get-chat-rooms-new.decorator';
 import { Observable } from 'rxjs';
-import { ChatsDto } from '../dto/chats.dto';
 import { ApiGetChatNotificationSse } from '../swagger-decorators/get-chat-notification-Sse.decorator';
-
+import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
+import { PageQueryDto } from 'src/search/dtos/page-query.dto';
+import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
+import { ChatImageDto } from '../dto/chat-image.dto';
+import { ChatRoomsWithoutChatsItemDto } from '../dto/chat-rooms-without-chats-item.dto';
+import { ApiGetOneChatRoomByUserId } from '../swagger-decorators/get-one-chat-room-by-user-id.decorator';
+/**
+ * @todo 1:1 채팅 컨트롤러 서비스 완성
+ */
 @ApiTags('CHAT')
 @UsePipes(
   new ValidationPipe({
@@ -58,6 +64,7 @@ export class ChatController {
    *
    * @param userId
    * @returns
+   * @todo 추후 다른 기능들에서도 호출이 필요할 경우 service코드에 별도의 비즈니스 로직 추가
    */
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChatNotificationSse()
@@ -69,15 +76,17 @@ export class ChatController {
   /**
    *
    * @param userId
-   * @returns
+   * @returns find all chat rooms by userId without chats
    */
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChatRooms()
   @Get()
-  async findAllChatRooms(@GetUserId() userId: number): Promise<ChatRoomsDto[]> {
+  async findAllChatRooms(
+    @GetUserId() userId: number,
+  ): Promise<ChatRoomsWithoutChatsItemDto[]> {
     const returnedChatRooms = await this.chatService.findAllChatRooms(userId);
 
-    return plainToInstance(ChatRoomsDto, returnedChatRooms, {
+    return plainToInstance(ChatRoomsWithoutChatsItemDto, returnedChatRooms, {
       excludeExtraneousValues: true,
     });
   }
@@ -85,11 +94,11 @@ export class ChatController {
   /**
    *
    * @param userId
-   * @returns
+   * @returns find all chat rooms with mapped user
    */
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChatRoomsNew()
-  @Get('new-api')
+  @Get('new')
   findAllChatRoomsWithUserAndChat(
     @GetUserId() userId: number,
   ): Promise<ResponseGetChatRoomsDto[]> {
@@ -98,62 +107,84 @@ export class ChatController {
 
   /**
    *
+   * @param userId
+   * @param receivedUserDto
+   * @returns findOneChatRoomByUserIds
+   */
+  @UseGuards(JwtAccessTokenGuard)
+  @ApiGetOneChatRoomByUserId()
+  @Get('check')
+  findOneChatRoomByUserIds(
+    @GetUserId() userId: number,
+    @Body() receivedUserDto: ReceivedUserDto,
+  ): Promise<ChatRoomDto> {
+    return this.chatService.findOneChatRoomByUserIds(
+      userId,
+      receivedUserDto.receiverId,
+    );
+  }
+
+  /**
+   *
    * @param roomId
-   * @returns
+   * @returns find one chat room or fail
    */
   @ApiGetOneChatRoom()
   @Get(':roomId')
   findOneChatRoomOrFail(
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  ): Promise<ChatRoomsDto> {
+  ): Promise<ChatRoomDto> {
     return this.chatService.findOneChatRoomOrFail(roomId);
   }
 
   /**
    *
    * @param userId
-   * @param receivedUserDto
-   * @returns
+   * @param createChatRoomBodyDto
+   * @returns 채팅방 생성
    */
   @UseGuards(JwtAccessTokenGuard)
   @ApiCreateChatRoom()
   @Post()
   createChatRoom(
     @GetUserId() userId: number,
-    @Body() receivedUserDto: ReceivedUserDto,
-  ): Promise<ChatRoomsDto> {
-    return this.chatService.createChatRoom(userId, receivedUserDto.receiverId);
+    @Body() createChatRoomBodyDto: CreateChatRoomBodyDto,
+  ): Promise<ChatRoomDto> {
+    return this.chatService.createChatRoom(userId, createChatRoomBodyDto);
   }
 
   /**
    *
    * @param userId
    * @param roomId
-   * @returns
+   * @returns 채팅창 나가기
    */
   @UseGuards(JwtAccessTokenGuard)
-  @ApiDeleteChatRoom()
+  @ApiLeaveChatRoom()
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':roomId')
-  deleteChatRoom(
+  leaveChatRoom(
     @GetUserId() userId: number,
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  ) {
-    return this.chatService.deleteChatRoom(userId, roomId);
+  ): Promise<void> {
+    return this.chatService.leaveChatRoom(userId, roomId);
   }
 
+  /**
+   *
+   * @param userId
+   * @param roomId
+   * @returns chatRoom
+   */
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChats()
   @Get(':roomId/chat')
-  async findChats(
+  findAllChats(
     @GetUserId() userId: number,
+    @Query() pageQueryDto: PageQueryDto,
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  ): Promise<ChatsDto[]> {
-    const returnedChats = await this.chatService.findAllChats(userId, roomId);
-
-    return plainToInstance(ChatsDto, returnedChats, {
-      excludeExtraneousValues: true,
-    });
+  ): Promise<AggregateChatRoomForChatsDto> {
+    return this.chatService.findAllChats(userId, roomId, pageQueryDto.page);
   }
 
   @UseGuards(JwtAccessTokenGuard)
@@ -164,7 +195,7 @@ export class ChatController {
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
     @GetUserId() senderId: number,
     @UploadedFile() file: Express.Multer.File,
-  ) {
+  ): Promise<ChatImageDto> {
     return this.chatService.createChatImage(roomId, senderId, file);
   }
 

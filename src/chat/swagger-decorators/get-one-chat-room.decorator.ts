@@ -2,20 +2,19 @@ import { applyDecorators } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiExtraModels,
-  ApiHeaders,
   ApiNotFoundResponse,
   ApiOperation,
   ApiParam,
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ChatRoomsDto } from '../dto/chat-rooms.dto';
+import { ChatRoomDto } from '../dto/chat-room.dto';
 
 export function ApiGetOneChatRoom() {
   return applyDecorators(
     ApiOperation({
       summary: '채팅룸 단일 조회',
-      description: 'Header - access_token, Param - roomId',
+      description: 'Param - roomId',
     }),
     ApiResponse({
       status: 200,
@@ -23,9 +22,9 @@ export function ApiGetOneChatRoom() {
       schema: {
         properties: {
           statusCode: { example: 200, type: 'number' },
-          data: {
+          content: {
             type: 'object',
-            $ref: getSchemaPath(ChatRoomsDto),
+            $ref: getSchemaPath(ChatRoomDto),
           },
         },
       },
@@ -54,14 +53,6 @@ export function ApiGetOneChatRoom() {
         },
       },
     }),
-    ApiHeaders([
-      {
-        name: 'access_token',
-        description: '액세스 토큰',
-        required: true,
-        example: '여기에 액세스 토큰',
-      },
-    ]),
     ApiParam({
       name: 'roomId',
       description: '채팅방의 id',
@@ -69,6 +60,6 @@ export function ApiGetOneChatRoom() {
       type: 'string',
       format: 'ObjectId',
     }),
-    ApiExtraModels(ChatRoomsDto),
+    ApiExtraModels(ChatRoomDto),
   );
 }

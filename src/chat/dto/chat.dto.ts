@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { TransformMongoId } from './transform/transform-mongo-id';
-import { Chats } from '../schemas/chats.schemas';
 import { Expose } from 'class-transformer';
 import mongoose from 'mongoose';
+import { Chat } from '../schemas/chats.schemas';
 
-export class ChatsDto implements Omit<Chats, 'unprotectedData'> {
+export class ChatDto implements Chat {
   @ApiProperty({
     description: '채팅 id',
     type: 'string',
@@ -24,42 +24,39 @@ export class ChatsDto implements Omit<Chats, 'unprotectedData'> {
   chatRoomId: mongoose.Types.ObjectId;
 
   @ApiProperty({
-    description: '채팅 내용',
-  })
-  @Expose()
-  content: string;
-
-  @ApiProperty({
     description: '채팅을 전송한 유저의 id',
   })
   @Expose()
   senderId: number;
 
   @ApiProperty({
-    description: '채팅을 받은 유저의 id',
+    description: '채팅 내용',
   })
   @Expose()
-  receiverId: number;
+  content: string;
 
   @ApiProperty({
-    description: '채팅 확인 여부',
+    isArray: true,
+    type: Number,
+    description: '채팅 확인한 유저들 id 배열',
   })
   @Expose()
-  isSeen: boolean;
+  seenUsers: number[];
 
   @ApiProperty({
     description: '생성 날짜',
+    type: 'string',
+    format: 'date-time',
   })
   @Expose()
   createdAt: Date;
 
-  constructor(chatDto: Partial<ChatsDto> = {}) {
+  constructor(chatDto: Partial<ChatDto> = {}) {
     this._id = chatDto._id;
     this.chatRoomId = chatDto.chatRoomId;
     this.content = chatDto.content;
     this.senderId = chatDto.senderId;
-    this.receiverId = chatDto.receiverId;
-    this.isSeen = chatDto.isSeen;
+    this.seenUsers = chatDto.seenUsers;
     this.createdAt = chatDto.createdAt;
   }
 }
