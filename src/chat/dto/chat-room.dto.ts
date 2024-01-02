@@ -66,7 +66,6 @@ export class ChatRoomDto implements Omit<ChatRooms, 'unprotectedData'> {
 
   constructor(chatRoomsDto: Partial<ChatRoomDto> = {}) {
     this._id = chatRoomsDto._id;
-    this.originalMembers = chatRoomsDto.originalMembers;
     this.chatMembers = chatRoomsDto.chatMembers;
     this.chats = plainToInstance(ChatDto, chatRoomsDto.chats);
     this.chatRoomType = chatRoomsDto.chatRoomType;
