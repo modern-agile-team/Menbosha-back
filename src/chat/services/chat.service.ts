@@ -24,6 +24,7 @@ import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 import { ChatRepository } from '../repositories/chat.repository';
 import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
 import { ChatRoomsWithoutChatsItemDto } from '../dto/chat-rooms-without-chats-item.dto';
+import { ChatRooms } from '../schemas/chat-rooms.schemas';
 // import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 
 @Injectable()
@@ -353,7 +354,7 @@ export class ChatService {
   async findAllChatRoomsWithUserAndChat(
     myId: number,
   ): Promise<ResponseGetChatRoomsDto[]> {
-    const returnedChatRoomsAggregate =
+    const returnedChatRoomsAggregate: AggregateChatRoomsDto[] =
       await this.chatRepository.aggregateChatRooms([
         {
           $match: {
@@ -378,23 +379,12 @@ export class ChatService {
         {
           $set: {
             latestChat: {
-              $arrayElemAt: [
-                // 출력되는 값은 1개기 때문에 배열 형태에서 빼내기 위해서 arrayElemAt을 통해 0번 인덱스를 지정
-                // 혹은 addFields를 이용해도 되는데 코드가 너무 길어질 것 같음.
-                {
-                  $filter: {
-                    input: '$chats',
-                    cond: {
-                      $eq: ['$$this.createdAt', { $max: '$chats.createdAt' }],
-                      // as를 통해 정의하지 않아도 this로 접근 가능.
-                      // 혹은 reverseArray를 사용해서 가져와도 될듯.
-                    },
-                  },
-                },
-                0,
-              ],
+              $arrayElemAt: [{ $reverseArray: '$chats' }, 0],
             },
           },
+        },
+        {
+          $sort: { 'chats.createdAt': -1 },
         },
         {
           $project: {
@@ -416,6 +406,12 @@ export class ChatService {
     if (!returnedChatRoomsAggregate) {
       return null;
     }
+
+    // const paginatedAggregateChatRooms =
+    //   await this.chatRepository.aggregatePaginate(
+    //     returnedChatRoomsAggregate,
+    //     {},
+    //   );
 
     const userIds = returnedChatRoomsAggregate.map((chatRoom) => {
       return chatRoom.chatMembers.filter((userId: number) => userId !== myId);
