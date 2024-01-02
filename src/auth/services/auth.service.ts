@@ -187,8 +187,6 @@ export class AuthService implements AuthServiceInterface {
     }
   }
 
-  async unlink(accessToken: string, refreshToken: string, provider: string) {}
-
   async kakaoLogout(accessToken: string, refreshToken: string) {
     try {
       const checkValidKakaoToken =
@@ -274,6 +272,20 @@ export class AuthService implements AuthServiceInterface {
       console.log(error);
       throw new HttpException(
         '네이버 연결 끊기 중 오류가 발생했습니다.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async googleUnlink(accessToken: string) {
+    try {
+      const googleUnlinkUrl = `https://accounts.google.com/o/oauth2/revoke?token=${accessToken}`;
+      axios.post(googleUnlinkUrl);
+      return { message: '구글 연결 끊기가 완료되었습니다.' };
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(
+        '구글 연결 끊기 중 오류가 발생했습니다.',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }

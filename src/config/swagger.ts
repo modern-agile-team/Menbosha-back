@@ -3,8 +3,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 export function setupSwagger(app: INestApplication): void {
   const config = new DocumentBuilder()
-    .setTitle('ma6-main API')
-    .setDescription('모던애자일 6기 메인프로젝트 API 문서')
+    .setTitle('Menbosha API')
+    .setDescription('모던애자일 6기 멘보샤 프로젝트 API 문서')
     .setVersion('1.0')
     .addBearerAuth(
       {
