@@ -486,6 +486,30 @@ export class ChatService {
     return responseGetChatRoomsPaginationDto;
   }
 
+  async deleteChat(
+    myId: number,
+    roomId: mongoose.Types.ObjectId,
+    chatId: mongoose.Types.ObjectId,
+  ) {
+    const existChatRoom = await this.findOneChatRoomOrFail(roomId);
+
+    if (
+      !existChatRoom.chats.find((chat) => {
+        return chat._id === chatId && chat.senderId === myId;
+      })
+    ) {
+      throw new NotFoundException('해당 채팅을 찾지 못했습니다.');
+    }
+
+    return this.chatRepository.updateOneChatRoom(
+      {
+        _id: roomId,
+        'chats._id': chatId,
+      },
+      { $set: { 'chats.deletedAt': new Date() } },
+    );
+  }
+
   // async getUnreadCounts(roomId: mongoose.Types.ObjectId, after: number) {
   //   const returnedRoom = await this.chatRoomsModel.findOne({ _id: roomId });
   //   if (!returnedRoom) {

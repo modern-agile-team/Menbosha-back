@@ -197,10 +197,23 @@ export class ChatController {
   @UseInterceptors(FileInterceptor('file'))
   createChatImage(
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-    @GetUserId() senderId: number,
+    @GetUserId() userId: number,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<ChatImageDto> {
-    return this.chatService.createChatImage(roomId, senderId, file);
+    return this.chatService.createChatImage(roomId, userId, file);
+  }
+
+  @UseGuards(JwtAccessTokenGuard)
+  // @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(':roomId/chat/:chatId')
+  deleteChat(
+    @GetUserId() userId: number,
+    @Param(':roomId', ParseObjectIdPipe)
+    roomId: mongoose.Types.ObjectId,
+    @Param(':chatId', ParseObjectIdPipe)
+    chatId: mongoose.Types.ObjectId,
+  ) {
+    return this.chatService.deleteChat(userId, roomId, chatId);
   }
 
   // @ApiGetChatUnreadCounts()
