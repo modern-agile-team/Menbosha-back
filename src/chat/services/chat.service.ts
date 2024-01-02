@@ -24,7 +24,6 @@ import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 import { ChatRepository } from '../repositories/chat.repository';
 import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
 import { ChatRoomsWithoutChatsItemDto } from '../dto/chat-rooms-without-chats-item.dto';
-import { ChatRooms } from '../schemas/chat-rooms.schemas';
 import { ResponseGetChatRoomsPaginationDto } from '../dto/response-get-chat-rooms-pagination.dto';
 // import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 

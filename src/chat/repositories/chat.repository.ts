@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ChatRooms } from '../schemas/chat-rooms.schemas';
 import { ChatImages } from '../schemas/chat-images.schemas';
 import mongoose, {
-  Aggregate,
   AggregatePaginateModel,
   AggregatePaginateResult,
   PaginateModel,
@@ -12,7 +11,6 @@ import mongoose, {
 } from 'mongoose';
 import { ChatRoomDto } from '../dto/chat-room.dto';
 import { ChatImageDto } from '../dto/chat-image.dto';
-import { AggregateChatRoomsDto } from '../dto/aggregate-chat-rooms.dto';
 
 @Injectable()
 export class ChatRepository {
