@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { CreateUserIntroDto } from '../dtos/create-user-intro-dto';
 import { UserIntro } from '../entities/user-intro.entity';
+import { UpdateUserIntroDTO } from '../dtos/update-user-intro-dto';
 
 @Injectable()
 export class UserIntroRepository {
@@ -19,10 +20,14 @@ export class UserIntroRepository {
     return await this.entityManager.save(UserIntro, userIntro);
   }
 
-  async getUserIntro(userId: number): Promise<UserIntro> {
+  async getUserIntro(mentorId: number): Promise<UserIntro> {
     const userIntro = await this.entityManager.findOne(UserIntro, {
-      where: { userId: userId },
+      where: { userId: mentorId },
     });
     return userIntro;
+  }
+
+  async updateUserIntro(userData: UpdateUserIntroDTO): Promise<UserIntro> {
+    return await this.entityManager.save(UserIntro, userData);
   }
 }
