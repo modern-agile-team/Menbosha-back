@@ -87,6 +87,9 @@ export class ChatService {
     const returnedRoom = await this.chatRepository.findOneChatRoom({
       _id: roomId,
       deletedAt: null,
+      chats: {
+        $elemMatch: { deletedAt: { $eq: null } },
+      },
     });
 
     if (!returnedRoom) {
@@ -497,7 +500,11 @@ export class ChatService {
     if (
       !existChatRoom.chats.length ||
       !existChatRoom.chats.find((chat: ChatDto) => {
-        return chat._id === chatId && chat.senderId === myId;
+        return (
+          chat._id === chatId &&
+          chat.senderId === myId &&
+          chat.deletedAt === null
+        );
       })
     ) {
       throw new NotFoundException('해당 채팅이 존재하지 않습니다.');
@@ -505,10 +512,10 @@ export class ChatService {
 
     return this.chatRepository.updateOneChatRoom(
       {
-        _id: roomId,
-        'chats._id': chatId,
+        _id: new mongoose.Types.ObjectId(roomId),
+        'chats._id': new mongoose.Types.ObjectId(chatId),
       },
-      { $set: { 'chats.deletedAt': new Date() } },
+      { $set: { 'chats.$.deletedAt': new Date() } },
     );
   }
 
