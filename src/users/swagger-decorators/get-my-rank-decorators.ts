@@ -14,10 +14,16 @@ export function ApiGetMyRank() {
         JSON: {
           example: {
             rank: 10,
-            badge: {
-              badgeId: 1,
-              createdAt: '2023-12-12T19:59:18.000Z',
-            },
+            badge: [
+              {
+                badgeId: 1,
+                createdAt: '2023-12-12T19:59:18.000Z',
+              },
+              {
+                badgeId: 2,
+                createdAt: '2023-12-12T19:59:18.000Z',
+              },
+            ],
           },
         },
       },

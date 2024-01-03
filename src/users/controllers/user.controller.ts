@@ -28,7 +28,7 @@ export class UserController {
   @ApiGetMyProfile()
   @UseGuards(JwtAccessTokenGuard)
   @Get('my/profile')
-  async getMyInfo(@GetUserId() userId: number) {
+  async getMyProfile(@GetUserId() userId: number) {
     return this.userService.getMyProfile(userId);
   }
 

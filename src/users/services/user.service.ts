@@ -25,13 +25,6 @@ export class UserService {
   }
 
   async getMyProfile(userId: number) {
-    if (!userId) {
-      throw new HttpException(
-        '토큰이 제공되지 않았습니다.',
-        HttpStatus.LENGTH_REQUIRED,
-      );
-    }
-
     const userInfo = plainToInstance(
       MyProfileResponseDTO,
       await this.userRepository.getUserInfo(userId),
@@ -48,18 +41,11 @@ export class UserService {
   }
 
   async getMyRank(userId: number) {
-    if (!userId) {
-      throw new HttpException(
-        '토큰이 제공되지 않았습니다.',
-        HttpStatus.LENGTH_REQUIRED,
-      );
-    }
-
     const rank = await this.userRepository.getUserRank(userId);
     const badge = plainToInstance(
       UserBadgeResponseDTO,
       await this.userBadgeRepository.getUserBadge(userId),
-    )[0];
+    );
 
     return { rank, badge };
   }
