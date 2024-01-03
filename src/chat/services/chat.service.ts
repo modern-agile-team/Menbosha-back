@@ -356,8 +356,8 @@ export class ChatService {
     myId: number,
     page: number,
   ): Promise<ResponseGetChatRoomsPaginationDto> {
-    const pageSize = 15,
-      skip = (page - 1) * pageSize;
+    const pageSize = 15;
+    const skip = (page - 1) * pageSize;
 
     const returnedChatRoomsAggregate: AggregateChatRoomsDto[] =
       await this.chatRepository.aggregateChatRooms([
