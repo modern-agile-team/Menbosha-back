@@ -493,12 +493,14 @@ export class ChatService {
   ) {
     const existChatRoom = await this.findOneChatRoomOrFail(roomId);
 
+    myId = 30;
     if (
-      !existChatRoom.chats.find((chat) => {
+      !existChatRoom.chats.length ||
+      !existChatRoom.chats.find((chat: ChatDto) => {
         return chat._id === chatId && chat.senderId === myId;
       })
     ) {
-      throw new NotFoundException('해당 채팅을 찾지 못했습니다.');
+      throw new NotFoundException('해당 채팅이 존재하지 않습니다.');
     }
 
     return this.chatRepository.updateOneChatRoom(

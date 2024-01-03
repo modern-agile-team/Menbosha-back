@@ -204,14 +204,12 @@ export class ChatController {
   }
 
   @UseGuards(JwtAccessTokenGuard)
-  // @HttpCode(HttpStatus.NO_CONTENT)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':roomId/chat/:chatId')
   deleteChat(
+    @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
+    @Param('chatId', ParseObjectIdPipe) chatId: mongoose.Types.ObjectId,
     @GetUserId() userId: number,
-    @Param(':roomId', ParseObjectIdPipe)
-    roomId: mongoose.Types.ObjectId,
-    @Param(':chatId', ParseObjectIdPipe)
-    chatId: mongoose.Types.ObjectId,
   ) {
     return this.chatService.deleteChat(userId, roomId, chatId);
   }
