@@ -235,9 +235,20 @@ export class ChatService {
         },
         {
           $addFields: {
-            totalCount: { $size: '$chats' },
-            sortedChat: {
-              $slice: [{ $reverseArray: '$chats' }, skip, pageSize],
+            filterChat: {
+              $filter: {
+                input: '$chats',
+                as: 'chat',
+                cond: { $eq: ['$$chat.deletedAt', null] },
+              },
+            },
+          },
+        },
+        {
+          $addFields: {
+            totalCount: { $size: '$filterChat' },
+            paginatedChat: {
+              $slice: [{ $reverseArray: '$filterChat' }, skip, pageSize],
             },
           },
         },
@@ -246,7 +257,7 @@ export class ChatService {
             _id: 1,
             chatMembers: 1,
             totalCount: 1,
-            chats: '$sortedChat',
+            chats: '$paginatedChat',
             chatRoomType: 1,
             createdAt: 1,
             updatedAt: 1,
