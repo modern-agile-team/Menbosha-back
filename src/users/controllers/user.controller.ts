@@ -23,6 +23,7 @@ import { UserIntro } from '../entities/user-intro.entity';
 import { CreateUserIntroDto } from '../dtos/create-user-intro-dto';
 import { ResponseUserIntroDto } from '../dtos/response-user-dto';
 import { UpdateUserIntroDTO } from '../dtos/update-user-intro-dto';
+import { ApiPostUserIntro } from '../swagger-decorators/upload-user-Intro-decorators';
 
 @Controller('user')
 @ApiTags('user API')
@@ -64,6 +65,7 @@ export class UserController {
   }
 
   @UseGuards(JwtAccessTokenGuard)
+  @ApiPostUserIntro()
   @Post('/intro')
   addUserIntro(
     @GetUserId() userId: number,
