@@ -9,7 +9,7 @@ export class JwtOptionalGuard {
     const request = context.switchToHttp().getRequest();
     const accessToken = request.headers['access_token'];
     if (!accessToken) {
-      const userId = undefined;
+      const userId = null;
       request.user = { userId };
       return true;
     }
