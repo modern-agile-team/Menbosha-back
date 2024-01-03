@@ -453,17 +453,10 @@ export class ChatService {
     const responseGetChatRoomsDto = aggregateChatRoomsDto.map(
       (aggregateChatRoomDto) => {
         const { chatMembers } = aggregateChatRoomDto;
-        const chatUserDto = [];
 
-        chatMembers.forEach((chatMemberId) => {
-          const matchingUser = chatUsersDtoArray.find((user) => {
-            return user.id === chatMemberId;
-          });
-
-          if (matchingUser) {
-            chatUserDto.push(matchingUser);
-          }
-        });
+        const chatUserDto = chatUsersDtoArray.filter((chatUserDto) =>
+          chatMembers.includes(chatUserDto.id),
+        );
 
         return new ResponseGetChatRoomsDto(aggregateChatRoomDto, chatUserDto);
       },
