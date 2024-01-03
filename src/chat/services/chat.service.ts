@@ -254,19 +254,11 @@ export class ChatService {
         },
       ]);
 
-    const aggregateChatRoomsForChatsDto = new AggregateChatRoomForChatsDto(
+    return new AggregateChatRoomForChatsDto(
       returnedChatRoom[0],
       page,
       pageSize,
     );
-
-    const { currentPage, lastPage } = aggregateChatRoomsForChatsDto;
-
-    if (currentPage > lastPage) {
-      throw new NotFoundException('Page not found');
-    }
-
-    return aggregateChatRoomsForChatsDto;
   }
 
   async createChat({ roomId, content, senderId }): Promise<ChatDto> {
@@ -462,21 +454,12 @@ export class ChatService {
       },
     );
 
-    const responseGetChatRoomsPaginationDto =
-      new ResponseGetChatRoomsPaginationDto(
-        responseGetChatRoomsDto,
-        responseGetChatRoomsDto.length,
-        page,
-        pageSize,
-      );
-
-    const { currentPage, lastPage } = responseGetChatRoomsPaginationDto;
-
-    if (currentPage > lastPage) {
-      throw new NotFoundException('Page not found');
-    }
-
-    return responseGetChatRoomsPaginationDto;
+    return new ResponseGetChatRoomsPaginationDto(
+      responseGetChatRoomsDto,
+      responseGetChatRoomsDto.length,
+      page,
+      pageSize,
+    );
   }
 
   // async getUnreadCounts(roomId: mongoose.Types.ObjectId, after: number) {

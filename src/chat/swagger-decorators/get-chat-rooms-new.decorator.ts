@@ -51,13 +51,12 @@ export function ApiGetChatRoomsNew() {
       },
     }),
     ApiNotFoundResponse({
-      description:
-        '내 정보를 찾을 수 없는 경우, 존재하지 않는 페이지를 조회하는 경우',
+      description: '내 정보를 찾을 수 없는 경우',
       schema: {
         type: 'object',
         example: {
           statusCode: 404,
-          message: ['사용자를 찾을 수 없습니다.', 'Page Not Found'],
+          message: '사용자를 찾을 수 없습니다.',
           error: 'Not Found',
         },
       },
