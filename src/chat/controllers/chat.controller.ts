@@ -33,7 +33,6 @@ import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { ApiCreateChatImage } from '../swagger-decorators/create-chat-image.decorators';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
 import { ChatRoomDto } from '../dto/chat-room.dto';
-import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
 import { plainToInstance } from 'class-transformer';
 import { ApiGetChatRoomsNew } from '../swagger-decorators/get-chat-rooms-new.decorator';
 import { Observable } from 'rxjs';
@@ -44,6 +43,7 @@ import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-cha
 import { ChatImageDto } from '../dto/chat-image.dto';
 import { ChatRoomsWithoutChatsItemDto } from '../dto/chat-rooms-without-chats-item.dto';
 import { ApiGetOneChatRoomByUserId } from '../swagger-decorators/get-one-chat-room-by-user-id.decorator';
+import { ResponseGetChatRoomsPaginationDto } from '../dto/response-get-chat-rooms-pagination.dto';
 /**
  * @todo 1:1 채팅 컨트롤러 서비스 완성
  */
@@ -101,8 +101,12 @@ export class ChatController {
   @Get('new')
   findAllChatRoomsWithUserAndChat(
     @GetUserId() userId: number,
-  ): Promise<ResponseGetChatRoomsDto[]> {
-    return this.chatService.findAllChatRoomsWithUserAndChat(userId);
+    @Query() pageQueryDto: PageQueryDto,
+  ): Promise<ResponseGetChatRoomsPaginationDto> {
+    return this.chatService.findAllChatRoomsWithUserAndChat(
+      userId,
+      pageQueryDto.page,
+    );
   }
 
   /**

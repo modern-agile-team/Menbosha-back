@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { TransformMongoId } from './transform/transform-mongo-id';
-import { Expose } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import mongoose from 'mongoose';
 import { Chat } from '../schemas/chats.schemas';
 
@@ -50,6 +50,14 @@ export class ChatDto implements Chat {
   })
   @Expose()
   createdAt: Date;
+
+  @ApiProperty({
+    description: '채팅 삭제 날짜',
+    type: 'string',
+    format: 'date-time',
+  })
+  @Exclude()
+  deletedAt: Date;
 
   constructor(chatDto: Partial<ChatDto> = {}) {
     this._id = chatDto._id;

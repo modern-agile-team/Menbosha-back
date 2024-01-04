@@ -24,6 +24,7 @@ import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 import { ChatRepository } from '../repositories/chat.repository';
 import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
 import { ChatRoomsWithoutChatsItemDto } from '../dto/chat-rooms-without-chats-item.dto';
+import { ResponseGetChatRoomsPaginationDto } from '../dto/response-get-chat-rooms-pagination.dto';
 // import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 
 @Injectable()
@@ -234,9 +235,20 @@ export class ChatService {
         },
         {
           $addFields: {
-            totalCount: { $size: '$chats' },
-            sortedChat: {
-              $slice: [{ $reverseArray: '$chats' }, skip, pageSize],
+            filterChat: {
+              $filter: {
+                input: '$chats',
+                as: 'chat',
+                cond: { $eq: ['$$chat.deletedAt', null] },
+              },
+            },
+          },
+        },
+        {
+          $addFields: {
+            totalCount: { $size: '$filterChat' },
+            paginatedChat: {
+              $slice: [{ $reverseArray: '$filterChat' }, skip, pageSize],
             },
           },
         },
@@ -245,7 +257,7 @@ export class ChatService {
             _id: 1,
             chatMembers: 1,
             totalCount: 1,
-            chats: '$sortedChat',
+            chats: '$paginatedChat',
             chatRoomType: 1,
             createdAt: 1,
             updatedAt: 1,
@@ -253,19 +265,11 @@ export class ChatService {
         },
       ]);
 
-    const aggregateChatRoomsForChatsDto = new AggregateChatRoomForChatsDto(
+    return new AggregateChatRoomForChatsDto(
       returnedChatRoom[0],
       page,
       pageSize,
     );
-
-    const { currentPage, lastPage } = aggregateChatRoomsForChatsDto;
-
-    if (currentPage > lastPage) {
-      throw new NotFoundException('Page not found');
-    }
-
-    return aggregateChatRoomsForChatsDto;
   }
 
   async createChat({ roomId, content, senderId }): Promise<ChatDto> {
@@ -286,6 +290,7 @@ export class ChatService {
       content: content,
       seenUsers: [senderId],
       createdAt: new Date(),
+      deletedAt: null,
     };
 
     const updatedChatRoom = await this.chatRepository.createChat(
@@ -352,8 +357,12 @@ export class ChatService {
    */
   async findAllChatRoomsWithUserAndChat(
     myId: number,
-  ): Promise<ResponseGetChatRoomsDto[]> {
-    const returnedChatRoomsAggregate =
+    page: number,
+  ): Promise<ResponseGetChatRoomsPaginationDto> {
+    const pageSize = 15;
+    const skip = (page - 1) * pageSize;
+
+    const returnedChatRoomsAggregate: AggregateChatRoomsDto[] =
       await this.chatRepository.aggregateChatRooms([
         {
           $match: {
@@ -369,33 +378,28 @@ export class ChatService {
                   input: '$chats',
                   as: 'chat',
                   cond: { $not: { $in: [myId, '$$chat.seenUsers'] } },
-                  // as를 통해 정의된 chat이라는 별칭을 참조하기 위해 $$를 붙임.
                 },
               },
             },
-          },
-        },
-        {
-          $set: {
             latestChat: {
               $arrayElemAt: [
-                // 출력되는 값은 1개기 때문에 배열 형태에서 빼내기 위해서 arrayElemAt을 통해 0번 인덱스를 지정
-                // 혹은 addFields를 이용해도 되는데 코드가 너무 길어질 것 같음.
                 {
                   $filter: {
                     input: '$chats',
-                    cond: {
-                      $eq: ['$$this.createdAt', { $max: '$chats.createdAt' }],
-                      // as를 통해 정의하지 않아도 this로 접근 가능.
-                      // 혹은 reverseArray를 사용해서 가져와도 될듯.
-                    },
+                    as: 'chat',
+                    cond: { $eq: ['$$chat.deletedAt', null] },
                   },
                 },
-                0,
+                -1,
               ],
             },
           },
         },
+        {
+          $sort: { 'chats.createdAt': -1 },
+        },
+        { $skip: skip },
+        { $limit: pageSize },
         {
           $project: {
             _id: 1,
@@ -449,22 +453,24 @@ export class ChatService {
       return new AggregateChatRoomsDto(chat);
     });
 
-    return aggregateChatRoomsDto.map((aggregateChatRoomDto) => {
-      const { chatMembers } = aggregateChatRoomDto;
-      const chatUserDto = [];
+    const responseGetChatRoomsDto = aggregateChatRoomsDto.map(
+      (aggregateChatRoomDto) => {
+        const { chatMembers } = aggregateChatRoomDto;
 
-      chatMembers.forEach((chatMemberId) => {
-        const matchingUser = chatUsersDtoArray.find((user) => {
-          return user.id === chatMemberId;
-        });
+        const chatUserDto = chatUsersDtoArray.filter((chatUserDto) =>
+          chatMembers.includes(chatUserDto.id),
+        );
 
-        if (matchingUser) {
-          chatUserDto.push(matchingUser);
-        }
-      });
+        return new ResponseGetChatRoomsDto(aggregateChatRoomDto, chatUserDto);
+      },
+    );
 
-      return new ResponseGetChatRoomsDto(aggregateChatRoomDto, chatUserDto);
-    });
+    return new ResponseGetChatRoomsPaginationDto(
+      responseGetChatRoomsDto,
+      responseGetChatRoomsDto.length,
+      page,
+      pageSize,
+    );
   }
 
   // async getUnreadCounts(roomId: mongoose.Types.ObjectId, after: number) {

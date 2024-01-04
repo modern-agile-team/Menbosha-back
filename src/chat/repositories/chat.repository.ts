@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ChatRooms } from '../schemas/chat-rooms.schemas';
 import { ChatImages } from '../schemas/chat-images.schemas';
 import mongoose, {
-  Aggregate,
   AggregatePaginateModel,
   AggregatePaginateResult,
   PaginateModel,
@@ -36,7 +35,7 @@ export class ChatRepository {
 
   aggregateChatRooms(
     pipeline: mongoose.PipelineStage[],
-  ): Aggregate<Array<any>> {
+  ): mongoose.Aggregate<Array<any>> {
     return this.chatRoomsModel.aggregate(pipeline);
   }
 

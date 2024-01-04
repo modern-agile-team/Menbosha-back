@@ -7,7 +7,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
+import { ResponseGetChatRoomsPaginationDto } from '../dto/response-get-chat-rooms-pagination.dto';
 
 export function ApiGetChatRoomsNew() {
   return applyDecorators(
@@ -25,10 +25,8 @@ export function ApiGetChatRoomsNew() {
             type: 'number',
           },
           content: {
-            type: 'array',
-            items: {
-              $ref: getSchemaPath(ResponseGetChatRoomsDto),
-            },
+            type: 'object',
+            $ref: getSchemaPath(ResponseGetChatRoomsPaginationDto),
           },
         },
       },
@@ -80,6 +78,6 @@ export function ApiGetChatRoomsNew() {
         example: '여기에 액세스 토큰',
       },
     ]),
-    ApiExtraModels(ResponseGetChatRoomsDto),
+    ApiExtraModels(ResponseGetChatRoomsPaginationDto),
   );
 }

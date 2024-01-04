@@ -16,6 +16,11 @@ export class ChatRoomDto implements Omit<ChatRooms, 'unprotectedData'> {
   @Expose()
   _id: mongoose.Types.ObjectId;
 
+  @ApiProperty({
+    description: '채팅 방에 속했던 모든 유저들의 id',
+    isArray: true,
+    type: Number,
+  })
   @Exclude()
   originalMembers: number[];
 
@@ -66,7 +71,6 @@ export class ChatRoomDto implements Omit<ChatRooms, 'unprotectedData'> {
 
   constructor(chatRoomsDto: Partial<ChatRoomDto> = {}) {
     this._id = chatRoomsDto._id;
-    this.originalMembers = chatRoomsDto.originalMembers;
     this.chatMembers = chatRoomsDto.chatMembers;
     this.chats = plainToInstance(ChatDto, chatRoomsDto.chats);
     this.chatRoomType = chatRoomsDto.chatRoomType;

@@ -23,10 +23,8 @@ export function ApiGetChats() {
         properties: {
           statusCode: { example: 200, type: 'number' },
           content: {
-            type: 'array',
-            items: {
-              $ref: getSchemaPath(AggregateChatRoomForChatsDto),
-            },
+            type: 'object',
+            $ref: getSchemaPath(AggregateChatRoomForChatsDto),
           },
         },
       },
