@@ -39,6 +39,11 @@ export class UserController {
     return this.userService.getMyRank(userId);
   }
 
+  @Get('info')
+  async getUserInfo(@Query('userId') userId: number) {
+    return this.userService.getUserInfo(userId);
+  }
+
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetMyInfoWithOwner()
   @Get('my-info/:targetId')
