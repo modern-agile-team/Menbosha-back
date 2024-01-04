@@ -87,14 +87,13 @@ export class ChatService {
     const returnedRoom = await this.chatRepository.findOneChatRoom({
       _id: roomId,
       deletedAt: null,
-      'chats.$.deletedAt': null,
     });
 
     if (!returnedRoom) {
       throw new NotFoundException('해당 채팅방이 없습니다.');
     }
 
-    return new ChatRoomDto(returnedRoom[0]);
+    return new ChatRoomDto(returnedRoom);
   }
 
   /**
