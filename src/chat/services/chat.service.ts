@@ -235,9 +235,20 @@ export class ChatService {
         },
         {
           $addFields: {
-            totalCount: { $size: '$chats' },
-            sortedChat: {
-              $slice: [{ $reverseArray: '$chats' }, skip, pageSize],
+            filterChat: {
+              $filter: {
+                input: '$chats',
+                as: 'chat',
+                cond: { $eq: ['$$chat.deletedAt', null] },
+              },
+            },
+          },
+        },
+        {
+          $addFields: {
+            totalCount: { $size: '$filterChat' },
+            paginatedChat: {
+              $slice: [{ $reverseArray: '$filterChat' }, skip, pageSize],
             },
           },
         },
@@ -246,7 +257,7 @@ export class ChatService {
             _id: 1,
             chatMembers: 1,
             totalCount: 1,
-            chats: '$sortedChat',
+            chats: '$paginatedChat',
             chatRoomType: 1,
             createdAt: 1,
             updatedAt: 1,
@@ -254,19 +265,11 @@ export class ChatService {
         },
       ]);
 
-    const aggregateChatRoomsForChatsDto = new AggregateChatRoomForChatsDto(
+    return new AggregateChatRoomForChatsDto(
       returnedChatRoom[0],
       page,
       pageSize,
     );
-
-    const { currentPage, lastPage } = aggregateChatRoomsForChatsDto;
-
-    if (currentPage > lastPage) {
-      throw new NotFoundException('Page not found');
-    }
-
-    return aggregateChatRoomsForChatsDto;
   }
 
   async createChat({ roomId, content, senderId }): Promise<ChatDto> {
@@ -356,8 +359,8 @@ export class ChatService {
     myId: number,
     page: number,
   ): Promise<ResponseGetChatRoomsPaginationDto> {
-    const pageSize = 15,
-      skip = (page - 1) * pageSize;
+    const pageSize = 15;
+    const skip = (page - 1) * pageSize;
 
     const returnedChatRoomsAggregate: AggregateChatRoomsDto[] =
       await this.chatRepository.aggregateChatRooms([
@@ -453,37 +456,21 @@ export class ChatService {
     const responseGetChatRoomsDto = aggregateChatRoomsDto.map(
       (aggregateChatRoomDto) => {
         const { chatMembers } = aggregateChatRoomDto;
-        const chatUserDto = [];
 
-        chatMembers.forEach((chatMemberId) => {
-          const matchingUser = chatUsersDtoArray.find((user) => {
-            return user.id === chatMemberId;
-          });
-
-          if (matchingUser) {
-            chatUserDto.push(matchingUser);
-          }
-        });
+        const chatUserDto = chatUsersDtoArray.filter((chatUserDto) =>
+          chatMembers.includes(chatUserDto.id),
+        );
 
         return new ResponseGetChatRoomsDto(aggregateChatRoomDto, chatUserDto);
       },
     );
 
-    const responseGetChatRoomsPaginationDto =
-      new ResponseGetChatRoomsPaginationDto(
-        responseGetChatRoomsDto,
-        responseGetChatRoomsDto.length,
-        page,
-        pageSize,
-      );
-
-    const { currentPage, lastPage } = responseGetChatRoomsPaginationDto;
-
-    if (currentPage > lastPage) {
-      throw new NotFoundException('Page not found');
-    }
-
-    return responseGetChatRoomsPaginationDto;
+    return new ResponseGetChatRoomsPaginationDto(
+      responseGetChatRoomsDto,
+      responseGetChatRoomsDto.length,
+      page,
+      pageSize,
+    );
   }
 
   async deleteChat(

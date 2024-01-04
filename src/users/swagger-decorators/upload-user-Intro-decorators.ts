@@ -1,36 +1,24 @@
 import { applyDecorators } from '@nestjs/common';
-import {
-  ApiExtraModels,
-  ApiHeaders,
-  ApiNotFoundResponse,
-  ApiOperation,
-  ApiResponse,
-  getSchemaPath,
-} from '@nestjs/swagger';
-import { ResponseGetChatRoomsPaginationDto } from '../dto/response-get-chat-rooms-pagination.dto';
+import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-export function ApiGetChatRoomsNew() {
+export function ApiPostUserIntro() {
   return applyDecorators(
     ApiOperation({
-      summary:
-        '챗룸에 유저 정보를 매핑하고 최신의 챗 1개만 가져오도록 하는 api',
-      description: 'Header - user-token',
+      summary: '유저 인트로 업로드 API',
+      description: '유저 인트로 업로드 API',
     }),
     ApiResponse({
       status: 200,
-      schema: {
-        properties: {
-          statusCode: {
-            example: 200,
-            type: 'number',
-          },
-          content: {
-            type: 'object',
-            $ref: getSchemaPath(ResponseGetChatRoomsPaginationDto),
+      description: '성공적으로 인트로를 등록한 경우',
+      content: {
+        JSON: {
+          example: {
+            mainField: '내이름은 코난 탐정이죠~',
+            introduce: '백엔드 공부하고있습니다',
+            career: '모던 애자일 6기',
           },
         },
       },
-      description: '성공적으로 채팅방 조회',
     }),
     ApiResponse({
       status: 401,
@@ -50,14 +38,12 @@ export function ApiGetChatRoomsNew() {
         },
       },
     }),
-    ApiNotFoundResponse({
-      description: '내 정보를 찾을 수 없는 경우',
-      schema: {
-        type: 'object',
-        example: {
-          statusCode: 404,
-          message: '사용자를 찾을 수 없습니다.',
-          error: 'Not Found',
+    ApiResponse({
+      status: 404,
+      description: 'DB에서 사용자를 찾을 수 없는 경우',
+      content: {
+        JSON: {
+          example: { statusCode: 404, message: '사용자를 찾을 수 없습니다.' },
         },
       },
     }),
@@ -70,6 +56,18 @@ export function ApiGetChatRoomsNew() {
         },
       },
     }),
+    ApiResponse({
+      status: 500,
+      description: 'DB혹은 서버에서 오류가 발생한 경우',
+      content: {
+        JSON: {
+          example: {
+            statusCode: 500,
+            message: 'DB혹은 서버에서 오류가 발생했습니다.',
+          },
+        },
+      },
+    }),
     ApiHeaders([
       {
         name: 'access_token',
@@ -78,6 +76,5 @@ export function ApiGetChatRoomsNew() {
         example: '여기에 액세스 토큰',
       },
     ]),
-    ApiExtraModels(ResponseGetChatRoomsPaginationDto),
   );
 }

@@ -22,6 +22,15 @@ export class UserRepository {
     return user;
   }
 
+  async getUserRank(userId: number): Promise<number> {
+    return (
+      await this.entityManager.findOne(User, {
+        where: { id: userId },
+        select: ['rank'],
+      })
+    ).rank;
+  }
+
   async findUser(email: string, provider: string): Promise<User | undefined> {
     return this.entityManager.findOne(User, { where: { email, provider } });
   }
@@ -68,6 +77,12 @@ export class UserRepository {
   async findIsMentors(): Promise<number> {
     return await this.entityManager.count(User, {
       where: { isMentor: true },
+    });
+  }
+
+  async findOneUser(userId: number): Promise<User> {
+    return await this.entityManager.findOne(User, {
+      where: { id: userId },
     });
   }
 }
