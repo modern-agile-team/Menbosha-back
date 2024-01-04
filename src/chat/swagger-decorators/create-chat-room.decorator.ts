@@ -18,7 +18,10 @@ export function ApiCreateChatRoom() {
   return applyDecorators(
     ApiOperation({
       summary: '채팅룸 생성',
-      description: 'Header - access-token, Body - CreateChatRoomBodyDto',
+      description: `Header - access-token, Body - CreateChatRoomBodyDto
+      만약 기존에 둘의 채팅방이 있고 현재 내가 그 채팅방에 없거나 상대가 없다면(채팅방이 삭제 되지 않았다면)
+      기존에 남아있던 둘의 채팅방으로 나를 혹은 상대를 다시 추가함.
+      기존의 둘의 채팅방이 없다면 새로 생성.`,
     }),
     ApiResponse({
       status: 201,

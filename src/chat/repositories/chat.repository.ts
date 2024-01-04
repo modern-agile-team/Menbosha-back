@@ -46,8 +46,10 @@ export class ChatRepository {
    */
   findOneChatRoom(
     filter: mongoose.FilterQuery<ChatRooms>,
+    projection?: mongoose.ProjectionType<ChatRooms>,
+    options?: mongoose.QueryOptions<ChatRooms>,
   ): Promise<ChatRoomDto> {
-    return this.chatRoomsModel.findOne(filter);
+    return this.chatRoomsModel.findOne(filter, projection, options);
   }
 
   paginateOneChatRoom(

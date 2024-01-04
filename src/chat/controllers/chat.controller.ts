@@ -44,6 +44,7 @@ import { ChatImageDto } from '../dto/chat-image.dto';
 import { ChatRoomsWithoutChatsItemDto } from '../dto/chat-rooms-without-chats-item.dto';
 import { ApiGetOneChatRoomByUserId } from '../swagger-decorators/get-one-chat-room-by-user-id.decorator';
 import { ResponseGetChatRoomsPaginationDto } from '../dto/response-get-chat-rooms-pagination.dto';
+import { ApiDeleteChat } from '../swagger-decorators/delete-chat.decorator';
 /**
  * @todo 1:1 채팅 컨트롤러 서비스 완성
  */
@@ -197,10 +198,22 @@ export class ChatController {
   @UseInterceptors(FileInterceptor('file'))
   createChatImage(
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-    @GetUserId() senderId: number,
+    @GetUserId() userId: number,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<ChatImageDto> {
-    return this.chatService.createChatImage(roomId, senderId, file);
+    return this.chatService.createChatImage(roomId, userId, file);
+  }
+
+  @UseGuards(JwtAccessTokenGuard)
+  @ApiDeleteChat()
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(':roomId/chat/:chatId')
+  deleteChat(
+    @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
+    @Param('chatId', ParseObjectIdPipe) chatId: mongoose.Types.ObjectId,
+    @GetUserId() userId: number,
+  ) {
+    return this.chatService.deleteChat(userId, roomId, chatId);
   }
 
   // @ApiGetChatUnreadCounts()
