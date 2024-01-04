@@ -50,6 +50,25 @@ export class UserService {
     return { rank, badge };
   }
 
+  async getUserInfo(userId: number) {
+    const userInfo = plainToInstance(
+      MyProfileResponseDTO,
+      await this.userRepository.getUserInfo(userId),
+    );
+    const image = (await this.userImageRepository.checkUserImage(userId))
+      .imageUrl;
+    const intro = plainToInstance(
+      MyIntroDto,
+      await this.userIntroRepository.getUserIntro(userId),
+    )[0];
+    const badge = plainToInstance(
+      UserBadgeResponseDTO,
+      await this.userBadgeRepository.getUserBadge(userId),
+    );
+
+    return { ...userInfo, image, intro, badge };
+  }
+
   // async getMyInfo(userId: number) {
   //   if (!userId) {
   //     throw new HttpException(
