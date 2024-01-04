@@ -4,6 +4,9 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Post,
+  Body,
+  Patch,
   Query,
   UseGuards,
   UseInterceptors,
@@ -17,13 +20,24 @@ import { ApiGetMyInfoWithOwner } from '../swagger-decorators/get-my-info-with-ow
 import { PageByMentorListResponseDTO } from '../dtos/page-by-mentor-list-response-dto';
 import { ApiGetPageNumberByMentor } from '../swagger-decorators/get-mentor-page-decorator';
 import { ApiGetMentorList } from '../swagger-decorators/get-mentor-list-decorator';
+import { UserIntroService } from '../services/user-intro-service';
+import { UserIntro } from '../entities/user-intro.entity';
+import { CreateUserIntroDto } from '../dtos/create-user-intro-dto';
+import { ResponseUserIntroDto } from '../dtos/response-user-dto';
+import { UpdateUserIntroDTO } from '../dtos/update-user-intro-dto';
+import { ApiPostUserIntro } from '../swagger-decorators/upload-user-Intro-decorators';
+import { ApiUpdateUserIntro } from '../swagger-decorators/patch-user-intro-decorator';
 import { ApiGetMyRank } from '../swagger-decorators/get-my-rank-decorators';
+
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
 @ApiTags('user API')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly userIntroService: UserIntroService,
+  ) {}
 
   @ApiGetMyProfile()
   @UseGuards(JwtAccessTokenGuard)
@@ -55,11 +69,31 @@ export class UserController {
     return this.userService.countPageMentors();
   }
 
-  @Get('mentor_list')
+  @Get('mentor-list')
   @ApiGetMentorList()
   getMentorList(
     @Query('page') page: 1,
   ): Promise<{ data: PageByMentorListResponseDTO[] }> {
     return this.userService.getMentorList(page);
+  }
+
+  @UseGuards(JwtAccessTokenGuard)
+  @ApiPostUserIntro()
+  @Post('/intro')
+  addUserIntro(
+    @GetUserId() userId: number,
+    @Body() userData: CreateUserIntroDto,
+  ): Promise<UserIntro> {
+    return this.userIntroService.addUserIntro(userId, userData);
+  }
+
+  @UseGuards(JwtAccessTokenGuard)
+  @ApiUpdateUserIntro()
+  @Patch('/intro')
+  patchUserIntro(
+    @GetUserId() userId: number,
+    @Body() userData: UpdateUserIntroDTO,
+  ): Promise<ResponseUserIntroDto> {
+    return this.userIntroService.updateUserIntro(userId, userData);
   }
 }

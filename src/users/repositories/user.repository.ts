@@ -79,4 +79,10 @@ export class UserRepository {
       where: { isMentor: true },
     });
   }
+
+  async findOneUser(userId: number): Promise<User> {
+    return await this.entityManager.findOne(User, {
+      where: { id: userId },
+    });
+  }
 }
