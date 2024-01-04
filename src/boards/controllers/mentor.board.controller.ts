@@ -29,6 +29,7 @@ import { oneMentorBoardResponseDTO } from '../dto/mentorBoard/one.response.mento
 import { BoardImagesService } from '../services/BoardImage.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateMentorBoardImageDto } from '../dto/mentorBoard/create.mentor.board.image.dto';
+import { ApiUploadMentorBoardImages } from '../swagger-decorators/mentorBoard/add-mentor-board-images-decorator';
 
 @Controller('mentorBoard')
 @ApiTags('mentorBoard API')
@@ -51,6 +52,7 @@ export class MentorBoardController {
   @Post('/images')
   @UseGuards(JwtAccessTokenGuard)
   @UseInterceptors(FilesInterceptor('files', 3))
+  @ApiUploadMentorBoardImages()
   uploadImage(
     @GetUserId() userId: number,
     @Query('helpMeBoardId') boardId: number,

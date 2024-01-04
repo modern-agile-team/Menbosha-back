@@ -19,10 +19,10 @@ export class MentorBoardImage {
       onDelete: 'CASCADE',
     },
   )
-  @JoinColumn({ name: 'help_me_board_id' })
+  @JoinColumn({ name: 'mentor_board_id' })
   mentorBoard: MentorBoard;
 
-  @Column({ name: 'help_me_board_id' })
+  @Column({ name: 'mentor_board_id' })
   mentorBoardId: number;
 
   @Column({ name: 'image_url' })
