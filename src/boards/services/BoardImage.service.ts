@@ -28,7 +28,7 @@ export class BoardImagesService {
       helpMeBoardImage.helpMeBoardId = boardId;
       helpMeBoardImage.imageUrl = uploadedImage.url;
       const savedImage =
-        await this.boardImageRepository.saveBoardImage(helpMeBoardImage);
+        await this.boardImageRepository.saveHelpMeBoardImage(helpMeBoardImage);
       savedImagesArray.push(savedImage);
     }
     return savedImagesArray;
@@ -50,7 +50,7 @@ export class BoardImagesService {
       mentorBoardImage.mentorBoardId = boardId;
       mentorBoardImage.imageUrl = uploadedImage.url;
       const savedImage =
-        await this.boardImageRepository.saveBoardImage(mentorBoardImage);
+        await this.boardImageRepository.saveMentorBoardImage(mentorBoardImage);
       savedImagesArray.push(savedImage);
     }
     return savedImagesArray;
@@ -83,7 +83,7 @@ export class BoardImagesService {
         boardImage.helpMeBoardId = boardId;
         boardImage.imageUrl = uploadedImage.url;
         const savedImage =
-          await this.boardImageRepository.saveBoardImage(boardImage);
+          await this.boardImageRepository.saveHelpMeBoardImage(boardImage);
         newImagesArray.push(savedImage);
       }
     }
