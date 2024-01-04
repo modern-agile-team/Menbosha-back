@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { MentorBoard } from './mentor-board.entity';
 
-@Entity({ name: 'help_me_board_image' })
+@Entity({ name: 'mentor_board_image' })
 export class MentorBoardImage {
   @PrimaryGeneratedColumn()
   id: number;

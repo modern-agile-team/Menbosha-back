@@ -4,6 +4,7 @@ import { EntityManager } from 'typeorm';
 import { HelpMeBoardImage } from '../entities/help-me-board-image.entity';
 import { CreateHelpMeBoardImageDto } from '../dto/helpMeBoard/create.board-image.dto';
 import { CreateMentorBoardImageDto } from '../dto/mentorBoard/create.mentor.board.image.dto';
+import { MentorBoardImage } from '../entities/mentor-board-image.entity';
 
 @Injectable()
 export class BoardImageRepository {
