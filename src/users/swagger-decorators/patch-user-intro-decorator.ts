@@ -1,21 +1,21 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-export function ApiPostUserIntro() {
+export function ApiUpdateUserIntro() {
   return applyDecorators(
     ApiOperation({
-      summary: '유저 인트로 업로드 API',
-      description: '유저 인트로 업로드 API',
+      summary: '유저 프로필을 수정하는 API',
+      description: '유저 프로필을 수정하는 API',
     }),
     ApiResponse({
       status: 200,
-      description: '성공적으로 인트로를 등록한 경우',
+      description: '유저 프로필의 내용을 성공적으로 수정한 경우',
       content: {
         JSON: {
           example: {
-            mainField: '내이름은 코난 탐정이죠~',
-            introduce: '백엔드 공부하고있습니다',
-            career: '모던 애자일 6기',
+            mainField: '내이름은 코난 탐정이죠~를 수정해보겠습니다',
+            introduce: '백엔드 공부하고있습니다~ 를 수정해보겠습니다',
+            career: '모던 애자일 6기~를 수정해보겠어',
           },
         },
       },
@@ -58,12 +58,12 @@ export function ApiPostUserIntro() {
     }),
     ApiResponse({
       status: 500,
-      description: '이미지 업로드 및 처리 중 오류가 발생한 경우',
+      description: '보드 수정중 오류가 발생했습니다',
       content: {
         JSON: {
           example: {
             statusCode: 500,
-            message: '이미지 업로드 및 처리 중 오류가 발생했습니다.',
+            message: '보드 수정 중 오류가 발생했습니다.',
           },
         },
       },

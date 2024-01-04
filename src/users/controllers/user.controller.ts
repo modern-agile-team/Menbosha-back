@@ -24,6 +24,7 @@ import { CreateUserIntroDto } from '../dtos/create-user-intro-dto';
 import { ResponseUserIntroDto } from '../dtos/response-user-dto';
 import { UpdateUserIntroDTO } from '../dtos/update-user-intro-dto';
 import { ApiPostUserIntro } from '../swagger-decorators/upload-user-Intro-decorators';
+import { ApiUpdateUserIntro } from '../swagger-decorators/patch-user-intro-decorator';
 
 @Controller('user')
 @ApiTags('user API')
@@ -75,6 +76,7 @@ export class UserController {
   }
 
   @UseGuards(JwtAccessTokenGuard)
+  @ApiUpdateUserIntro()
   @Patch('/intro')
   patchUserIntro(
     @GetUserId() userId: number,
