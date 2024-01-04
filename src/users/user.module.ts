@@ -11,6 +11,8 @@ import { UserImageService } from './services/user-image.service';
 import { AuthModule } from 'src/auth/auth.module';
 import { UserIntroRepository } from './repositories/user-intro-repositories';
 import { UserIntroService } from './services/user-intro-service';
+import { UserBadgeRepository } from './repositories/user-badge.repository';
+import { UserIntroRepository } from './repositories/user-intro.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]), AuthModule],
@@ -23,6 +25,8 @@ import { UserIntroService } from './services/user-intro-service';
     UserImageRepository,
     UserService,
     UserImageService,
+    UserBadgeRepository,
+    UserIntroRepository,
   ],
   exports: [UserService, UserRepository],
 })

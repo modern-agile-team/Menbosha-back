@@ -69,8 +69,7 @@ export class EventsGateway
         chatRoomId: "string"
         content: 채팅내용,
         sender: 보낸 사람 id,
-        receiver: 받는 사람 id,
-        isSeen: "boolean",
+        seenUsers: [userId],
         createdAt: "Date",
       }
     };
@@ -86,7 +85,6 @@ export class EventsGateway
     @ConnectedSocket() socket: Socket,
   ) {
     const returnedChat = await this.chatService.createChat(postChatDto);
-
     socket.to(postChatDto.roomId.toString()).emit('message', returnedChat);
   }
 

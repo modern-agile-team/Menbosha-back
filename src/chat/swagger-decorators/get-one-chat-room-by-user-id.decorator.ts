@@ -4,19 +4,28 @@ import {
   ApiHeaders,
   ApiOperation,
   ApiResponse,
+  getSchemaPath,
 } from '@nestjs/swagger';
-import { ChatDto } from '../dto/chat.dto';
+import { ChatRoomDto } from '../dto/chat-room.dto';
 
-export function ApiGetChatNotificationSse() {
+export function ApiGetOneChatRoomByUserId() {
   return applyDecorators(
     ApiOperation({
-      summary: '채팅 실시간 SSE 알람(미사용 예정)',
-      description: 'listener',
+      summary: '유저 id로 채팅룸 단일 조회',
+      description: 'Param - roomId',
     }),
     ApiResponse({
       status: 200,
-      description: '성공적으로 SSE 연결 및 서버로부터 데이터 수신',
-      type: ChatDto,
+      description: '성공적으로 채팅방 (단일)조회',
+      schema: {
+        properties: {
+          statusCode: { example: 200, type: 'number' },
+          content: {
+            type: 'object',
+            $ref: getSchemaPath(ChatRoomDto),
+          },
+        },
+      },
     }),
     ApiResponse({
       status: 401,
@@ -32,16 +41,24 @@ export function ApiGetChatNotificationSse() {
       description: '만료된 액세스 토큰인 경우',
       content: {
         JSON: {
-          example: { statusCode: 403, message: '만료된 토큰입니다.' },
+          example: {
+            statusCode: 403,
+            error: 'Forbidden',
+            message: '만료된 토큰입니다.',
+          },
         },
       },
     }),
     ApiResponse({
       status: 404,
-      description: 'DB에서 사용자를 찾을 수 없는 경우',
+      description: '채팅 조회 실패 및 유저 찾기 실패',
       content: {
         JSON: {
-          example: { statusCode: 404, message: '사용자를 찾을 수 없습니다.' },
+          example: {
+            message: ['해당 채팅방이 없습니다.', '사용자를 찾을 수 없습니다.'],
+            error: 'Not Found',
+            statusCode: 404,
+          },
         },
       },
     }),
@@ -62,6 +79,6 @@ export function ApiGetChatNotificationSse() {
         example: '여기에 액세스 토큰',
       },
     ]),
-    ApiExtraModels(ChatDto),
+    ApiExtraModels(ChatRoomDto),
   );
 }

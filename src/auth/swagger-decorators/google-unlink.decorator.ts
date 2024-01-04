@@ -1,22 +1,18 @@
 import { applyDecorators } from '@nestjs/common';
-import {
-  ApiExtraModels,
-  ApiHeaders,
-  ApiOperation,
-  ApiResponse,
-} from '@nestjs/swagger';
-import { ChatDto } from '../dto/chat.dto';
+import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-export function ApiGetChatNotificationSse() {
+export function ApiGoogleUnlink() {
   return applyDecorators(
     ApiOperation({
-      summary: '채팅 실시간 SSE 알람(미사용 예정)',
-      description: 'listener',
+      summary: '구글 회원탈퇴 API',
+      description: '구글 회원탈퇴 API',
     }),
     ApiResponse({
-      status: 200,
-      description: '성공적으로 SSE 연결 및 서버로부터 데이터 수신',
-      type: ChatDto,
+      status: 201,
+      description: '성공적으로 회원탈퇴 된 경우',
+      content: {
+        JSON: { example: { message: '구글 연결 끊기가 완료되었습니다.' } },
+      },
     }),
     ApiResponse({
       status: 401,
@@ -38,10 +34,10 @@ export function ApiGetChatNotificationSse() {
     }),
     ApiResponse({
       status: 404,
-      description: 'DB에서 사용자를 찾을 수 없는 경우',
+      description: 'DB에서 구글 토큰을 찾을 수 없는 경우',
       content: {
         JSON: {
-          example: { statusCode: 404, message: '사용자를 찾을 수 없습니다.' },
+          example: { statusCode: 404, message: '토큰을 찾을 수 없습니다.' },
         },
       },
     }),
@@ -54,6 +50,18 @@ export function ApiGetChatNotificationSse() {
         },
       },
     }),
+    ApiResponse({
+      status: 500,
+      description: '구글 회원탈퇴 API에서 오류가 발생한 경우',
+      content: {
+        JSON: {
+          example: {
+            statusCode: 500,
+            message: '구글 연결 끊기 중 오류가 발생했습니다.',
+          },
+        },
+      },
+    }),
     ApiHeaders([
       {
         name: 'access_token',
@@ -62,6 +70,5 @@ export function ApiGetChatNotificationSse() {
         example: '여기에 액세스 토큰',
       },
     ]),
-    ApiExtraModels(ChatDto),
   );
 }

@@ -1,8 +1,8 @@
 import { PickType } from '@nestjs/swagger';
-import { ChatsDto } from './chats.dto';
+import { ChatDto } from './chat.dto';
 
-export class LookupChatsDto extends PickType(ChatsDto, [
+export class LookupChatsDto extends PickType(ChatDto, [
   'content',
   'createdAt',
-  'isSeen',
+  'seenUsers',
 ]) {}

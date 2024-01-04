@@ -1,4 +1,5 @@
 import {
+  ClassSerializerInterceptor,
   Controller,
   Get,
   Param,
@@ -8,12 +9,13 @@ import {
   Patch,
   Query,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
-import { ApiGetMyInfo } from '../swagger-decorators/get-my-info-decorator';
+import { ApiGetMyProfile } from '../swagger-decorators/get-my-profile-decorator';
 import { ApiGetMyInfoWithOwner } from '../swagger-decorators/get-my-info-with-owner-decorator';
 import { PageByMentorListResponseDTO } from '../dtos/page-by-mentor-list-response-dto';
 import { ApiGetPageNumberByMentor } from '../swagger-decorators/get-mentor-page-decorator';
@@ -25,8 +27,11 @@ import { ResponseUserIntroDto } from '../dtos/response-user-dto';
 import { UpdateUserIntroDTO } from '../dtos/update-user-intro-dto';
 import { ApiPostUserIntro } from '../swagger-decorators/upload-user-Intro-decorators';
 import { ApiUpdateUserIntro } from '../swagger-decorators/patch-user-intro-decorator';
+import { ApiGetMyRank } from '../swagger-decorators/get-my-rank-decorators';
+
 
 @Controller('user')
+@UseInterceptors(ClassSerializerInterceptor)
 @ApiTags('user API')
 export class UserController {
   constructor(
@@ -34,11 +39,18 @@ export class UserController {
     private readonly userIntroService: UserIntroService,
   ) {}
 
-  @ApiGetMyInfo()
+  @ApiGetMyProfile()
   @UseGuards(JwtAccessTokenGuard)
-  @Get('my-info')
-  async getMyInfo(@GetUserId() userId: number) {
-    return this.userService.getMyInfo(userId);
+  @Get('my/profile')
+  async getMyProfile(@GetUserId() userId: number) {
+    return this.userService.getMyProfile(userId);
+  }
+
+  @ApiGetMyRank()
+  @UseGuards(JwtAccessTokenGuard)
+  @Get('my/rank')
+  async getMyRank(@GetUserId() userId: number) {
+    return this.userService.getMyRank(userId);
   }
 
   @UseGuards(JwtAccessTokenGuard)

@@ -24,11 +24,4 @@ export class PostChatDto {
   })
   @IsNumber()
   senderId: number;
-
-  @ApiProperty({
-    example: 2,
-    description: '채팅을 받는 유저 아이디',
-  })
-  @IsNumber()
-  receiverId: number;
 }
