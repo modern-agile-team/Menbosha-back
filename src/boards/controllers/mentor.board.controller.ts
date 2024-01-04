@@ -7,6 +7,8 @@ import {
   Delete,
   Query,
   UseGuards,
+  UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
 import { MentorBoardService } from '../services/mentor.board.service';
 import { MentorBoard } from '../entities/mentor-board.entity';
@@ -24,11 +26,17 @@ import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 import { MentorBoardResponseDTO } from '../dto/mentorBoard/update.mentor.board.response.dto';
 import { UpdateMentorBoardDto } from '../dto/mentorBoard/update.mentor.board.dto';
 import { oneMentorBoardResponseDTO } from '../dto/mentorBoard/one.response.mentor.boards.dto';
+import { BoardImagesService } from '../services/BoardImage.service';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { CreateMentorBoardImageDto } from '../dto/mentorBoard/create.mentor.board.image.dto';
 
 @Controller('mentorBoard')
 @ApiTags('mentorBoard API')
 export class MentorBoardController {
-  constructor(private readonly mentorBoardService: MentorBoardService) {}
+  constructor(
+    private readonly mentorBoardService: MentorBoardService,
+    private readonly boardImagesService: BoardImagesService,
+  ) {}
 
   @Post('')
   @UseGuards(JwtAccessTokenGuard)
@@ -38,6 +46,21 @@ export class MentorBoardController {
     @GetUserId() userId: number,
   ): Promise<MentorBoard> {
     return await this.mentorBoardService.create(createMentorBoardDto, userId);
+  }
+
+  @Post('/images')
+  @UseGuards(JwtAccessTokenGuard)
+  @UseInterceptors(FilesInterceptor('files', 3))
+  uploadImage(
+    @GetUserId() userId: number,
+    @Query('helpMeBoardId') boardId: number,
+    @UploadedFiles() files: Express.Multer.File[],
+  ): Promise<CreateMentorBoardImageDto[]> {
+    return this.boardImagesService.createMentorBoardImages(
+      boardId,
+      files,
+      userId,
+    );
   }
 
   @Get('') // 이부분은 아직 프론트랑 상의중입니다
