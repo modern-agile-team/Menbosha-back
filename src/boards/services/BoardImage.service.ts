@@ -3,6 +3,7 @@ import { BoardImageRepository } from '../repository/boardImage.repository';
 import { S3Service } from '../../common/s3/s3.service';
 import { CreateHelpMeBoardImageDto } from '../dto/helpMeBoard/create.board-image.dto';
 import { HelpMeBoardImage } from '../entities/help-me-board-image.entity';
+import { CreateMentorBoardImageDto } from '../dto/mentorBoard/create.mentor.board.image.dto';
 
 @Injectable()
 export class BoardImagesService {
@@ -23,11 +24,33 @@ export class BoardImagesService {
         userId,
         'HelpMeBoardImages',
       );
-      const boardImage = new CreateHelpMeBoardImageDto();
-      boardImage.helpMeBoardId = boardId;
-      boardImage.imageUrl = uploadedImage.url;
+      const helpMeBoardImage = new CreateHelpMeBoardImageDto();
+      helpMeBoardImage.helpMeBoardId = boardId;
+      helpMeBoardImage.imageUrl = uploadedImage.url;
       const savedImage =
-        await this.boardImageRepository.saveBoardImage(boardImage);
+        await this.boardImageRepository.saveBoardImage(helpMeBoardImage);
+      savedImagesArray.push(savedImage);
+    }
+    return savedImagesArray;
+  }
+
+  async createMentorBoardImages(
+    boardId: number,
+    files: Express.Multer.File[],
+    userId: number,
+  ): Promise<CreateMentorBoardImageDto[]> {
+    const savedImagesArray: CreateMentorBoardImageDto[] = [];
+    for (const file of files) {
+      const uploadedImage = await this.s3Service.uploadImage(
+        file,
+        userId,
+        'MentorBoardImages',
+      );
+      const mentorBoardImage = new CreateMentorBoardImageDto();
+      mentorBoardImage.mentorBoardId = boardId;
+      mentorBoardImage.imageUrl = uploadedImage.url;
+      const savedImage =
+        await this.boardImageRepository.saveBoardImage(mentorBoardImage);
       savedImagesArray.push(savedImage);
     }
     return savedImagesArray;

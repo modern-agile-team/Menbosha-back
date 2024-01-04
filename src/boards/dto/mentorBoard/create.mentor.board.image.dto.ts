@@ -5,7 +5,7 @@ export class CreateMentorBoardImageDto {
   id: number;
 
   @IsNumber()
-  helpMeBoardId: number;
+  mentorBoardId: number;
 
   @IsString()
   imageUrl: string;
