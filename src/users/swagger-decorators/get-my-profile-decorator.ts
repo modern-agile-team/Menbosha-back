@@ -1,32 +1,36 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-export function ApiGetMyInfo() {
+export function ApiGetMyProfile() {
   return applyDecorators(
     ApiOperation({
-      summary: '내 정보 조회 API',
-      description: '내 정보 조회 API',
+      summary: '내 프로필 조회 API',
+      description: '내 프로필 조회 API',
     }),
     ApiResponse({
       status: 200,
-      description: '성공적으로 내 정보를 조회한 경우',
+      description: '성공적으로 내 프로필을 조회한 경우',
       content: {
         JSON: {
           example: {
-            userId: 1,
             name: '홍길동',
             email: 'abcd@naver.com',
-            gender: 'M',
-            admin: false,
-            provider: 'kakao',
-            userImage: 'http://img.jpg',
+            isMentor: false,
+            activityCategoryId: 3,
+            phone: 'true',
+            image: 'http://img.jpg',
+            intro: {
+              mainField: '응애',
+              introduce: '발로란트 1대1 코칭해드려요',
+              career: '발로란트 최대 티어 불멸',
+            },
           },
         },
       },
     }),
     ApiResponse({
       status: 404,
-      description: '내 정보를 찾을 수 없는 경우',
+      description: '내 프로필을 찾을 수 없는 경우',
       content: {
         JSON: {
           example: {

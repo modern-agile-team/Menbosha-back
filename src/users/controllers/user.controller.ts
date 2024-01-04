@@ -1,31 +1,42 @@
 import {
+  ClassSerializerInterceptor,
   Controller,
   Get,
   Param,
   ParseIntPipe,
   Query,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
-import { ApiGetMyInfo } from '../swagger-decorators/get-my-info-decorator';
+import { ApiGetMyProfile } from '../swagger-decorators/get-my-profile-decorator';
 import { ApiGetMyInfoWithOwner } from '../swagger-decorators/get-my-info-with-owner-decorator';
 import { PageByMentorListResponseDTO } from '../dtos/page-by-mentor-list-response-dto';
 import { ApiGetPageNumberByMentor } from '../swagger-decorators/get-mentor-page-decorator';
 import { ApiGetMentorList } from '../swagger-decorators/get-mentor-list-decorator';
+import { ApiGetMyRank } from '../swagger-decorators/get-my-rank-decorators';
 
 @Controller('user')
+@UseInterceptors(ClassSerializerInterceptor)
 @ApiTags('user API')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @ApiGetMyInfo()
+  @ApiGetMyProfile()
   @UseGuards(JwtAccessTokenGuard)
-  @Get('my-info')
-  async getMyInfo(@GetUserId() userId: number) {
-    return this.userService.getMyInfo(userId);
+  @Get('my/profile')
+  async getMyProfile(@GetUserId() userId: number) {
+    return this.userService.getMyProfile(userId);
+  }
+
+  @ApiGetMyRank()
+  @UseGuards(JwtAccessTokenGuard)
+  @Get('my/rank')
+  async getMyRank(@GetUserId() userId: number) {
+    return this.userService.getMyRank(userId);
   }
 
   @UseGuards(JwtAccessTokenGuard)
