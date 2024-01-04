@@ -9,8 +9,8 @@ import {
 export function ApiUploadHelpMeBoardImages() {
   return applyDecorators(
     ApiOperation({
-      summary: '보드 이미지 업로드 API',
-      description: '보드 이미지 업로드 API',
+      summary: '멘티 보드 이미지 업로드 API',
+      description: '멘티 보드 이미지 업로드 API',
     }),
     ApiResponse({
       status: 200,
