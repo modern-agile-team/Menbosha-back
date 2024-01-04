@@ -28,7 +28,7 @@ import { UpdateUserIntroDTO } from '../dtos/update-user-intro-dto';
 import { ApiPostUserIntro } from '../swagger-decorators/upload-user-Intro-decorators';
 import { ApiUpdateUserIntro } from '../swagger-decorators/patch-user-intro-decorator';
 import { ApiGetMyRank } from '../swagger-decorators/get-my-rank-decorators';
-
+import { ApiGetUserInfo } from '../swagger-decorators/get-user-info.decorators';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -53,6 +53,7 @@ export class UserController {
     return this.userService.getMyRank(userId);
   }
 
+  @ApiGetUserInfo()
   @Get('info')
   async getUserInfo(@Query('userId') userId: number) {
     return this.userService.getUserInfo(userId);
