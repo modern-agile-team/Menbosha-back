@@ -13,7 +13,7 @@ export function ApiGetChatRoomsNew() {
   return applyDecorators(
     ApiOperation({
       summary:
-        '챗룸에 유저 정보를 매핑하고 최신의 챗 1개만 가져오도록 하는 api',
+        '챗룸에 유저 정보를 매핑하고 최신의 챗 1개만 가져오도록 하는 api 페이지네이션이 구현됨. 15개씩 잘라서 가져옴.',
       description: 'Header - user-token',
     }),
     ApiResponse({

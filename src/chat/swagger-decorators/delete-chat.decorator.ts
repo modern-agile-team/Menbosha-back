@@ -8,16 +8,15 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 
-export function ApiLeaveChatRoom() {
+export function ApiDeleteChat() {
   return applyDecorators(
     ApiOperation({
-      summary: '채팅룸 나가기',
-      description: `Header - access_token, Param - roomId
-      채팅방 인원 중 한명만 나가면 남은 인원만 있는 채로 채팅방이 존재.
-      만약 채팅방을 둘다 나가서 채팅방에 남아있는 인원이 없는 경우 채팅방 삭제 처리`,
+      summary: '채팅삭제',
+      description: `Header - access_token, Param - roomId, Param - chatId
+      채팅을 삭제합니다.`,
     }),
     ApiNoContentResponse({
-      description: '성공적으로 채팅방 나가기',
+      description: '성공적으로 채팅 삭제',
     }),
     ApiBadRequestResponse({
       description: '유효성 검사 실패',
@@ -63,7 +62,7 @@ export function ApiLeaveChatRoom() {
       content: {
         JSON: {
           example: {
-            message: ['해당 채팅룸이 없습니다.', '사용자를 찾을 수 없습니다.'],
+            message: ['해당 채팅이 없습니다.', '사용자를 찾을 수 없습니다.'],
             error: 'Not Found',
             statusCode: 404,
           },
@@ -90,6 +89,13 @@ export function ApiLeaveChatRoom() {
     ApiParam({
       name: 'roomId',
       description: '채팅방의 id',
+      required: true,
+      type: 'string',
+      format: 'objectId',
+    }),
+    ApiParam({
+      name: 'chatId',
+      description: '채팅의 id',
       required: true,
       type: 'string',
       format: 'objectId',
