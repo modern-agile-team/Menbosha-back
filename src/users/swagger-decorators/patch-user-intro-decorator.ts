@@ -58,12 +58,12 @@ export function ApiUpdateUserIntro() {
     }),
     ApiResponse({
       status: 500,
-      description: '보드 수정중 오류가 발생했습니다',
+      description: '프로필 수정중 오류가 발생했습니다',
       content: {
         JSON: {
           example: {
             statusCode: 500,
-            message: '보드 수정 중 오류가 발생했습니다.',
+            message: '프로필 수정 중 오류가 발생했습니다.',
           },
         },
       },

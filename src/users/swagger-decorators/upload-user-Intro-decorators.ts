@@ -58,12 +58,12 @@ export function ApiPostUserIntro() {
     }),
     ApiResponse({
       status: 500,
-      description: '이미지 업로드 및 처리 중 오류가 발생한 경우',
+      description: 'DB혹은 서버에서 오류가 발생한 경우',
       content: {
         JSON: {
           example: {
             statusCode: 500,
-            message: '이미지 업로드 및 처리 중 오류가 발생했습니다.',
+            message: 'DB혹은 서버에서 오류가 발생했습니다.',
           },
         },
       },
