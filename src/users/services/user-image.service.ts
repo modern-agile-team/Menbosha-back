@@ -10,7 +10,7 @@ export class UserImageService {
     private readonly userImageRepository: UserImageRepository,
   ) {}
 
-  async uploadImage(
+  async updateImage(
     userId: number,
     file: Express.Multer.File,
   ): Promise<{ message: string }> {
@@ -31,8 +31,8 @@ export class UserImageService {
       const dbImageUrl = imageUrlParts[imageUrlParts.length - 3]; // 이미지 제공자 이름
 
       if (
-        dbImageUrl == 'ma6-main.s3.ap-northeast-2.amazonaws.com' &&
-        imageKey !== 'default_user_image.png'
+        dbImageUrl === 'menbosha-s3.s3.ap-northeast-2.amazonaws.com' &&
+        imageKey !== 'UserIcon.svg'
       ) {
         // S3에 업로드된 이미지이고, 기본 이미지가 아닌 경우
         await this.s3Service.deleteImage('UserImages/' + imageKey); // S3에 업로드된 기존 이미지 삭제
