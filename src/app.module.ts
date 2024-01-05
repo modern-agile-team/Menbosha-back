@@ -27,7 +27,7 @@ import { ExceptionsModule } from './http-exceptions/exceptions.module';
     TypeOrmModule.forRoot({
       ...TypeORMconfig, // TypeORM 설정 객체 확장
       synchronize: true, // DB 동기화 여부 설정
-      logging: false, //DB 로깅 여부 설정
+      logging: true, //DB 로깅 여부 설정
     }),
     ConfigModule.forRoot({
       isGlobal: true,
