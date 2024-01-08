@@ -12,6 +12,7 @@ import { HelpMeBoardRepository } from './repository/help.me.board.repository';
 import { MentorBoardRepository } from './repository/mentor.boards.repository';
 import { BoardImageRepository } from './repository/boardImage.repository';
 import { HelpMeBoardImage } from './entities/help-me-board-image.entity';
+import { MentorBoardImage } from './entities/mentor-board-image.entity';
 import { RedisModule } from 'src/common/redis/redis.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { LikesModule } from 'src/like/likes.module';
@@ -21,7 +22,12 @@ import { MentorBoardLikeService } from './services/mentor-board-like.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([MentorBoard, HelpMeBoard, HelpMeBoardImage]),
+    TypeOrmModule.forFeature([
+      MentorBoard,
+      HelpMeBoard,
+      HelpMeBoardImage,
+      MentorBoardImage,
+    ]),
     AuthModule,
     RedisModule,
     LikesModule.forFeature(MentorBoardLike),

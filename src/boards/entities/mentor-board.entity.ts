@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 import { CategoryList } from 'src/common/entity/category-list.entity';
 import { MentorBoardLike } from './mentor-board-like.entity';
+import { MentorBoardImage } from './mentor-board-image.entity';
 
 @Entity({
   name: 'mentor_board',
@@ -28,6 +29,12 @@ export class MentorBoard {
   })
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @OneToMany(
+    () => MentorBoardImage,
+    (mentorBoardImages) => mentorBoardImages.mentorBoard,
+  )
+  mentorBoardImages: MentorBoardImage[];
 
   @Index({ fulltext: true })
   @Column('varchar')

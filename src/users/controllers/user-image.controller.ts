@@ -8,7 +8,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UserImageService } from '../services/user-image.service';
 import { ApiTags } from '@nestjs/swagger';
-import { ApiUploadUserImage } from '../swagger-decorators/upload-user-image.decorator';
+import { ApiUpdateUserImage } from '../swagger-decorators/update-user-image.decorator';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 
@@ -17,14 +17,14 @@ import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 export class UserImageController {
   constructor(private readonly userImageService: UserImageService) {}
 
-  @ApiUploadUserImage()
+  @ApiUpdateUserImage()
   @UseGuards(JwtAccessTokenGuard)
   @Patch()
   @UseInterceptors(FileInterceptor('file'))
-  async uploadUserImage(
+  async updateUserImage(
     @GetUserId() userId: number,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return await this.userImageService.uploadImage(userId, file);
+    return await this.userImageService.updateImage(userId, file);
   }
 }

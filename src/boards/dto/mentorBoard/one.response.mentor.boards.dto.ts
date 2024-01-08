@@ -6,7 +6,7 @@ export class oneMentorBoardResponseDTO {
   body: string;
   createdAt: Date;
   updatedAt: Date;
-  unitowner: true | false;
+  unitOwner: boolean;
   categoryId: number;
   user: {
     name: string;
