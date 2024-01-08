@@ -17,6 +17,7 @@ import { UserImageRepository } from './users/repositories/user-image.repository'
 import { ScheduleModule } from '@nestjs/schedule';
 import { SearchModule } from './search/search.module';
 import { ExceptionsModule } from './http-exceptions/exceptions.module';
+import { MentorBoardLikeService } from './boards/services/mentor-board-like.service';
 
 @Module({
   imports: [
@@ -41,7 +42,12 @@ import { ExceptionsModule } from './http-exceptions/exceptions.module';
     SearchModule,
     ExceptionsModule,
   ], //
-  providers: [UserImageService, UserImageRepository, S3Service],
+  providers: [
+    UserImageService,
+    UserImageRepository,
+    S3Service,
+    MentorBoardLikeService,
+  ],
 })
 export class AppModule implements NestModule {
   private readonly isDev: boolean =
