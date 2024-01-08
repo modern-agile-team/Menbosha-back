@@ -14,8 +14,7 @@ import { BoardImageRepository } from './repository/boardImage.repository';
 import { HelpMeBoardImage } from './entities/help-me-board-image.entity';
 import { RedisModule } from 'src/common/redis/redis.module';
 import { AuthModule } from 'src/auth/auth.module';
-import { MentorBoardLikeController } from './controllers/mentor-board-like.controller';
-import { MentorBoardsLikeModule } from './mentor-boards-like/mentor-boards-like.module';
+import { MentorBoardsLikeModule } from './mentor-board-like/mentor-board-like.module';
 
 @Module({
   imports: [
@@ -24,11 +23,7 @@ import { MentorBoardsLikeModule } from './mentor-boards-like/mentor-boards-like.
     RedisModule,
     MentorBoardsLikeModule,
   ],
-  controllers: [
-    MentorBoardController,
-    HelpMeBoardController,
-    MentorBoardLikeController,
-  ],
+  controllers: [MentorBoardController, HelpMeBoardController],
   providers: [
     HelpMeBoardService,
     MentorBoardService,
