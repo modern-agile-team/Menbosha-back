@@ -12,7 +12,7 @@ import { BadgeList } from 'src/common/entity/badge-list.entity';
 import { UserBadge } from 'src/users/entities/user-badge.entity';
 import { UserReview } from 'src/users/entities/user-review.entity';
 import { UserIntro } from 'src/users/entities/user-intro.entity';
-import { MentorBoardLike } from 'src/boards/entities/mentor-board-like.entity';
+import { MentorBoardLike } from 'src/boards/mentor-board-like/entities/mentor-board-like.entity';
 
 // .env 파일 로드
 dotenv.config();

@@ -11,7 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { CategoryList } from 'src/common/entity/category-list.entity';
-import { MentorBoardLike } from './mentor-board-like.entity';
+import { MentorBoardLike } from '../mentor-board-like/entities/mentor-board-like.entity';
 
 @Entity({
   name: 'mentor_board',

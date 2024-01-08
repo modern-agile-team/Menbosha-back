@@ -18,4 +18,6 @@ import { SuccessResponseInterceptor } from 'src/common/interceptors/success-resp
 )
 @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
 @Controller('mentorBoard/like')
-export class MentorBoardLikeController {}
+export class MentorBoardLikeController {
+  constructor() {}
+}

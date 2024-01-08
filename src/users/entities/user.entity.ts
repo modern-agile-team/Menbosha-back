@@ -16,7 +16,7 @@ import { UserReview } from './user-review.entity';
 import { UserBadge } from './user-badge.entity';
 import { CategoryList } from '../../common/entity/category-list.entity';
 import { UserIntro } from './user-intro.entity';
-import { MentorBoardLike } from 'src/boards/entities/mentor-board-like.entity';
+import { MentorBoardLike } from 'src/boards/mentor-board-like/entities/mentor-board-like.entity';
 
 @Entity({
   name: 'user',
