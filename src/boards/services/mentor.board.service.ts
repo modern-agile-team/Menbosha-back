@@ -92,6 +92,10 @@ export class MentorBoardService {
         name: mentorBoard.user.name,
         userImage: mentorBoard.user.userImage ? mentorBoard.user.userImage : [],
       },
+      mentorBoardImages: mentorBoard.mentorBoardImages.map((image) => ({
+        id: image.id,
+        imageUrl: image.imageUrl,
+      })),
       unitOwner: unitOwner,
     };
   }
