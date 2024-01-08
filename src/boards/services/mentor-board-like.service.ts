@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MentorBoardLike } from '../entities/mentor-board-like.entity';
 import { MentorBoardService } from 'src/boards/services/mentor.board.service';
-import { LikesService } from 'src/common-boards/services/likes.service';
+import { LikesService } from 'src/like/services/likes.service';
 
 @Injectable()
 export class MentorBoardLikeService {

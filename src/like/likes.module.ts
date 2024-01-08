@@ -9,17 +9,19 @@ import { DataSource } from 'typeorm';
   exports: [LikesService],
 })
 export class LikesModule {
-  static forFeature(likeEntity: Type<RequiredLikeColumn>): DynamicModule {
+  static forFeature(LikeEntity: Type<RequiredLikeColumn>): DynamicModule {
     return {
       module: LikesModule,
       providers: [
         {
           provide: LIKE_REPOSITORY_TOKEN,
           useFactory: (dataSource: DataSource) => {
-            return dataSource.getRepository(likeEntity);
+            return dataSource.getRepository(LikeEntity);
           },
+          inject: [DataSource],
         },
       ],
+      exports: [LikesService],
     };
   }
 }
