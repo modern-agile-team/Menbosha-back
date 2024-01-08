@@ -24,18 +24,20 @@ import { GetUserId } from 'src/common/decorators/get-userId.decorator';
   }),
 )
 @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
-@Controller('mentorBoard/like')
+@Controller('mentorBoard')
 export class MentorBoardLikeController {
   constructor(
     private readonly mentorBoardSLikeService: MentorBoardLikeService,
   ) {}
 
   @UseGuards(JwtAccessTokenGuard)
-  @Post(':boardId')
+  @Post(':boardId/like')
   createBoardLike(
     @GetUserId() userId: number,
     @Param('boardId', ParseIntPipe) boardId: number,
   ) {
     return this.mentorBoardSLikeService.createBoardLike(userId, boardId);
   }
+
+  @Get()
 }
