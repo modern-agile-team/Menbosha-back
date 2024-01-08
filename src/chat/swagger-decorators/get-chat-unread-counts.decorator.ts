@@ -12,7 +12,6 @@ export function ApiGetChatUnreadCounts() {
       description: '개수 받아오기 성공',
       schema: {
         properties: {
-          statusCode: { example: 200, type: 'number' },
           content: {
             type: 'number',
             example: 1,
