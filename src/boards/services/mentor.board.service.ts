@@ -36,14 +36,21 @@ export class MentorBoardService {
 
   async findPagedMentorBoards(
     page: number,
+    categoryId: number,
   ): Promise<{ data: PageByMentorBoardResponseDTO[]; total: number }> {
     const limit = 10;
     const skip = (page - 1) * limit;
-    const boards = await this.mentorBoardRepository.findPagedBoards(
-      skip,
-      limit,
-    );
-    const total = await this.mentorBoardRepository.findTotalBoards();
+    const total = categoryId
+      ? await this.mentorBoardRepository.findTotalBoardsByCategoryId(categoryId)
+      : await this.mentorBoardRepository.findTotalBoards();
+
+    const boards = categoryId
+      ? await this.mentorBoardRepository.findPagedBoardsByCategoryId(
+          skip,
+          limit,
+          categoryId,
+        )
+      : await this.mentorBoardRepository.findPagedBoards(skip, limit);
 
     const boardResponse: PageByMentorBoardResponseDTO[] = await Promise.all(
       boards.map(async (board) => {
@@ -53,12 +60,12 @@ export class MentorBoardService {
           body: board.body.substring(0, 30),
           createdAt: board.createdAt,
           updatedAt: board.updatedAt,
-          category: board.categoryId,
+          categoryId: board.categoryId,
           user: {
             name: board.user.name,
             userImage: board.user.userImage ? board.user.userImage : [],
           },
-          mentorBoardImage: board.mentorBoardImages.map((image) => ({
+          mentorBoardImage: (board.mentorBoardImages || []).map((image) => ({
             id: image.id,
             imageUrl: image.imageUrl,
           })),
