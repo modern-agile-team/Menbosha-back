@@ -2,6 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { S3Service } from 'src/common/s3/s3.service';
 import { UserImageRepository } from '../repositories/user-image.repository';
 import { InternalServerErrorException } from '@nestjs/common';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 @Injectable()
 export class UserImageService {
@@ -31,7 +34,7 @@ export class UserImageService {
       const dbImageUrl = imageUrlParts[imageUrlParts.length - 3]; // 이미지 제공자 이름
 
       if (
-        dbImageUrl === 'menbosha-s3.s3.ap-northeast-2.amazonaws.com' &&
+        dbImageUrl === process.env.AWS_S3_URL &&
         imageKey !== 'UserIcon.svg'
       ) {
         // S3에 업로드된 이미지이고, 기본 이미지가 아닌 경우
