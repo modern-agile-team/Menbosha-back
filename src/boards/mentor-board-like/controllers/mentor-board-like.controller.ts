@@ -12,7 +12,6 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
 import { MentorBoardLikeService } from '../services/mentor-board-like.service';
-import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 

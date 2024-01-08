@@ -17,7 +17,6 @@ import { UserImageRepository } from './users/repositories/user-image.repository'
 import { ScheduleModule } from '@nestjs/schedule';
 import { SearchModule } from './search/search.module';
 import { ExceptionsModule } from './http-exceptions/exceptions.module';
-import { CommonBoardsModule } from './common-boards/common-boards.module';
 
 @Module({
   imports: [
@@ -41,7 +40,6 @@ import { CommonBoardsModule } from './common-boards/common-boards.module';
     BoardsModule,
     SearchModule,
     ExceptionsModule,
-    CommonBoardsModule,
   ], //
   providers: [UserImageService, UserImageRepository, S3Service],
 })

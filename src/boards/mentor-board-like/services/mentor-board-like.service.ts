@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { MentorBoardLikeRepository } from '../repositories/mentor-board-like.repository';
 import { MentorBoardLike } from '../entities/mentor-board-like.entity';
 import { MentorBoardService } from 'src/boards/services/mentor.board.service';
+import { LikesService } from 'src/common-boards/services/likes.service';
 
 @Injectable()
 export class MentorBoardLikeService {
   constructor(
-    private readonly mentorBoardLikeRepository: MentorBoardLikeRepository,
+    private readonly likesService: LikesService<MentorBoardLike>,
     private readonly mentorBoardService: MentorBoardService,
   ) {}
   async createBoardLike(userId: number, boardId: number) {
@@ -14,12 +14,8 @@ export class MentorBoardLikeService {
       where: { id: boardId },
     });
 
-    const mentorBoardLike = new MentorBoardLike();
-    mentorBoardLike.parentId = existBoard.id;
-    mentorBoardLike.userId = existBoard.userId;
+    await this.likesService.createLike(existBoard.id, userId);
 
-    return this.mentorBoardLikeRepository.createMentorBoardLike(
-      mentorBoardLike,
-    );
+    return { success: true, msg: '좋아요 생성 성공', isLike: true };
   }
 }
