@@ -3,16 +3,16 @@ import { LikesService } from './services/likes.service';
 import { RequiredLikeColumn } from './types/like.type';
 import { LIKE_REPOSITORY_TOKEN } from './constants/like.token';
 import { DataSource } from 'typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
-@Module({
-  providers: [LikesService],
-  exports: [LikesService],
-})
+@Module({})
 export class LikesModule {
   static forFeature(LikeEntity: Type<RequiredLikeColumn>): DynamicModule {
     return {
       module: LikesModule,
+      imports: [TypeOrmModule.forFeature([LikeEntity])],
       providers: [
+        LikesService,
         {
           provide: LIKE_REPOSITORY_TOKEN,
           useFactory: (dataSource: DataSource) => {
