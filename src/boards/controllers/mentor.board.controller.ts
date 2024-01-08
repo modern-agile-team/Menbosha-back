@@ -70,9 +70,8 @@ export class MentorBoardController {
   @ApiGetPageMentorBoards()
   findPageMentorBoards(
     @Query('page') page = 1,
-    @Query('limit') limit = 30,
   ): Promise<{ data: PageByMentorBoardResponseDTO[]; total: number }> {
-    return this.mentorBoardService.findPagedMentorBoards(page, limit);
+    return this.mentorBoardService.findPagedMentorBoards(page);
   }
 
   @Get('')

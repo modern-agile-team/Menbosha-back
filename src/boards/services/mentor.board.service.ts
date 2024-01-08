@@ -26,13 +26,23 @@ export class MentorBoardService {
     }
   }
 
+  async countPagedMentorBoards() {
+    const limit = 10;
+    const total = await this.mentorBoardRepository.findTotalBoards();
+    const page = total / limit;
+    const totalPage = Math.ceil(page);
+    return { total, totalPage };
+  }
+
   async findPagedMentorBoards(
     page: number,
-    limit: number,
   ): Promise<{ data: PageByMentorBoardResponseDTO[]; total: number }> {
+    const limit = 10;
     const skip = (page - 1) * limit;
-    const take = limit;
-    const boards = await this.mentorBoardRepository.findPagedBoards(skip, take);
+    const boards = await this.mentorBoardRepository.findPagedBoards(
+      skip,
+      limit,
+    );
     const total = await this.mentorBoardRepository.findTotalBoards();
 
     const boardResponse: PageByMentorBoardResponseDTO[] = await Promise.all(
@@ -48,6 +58,10 @@ export class MentorBoardService {
             name: board.user.name,
             userImage: board.user.userImage ? board.user.userImage : [],
           },
+          mentorBoardImage: board.mentorBoardImages.map((image) => ({
+            id: image.id,
+            imageUrl: image.imageUrl,
+          })),
         };
       }),
     );
