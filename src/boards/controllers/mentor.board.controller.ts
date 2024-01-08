@@ -30,6 +30,7 @@ import { BoardImagesService } from '../services/BoardImage.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateMentorBoardImageDto } from '../dto/mentorBoard/create.mentor.board.image.dto';
 import { ApiUploadMentorBoardImages } from '../swagger-decorators/mentorBoard/add-mentor-board-images-decorator';
+import { ApiGetPageNumberByHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-board-page-number.decorator';
 
 @Controller('mentorBoard')
 @ApiTags('mentorBoard API')
@@ -72,6 +73,12 @@ export class MentorBoardController {
     @Query('limit') limit = 30,
   ): Promise<{ data: PageByMentorBoardResponseDTO[]; total: number }> {
     return this.mentorBoardService.findPagedMentorBoards(page, limit);
+  }
+
+  @Get('')
+  @ApiGetPageNumberByHelpMeBoard()
+  countPageMentorBoards() {
+    return this.mentorBoardService.countPagedMentorBoards();
   }
 
   @Get('/unit') //하나의 게시판 불러오기
