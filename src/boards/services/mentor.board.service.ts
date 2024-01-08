@@ -11,6 +11,7 @@ import { PageByMentorBoardResponseDTO } from '../dto/mentorBoard/response.mentor
 import { MentorBoardResponseDTO } from '../dto/mentorBoard/update.mentor.board.response.dto';
 import { UpdateMentorBoardDto } from '../dto/mentorBoard/update.mentor.board.dto';
 import { oneMentorBoardResponseDTO } from '../dto/mentorBoard/one.response.mentor.boards.dto';
+import { FindOneOptions } from 'typeorm';
 
 @Injectable()
 export class MentorBoardService {
@@ -53,6 +54,10 @@ export class MentorBoardService {
     );
 
     return { data: boardResponse, total };
+  }
+
+  async findOne(options: FindOneOptions<MentorBoard>) {
+    return this.mentorBoardRepository.findOneMentorBoard(options);
   }
 
   async findOneMentorBoard(

@@ -1,4 +1,4 @@
-import { EntityManager } from 'typeorm';
+import { EntityManager, FindOneOptions } from 'typeorm';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { CreateMentorBoardDto } from '../dto/mentorBoard/create.mentor.board.dto';
 import { Injectable } from '@nestjs/common';
@@ -31,6 +31,10 @@ export class MentorBoardRepository {
       skip: skip,
       take: limit,
     });
+  }
+
+  findOneMentorBoard(options: FindOneOptions<MentorBoard>) {
+    return this.entityManager.getRepository(MentorBoard).findOne(options);
   }
 
   async findMentorBoardById(id: number): Promise<MentorBoard> {

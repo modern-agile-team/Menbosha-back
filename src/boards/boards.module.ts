@@ -14,14 +14,12 @@ import { BoardImageRepository } from './repository/boardImage.repository';
 import { HelpMeBoardImage } from './entities/help-me-board-image.entity';
 import { RedisModule } from 'src/common/redis/redis.module';
 import { AuthModule } from 'src/auth/auth.module';
-import { MentorBoardsLikeModule } from './mentor-board-like/mentor-board-like.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([MentorBoard, HelpMeBoard, HelpMeBoardImage]),
     AuthModule,
     RedisModule,
-    MentorBoardsLikeModule,
   ],
   controllers: [MentorBoardController, HelpMeBoardController],
   providers: [
@@ -33,6 +31,7 @@ import { MentorBoardsLikeModule } from './mentor-board-like/mentor-board-like.mo
     HelpMeBoardRepository,
     MentorBoardRepository,
   ],
+  exports: [MentorBoardService],
 })
 @Module({})
 export class BoardsModule {}
