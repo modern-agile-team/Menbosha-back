@@ -9,17 +9,23 @@ export class MentorBoardLikeService {
     private readonly likesService: LikesService<MentorBoardLike>,
     private readonly mentorBoardService: MentorBoardService,
   ) {}
-  async createMentorBoardLike(boardId: number, userId: number) {
+  async createMentorBoardLike(
+    boardId: number,
+    userId: number,
+  ): Promise<{ isLike: boolean }> {
     const existBoard = await this.mentorBoardService.findOneByOrNotFound({
       where: { id: boardId },
     });
 
     await this.likesService.createLike(existBoard.id, userId);
 
-    return { success: true, msg: '좋아요 생성 성공', isLike: true };
+    return { isLike: true };
   }
 
-  async getMentorBoardLikes(boardId: number, userId: number) {
+  async getMentorBoardLikes(
+    boardId: number,
+    userId: number,
+  ): Promise<{ isLike: boolean; boardLikesCount: number }> {
     await this.mentorBoardService.findOneByOrNotFound({
       where: { id: boardId },
     });
@@ -35,13 +41,16 @@ export class MentorBoardLikeService {
       : { isLike: false, boardLikesCount: mentorBoardLikes.length };
   }
 
-  async deleteMentorBoardLike(boardId: number, userId: number) {
+  async deleteMentorBoardLike(
+    boardId: number,
+    userId: number,
+  ): Promise<{ isLike: boolean }> {
     const existBoard = await this.mentorBoardService.findOneByOrNotFound({
       where: { id: boardId },
     });
 
     await this.likesService.deleteLike(existBoard.id, userId);
 
-    return { success: true, msg: '좋아요 삭제 성공', isLike: false };
+    return { isLike: false };
   }
 }
