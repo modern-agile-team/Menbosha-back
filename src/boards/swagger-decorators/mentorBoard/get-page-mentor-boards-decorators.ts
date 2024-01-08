@@ -1,15 +1,15 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 
 export function ApiGetPageMentorBoards() {
   return applyDecorators(
     ApiOperation({
-      summary: '페이지별 보드 불러오는 API',
-      description: '페이지별 보드 불러오는 API',
+      summary: '페이지별 멘토보드 불러오는 API',
+      description: '페이지별 멘토보드 불러오는 API',
     }),
     ApiResponse({
       status: 200,
-      description: '성공적으로 보드를 불러왔습니다.',
+      description: '성공적으로 멘토보드를 불러왔습니다.',
       content: {
         JSON: {
           example: {
@@ -62,5 +62,7 @@ export function ApiGetPageMentorBoards() {
         },
       },
     }),
+    ApiQuery({ name: 'page', type: Number }),
+    ApiQuery({ name: 'categoryId', type: Number }),
   );
 }

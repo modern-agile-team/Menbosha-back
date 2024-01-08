@@ -7,7 +7,6 @@ import { MentorBoardRepository } from '../repository/mentor.boards.repository';
 import { CreateMentorBoardDto } from '../dto/mentorBoard/create.mentor.board.dto';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { PageByMentorBoardResponseDTO } from '../dto/mentorBoard/response.mentor.boards.dto';
-
 import { MentorBoardResponseDTO } from '../dto/mentorBoard/update.mentor.board.response.dto';
 import { UpdateMentorBoardDto } from '../dto/mentorBoard/update.mentor.board.dto';
 import { oneMentorBoardResponseDTO } from '../dto/mentorBoard/one.response.mentor.boards.dto';
@@ -40,11 +39,11 @@ export class MentorBoardService {
   ): Promise<{ data: PageByMentorBoardResponseDTO[]; total: number }> {
     const limit = 10;
     const skip = (page - 1) * limit;
-    const total = categoryId
+    const total = categoryId // 예외처리 - categoryId가 들어올 경우
       ? await this.mentorBoardRepository.findTotalBoardsByCategoryId(categoryId)
       : await this.mentorBoardRepository.findTotalBoards();
 
-    const boards = categoryId
+    const boards = categoryId // 예외처리 - categoryId가 들어올 경우
       ? await this.mentorBoardRepository.findPagedBoardsByCategoryId(
           skip,
           limit,
@@ -66,6 +65,7 @@ export class MentorBoardService {
             userImage: board.user.userImage ? board.user.userImage : [],
           },
           mentorBoardImage: (board.mentorBoardImages || []).map((image) => ({
+            // 예외처리 - 이미지 없을경우 빈배열
             id: image.id,
             imageUrl: image.imageUrl,
           })),
