@@ -15,7 +15,7 @@ export class MentorBoardLikeService {
     });
 
     const mentorBoardLike = new MentorBoardLike();
-    mentorBoardLike.mentorBoardId = existBoard.id;
+    mentorBoardLike.parentId = existBoard.id;
     mentorBoardLike.userId = existBoard.userId;
 
     return this.mentorBoardLikeRepository.createMentorBoardLike(

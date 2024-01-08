@@ -18,8 +18,12 @@ export class MentorBoardLike {
   })
   id: number;
 
-  @Column({ name: 'mentor_board_id' })
-  mentorBoardId: number;
+  @Column('int', {
+    name: 'mentor_board_id',
+    comment: '멘토 게시판 글 고유 id',
+    unsigned: true,
+  })
+  parentId: number;
 
   @ManyToOne(() => MentorBoard, (mentorBoard) => mentorBoard.mentorBoardLike, {
     onDelete: 'CASCADE',
