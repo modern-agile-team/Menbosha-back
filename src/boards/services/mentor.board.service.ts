@@ -76,7 +76,7 @@ export class MentorBoardService {
   ): Promise<oneMentorBoardResponseDTO> {
     const mentorBoard =
       await this.mentorBoardRepository.findMentorBoardById(mentorBoardId);
-    const unitowner = mentorBoard.userId === userId;
+    const unitOwner = mentorBoard.userId === userId;
     console.log(mentorBoardId);
 
     if (!mentorBoard) {
@@ -93,7 +93,7 @@ export class MentorBoardService {
         name: mentorBoard.user.name,
         userImage: mentorBoard.user.userImage ? mentorBoard.user.userImage : [],
       },
-      unitowner: unitowner,
+      unitOwner: unitOwner,
     };
   }
 
@@ -112,7 +112,7 @@ export class MentorBoardService {
 
     const updatedBoard =
       await this.mentorBoardRepository.updateMentorBoard(existingBoard);
-    const unitowner = userId === updatedBoard.userId;
+    const unitOwner = userId === updatedBoard.userId;
     return {
       id: updatedBoard.id,
       head: updatedBoard.head,
@@ -126,7 +126,7 @@ export class MentorBoardService {
           ? updatedBoard.user.userImage
           : [],
       },
-      unitowner: unitowner,
+      unitOwner: unitOwner,
     };
   }
 

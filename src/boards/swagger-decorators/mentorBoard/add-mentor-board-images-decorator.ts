@@ -6,14 +6,14 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 
-export function ApiUploadHelpMeBoardImages() {
+export function ApiUploadMentorBoardImages() {
   return applyDecorators(
     ApiOperation({
-      summary: '멘티 보드 이미지 업로드 API',
-      description: '멘티 보드 이미지 업로드 API',
+      summary: '멘토 보드 이미지 업로드 API',
+      description: '멘토 보드 이미지 업로드 API',
     }),
     ApiResponse({
-      status: 200,
+      status: 201,
       description: '성공적으로 이미지를 업로드한 경우',
       content: {
         JSON: { example: { message: '이미지 업로드에 성공했습니다.' } },

@@ -13,6 +13,7 @@ import { UserBadge } from 'src/users/entities/user-badge.entity';
 import { UserReview } from 'src/users/entities/user-review.entity';
 import { UserIntro } from 'src/users/entities/user-intro.entity';
 import { MentorBoardLike } from 'src/boards/entities/mentor-board-like.entity';
+import { MentorBoardImage } from 'src/boards/entities/mentor-board-image.entity';
 
 // .env 파일 로드
 dotenv.config();
@@ -29,6 +30,7 @@ export const TypeORMconfig: TypeOrmModuleOptions = {
     UserImage,
     Token,
     MentorBoard,
+    MentorBoardImage,
     HelpMeBoard,
     HelpMeBoardImage,
     HelpYouComment,
