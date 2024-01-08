@@ -9,10 +9,14 @@ export class MentorBoardLikeService {
     private readonly mentorBoardLikeRepository: MentorBoardLikeRepository,
     private readonly mentorBoardService: MentorBoardService,
   ) {}
-  createBoardLike(userId: number, boardId: number) {
+  async createBoardLike(userId: number, boardId: number) {
+    const existBoard = await this.mentorBoardService.findOneByOrNotFound({
+      where: { id: boardId },
+    });
+
     const mentorBoardLike = new MentorBoardLike();
-    mentorBoardLike.mentorBoardId = boardId;
-    mentorBoardLike.userId = userId;
+    mentorBoardLike.mentorBoardId = existBoard.id;
+    mentorBoardLike.userId = existBoard.userId;
 
     return this.mentorBoardLikeRepository.createMentorBoardLike(
       mentorBoardLike,
