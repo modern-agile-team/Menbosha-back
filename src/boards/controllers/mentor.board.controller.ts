@@ -30,7 +30,7 @@ import { BoardImagesService } from '../services/BoardImage.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateMentorBoardImageDto } from '../dto/mentorBoard/create.mentor.board.image.dto';
 import { ApiUploadMentorBoardImages } from '../swagger-decorators/mentorBoard/add-mentor-board-images-decorator';
-import { ApiGetPageNumberByHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-board-page-number.decorator';
+import { ApiGetPageNumberByMentorBoard } from '../swagger-decorators/mentorBoard/get-page-number-mentor-board-decorator';
 
 @Controller('mentorBoard')
 @ApiTags('mentorBoard API')
@@ -74,8 +74,8 @@ export class MentorBoardController {
     return this.mentorBoardService.findPagedMentorBoards(page);
   }
 
-  @Get('')
-  @ApiGetPageNumberByHelpMeBoard()
+  @Get('/page')
+  @ApiGetPageNumberByMentorBoard()
   countPageMentorBoards() {
     return this.mentorBoardService.countPagedMentorBoards();
   }
