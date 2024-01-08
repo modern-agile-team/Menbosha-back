@@ -150,7 +150,7 @@ export class AuthService implements AuthServiceInterface {
         const imageUrlParts = userImage.split('/');
         const dbImageProvider = imageUrlParts[imageUrlParts.length - 3]; // 이미지 제공자 이름
 
-        if (dbImageProvider != process.env.AWS_S3_URL) {
+        if (dbImageProvider !== process.env.AWS_S3_URL) {
           // S3에 업로드된 이미지가 아닌 경우
           await this.userImageRepository.updateUserImage(userId, profileImage); // DB에 이미지 URL 업데이트
         }
