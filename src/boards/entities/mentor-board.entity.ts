@@ -6,10 +6,12 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { CategoryList } from 'src/common/entity/category-list.entity';
+import { MentorBoardLike } from './mentor-board-like.entity';
 
 @Entity({
   name: 'mentor_board',
@@ -47,4 +49,10 @@ export class MentorBoard {
   @ManyToOne(() => CategoryList, (categoryList) => categoryList.mentorBoard)
   @JoinColumn({ name: 'category_list_id' })
   categoryList: CategoryList;
+
+  @OneToMany(
+    () => MentorBoardLike,
+    (mentorBoardLike) => mentorBoardLike.mentorBoard,
+  )
+  mentorBoardLike: MentorBoardLike;
 }
