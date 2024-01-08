@@ -18,11 +18,17 @@ export class MentorBoardLike {
   })
   id: number;
 
+  @Column({ name: 'mentor_board_id' })
+  mentorBoardId: number;
+
   @ManyToOne(() => MentorBoard, (mentorBoard) => mentorBoard.mentorBoardLike, {
     onDelete: 'CASCADE',
   })
   @JoinColumn([{ name: 'mentor_board_id', referencedColumnName: 'id' }])
   mentorBoard: MentorBoard;
+
+  @Column({ name: 'user_id' })
+  userId: number;
 
   @ManyToOne(() => User, (user) => user.mentorBoardLike, {
     onDelete: 'CASCADE',
