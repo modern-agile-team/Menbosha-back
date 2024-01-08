@@ -1,6 +1,8 @@
 import {
   ClassSerializerInterceptor,
   Controller,
+  Delete,
+  Get,
   Param,
   ParseIntPipe,
   Post,
@@ -14,6 +16,7 @@ import { SuccessResponseInterceptor } from 'src/common/interceptors/success-resp
 import { MentorBoardLikeService } from '../services/mentor-board-like.service';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
+import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 
 @ApiTags('mentor-board-like')
 @UsePipes(
@@ -32,12 +35,28 @@ export class MentorBoardLikeController {
 
   @UseGuards(JwtAccessTokenGuard)
   @Post(':boardId/like')
-  createBoardLike(
+  createMentorBoardLike(
     @GetUserId() userId: number,
     @Param('boardId', ParseIntPipe) boardId: number,
   ) {
-    return this.mentorBoardSLikeService.createBoardLike(userId, boardId);
+    return this.mentorBoardSLikeService.createMentorBoardLike(boardId, userId);
   }
 
-  @Get()
+  @UseGuards(JwtOptionalGuard)
+  @Get(':boardId/like')
+  getMentorBoardLike(
+    @GetUserId() userId: number,
+    @Param('boardId', ParseIntPipe) boardId: number,
+  ) {
+    return this.mentorBoardSLikeService.getMentorBoardLikes(boardId, userId);
+  }
+
+  @UseGuards(JwtAccessTokenGuard)
+  @Delete(':boardId/like')
+  deleteMentorBoardLike(
+    @GetUserId() userId: number,
+    @Param('boardId', ParseIntPipe) boardId: number,
+  ) {
+    return this.mentorBoardSLikeService.deleteMentorBoardLike(boardId, userId);
+  }
 }
