@@ -27,7 +27,6 @@ export function ApiCreateChatImage() {
       description: '채팅 이미지 url 생성 성공',
       schema: {
         properties: {
-          statusCode: { example: 201, type: 'number' },
           content: {
             type: 'object',
             $ref: getSchemaPath(ChatImageDto),

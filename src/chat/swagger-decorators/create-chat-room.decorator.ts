@@ -28,7 +28,6 @@ export function ApiCreateChatRoom() {
       description: '성공적으로 채팅방 생성',
       schema: {
         properties: {
-          statusCode: { example: 201, type: 'number' },
           content: {
             type: 'object',
             $ref: getSchemaPath(ChatRoomDto),
