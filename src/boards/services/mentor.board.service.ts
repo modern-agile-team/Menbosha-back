@@ -12,7 +12,6 @@ import { MentorBoardResponseDTO } from '../dto/mentorBoard/update.mentor.board.r
 import { UpdateMentorBoardDto } from '../dto/mentorBoard/update.mentor.board.dto';
 import { oneMentorBoardResponseDTO } from '../dto/mentorBoard/one.response.mentor.boards.dto';
 import { FindOneOptions } from 'typeorm';
-import { MentorBoardDto } from '../dto/mentorBoard/mentor-board.dto';
 
 @Injectable()
 export class MentorBoardService {
@@ -59,7 +58,7 @@ export class MentorBoardService {
 
   async findOneByOrNotFound(
     options: FindOneOptions<MentorBoard>,
-  ): Promise<MentorBoardDto> {
+  ): Promise<MentorBoard> {
     const existMentorBoard =
       await this.mentorBoardRepository.findOneMentorBoard(options);
 
@@ -67,7 +66,7 @@ export class MentorBoardService {
       throw new NotFoundException('게시물을 찾을 수 없습니다.');
     }
 
-    return new MentorBoardDto(existMentorBoard);
+    return existMentorBoard;
   }
 
   async findOneMentorBoard(

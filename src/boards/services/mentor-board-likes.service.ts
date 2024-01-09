@@ -5,6 +5,7 @@ import { LikesService } from 'src/like/services/likes.service';
 import { HotPostsService } from 'src/hot-posts/services/hot-posts.service';
 import { MentorBoardHotPost } from '../entities/mentor-board-hot-post.entity';
 import { DataSource } from 'typeorm';
+import { MentorBoardJoinLikesDto } from '../dto/mentorBoard/mentor-board-join-likes.dto';
 
 @Injectable()
 export class MentorBoardLikeService {
@@ -64,10 +65,11 @@ export class MentorBoardLikeService {
     boardId: number,
     userId: number,
   ): Promise<{ isLike: boolean }> {
-    const existBoard = await this.mentorBoardService.findOneByOrNotFound({
-      where: { id: boardId },
-      relations: ['mentorBoardLikes'],
-    });
+    const existBoard: MentorBoardJoinLikesDto =
+      await this.mentorBoardService.findOneByOrNotFound({
+        where: { id: boardId },
+        relations: ['mentorBoardLikes'],
+      });
 
     await this.likesService.deleteLike(existBoard.id, userId);
 
