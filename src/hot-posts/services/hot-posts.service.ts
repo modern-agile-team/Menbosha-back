@@ -5,7 +5,12 @@ import {
 } from '@nestjs/common';
 import { RequiredHotPostColumn } from '../types/hot-post.type';
 import { HOT_POST_REPOSITORY_TOKEN } from '../constants/hot-post.token';
-import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
+import {
+  DeepPartial,
+  FindManyOptions,
+  FindOptionsWhere,
+  Repository,
+} from 'typeorm';
 
 @Injectable()
 export class HotPostsService<E extends RequiredHotPostColumn> {
@@ -21,6 +26,10 @@ export class HotPostsService<E extends RequiredHotPostColumn> {
         reload: false,
       },
     );
+  }
+
+  findAllHotPosts(): Promise<E[]> {
+    return this.HotPostRepository.find(options);
   }
 
   async increaseLikeCount(parentId: number): Promise<void> {
