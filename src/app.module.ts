@@ -17,7 +17,6 @@ import { UserImageRepository } from './users/repositories/user-image.repository'
 import { ScheduleModule } from '@nestjs/schedule';
 import { SearchModule } from './search/search.module';
 import { ExceptionsModule } from './http-exceptions/exceptions.module';
-import { HotPostsModule } from './hot-posts/hot-posts.module';
 
 @Module({
   imports: [
@@ -28,7 +27,7 @@ import { HotPostsModule } from './hot-posts/hot-posts.module';
     TypeOrmModule.forRoot({
       ...TypeORMconfig, // TypeORM 설정 객체 확장
       synchronize: false, // DB 동기화 여부 설정
-      logging: false, //DB 로깅 여부 설정
+      logging: true, //DB 로깅 여부 설정
     }),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -41,7 +40,6 @@ import { HotPostsModule } from './hot-posts/hot-posts.module';
     BoardsModule,
     SearchModule,
     ExceptionsModule,
-    HotPostsModule,
   ], //
   providers: [UserImageService, UserImageRepository, S3Service],
 })

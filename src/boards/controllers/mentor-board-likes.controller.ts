@@ -8,12 +8,10 @@ import {
   Post,
   UseGuards,
   UseInterceptors,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
-import { MentorBoardLikeService } from '../services/mentor-board-like.service';
+import { MentorBoardLikeService } from '../services/mentor-board-likes.service';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
@@ -21,14 +19,7 @@ import { ApiCreateMentorBoardLike } from '../swagger-decorators/mentorBoard/crea
 import { ApiGetMentorBoardLikes } from '../swagger-decorators/mentorBoard/get-mentor-board-likes.decorator';
 import { ApiDeleteMentorBoardLike } from '../swagger-decorators/mentorBoard/delete-mentor-board-like.decorator';
 
-@ApiTags('mentor-board-like')
-@UsePipes(
-  new ValidationPipe({
-    transform: true,
-    whitelist: true,
-    forbidNonWhitelisted: true,
-  }),
-)
+@ApiTags('mentor-board-likes')
 @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
 @Controller('mentorBoard')
 export class MentorBoardLikeController {

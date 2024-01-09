@@ -1,15 +1,11 @@
 import { DynamicModule, Module, Type } from '@nestjs/common';
-import { HotPostsController } from './controllers/hot-posts.controller';
 import { HotPostsService } from './services/hot-posts.service';
 import { RequiredHotPostColumn } from './types/hot-post.type';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HOT_POST_REPOSITORY_TOKEN } from './constants/hot-post.token';
 import { DataSource } from 'typeorm';
 
-@Module({
-  controllers: [HotPostsController],
-  providers: [HotPostsService],
-})
+@Module({})
 export class HotPostsModule {
   static forFeature(HotPostEntity: Type<RequiredHotPostColumn>): DynamicModule {
     return {
