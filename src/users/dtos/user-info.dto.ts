@@ -15,7 +15,7 @@ export class UserInfoDto
       | 'userBadge'
       | 'token'
       | 'categoryList'
-      | 'mentorBoardLike'
+      | 'mentorBoardLikes'
     >
 {
   @ApiProperty({
