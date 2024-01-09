@@ -7,12 +7,14 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { CategoryList } from 'src/common/entity/category-list.entity';
 import { MentorBoardLike } from './mentor-board-like.entity';
 import { MentorBoardImage } from './mentor-board-image.entity';
+import { MentorBoardHotPost } from './mentor-board-hot-post.entity';
 
 @Entity({
   name: 'mentor_board',
@@ -62,4 +64,10 @@ export class MentorBoard {
     (mentorBoardLike) => mentorBoardLike.mentorBoard,
   )
   mentorBoardLikes: MentorBoardLike[];
+
+  @OneToOne(
+    () => MentorBoardHotPost,
+    (mentorBoardHotPost) => mentorBoardHotPost.mentorBoard,
+  )
+  mentorBoardHotPost: MentorBoardHotPost;
 }
