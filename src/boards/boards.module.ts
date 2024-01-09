@@ -22,6 +22,7 @@ import { MentorBoardLikeService } from './services/mentor-board-likes.service';
 import { HotPostsModule } from 'src/hot-posts/hot-posts.module';
 import { MentorBoardHotPost } from './entities/mentor-board-hot-post.entity';
 import { MentorBoardHotPostsController } from './controllers/mentor-board-hot-posts.controller';
+import { MentorBoardHotPostsService } from './services/mentor-board-hot-posts.service';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { MentorBoardHotPostsController } from './controllers/mentor-board-hot-po
     HelpMeBoardService,
     MentorBoardService,
     MentorBoardLikeService,
+    MentorBoardHotPostsService,
     BoardImagesService,
     S3Service,
     BoardImageRepository,

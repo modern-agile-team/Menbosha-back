@@ -10,7 +10,10 @@ export class MentorBoardHotPostsController {
   ) {}
 
   @Get()
-  findAllMentorBoardHotPosts() {
-    return this.mentorBoardHotPostsService.findAllMentorBoardHotPosts();
+  async findAllMentorBoardHotPosts() {
+    const mentorBoardHotPosts =
+      await this.mentorBoardHotPostsService.findAllMentorBoardHotPosts();
+
+    console.log(mentorBoardHotPosts[0].mentorBoard.user);
   }
 }
