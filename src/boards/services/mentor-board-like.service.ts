@@ -2,11 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { MentorBoardLike } from '../entities/mentor-board-like.entity';
 import { MentorBoardService } from 'src/boards/services/mentor.board.service';
 import { LikesService } from 'src/like/services/likes.service';
+import { HotPostsService } from 'src/hot-posts/services/hot-posts.service';
+import { MentorBoardHotPost } from '../entities/mentor-board-hot-post.entity';
+import { DataSource } from 'typeorm';
 
 @Injectable()
 export class MentorBoardLikeService {
   constructor(
     private readonly likesService: LikesService<MentorBoardLike>,
+    private readonly dataSource: DataSource,
+    private readonly hotPostsService: HotPostsService<MentorBoardHotPost>,
     private readonly mentorBoardService: MentorBoardService,
   ) {}
   async createMentorBoardLike(
@@ -15,9 +20,21 @@ export class MentorBoardLikeService {
   ): Promise<{ isLike: boolean }> {
     const existBoard = await this.mentorBoardService.findOneByOrNotFound({
       where: { id: boardId },
+      relations: ['mentorBoardLikes'],
     });
 
-    await this.likesService.createLike(existBoard.id, userId);
+    const mentorBoardLike = await this.likesService.createLike(
+      existBoard.id,
+      userId,
+    );
+
+    existBoard.mentorBoardLikes.push(mentorBoardLike);
+
+    const likeCount = existBoard.mentorBoardLikes.length;
+
+    if (likeCount === 5) {
+      await this.hotPostsService.createHotPost(existBoard.id, likeCount);
+    }
 
     return { isLike: true };
   }
@@ -47,9 +64,13 @@ export class MentorBoardLikeService {
   ): Promise<{ isLike: boolean }> {
     const existBoard = await this.mentorBoardService.findOneByOrNotFound({
       where: { id: boardId },
+      relations: ['mentorBoardLikes'],
     });
 
     await this.likesService.deleteLike(existBoard.id, userId);
+
+    if (existBoard.mentorBoardLikes.length === 4) {
+    }
 
     return { isLike: false };
   }

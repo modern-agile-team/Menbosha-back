@@ -19,6 +19,8 @@ import { LikesModule } from 'src/like/likes.module';
 import { MentorBoardLike } from './entities/mentor-board-like.entity';
 import { MentorBoardLikeController } from './controllers/mentor-board-like.controller';
 import { MentorBoardLikeService } from './services/mentor-board-like.service';
+import { HotPostsModule } from 'src/hot-posts/hot-posts.module';
+import { MentorBoardHotPost } from './entities/mentor-board-hot-post.entity';
 
 @Module({
   imports: [
@@ -31,6 +33,7 @@ import { MentorBoardLikeService } from './services/mentor-board-like.service';
     AuthModule,
     RedisModule,
     LikesModule.forFeature(MentorBoardLike),
+    HotPostsModule.forFeature(MentorBoardHotPost),
   ],
   controllers: [
     MentorBoardController,

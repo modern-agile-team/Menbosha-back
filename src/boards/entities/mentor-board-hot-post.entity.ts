@@ -31,7 +31,7 @@ export class MentorBoardHotPost {
     name: 'mentor_board_id',
     comment: '멘토 게시판 글 고유 id',
   })
-  mentorBoardId: number;
+  parentId: number;
 
   @Column('int', {
     name: 'like_count',
