@@ -28,7 +28,7 @@ export class HotPostsService<E extends RequiredHotPostColumn> {
     );
   }
 
-  findAllHotPosts(): Promise<E[]> {
+  findAllHotPosts(options: FindManyOptions<E>): Promise<E[]> {
     return this.HotPostRepository.find(options);
   }
 
