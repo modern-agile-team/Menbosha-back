@@ -61,5 +61,5 @@ export class MentorBoard {
     () => MentorBoardLike,
     (mentorBoardLike) => mentorBoardLike.mentorBoard,
   )
-  mentorBoardLike: MentorBoardLike[];
+  mentorBoardLikes: MentorBoardLike[];
 }

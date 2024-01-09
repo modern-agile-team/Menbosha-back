@@ -25,7 +25,7 @@ export class MentorBoardLike {
   })
   parentId: number;
 
-  @ManyToOne(() => MentorBoard, (mentorBoard) => mentorBoard.mentorBoardLike, {
+  @ManyToOne(() => MentorBoard, (mentorBoard) => mentorBoard.mentorBoardLikes, {
     onDelete: 'CASCADE',
   })
   @JoinColumn([{ name: 'mentor_board_id', referencedColumnName: 'id' }])
@@ -34,7 +34,7 @@ export class MentorBoardLike {
   @Column({ name: 'user_id' })
   userId: number;
 
-  @ManyToOne(() => User, (user) => user.mentorBoardLike, {
+  @ManyToOne(() => User, (user) => user.mentorBoardLikes, {
     onDelete: 'CASCADE',
   })
   @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])

@@ -70,7 +70,7 @@ export class User {
   mentorBoard: MentorBoard;
 
   @OneToMany(() => MentorBoardLike, (mentorBoardLike) => mentorBoardLike.user)
-  mentorBoardLike: MentorBoardLike[];
+  mentorBoardLikes: MentorBoardLike[];
 
   @OneToMany(() => HelpMeBoard, (helpMeBoard) => helpMeBoard.user)
   @JoinColumn({ name: 'help_me_board_id' })
