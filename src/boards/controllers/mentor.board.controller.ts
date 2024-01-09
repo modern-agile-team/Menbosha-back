@@ -67,6 +67,7 @@ export class MentorBoardController {
   }
 
   @Get('') // 이부분은 아직 프론트랑 상의중입니다
+  //categoryId별 유저 가져오기 추가해야함.
   @ApiGetPageMentorBoards()
   findPageMentorBoards(
     @Query('page') page = 1,
