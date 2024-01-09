@@ -39,11 +39,14 @@ export class MentorBoardLikeController {
   @ApiCreateMentorBoardLike()
   @UseGuards(JwtAccessTokenGuard)
   @Post(':boardId/like')
-  createMentorBoardLike(
+  createMentorBoardLikeAndHotPost(
     @GetUserId() userId: number,
     @Param('boardId', ParseIntPipe) boardId: number,
   ): Promise<{ isLike: boolean }> {
-    return this.mentorBoardSLikeService.createMentorBoardLike(boardId, userId);
+    return this.mentorBoardSLikeService.createMentorBoardLikeAndHotPost(
+      boardId,
+      userId,
+    );
   }
 
   @ApiGetMentorBoardLikes()

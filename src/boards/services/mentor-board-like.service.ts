@@ -14,7 +14,7 @@ export class MentorBoardLikeService {
     private readonly hotPostsService: HotPostsService<MentorBoardHotPost>,
     private readonly mentorBoardService: MentorBoardService,
   ) {}
-  async createMentorBoardLike(
+  async createMentorBoardLikeAndHotPost(
     boardId: number,
     userId: number,
   ): Promise<{ isLike: boolean }> {
@@ -34,6 +34,8 @@ export class MentorBoardLikeService {
 
     if (likeCount === 5) {
       await this.hotPostsService.createHotPost(existBoard.id, likeCount);
+    } else if (likeCount > 5) {
+      await this.hotPostsService.increaseLikeCount(existBoard.id);
     }
 
     return { isLike: true };
