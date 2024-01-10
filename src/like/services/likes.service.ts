@@ -3,6 +3,7 @@ import { RequiredLikeColumn } from '../types/like.type';
 import { LIKE_REPOSITORY_TOKEN } from '../constants/like.token';
 import {
   DeepPartial,
+  EntityManager,
   FindManyOptions,
   FindOptionsWhere,
   Repository,
@@ -15,7 +16,11 @@ export class LikesService<E extends RequiredLikeColumn> {
     private readonly LikeRepository: Repository<E>,
   ) {}
 
-  async createLike(parentId: number, userId: number): Promise<E> {
+  async createLike(
+    entityManager: EntityManager,
+    parentId: number,
+    userId: number,
+  ): Promise<E> {
     const isExistLike = await this.LikeRepository.exist({
       where: {
         userId,
@@ -27,17 +32,13 @@ export class LikesService<E extends RequiredLikeColumn> {
       throw new ConflictException('이미 좋아요가 존재합니다.');
     }
 
-    return this.LikeRepository.save({
+    return entityManager.withRepository(this.LikeRepository).save({
       userId,
       parentId,
     } as DeepPartial<E>);
   }
 
-<<<<<<< HEAD
-  getLike(options: FindManyOptions<E>): Promise<E[]> {
-=======
-  findLikes(options: FindManyOptions<E>) {
->>>>>>> 0667b5a19e79071beff65ef70357aea8a364ab3a
+  findLikes(options: FindManyOptions<E>): Promise<E[]> {
     return this.LikeRepository.find({ options } as FindManyOptions<E>);
   }
 
