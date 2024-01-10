@@ -6,7 +6,7 @@ export class PageByMentorBoardResponseDTO {
   body: string;
   createdAt: Date;
   updatedAt: Date;
-  category: number;
+  categoryId: number;
   user: {
     name: string;
     userImage: UserImage | UserImage[];

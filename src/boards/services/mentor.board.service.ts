@@ -7,7 +7,6 @@ import { MentorBoardRepository } from '../repository/mentor.boards.repository';
 import { CreateMentorBoardDto } from '../dto/mentorBoard/create.mentor.board.dto';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { PageByMentorBoardResponseDTO } from '../dto/mentorBoard/response.mentor.boards.dto';
-
 import { MentorBoardResponseDTO } from '../dto/mentorBoard/update.mentor.board.response.dto';
 import { UpdateMentorBoardDto } from '../dto/mentorBoard/update.mentor.board.dto';
 import { oneMentorBoardResponseDTO } from '../dto/mentorBoard/one.response.mentor.boards.dto';
@@ -26,14 +25,31 @@ export class MentorBoardService {
     }
   }
 
+  async countPagedMentorBoards() {
+    const limit = 10;
+    const total = await this.mentorBoardRepository.findTotalBoards();
+    const page = total / limit;
+    const totalPage = Math.ceil(page);
+    return { total, totalPage };
+  }
+
   async findPagedMentorBoards(
     page: number,
-    limit: number,
+    categoryId: number,
   ): Promise<{ data: PageByMentorBoardResponseDTO[]; total: number }> {
+    const limit = 10;
     const skip = (page - 1) * limit;
-    const take = limit;
-    const boards = await this.mentorBoardRepository.findPagedBoards(skip, take);
-    const total = await this.mentorBoardRepository.findTotalBoards();
+    const total = categoryId // 예외처리 - categoryId가 들어올 경우
+      ? await this.mentorBoardRepository.findTotalBoardsByCategoryId(categoryId)
+      : await this.mentorBoardRepository.findTotalBoards();
+
+    const boards = categoryId // 예외처리 - categoryId가 들어올 경우
+      ? await this.mentorBoardRepository.findPagedBoardsByCategoryId(
+          skip,
+          limit,
+          categoryId,
+        )
+      : await this.mentorBoardRepository.findPagedBoards(skip, limit);
 
     const boardResponse: PageByMentorBoardResponseDTO[] = await Promise.all(
       boards.map(async (board) => {
@@ -43,11 +59,16 @@ export class MentorBoardService {
           body: board.body.substring(0, 30),
           createdAt: board.createdAt,
           updatedAt: board.updatedAt,
-          category: board.categoryId,
+          categoryId: board.categoryId,
           user: {
             name: board.user.name,
             userImage: board.user.userImage ? board.user.userImage : [],
           },
+          mentorBoardImage: (board.mentorBoardImages || []).map((image) => ({
+            // 예외처리 - 이미지 없을경우 빈배열
+            id: image.id,
+            imageUrl: image.imageUrl,
+          })),
         };
       }),
     );
@@ -78,6 +99,10 @@ export class MentorBoardService {
         name: mentorBoard.user.name,
         userImage: mentorBoard.user.userImage ? mentorBoard.user.userImage : [],
       },
+      mentorBoardImages: mentorBoard.mentorBoardImages.map((image) => ({
+        id: image.id,
+        imageUrl: image.imageUrl,
+      })),
       unitOwner: unitOwner,
     };
   }

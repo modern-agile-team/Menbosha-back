@@ -69,7 +69,7 @@ export class SearchService {
             body: board.body.substring(0, 30),
             createdAt: board.createdAt,
             updatedAt: board.updatedAt,
-            category: board.categoryId,
+            categoryId: board.categoryId,
             user: {
               name: board.user[0].name,
               userImage: board.user[0].userImage ? board.user[0].userImage : [],
@@ -111,7 +111,7 @@ export class SearchService {
             body: board.body.substring(0, 30),
             createdAt: board.createdAt,
             updatedAt: board.updatedAt,
-            category: board.categoryId,
+            categoryId: board.categoryId,
             user: {
               name: board.user[0].name,
               userImage: board.user[0].userImage ? board.user[0].userImage : [],
@@ -163,7 +163,7 @@ export class SearchService {
             body: board.body.substring(0, 30),
             createdAt: board.createdAt,
             updatedAt: board.updatedAt,
-            category: board.categoryId,
+            categoryId: board.categoryId,
             user: {
               name: board.user[0].name,
               userImage: board.user[0].userImage ? board.user[0].userImage : [],
@@ -215,7 +215,7 @@ export class SearchService {
           body: board.body.substring(0, 30),
           createdAt: board.createdAt,
           updatedAt: board.updatedAt,
-          category: board.categoryId,
+          categoryId: board.categoryId,
           user: {
             name: board.user[0].name,
             userImage: board.user[0].userImage ? board.user[0].userImage : [],
@@ -266,7 +266,7 @@ export class SearchService {
           body: board.body.substring(0, 30),
           createdAt: board.createdAt,
           updatedAt: board.updatedAt,
-          category: board.categoryId,
+          categoryId: board.categoryId,
           user: {
             name: board.user[0].name,
             userImage: board.user[0].userImage ? board.user[0].userImage : [],
@@ -321,7 +321,7 @@ export class SearchService {
           body: board.body.substring(0, 30),
           createdAt: board.createdAt,
           updatedAt: board.updatedAt,
-          category: board.categoryId,
+          categoryId: board.categoryId,
           user: {
             name: board.user[0].name,
             userImage: board.user[0].userImage ? board.user[0].userImage : [],
