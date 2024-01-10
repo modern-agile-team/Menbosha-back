@@ -22,25 +22,6 @@ export class MentorBoardLikeService {
     return { isLike: true };
   }
 
-  async getMentorBoardLikes(
-    boardId: number,
-    userId: number,
-  ): Promise<{ isLike: boolean; boardLikesCount: number }> {
-    await this.mentorBoardService.findOneByOrNotFound({
-      where: { id: boardId },
-    });
-
-    const mentorBoardLikes = await this.likesService.getLike({
-      where: { parentId: boardId },
-    });
-
-    return mentorBoardLikes.find(
-      (mentorBoardLike) => mentorBoardLike.userId === userId,
-    )
-      ? { isLike: true, boardLikesCount: mentorBoardLikes.length }
-      : { isLike: false, boardLikesCount: mentorBoardLikes.length };
-  }
-
   async deleteMentorBoardLike(
     boardId: number,
     userId: number,
