@@ -62,5 +62,10 @@ export class MentorBoardHotPostsService {
     entityManager: EntityManager,
     mentorBoardId: number,
     likeCount: number,
-  ) {}
+  ) {
+    if (likeCount === 4) {
+      this.hotPostsService.deleteHotPost(entityManager, mentorBoardId);
+    } else if (likeCount > 4) {
+    }
+  }
 }

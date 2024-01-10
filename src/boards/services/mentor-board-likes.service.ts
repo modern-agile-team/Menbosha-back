@@ -99,6 +99,12 @@ export class MentorBoardLikeService {
 
       const likeCount = existBoard.mentorBoardLikes.length - 1;
 
+      await this.mentorBoardHotPostService.deleteMentorBoardHotPostOrDecrease(
+        entityManager,
+        existBoard.id,
+        likeCount,
+      );
+
       return { isLike: false };
     } catch (error) {}
   }
