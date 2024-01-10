@@ -56,7 +56,7 @@ export class MentorBoardController {
   @ApiUploadMentorBoardImages()
   uploadImage(
     @GetUserId() userId: number,
-    @Query('helpMeBoardId') boardId: number,
+    @Query('mentorBoardId') boardId: number,
     @UploadedFiles() files: Express.Multer.File[],
   ): Promise<CreateMentorBoardImageDto[]> {
     return this.boardImagesService.createMentorBoardImages(
