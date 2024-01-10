@@ -30,6 +30,9 @@ import { ApiDeleteMentorBoardLike } from '../swagger-decorators/mentorBoard/dele
   }),
 )
 @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
+/**
+ * @todo restful하게 uri 수정
+ */
 @Controller('mentorBoard')
 export class MentorBoardLikeController {
   constructor(
