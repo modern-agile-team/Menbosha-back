@@ -61,6 +61,10 @@ export class HelpMeBoardRepository {
     });
   }
 
+  async pullingUpHelpMeBoards() {
+    return await this.helpMeBoardRepository.findLatestPost();
+  }
+
   async updateHelpMeBoard(
     boardData: Partial<UpdateHelpMeBoardDto>,
   ): Promise<HelpMeBoard> {
