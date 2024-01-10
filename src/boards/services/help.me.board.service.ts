@@ -98,6 +98,10 @@ export class HelpMeBoardService {
     };
   }
 
+  async pullingUpHelpMeBoards() {
+    return await this.helpMeBoardRepository.findLatestPost();
+  }
+
   async updateBoard(
     userId: number,
     boardId: number,
