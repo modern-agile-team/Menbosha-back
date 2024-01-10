@@ -1,6 +1,6 @@
 import { UserIntroRepository } from './../repositories/user-intro.repository';
 import { UserBadgeRepository } from './../repositories/user-badge.repository';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { UserImageRepository } from '../repositories/user-image.repository';
 import { FindManyOptions } from 'typeorm';
@@ -117,11 +117,18 @@ export class UserService {
 
   async getMentorList(
     page: number,
+    categoryId: number,
   ): Promise<{ data: PageByMentorListResponseDTO[] }> {
     const limit = 10;
     const skip = (page - 1) * limit;
     const take = limit;
-    const mentors = await this.userRepository.findPageByMentors(skip, take);
+    const mentors = categoryId
+      ? await this.userRepository.findCategoryIdByMentors(
+          skip,
+          take,
+          categoryId,
+        )
+      : await this.userRepository.findPageByMentors(skip, limit);
     const mentorResponse: PageByMentorListResponseDTO[] = await Promise.all(
       mentors
         .filter((user) => user.isMentor === true) //filter로 user.isMentor = true인 경우만 불러오기
