@@ -32,8 +32,8 @@ import { CreateMentorBoardImageDto } from '../dto/mentorBoard/create.mentor.boar
 import { ApiUploadMentorBoardImages } from '../swagger-decorators/mentorBoard/add-mentor-board-images-decorator';
 import { ApiGetPageNumberByMentorBoard } from '../swagger-decorators/mentorBoard/get-page-number-mentor-board-decorator';
 
-@Controller('mentorBoard')
-@ApiTags('mentorBoard API')
+@Controller('mentor-board')
+@ApiTags('mentor-board API')
 export class MentorBoardController {
   constructor(
     private readonly mentorBoardService: MentorBoardService,
