@@ -105,7 +105,21 @@ export class MentorBoardLikeService {
         likeCount,
       );
 
+      await queryRunner.commitTransaction();
+
       return { isLike: false };
-    } catch (error) {}
+    } catch (error) {
+      if (queryRunner.isTransactionActive) {
+        await queryRunner.rollbackTransaction();
+      }
+
+      console.error(error);
+
+      throw new InternalServerErrorException('좋아요 삭제 중 서버 에러 발생');
+    } finally {
+      if (!queryRunner.isReleased) {
+        await queryRunner.release();
+      }
+    }
   }
 }

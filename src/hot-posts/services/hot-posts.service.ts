@@ -32,10 +32,6 @@ export class HotPostsService<E extends RequiredHotPostColumn> {
       });
   }
 
-  findAllHotPosts(options: FindManyOptions<E>): Promise<E[]> {
-    return this.HotPostRepository.find(options);
-  }
-
   async increaseLikeCount(
     entityManager: EntityManager,
     parentId: number,
@@ -51,9 +47,31 @@ export class HotPostsService<E extends RequiredHotPostColumn> {
     }
   }
 
-  async deleteHotPost(entityManager: EntityManager, parentId: number) {
+  findAllHotPosts(options: FindManyOptions<E>): Promise<E[]> {
+    return this.HotPostRepository.find(options);
+  }
+
+  async deleteHotPost(
+    entityManager: EntityManager,
+    parentId: number,
+  ): Promise<void> {
     await entityManager
       .withRepository(this.HotPostRepository)
       .delete({ parentId } as FindOptionsWhere<E>);
+  }
+
+  async decreaseLikeCount(
+    entityManager: EntityManager,
+    parentId: number,
+  ): Promise<void> {
+    const updatedResult = await entityManager
+      .withRepository(this.HotPostRepository)
+      .decrement({ parentId } as FindOptionsWhere<E>, 'likeCount', 1);
+
+    if (!updatedResult.affected) {
+      throw new InternalServerErrorException(
+        '좋아요 업데이트 중 서버 에러 발생',
+      );
+    }
   }
 }
