@@ -25,9 +25,11 @@ export class MentorBoardService {
     }
   }
 
-  async countPagedMentorBoards() {
+  async countPagedMentorBoards(categoryId) {
     const limit = 10;
-    const total = await this.mentorBoardRepository.findTotalBoards();
+    const total = categoryId // 예외처리 - categoryId가 들어올 경우
+      ? await this.mentorBoardRepository.findTotalBoardsByCategoryId(categoryId)
+      : await this.mentorBoardRepository.findTotalBoards();
     const page = total / limit;
     const totalPage = Math.ceil(page);
     return { total, totalPage };
@@ -36,13 +38,9 @@ export class MentorBoardService {
   async findPagedMentorBoards(
     page: number,
     categoryId: number,
-  ): Promise<{ data: PageByMentorBoardResponseDTO[]; total: number }> {
+  ): Promise<{ data: PageByMentorBoardResponseDTO[] }> {
     const limit = 10;
     const skip = (page - 1) * limit;
-    const total = categoryId // 예외처리 - categoryId가 들어올 경우
-      ? await this.mentorBoardRepository.findTotalBoardsByCategoryId(categoryId)
-      : await this.mentorBoardRepository.findTotalBoards();
-
     const boards = categoryId // 예외처리 - categoryId가 들어올 경우
       ? await this.mentorBoardRepository.findPagedBoardsByCategoryId(
           skip,
@@ -73,7 +71,7 @@ export class MentorBoardService {
       }),
     );
 
-    return { data: boardResponse, total };
+    return { data: boardResponse };
   }
 
   async findOneMentorBoard(
