@@ -41,15 +41,14 @@ export class MentorBoardLikeService {
 
     try {
       const entityManager = queryRunner.manager;
+
       const newLike = await this.likesService.createLike(
         entityManager,
         existBoard.id,
         userId,
       );
 
-      existBoard.mentorBoardLikes.push(newLike);
-
-      const likeCount = existBoard.mentorBoardLikes.length;
+      const likeCount = existBoard.mentorBoardLikes.length + 1;
 
       await this.mentorBoardHotPostService.createMentorBoardHotPostOrIncrease(
         entityManager,
@@ -88,11 +87,19 @@ export class MentorBoardLikeService {
         relations: ['mentorBoardLikes'],
       });
 
-    await this.likesService.deleteLike(existBoard.id, userId);
+    const queryRunner = this.dataSource.createQueryRunner();
 
-    if (existBoard.mentorBoardLikes.length === 4) {
-    }
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
-    return { isLike: false };
+    try {
+      const entityManager = queryRunner.manager;
+
+      await this.likesService.deleteLike(entityManager, existBoard.id, userId);
+
+      const likeCount = existBoard.mentorBoardLikes.length - 1;
+
+      return { isLike: false };
+    } catch (error) {}
   }
 }

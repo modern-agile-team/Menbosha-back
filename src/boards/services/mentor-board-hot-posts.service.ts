@@ -57,4 +57,10 @@ export class MentorBoardHotPostsService {
       },
     });
   }
+
+  deleteMentorBoardHotPostOrDecrease(
+    entityManager: EntityManager,
+    mentorBoardId: number,
+    likeCount: number,
+  ) {}
 }

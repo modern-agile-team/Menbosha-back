@@ -50,4 +50,10 @@ export class HotPostsService<E extends RequiredHotPostColumn> {
       );
     }
   }
+
+  async deleteHotPost(entityManager: EntityManager, parentId: number) {
+    await entityManager
+      .withRepository(this.HotPostRepository)
+      .delete({ parentId } as FindOptionsWhere<E>);
+  }
 }

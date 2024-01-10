@@ -42,7 +42,11 @@ export class LikesService<E extends RequiredLikeColumn> {
     return this.LikeRepository.find({ options } as FindManyOptions<E>);
   }
 
-  async deleteLike(parentId: number, userId: number): Promise<void> {
+  async deleteLike(
+    entityManager: EntityManager,
+    parentId: number,
+    userId: number,
+  ): Promise<void> {
     const isExistLike = await this.LikeRepository.exist({
       where: {
         userId,
@@ -54,7 +58,7 @@ export class LikesService<E extends RequiredLikeColumn> {
       throw new ConflictException('좋아요가 없습니다.');
     }
 
-    await this.LikeRepository.delete({
+    await entityManager.withRepository(this.LikeRepository).delete({
       parentId,
       userId,
     } as FindOptionsWhere<E>);
