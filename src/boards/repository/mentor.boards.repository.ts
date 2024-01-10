@@ -21,6 +21,17 @@ export class MentorBoardRepository {
     //이 부분 return은 dto로 수정하기
   }
 
+  async findRandomMentorBoard(limit: number): Promise<MentorBoard[]> {
+    return this.entityManager
+      .createQueryBuilder(MentorBoard, 'board')
+      .leftJoinAndSelect('board.user', 'user')
+      .leftJoinAndSelect('user.userImage', 'userImage')
+      .leftJoinAndSelect('board.mentorBoardImages', 'mentorBoardImages')
+      .orderBy('RAND()')
+      .take(limit)
+      .getMany();
+  }
+
   async findTotalBoardsByCategoryId(categoryId: number): Promise<number> {
     return this.entityManager.count(MentorBoard, {
       where: { categoryId: categoryId },
