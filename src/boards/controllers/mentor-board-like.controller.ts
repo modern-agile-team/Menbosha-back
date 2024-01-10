@@ -42,7 +42,7 @@ export class MentorBoardLikeController {
   createMentorBoardLike(
     @GetUserId() userId: number,
     @Param('boardId', ParseIntPipe) boardId: number,
-  ): Promise<{ isLike: boolean }> {
+  ): Promise<{ isLike: true }> {
     return this.mentorBoardSLikeService.createMentorBoardLike(boardId, userId);
   }
 
@@ -52,7 +52,7 @@ export class MentorBoardLikeController {
   deleteMentorBoardLike(
     @GetUserId() userId: number,
     @Param('boardId', ParseIntPipe) boardId: number,
-  ): Promise<{ isLike: boolean }> {
+  ): Promise<{ isLike: false }> {
     return this.mentorBoardSLikeService.deleteMentorBoardLike(boardId, userId);
   }
 }

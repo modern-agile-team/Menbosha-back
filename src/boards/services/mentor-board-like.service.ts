@@ -12,7 +12,7 @@ export class MentorBoardLikeService {
   async createMentorBoardLike(
     boardId: number,
     userId: number,
-  ): Promise<{ isLike: boolean }> {
+  ): Promise<{ isLike: true }> {
     const existBoard = await this.mentorBoardService.findOneByOrNotFound({
       where: { id: boardId },
     });
@@ -25,7 +25,7 @@ export class MentorBoardLikeService {
   async deleteMentorBoardLike(
     boardId: number,
     userId: number,
-  ): Promise<{ isLike: boolean }> {
+  ): Promise<{ isLike: false }> {
     const existBoard = await this.mentorBoardService.findOneByOrNotFound({
       where: { id: boardId },
     });
