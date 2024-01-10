@@ -76,6 +76,11 @@ export class MentorBoardController {
     return this.mentorBoardService.findPagedMentorBoards(page, categoryId);
   }
 
+  @Get('random')
+  randomMentorBoards() {
+    return this.mentorBoardService.randomMentorBoards();
+  }
+
   @Get('/page')
   @ApiGetPageNumberByMentorBoard()
   countPageMentorBoards(@Query('categoryId') categoryId: number) {
