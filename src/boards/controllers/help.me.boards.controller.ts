@@ -33,8 +33,8 @@ import { HelpMeBoardResponseDTO } from '../dto/helpMeBoard/update.help.me.board.
 import { ApiDeleteHelpMeBoard } from '../swagger-decorators/helpMeBoard/delete-help-me-board-decorator';
 import { ApiGetPageNumberByHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-board-page-number.decorator';
 
-@Controller('helpMeBoard')
-@ApiTags('HelpMeBoard API')
+@Controller('help-me-board')
+@ApiTags('Help-me-board API')
 export class HelpMeBoardController {
   constructor(
     private readonly helpMeBoardService: HelpMeBoardService,

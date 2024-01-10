@@ -61,7 +61,7 @@ export class HelpMeBoardService {
             name: board.user.name,
             userImage: board.user.userImage ? board.user.userImage : [],
           },
-          helpMeBoardImages: board.helpMeBoardImages.map((image) => ({
+          helpMeBoardImages: (board.helpMeBoardImages || []).map((image) => ({
             id: image.id,
             imageUrl: image.imageUrl,
           })),
