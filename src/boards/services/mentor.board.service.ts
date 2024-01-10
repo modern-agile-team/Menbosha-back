@@ -81,7 +81,6 @@ export class MentorBoardService {
     const mentorBoard =
       await this.mentorBoardRepository.findMentorBoardById(mentorBoardId);
     const unitOwner = mentorBoard.userId === userId;
-    console.log(mentorBoardId);
 
     if (!mentorBoard) {
       throw new NotFoundException('게시물을 찾을 수 없습니다.');
