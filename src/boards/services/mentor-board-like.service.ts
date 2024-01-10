@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { MentorBoardLike } from '../entities/mentor-board-like.entity';
 import { MentorBoardService } from 'src/boards/services/mentor.board.service';
 import { LikesService } from 'src/like/services/likes.service';
+import { MentorBoardLikeDto } from '../dto/mentorBoard/mentor-board-like.dto';
 
 @Injectable()
 export class MentorBoardLikeService {
@@ -12,14 +13,14 @@ export class MentorBoardLikeService {
   async createMentorBoardLike(
     boardId: number,
     userId: number,
-  ): Promise<{ isLike: true }> {
+  ): Promise<MentorBoardLikeDto> {
     const existBoard = await this.mentorBoardService.findOneByOrNotFound({
       where: { id: boardId },
     });
 
-    await this.likesService.createLike(existBoard.id, userId);
+    const newLike = await this.likesService.createLike(existBoard.id, userId);
 
-    return { isLike: true };
+    return new MentorBoardLikeDto(newLike);
   }
 
   async deleteMentorBoardLike(

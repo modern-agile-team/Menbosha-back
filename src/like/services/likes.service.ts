@@ -32,13 +32,10 @@ export class LikesService<E extends RequiredLikeColumn> {
       throw new ConflictException('이미 좋아요가 존재합니다.');
     }
 
-    await this.LikeRepository.save(
-      {
-        userId,
-        parentId,
-      } as DeepPartial<E>,
-      { reload: false },
-    );
+    return this.LikeRepository.save({
+      userId,
+      parentId,
+    } as DeepPartial<E>);
   }
 
   getLike(options: FindManyOptions<E>) {
