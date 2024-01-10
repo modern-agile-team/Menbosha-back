@@ -136,7 +136,11 @@ export class UserService {
           return {
             id: user.id,
             name: user.name,
-            userImage: user.userImage ? user.userImage : [],
+            categoryId: user.activityCategoryId,
+            userImage: {
+              imageId: user.userImage.id,
+              imageUrl: user.userImage.imageUrl,
+            },
             userIntro: {
               introduce: user.userIntro.introduce.substring(0, 30),
               mainField: user.userIntro.mainField.substring(0, 30),
