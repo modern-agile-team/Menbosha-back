@@ -1,5 +1,10 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiConflictResponse,
+  ApiHeaders,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 export function ApiDeleteMentorBoardLike() {
   return applyDecorators(
@@ -43,7 +48,7 @@ export function ApiDeleteMentorBoardLike() {
     ApiResponse({
       status: 404,
       description:
-        'DB에서 사용자를 찾을 수 없는 경우, 게시글을 찾을 수 없는 경우, 좋아요가 없는 경우',
+        'DB에서 사용자를 찾을 수 없는 경우, 게시글을 찾을 수 없는 경우',
       content: {
         JSON: {
           example: {
@@ -51,8 +56,19 @@ export function ApiDeleteMentorBoardLike() {
             message: [
               '사용자를 찾을 수 없습니다.',
               '게시물을 찾을 수 없습니다.',
-              '좋아요가 없습니다',
             ],
+          },
+        },
+      },
+    }),
+    ApiConflictResponse({
+      description: '이미 좋아요가 없는 경우',
+      content: {
+        JSON: {
+          example: {
+            message: '이미 좋아요가 없습니다.',
+            error: 'Conflict',
+            statusCode: 409,
           },
         },
       },

@@ -6,6 +6,7 @@ import { HotPostsService } from 'src/hot-posts/services/hot-posts.service';
 import { MentorBoardHotPost } from '../entities/mentor-board-hot-post.entity';
 import { DataSource } from 'typeorm';
 import { MentorBoardJoinLikesDto } from '../dto/mentorBoard/mentor-board-join-likes.dto';
+import { MentorBoardLikeDto } from '../dto/mentorBoard/mentor-board-like.dto';
 
 @Injectable()
 export class MentorBoardLikeService {
@@ -18,7 +19,7 @@ export class MentorBoardLikeService {
   async createMentorBoardLikeAndHotPost(
     boardId: number,
     userId: number,
-  ): Promise<{ isLike: boolean }> {
+  ): Promise<MentorBoardLikeDto> {
     const existBoard = await this.mentorBoardService.findOneByOrNotFound({
       select: {
         id: true,
@@ -44,33 +45,15 @@ export class MentorBoardLikeService {
     } else if (likeCount > 5) {
       await this.hotPostsService.increaseLikeCount(existBoard.id);
     }
+    const newLike = await this.likesService.createLike(existBoard.id, userId);
 
-    return { isLike: true };
-  }
-
-  async getMentorBoardLikes(
-    boardId: number,
-    userId: number,
-  ): Promise<{ isLike: boolean; boardLikesCount: number }> {
-    await this.mentorBoardService.findOneByOrNotFound({
-      where: { id: boardId },
-    });
-
-    const mentorBoardLikes = await this.likesService.getLike({
-      where: { parentId: boardId },
-    });
-
-    return mentorBoardLikes.find(
-      (mentorBoardLike) => mentorBoardLike.userId === userId,
-    )
-      ? { isLike: true, boardLikesCount: mentorBoardLikes.length }
-      : { isLike: false, boardLikesCount: mentorBoardLikes.length };
+    return new MentorBoardLikeDto(newLike);
   }
 
   async deleteMentorBoardLike(
     boardId: number,
     userId: number,
-  ): Promise<{ isLike: boolean }> {
+  ): Promise<{ isLike: false }> {
     const existBoard: MentorBoardJoinLikesDto =
       await this.mentorBoardService.findOneByOrNotFound({
         where: { id: boardId },

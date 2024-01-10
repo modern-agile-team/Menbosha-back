@@ -1,9 +1,4 @@
-import {
-  ConflictException,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { RequiredLikeColumn } from '../types/like.type';
 import { LIKE_REPOSITORY_TOKEN } from '../constants/like.token';
 import {
@@ -38,7 +33,11 @@ export class LikesService<E extends RequiredLikeColumn> {
     } as DeepPartial<E>);
   }
 
+<<<<<<< HEAD
   getLike(options: FindManyOptions<E>): Promise<E[]> {
+=======
+  findLikes(options: FindManyOptions<E>) {
+>>>>>>> 0667b5a19e79071beff65ef70357aea8a364ab3a
     return this.LikeRepository.find({ options } as FindManyOptions<E>);
   }
 
@@ -51,7 +50,7 @@ export class LikesService<E extends RequiredLikeColumn> {
     });
 
     if (!isExistLike) {
-      throw new NotFoundException('좋아요가 없습니다.');
+      throw new ConflictException('좋아요가 없습니다.');
     }
 
     await this.LikeRepository.delete({
