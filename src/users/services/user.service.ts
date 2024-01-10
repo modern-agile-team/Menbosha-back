@@ -107,9 +107,11 @@ export class UserService {
     };
   }
 
-  async countPageMentors() {
+  async countPageMentors(categoryId: number) {
     const limit = 10;
-    const total = await this.userRepository.findIsMentors();
+    const total = categoryId
+      ? await this.userRepository.findCategoryIdByIsMentors(categoryId)
+      : await this.userRepository.findIsMentors();
     const page = total / limit;
     const totalPage = Math.ceil(page);
     return { total, totalPage };

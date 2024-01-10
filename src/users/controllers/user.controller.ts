@@ -71,8 +71,8 @@ export class UserController {
 
   @Get('/page')
   @ApiGetPageNumberByMentor()
-  countPageMentor() {
-    return this.userService.countPageMentors();
+  countPageMentor(@Query('categoryId') categoryId: number) {
+    return this.userService.countPageMentors(categoryId);
   }
 
   // 카테고리 id별 멘토 리스트 불러오기(페이지네이션) 추가

@@ -87,6 +87,12 @@ export class UserRepository {
     });
   }
 
+  async findCategoryIdByIsMentors(categoryId: number): Promise<number> {
+    return await this.entityManager.count(User, {
+      where: { isMentor: true, activityCategoryId: categoryId },
+    });
+  }
+
   async findIsMentors(): Promise<number> {
     return await this.entityManager.count(User, {
       where: { isMentor: true },
