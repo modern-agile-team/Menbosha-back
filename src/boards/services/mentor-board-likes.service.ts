@@ -75,7 +75,7 @@ export class MentorBoardLikeService {
   }
 
   /**
-   * @todo hot posts service와 분리
+   * @todo hot posts service와 분리 및 에러 핸들링
    */
   async deleteMentorBoardLike(
     boardId: number,
