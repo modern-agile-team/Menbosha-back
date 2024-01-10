@@ -36,7 +36,7 @@ export class HelpMeBoardRepository {
     categoryId: number,
   ): Promise<HelpMeBoard[]> {
     return await this.entityManager.find(HelpMeBoard, {
-      relations: ['user', 'user.userImage'],
+      relations: ['user', 'user.userImage', 'helpMeBoardImages'],
       where: { categoryId },
       skip: skip,
       take: limit,
