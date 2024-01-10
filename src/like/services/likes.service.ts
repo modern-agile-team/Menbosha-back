@@ -33,7 +33,7 @@ export class LikesService<E extends RequiredLikeColumn> {
     } as DeepPartial<E>);
   }
 
-  getLike(options: FindManyOptions<E>) {
+  findLikes(options: FindManyOptions<E>) {
     return this.LikeRepository.find({ options } as FindManyOptions<E>);
   }
 

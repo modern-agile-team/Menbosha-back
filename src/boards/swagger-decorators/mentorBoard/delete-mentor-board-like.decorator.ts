@@ -62,11 +62,11 @@ export function ApiDeleteMentorBoardLike() {
       },
     }),
     ApiConflictResponse({
-      description: '이미 좋아요가 있는 경우',
+      description: '이미 좋아요가 없는 경우',
       content: {
         JSON: {
           example: {
-            message: '이미 좋아요가 존재합니다.',
+            message: '이미 좋아요가 없습니다.',
             error: 'Conflict',
             statusCode: 409,
           },
