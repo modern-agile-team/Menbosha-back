@@ -72,14 +72,14 @@ export class MentorBoardController {
   findPageMentorBoards(
     @Query('page') page = 1,
     @Query('categoryId') categoryId: number,
-  ): Promise<{ data: PageByMentorBoardResponseDTO[]; total: number }> {
+  ): Promise<{ data: PageByMentorBoardResponseDTO[] }> {
     return this.mentorBoardService.findPagedMentorBoards(page, categoryId);
   }
 
   @Get('/page')
   @ApiGetPageNumberByMentorBoard()
-  countPageMentorBoards() {
-    return this.mentorBoardService.countPagedMentorBoards();
+  countPageMentorBoards(@Query('categoryId') categoryId: number) {
+    return this.mentorBoardService.countPagedMentorBoards(categoryId);
   }
 
   @Get('/unit') //하나의 게시판 불러오기

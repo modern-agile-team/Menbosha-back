@@ -4,12 +4,12 @@ import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 export function ApiGetPageMentorBoards() {
   return applyDecorators(
     ApiOperation({
-      summary: '페이지별 멘토보드 불러오는 API',
-      description: '페이지별 멘토보드 불러오는 API',
+      summary: '카테고리 ID로 멘토 게시판 불러오는 API',
+      description: '카테고리 ID로 멘토 게시판 불러오는 API',
     }),
     ApiResponse({
       status: 200,
-      description: '성공적으로 멘토보드를 불러왔습니다.',
+      description: '성공적으로 멘토 게시판를 불러왔습니다.',
       content: {
         JSON: {
           example: {
@@ -46,6 +46,7 @@ export function ApiGetPageMentorBoards() {
                 imageUrl: 's3에 저장된 보드 이미지 URL',
               },
             ],
+            total: '카테고리 id에 맞는 보드의 총 개수가 number로 넘어옵니다',
           },
         },
       },
