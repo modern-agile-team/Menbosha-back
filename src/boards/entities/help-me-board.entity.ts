@@ -49,6 +49,9 @@ export class HelpMeBoard {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
+  @UpdateDateColumn({ name: 'pulling_up' })
+  pullingUp: Date;
+
   @Column({ name: 'category_list_id' })
   categoryId: number;
 
