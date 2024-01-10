@@ -21,9 +21,11 @@ export class HelpMeBoardService {
     }
   }
 
-  async countPagedHelpMeBoards() {
+  async countPagedHelpMeBoards(categoryId: number) {
     const limit = 10;
-    const total = await this.helpMeBoardRepository.findTotalBoards();
+    const total = categoryId // 예외처리 - categoryId가 들어올 경우
+      ? await this.helpMeBoardRepository.findTotalBoardsByCategoryId(categoryId)
+      : await this.helpMeBoardRepository.findTotalBoards();
     const page = total / limit;
     const totalPage = Math.ceil(page);
     return { total, totalPage };
@@ -33,13 +35,9 @@ export class HelpMeBoardService {
   async findPagedHelpMeBoards(
     page: number,
     categoryId: number,
-  ): Promise<{ data: PageByHelpMeBoardResponseDTO[]; total: number }> {
+  ): Promise<{ data: PageByHelpMeBoardResponseDTO[] }> {
     const limit = 10;
     const skip = (page - 1) * limit;
-    const total = categoryId // 예외처리 - categoryId가 들어올 경우
-      ? await this.helpMeBoardRepository.findTotalBoardsByCategoryId(categoryId)
-      : await this.helpMeBoardRepository.findTotalBoards();
-
     const boards = categoryId // 예외처리 - categoryId가 들어올 경우
       ? await this.helpMeBoardRepository.findPagedBoardsByCategoryId(
           skip,
@@ -69,7 +67,7 @@ export class HelpMeBoardService {
       }),
     );
 
-    return { data: boardResponse, total };
+    return { data: boardResponse };
   }
 
   async findOneHelpMeBoard(

@@ -73,14 +73,14 @@ export class HelpMeBoardController {
   findPageBoards(
     @Query('page') page = 1,
     @Query('categoryId') categoryId: number,
-  ): Promise<{ data: PageByHelpMeBoardResponseDTO[]; total: number }> {
+  ): Promise<{ data: PageByHelpMeBoardResponseDTO[] }> {
     return this.helpMeBoardService.findPagedHelpMeBoards(page, categoryId);
   }
 
   @Get('/page')
   @ApiGetPageNumberByHelpMeBoard()
-  countPageBoards() {
-    return this.helpMeBoardService.countPagedHelpMeBoards();
+  countPageBoards(@Query('categoryId') categoryId: number) {
+    return this.helpMeBoardService.countPagedHelpMeBoards(categoryId);
   }
 
   @Get('/unit') //하나의 게시판 불러오기
