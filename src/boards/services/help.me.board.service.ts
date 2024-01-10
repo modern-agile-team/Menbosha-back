@@ -98,7 +98,7 @@ export class HelpMeBoardService {
     };
   }
 
-  async pullingUpHelpMeBoards() {
+  async latestHelpMeBoards() {
     const limit = 3;
     return await this.helpMeBoardRepository.findLatestBoards(limit);
   }

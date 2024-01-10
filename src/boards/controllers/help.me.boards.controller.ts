@@ -84,8 +84,8 @@ export class HelpMeBoardController {
   }
 
   @Get('pullingUp')
-  pullingUpHelpMeBoards() {
-    return this.helpMeBoardService.pullingUpHelpMeBoards();
+  latestHelpMeBoard() {
+    return this.helpMeBoardService.latestHelpMeBoards();
   }
 
   @Get('/unit') //하나의 게시판 불러오기
@@ -107,6 +107,12 @@ export class HelpMeBoardController {
     @Body() boardData: UpdateHelpMeBoardDto,
   ): Promise<HelpMeBoardResponseDTO> {
     return this.helpMeBoardService.updateBoard(userId, boardId, boardData);
+  }
+
+  @Patch('/pullingUp')
+  @UseGuards(JwtAccessTokenGuard)
+  pullingUpHelpMeBoard(@GetUserId() userId: number) {
+    return this.helpMeBoardService.pullingUpHelpMeBoards(userId);
   }
 
   @Patch('/images')
