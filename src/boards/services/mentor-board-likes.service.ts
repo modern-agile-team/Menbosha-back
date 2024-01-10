@@ -20,6 +20,12 @@ export class MentorBoardLikeService {
     userId: number,
   ): Promise<{ isLike: boolean }> {
     const existBoard = await this.mentorBoardService.findOneByOrNotFound({
+      select: {
+        id: true,
+        mentorBoardLikes: {
+          id: true,
+        },
+      },
       where: { id: boardId },
       relations: ['mentorBoardLikes'],
     });
