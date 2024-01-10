@@ -72,8 +72,9 @@ export class HelpMeBoardController {
   @ApiGetPageHelpMeBoards()
   findPageBoards(
     @Query('page') page = 1,
+    @Query('categoryId') categoryId: number,
   ): Promise<{ data: PageByHelpMeBoardResponseDTO[]; total: number }> {
-    return this.helpMeBoardService.findPagedHelpMeBoards(page);
+    return this.helpMeBoardService.findPagedHelpMeBoards(page, categoryId);
   }
 
   @Get('/page')
