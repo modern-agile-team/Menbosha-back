@@ -56,7 +56,7 @@ export class MentorBoardController {
   @ApiUploadMentorBoardImages()
   uploadImage(
     @GetUserId() userId: number,
-    @Query('mentorBoarId') boardId: number, // Param으로 바꿔서 하기 (URI 컨벤션 이상함)
+    @Query('mentorBoardId') boardId: number, // Param으로 바꿔서 하기 (URI 컨벤션 이상함)
     @UploadedFiles() files: Express.Multer.File[],
   ): Promise<CreateMentorBoardImageDto[]> {
     return this.boardImagesService.createMentorBoardImages(
