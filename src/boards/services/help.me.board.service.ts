@@ -80,10 +80,10 @@ export class HelpMeBoardService {
     userId: number,
   ): Promise<oneHelpMeBoardResponseDTO> {
     const board = await this.helpMeBoardRepository.findHelpMeBoardById(boardId);
-    const unitOwner = board.userId === userId;
     if (!board) {
       throw new NotFoundException('게시물을 찾을 수 없습니다');
     }
+    const unitOwner = board.userId === userId;
     return {
       id: board.id,
       head: board.head,
