@@ -63,7 +63,7 @@ export class MentorBoardHotPostsService {
     mentorBoardId: number,
     likeCount: number,
   ): Promise<void> {
-    if (likeCount === 4) {
+    if (likeCount < 5) {
       return this.hotPostsService.deleteHotPost(entityManager, mentorBoardId);
     } else if (likeCount > 4) {
       return this.hotPostsService.decreaseLikeCount(

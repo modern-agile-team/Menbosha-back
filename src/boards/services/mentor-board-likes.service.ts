@@ -32,6 +32,7 @@ export class MentorBoardLikeService {
           id: true,
           mentorBoardLikes: {
             id: true,
+            userId: true,
           },
         },
         where: { id: boardId },
@@ -95,6 +96,13 @@ export class MentorBoardLikeService {
   ): Promise<{ isLike: false }> {
     const existBoard: MentorBoardJoinLikesDto =
       await this.mentorBoardService.findOneByOrNotFound({
+        select: {
+          id: true,
+          mentorBoardLikes: {
+            id: true,
+            userId: true,
+          },
+        },
         where: { id: boardId },
         relations: ['mentorBoardLikes'],
       });
