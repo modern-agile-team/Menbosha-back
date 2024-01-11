@@ -43,7 +43,7 @@ export class MentorBoardService {
               name: board.user.name,
               userImage: board.user.userImage ? board.user.userImage : [],
             },
-            mentorBoardImage: (board.mentorBoardImages || []).map((image) => ({
+            mentorBoardImages: (board.mentorBoardImages || []).map((image) => ({
               // 예외처리 - 이미지 없을경우 빈배열
               id: image.id,
               imageUrl: image.imageUrl,
@@ -92,7 +92,7 @@ export class MentorBoardService {
             name: board.user.name,
             userImage: board.user.userImage ? board.user.userImage : [],
           },
-          mentorBoardImage: (board.mentorBoardImages || []).map((image) => ({
+          mentorBoardImages: (board.mentorBoardImages || []).map((image) => ({
             // 예외처리 - 이미지 없을경우 빈배열
             id: image.id,
             imageUrl: image.imageUrl,
