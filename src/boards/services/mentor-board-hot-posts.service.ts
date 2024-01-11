@@ -29,13 +29,19 @@ export class MentorBoardHotPostsService {
     return;
   }
 
-  findAllMentorBoardHotPosts() {
+  findAllMentorBoardHotPostsWithLimit() {
     return this.hotPostsService.findAllHotPosts({
       select: {
         id: true,
+        likeCount: true,
         mentorBoard: {
           id: true,
           userId: true,
+          head: true,
+          body: true,
+          categoryId: true,
+          createdAt: true,
+          updatedAt: true,
           user: {
             name: true,
             userImage: {
@@ -43,9 +49,11 @@ export class MentorBoardHotPostsService {
             },
           },
           mentorBoardImages: {
+            id: true,
             imageUrl: true,
           },
         },
+        createdAt: true,
       },
       relations: {
         mentorBoard: {
@@ -55,6 +63,10 @@ export class MentorBoardHotPostsService {
           mentorBoardImages: true,
         },
       },
+      order: {
+        likeCount: 'DESC',
+      },
+      take: 5,
     });
   }
 
