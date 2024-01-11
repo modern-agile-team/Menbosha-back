@@ -56,7 +56,7 @@ export class MentorBoardController {
   @ApiUploadMentorBoardImages()
   uploadImage(
     @GetUserId() userId: number,
-    @Query('mentor-boar-id') boardId: number, // Param으로 바꿔서 하기 (URI 컨벤션 이상함)
+    @Query('mentorBoarId') boardId: number, // Param으로 바꿔서 하기 (URI 컨벤션 이상함)
     @UploadedFiles() files: Express.Multer.File[],
   ): Promise<CreateMentorBoardImageDto[]> {
     return this.boardImagesService.createMentorBoardImages(
@@ -71,7 +71,7 @@ export class MentorBoardController {
   @ApiGetPageMentorBoards()
   findPageMentorBoards(
     @Query('page') page = 1,
-    @Query('category-id') categoryId: number,
+    @Query('categoryId') categoryId: number,
   ): Promise<{ data: PageByMentorBoardResponseDTO[] }> {
     return this.mentorBoardService.findPagedMentorBoards(page, categoryId);
   }
@@ -86,7 +86,7 @@ export class MentorBoardController {
   @UseGuards(JwtOptionalGuard)
   @ApiGetOneMentorBoard()
   findOne(
-    @Query('mentor-board-id') mentorBoardId: number,
+    @Query('mentorBoardId') mentorBoardId: number,
     @GetUserId() userId: number,
   ): Promise<oneMentorBoardResponseDTO> {
     return this.mentorBoardService.findOneMentorBoard(mentorBoardId, userId);
@@ -97,7 +97,7 @@ export class MentorBoardController {
   @ApiUpdateMentorBoard()
   editBoard(
     @GetUserId() userId: number,
-    @Query('mentor-board-id') mentorBoardId: number,
+    @Query('mentorBoardId') mentorBoardId: number,
     @Body() boardData: UpdateMentorBoardDto,
   ): Promise<MentorBoardResponseDTO> {
     return this.mentorBoardService.updateMentorBoard(
@@ -111,7 +111,7 @@ export class MentorBoardController {
   @UseGuards(JwtAccessTokenGuard)
   @ApiDeleteMentorBoard()
   deleteBoard(
-    @Query('mentor-board-id') mentorBoardId: number,
+    @Query('mentorBoardId') mentorBoardId: number,
     @GetUserId() userId: number,
   ) {
     this.mentorBoardService.deleteBoard(mentorBoardId, userId);
