@@ -83,7 +83,7 @@ export class HelpMeBoardController {
     return this.helpMeBoardService.countPagedHelpMeBoards(categoryId);
   }
 
-  @Get('pullingUp')
+  @Get('/pullingUp')
   latestHelpMeBoard() {
     return this.helpMeBoardService.latestHelpMeBoards();
   }
@@ -111,8 +111,11 @@ export class HelpMeBoardController {
 
   @Patch('/pullingUp')
   @UseGuards(JwtAccessTokenGuard)
-  pullingUpHelpMeBoard(@GetUserId() userId: number) {
-    return this.helpMeBoardService.pullingUpHelpMeBoards(userId);
+  pullingUpHelpMeBoard(
+    @GetUserId() userId: number,
+    @Query('helpMeBoardId') boardId: number,
+  ) {
+    return this.helpMeBoardService.pullingUpHelpMeBoards(userId, boardId);
   }
 
   @Patch('/images')

@@ -69,6 +69,10 @@ export class HelpMeBoardRepository {
     });
   }
 
+  async pullingUpHelpMeBoard(board: HelpMeBoard): Promise<void> {
+    await this.entityManager.save(board);
+  }
+
   async updateHelpMeBoard(
     boardData: Partial<UpdateHelpMeBoardDto>,
   ): Promise<HelpMeBoard> {
