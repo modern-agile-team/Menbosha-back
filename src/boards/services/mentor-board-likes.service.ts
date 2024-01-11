@@ -52,12 +52,11 @@ export class MentorBoardLikeService {
     try {
       const entityManager = queryRunner.manager;
 
-      const newLike =
-        await this.mentorBoardLikesRepository.createMentorBoardLike(
-          entityManager,
-          existBoard.id,
-          userId,
-        );
+      const newLike = await this.likesService.createLikeWithEntityManager(
+        entityManager,
+        existBoard.id,
+        userId,
+      );
 
       const likeCount = existBoard.mentorBoardLikes.length + 1;
 
