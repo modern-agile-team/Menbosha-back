@@ -1,21 +1,11 @@
-import { ConflictException, Inject, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { RequiredLikeColumn } from '../types/like.type';
-import { LIKE_REPOSITORY_TOKEN } from '../constants/like.token';
-import {
-  EntityManager,
-  FindManyOptions,
-  FindOptionsWhere,
-  Repository,
-} from 'typeorm';
+import { EntityManager, FindManyOptions, FindOptionsWhere } from 'typeorm';
 import { LikesRepository } from '../repositories/likes.repository';
 
 @Injectable()
 export class LikesService<E extends RequiredLikeColumn> {
-  constructor(
-    @Inject(LIKE_REPOSITORY_TOKEN)
-    private readonly LikeRepository: Repository<E>,
-    private readonly likesRepository: LikesRepository<E>,
-  ) {}
+  constructor(private readonly likesRepository: LikesRepository<E>) {}
 
   async createLike(parentId: number, userId: number): Promise<void> {
     const isExistLike = await this.likesRepository.checkExistLike({
