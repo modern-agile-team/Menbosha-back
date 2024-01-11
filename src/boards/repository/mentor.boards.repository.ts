@@ -21,13 +21,32 @@ export class MentorBoardRepository {
     //이 부분 return은 dto로 수정하기
   }
 
+  async findTotalBoardsByCategoryId(categoryId: number): Promise<number> {
+    return this.entityManager.count(MentorBoard, {
+      where: { categoryId: categoryId },
+    });
+  }
+
   async findTotalBoards(): Promise<number> {
     return this.entityManager.count(MentorBoard);
   }
 
+  async findPagedBoardsByCategoryId(
+    skip: number,
+    limit: number,
+    categoryId: number,
+  ): Promise<MentorBoard[]> {
+    return await this.entityManager.find(MentorBoard, {
+      relations: ['user', 'user.userImage', 'mentorBoardImages'],
+      where: { categoryId },
+      skip: skip,
+      take: limit,
+    });
+  }
+
   async findPagedBoards(skip: number, limit: number): Promise<MentorBoard[]> {
     return await this.entityManager.find(MentorBoard, {
-      relations: ['user', 'user.userImage'],
+      relations: ['user', 'user.userImage', 'mentorBoardImages'],
       skip: skip,
       take: limit,
     });
@@ -39,7 +58,7 @@ export class MentorBoardRepository {
 
   async findMentorBoardById(id: number): Promise<MentorBoard> {
     return await this.entityManager.findOne(MentorBoard, {
-      relations: ['user', 'user.userImage'],
+      relations: ['user', 'user.userImage', 'mentorBoardImages'],
       where: { id },
     });
   }

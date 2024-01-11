@@ -1,5 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiParam, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiParam, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 
 export function ApiGetMentorList() {
   return applyDecorators(
@@ -45,5 +45,6 @@ export function ApiGetMentorList() {
       },
     }),
     ApiParam({ name: 'page', example: 1 }),
+    ApiQuery({ name: 'categoryId', type: Number }),
   );
 }

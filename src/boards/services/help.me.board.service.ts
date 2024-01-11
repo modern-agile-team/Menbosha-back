@@ -21,9 +21,11 @@ export class HelpMeBoardService {
     }
   }
 
-  async countPagedHelpMeBoards() {
+  async countPagedHelpMeBoards(categoryId: number) {
     const limit = 10;
-    const total = await this.helpMeBoardRepository.findTotalBoards();
+    const total = categoryId // 예외처리 - categoryId가 들어올 경우
+      ? await this.helpMeBoardRepository.findTotalBoardsByCategoryId(categoryId)
+      : await this.helpMeBoardRepository.findTotalBoards();
     const page = total / limit;
     const totalPage = Math.ceil(page);
     return { total, totalPage };
@@ -32,14 +34,17 @@ export class HelpMeBoardService {
   // -----이 기능은 프론트와 상의중인 기능입니다 -----
   async findPagedHelpMeBoards(
     page: number,
-  ): Promise<{ data: PageByHelpMeBoardResponseDTO[]; total: number }> {
+    categoryId: number,
+  ): Promise<{ data: PageByHelpMeBoardResponseDTO[] }> {
     const limit = 10;
     const skip = (page - 1) * limit;
-    const boards = await this.helpMeBoardRepository.findPageByHelpMeBoards(
-      skip,
-      limit,
-    );
-    const total = await this.helpMeBoardRepository.findTotalBoards();
+    const boards = categoryId // 예외처리 - categoryId가 들어올 경우
+      ? await this.helpMeBoardRepository.findPagedBoardsByCategoryId(
+          skip,
+          limit,
+          categoryId,
+        )
+      : await this.helpMeBoardRepository.findPageByHelpMeBoards(skip, limit);
 
     const boardResponse: PageByHelpMeBoardResponseDTO[] = await Promise.all(
       boards.map(async (board) => {
@@ -54,7 +59,7 @@ export class HelpMeBoardService {
             name: board.user.name,
             userImage: board.user.userImage ? board.user.userImage : [],
           },
-          helpMeBoardImages: board.helpMeBoardImages.map((image) => ({
+          helpMeBoardImages: (board.helpMeBoardImages || []).map((image) => ({
             id: image.id,
             imageUrl: image.imageUrl,
           })),
@@ -62,7 +67,7 @@ export class HelpMeBoardService {
       }),
     );
 
-    return { data: boardResponse, total };
+    return { data: boardResponse };
   }
 
   async findOneHelpMeBoard(
