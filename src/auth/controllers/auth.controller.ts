@@ -66,6 +66,8 @@ export class AuthController {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
     });
 
+    await this.authService.createTotalCount(userId);
+
     return res.json({ accessToken, refreshToken });
   }
 
@@ -97,6 +99,8 @@ export class AuthController {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
     });
 
+    await this.authService.createTotalCount(userId);
+
     return res.json({ accessToken, refreshToken });
   }
 
@@ -127,6 +131,8 @@ export class AuthController {
       domain: 'localhost',
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
     });
+
+    await this.authService.createTotalCount(userId);
 
     return res.json({ accessToken, refreshToken });
   }

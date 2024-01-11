@@ -47,6 +47,14 @@ export class UserRepository {
     return this.entityManager.save(user);
   }
 
+  async createTotalCount(userId: number): Promise<void> {
+    const totalCount = {
+      userId: userId,
+    };
+
+    await this.entityManager.insert('total_count', totalCount);
+  }
+
   async updateUserName(userId: number, name: string): Promise<User> {
     const user = await this.entityManager.findOne(User, {
       where: { id: userId },

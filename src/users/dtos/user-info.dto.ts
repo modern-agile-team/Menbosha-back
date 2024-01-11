@@ -15,6 +15,7 @@ export class UserInfoDto
       | 'userBadge'
       | 'token'
       | 'categoryList'
+      | 'totalCount'
     >
 {
   @ApiProperty({
