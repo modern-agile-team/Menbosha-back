@@ -48,27 +48,6 @@ export function ApiGetPullingUpHelpMeBoard() {
       },
     }),
     ApiResponse({
-      status: 404,
-      description: 'DB에서 일치하는 보드를 찾을 수 없는 경우',
-      content: {
-        JSON: {
-          example: { statusCode: 404, message: '보드를 찾을 수 없습니다.' },
-        },
-      },
-    }),
-    ApiResponse({
-      status: 404,
-      description: '사용자가 작성한 게시물이 아닐 경우',
-      content: {
-        JSON: {
-          example: {
-            statusCode: 404,
-            message: '사용자가 작성한 게시물이 아닙니다.',
-          },
-        },
-      },
-    }),
-    ApiResponse({
       status: 500,
       description: '보드를 불러오는 중 오류가 발생한 경우',
       content: {

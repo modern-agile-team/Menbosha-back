@@ -34,6 +34,7 @@ import { ApiDeleteHelpMeBoard } from '../swagger-decorators/helpMeBoard/delete-h
 import { ApiGetPageNumberByHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-board-page-number.decorator';
 import { PullingUpHelpMeBoardResponseDTO } from '../dto/helpMeBoard/pulling.up.response.dto';
 import { ApiGetPullingUpHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-pulling-up-help-me-board-decorator';
+import { ApiPullingUpHelpMeBoard } from '../swagger-decorators/helpMeBoard/pulling-up-help-me-board.decorator';
 
 @Controller('help-me-board')
 @ApiTags('Help-me-board API')
@@ -113,6 +114,7 @@ export class HelpMeBoardController {
   }
 
   @Patch('/pullingUp')
+  @ApiPullingUpHelpMeBoard()
   @UseGuards(JwtAccessTokenGuard)
   pullingUpHelpMeBoard(
     @GetUserId() userId: number,
