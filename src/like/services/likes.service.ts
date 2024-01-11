@@ -8,16 +8,18 @@ import {
   FindOptionsWhere,
   Repository,
 } from 'typeorm';
+import { LikesRepository } from '../repositories/likes.repository';
 
 @Injectable()
 export class LikesService<E extends RequiredLikeColumn> {
   constructor(
     @Inject(LIKE_REPOSITORY_TOKEN)
     private readonly LikeRepository: Repository<E>,
+    private readonly likesRepository: LikesRepository<E>,
   ) {}
 
   async createLike(parentId: number, userId: number): Promise<void> {
-    const isExistLike = await this.LikeRepository.exist({
+    const isExistLike = await this.likesRepository.checkExistLike({
       where: {
         userId,
         parentId,
@@ -28,29 +30,27 @@ export class LikesService<E extends RequiredLikeColumn> {
       throw new ConflictException('이미 좋아요가 존재합니다.');
     }
 
-    await this.LikeRepository.save({
-      userId,
-      parentId,
-    } as DeepPartial<E>);
+    return this.likesRepository.createLike(parentId, userId);
   }
 
-  async createLikeWithEntityManager(
+  createLikeWithEntityManager(
     entityManager: EntityManager,
     parentId: number,
     userId: number,
   ): Promise<E> {
-    return entityManager.withRepository(this.LikeRepository).save({
-      userId,
+    return this.likesRepository.createLikeWithEntityManager(
+      entityManager,
       parentId,
-    } as DeepPartial<E>);
+      userId,
+    );
   }
 
   findLikes(options: FindManyOptions<E>): Promise<E[]> {
-    return this.LikeRepository.find({ options } as FindManyOptions<E>);
+    return this.likesRepository.findLikes(options);
   }
 
   async deleteLike(parentId: number, userId: number): Promise<void> {
-    const isExistLike = await this.LikeRepository.exist({
+    const isExistLike = await this.likesRepository.checkExistLike({
       where: {
         userId,
         parentId,
@@ -61,20 +61,18 @@ export class LikesService<E extends RequiredLikeColumn> {
       throw new ConflictException('이미 좋아요가 없습니다.');
     }
 
-    await this.LikeRepository.delete({
-      parentId,
-      userId,
-    } as FindOptionsWhere<E>);
+    return this.likesRepository.deleteLike(parentId, userId);
   }
 
-  async deleteLikeWithEntityManager(
+  deleteLikeWithEntityManager(
     entityManager: EntityManager,
     parentId: number,
     userId: number,
   ): Promise<void> {
-    await entityManager.withRepository(this.LikeRepository).delete({
+    return this.likesRepository.deleteLikeWithEntityManager(
+      entityManager,
       parentId,
       userId,
-    } as FindOptionsWhere<E>);
+    );
   }
 }
