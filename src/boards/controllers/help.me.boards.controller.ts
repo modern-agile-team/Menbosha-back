@@ -32,6 +32,8 @@ import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dt
 import { HelpMeBoardResponseDTO } from '../dto/helpMeBoard/update.help.me.board.response.dto';
 import { ApiDeleteHelpMeBoard } from '../swagger-decorators/helpMeBoard/delete-help-me-board-decorator';
 import { ApiGetPageNumberByHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-board-page-number.decorator';
+import { PullingUpHelpMeBoardResponseDTO } from '../dto/helpMeBoard/pulling.up.response.dto';
+import { ApiGetPullingUpHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-pulling-up-help-me-board-decorator';
 
 @Controller('help-me-board')
 @ApiTags('Help-me-board API')
@@ -84,7 +86,8 @@ export class HelpMeBoardController {
   }
 
   @Get('/pullingUp')
-  latestHelpMeBoard() {
+  @ApiGetPullingUpHelpMeBoard()
+  latestHelpMeBoard(): Promise<{ data: PullingUpHelpMeBoardResponseDTO[] }> {
     return this.helpMeBoardService.latestHelpMeBoards();
   }
 

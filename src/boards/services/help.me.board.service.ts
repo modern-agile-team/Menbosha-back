@@ -172,7 +172,7 @@ export class HelpMeBoardService {
       throw new NotFoundException('게시물을 찾을 수 없습니다');
     }
     if (userId !== board.userId) {
-      throw new ForbiddenException('작성자의 게시물이 아닙니다');
+      throw new ForbiddenException('사용자가 작성한 게시물이 아닙니다');
     }
     const currentDate = new Date();
     board.pullingUp = currentDate;
@@ -188,7 +188,7 @@ export class HelpMeBoardService {
     }
 
     if (board.userId !== userId) {
-      throw new ForbiddenException('작성자의 게시물이 아닙니다');
+      throw new ForbiddenException('사용자가 작성한 게시물이 아닙니다');
     }
 
     await this.helpMeBoardRepository.deleteBoard(board);

@@ -1,24 +1,23 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-export function ApiGetOneHelpMeBoard() {
+export function ApiGetPullingUpHelpMeBoard() {
   return applyDecorators(
     ApiOperation({
-      summary: '클릭한 멘티 보드 가져오는 API',
-      description: 'header - accessToken, param - helpMeBoardId',
+      summary: '끌어올려진 도와주세요 게시글만 불러오는 API',
+      description: '끌어올려진 도와주세요 게시글만 불러오는 API',
     }),
     ApiResponse({
       status: 200,
-      description: '성공적으로 멘토보드를 불러온 경우',
+      description: '성공적으로 도와주세요 게시글을 불러온 경우',
       content: {
         JSON: {
           example: {
-            id: '8',
+            id: 'number',
             head: '제목',
             body: '내용',
-            createdAt: '2023-12-06T23:51:47.969Z',
-            updatedAt: '2023-12-06T23:51:47.969Z',
-            categoryId: 4,
+            pullingUp: 'Date',
+            categoryId: 'number',
             user: {
               name: '홍길동',
               userImage: {
@@ -29,15 +28,14 @@ export function ApiGetOneHelpMeBoard() {
             },
             helpMeBoardImages: [
               {
-                id: 9,
+                id: 'number',
                 imageUrl: 's3 저장된 url 주소',
               },
               {
-                id: 10,
+                id: 'number',
                 imageUrl: 's3 저장된 url 주소',
               },
             ],
-            unitOwner: 'boolean값',
           },
         },
       },
@@ -50,24 +48,6 @@ export function ApiGetOneHelpMeBoard() {
       },
     }),
     ApiResponse({
-      status: 401,
-      description: '우리 서비스의 액세스 토큰이 아닌 경우',
-      content: {
-        JSON: {
-          example: { statusCode: 401, message: '유효하지 않은 토큰입니다.' },
-        },
-      },
-    }),
-    ApiResponse({
-      status: 403,
-      description: '만료된 액세스 토큰인 경우',
-      content: {
-        JSON: {
-          example: { statusCode: 403, message: '만료된 토큰입니다.' },
-        },
-      },
-    }),
-    ApiResponse({
       status: 404,
       description: 'DB에서 일치하는 보드를 찾을 수 없는 경우',
       content: {
@@ -77,11 +57,14 @@ export function ApiGetOneHelpMeBoard() {
       },
     }),
     ApiResponse({
-      status: 411,
-      description: '액세스 토큰이 제공되지 않은 경우',
+      status: 404,
+      description: '사용자가 작성한 게시물이 아닐 경우',
       content: {
         JSON: {
-          example: { statusCode: 411, message: '토큰이 제공되지 않았습니다.' },
+          example: {
+            statusCode: 404,
+            message: '사용자가 작성한 게시물이 아닙니다.',
+          },
         },
       },
     }),
@@ -97,13 +80,5 @@ export function ApiGetOneHelpMeBoard() {
         },
       },
     }),
-    ApiHeaders([
-      {
-        name: 'access_token',
-        description: '액세스 토큰',
-        required: true,
-        example: '여기에 액세스 토큰',
-      },
-    ]),
   );
 }
