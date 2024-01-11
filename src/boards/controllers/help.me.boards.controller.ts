@@ -32,6 +32,9 @@ import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dt
 import { HelpMeBoardResponseDTO } from '../dto/helpMeBoard/update.help.me.board.response.dto';
 import { ApiDeleteHelpMeBoard } from '../swagger-decorators/helpMeBoard/delete-help-me-board-decorator';
 import { ApiGetPageNumberByHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-board-page-number.decorator';
+import { PullingUpHelpMeBoardResponseDTO } from '../dto/helpMeBoard/pulling.up.response.dto';
+import { ApiGetPullingUpHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-pulling-up-help-me-board-decorator';
+import { ApiPullingUpHelpMeBoard } from '../swagger-decorators/helpMeBoard/pulling-up-help-me-board.decorator';
 
 @Controller('help-me-board')
 @ApiTags('Help-me-board API')
@@ -83,6 +86,12 @@ export class HelpMeBoardController {
     return this.helpMeBoardService.countPagedHelpMeBoards(categoryId);
   }
 
+  @Get('/pulling-up')
+  @ApiGetPullingUpHelpMeBoard()
+  latestHelpMeBoard(): Promise<{ data: PullingUpHelpMeBoardResponseDTO[] }> {
+    return this.helpMeBoardService.latestHelpMeBoards();
+  }
+
   @Get('/unit') //하나의 게시판 불러오기
   @UseGuards(JwtOptionalGuard)
   @ApiGetOneHelpMeBoard()
@@ -102,6 +111,16 @@ export class HelpMeBoardController {
     @Body() boardData: UpdateHelpMeBoardDto,
   ): Promise<HelpMeBoardResponseDTO> {
     return this.helpMeBoardService.updateBoard(userId, boardId, boardData);
+  }
+
+  @Patch('/pulling-up')
+  @ApiPullingUpHelpMeBoard()
+  @UseGuards(JwtAccessTokenGuard)
+  pullingUpHelpMeBoard(
+    @GetUserId() userId: number,
+    @Query('helpMeBoardId') boardId: number,
+  ) {
+    return this.helpMeBoardService.pullingUpHelpMeBoards(userId, boardId);
   }
 
   @Patch('/images')
