@@ -13,13 +13,13 @@ export class MentorBoardHotPostsService {
     mentorBoardId: number,
     likeCount: number,
   ): Promise<void> {
-    if (likeCount === 5) {
+    if (likeCount === 10) {
       return this.hotPostsService.createHotPost(
         entityManager,
         mentorBoardId,
         likeCount,
       );
-    } else if (likeCount > 5) {
+    } else if (likeCount > 10) {
       return this.hotPostsService.increaseLikeCount(
         entityManager,
         mentorBoardId,
@@ -64,7 +64,7 @@ export class MentorBoardHotPostsService {
         },
       },
       order: {
-        likeCount: 'DESC',
+        createdAt: 'DESC',
       },
       take: 5,
     });
@@ -75,9 +75,9 @@ export class MentorBoardHotPostsService {
     mentorBoardId: number,
     likeCount: number,
   ): Promise<void> {
-    if (likeCount < 5) {
+    if (likeCount < 10) {
       return this.hotPostsService.deleteHotPost(entityManager, mentorBoardId);
-    } else if (likeCount > 4) {
+    } else if (likeCount > 9) {
       return this.hotPostsService.decreaseLikeCount(
         entityManager,
         mentorBoardId,

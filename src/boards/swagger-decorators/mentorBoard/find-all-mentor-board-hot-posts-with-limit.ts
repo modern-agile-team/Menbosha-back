@@ -10,7 +10,7 @@ import { ResponseMentorBoardHotPostsItemDto } from 'src/boards/dto/mentorBoard/r
 export function ApiFindAllMentorBoardHotPostsWithLimit() {
   return applyDecorators(
     ApiOperation({
-      summary: '멘토 게시판 인기 글 좋아요 순으로 불러오기',
+      summary: '멘토 게시판 인기 글 createdAt 내림차 순으로 불러오기',
       description: 'limit로 5개만 불러 옵니다',
     }),
     ApiResponse({
