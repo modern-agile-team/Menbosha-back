@@ -6,8 +6,6 @@ import {
 import { MentorBoardLike } from '../entities/mentor-board-like.entity';
 import { MentorBoardService } from 'src/boards/services/mentor.board.service';
 import { LikesService } from 'src/like/services/likes.service';
-import { HotPostsService } from 'src/hot-posts/services/hot-posts.service';
-import { MentorBoardHotPost } from '../entities/mentor-board-hot-post.entity';
 import { MentorBoardJoinLikesDto } from '../dto/mentorBoard/mentor-board-join-likes.dto';
 import { MentorBoardLikeDto } from '../dto/mentorBoard/mentor-board-like.dto';
 import { MentorBoardHotPostsService } from './mentor-board-hot-posts.service';
@@ -17,7 +15,6 @@ import { DataSource } from 'typeorm';
 export class MentorBoardLikeService {
   constructor(
     private readonly likesService: LikesService<MentorBoardLike>,
-    private readonly hotPostsService: HotPostsService<MentorBoardHotPost>,
     private readonly dataSource: DataSource,
     private readonly mentorBoardService: MentorBoardService,
     private readonly mentorBoardHotPostService: MentorBoardHotPostsService,
