@@ -60,7 +60,7 @@ export class HelpMeBoardController {
   @ApiUploadHelpMeBoardImages()
   uploadImage(
     @GetUserId() userId: number,
-    @Query('helpMeBoardId') boardId: number,
+    @Query('help-me-board-id') boardId: number,
     @UploadedFiles() files: Express.Multer.File[],
   ): Promise<CreateHelpMeBoardImageDto[]> {
     return this.boardImagesService.createHelpMeBoardImages(
@@ -82,11 +82,11 @@ export class HelpMeBoardController {
 
   @Get('/page')
   @ApiGetPageNumberByHelpMeBoard()
-  countPageBoards(@Query('categoryId') categoryId: number) {
+  countPageBoards(@Query('category-id') categoryId: number) {
     return this.helpMeBoardService.countPagedHelpMeBoards(categoryId);
   }
 
-  @Get('/pullingUp')
+  @Get('/pulling-up')
   @ApiGetPullingUpHelpMeBoard()
   latestHelpMeBoard(): Promise<{ data: PullingUpHelpMeBoardResponseDTO[] }> {
     return this.helpMeBoardService.latestHelpMeBoards();
@@ -96,7 +96,7 @@ export class HelpMeBoardController {
   @UseGuards(JwtOptionalGuard)
   @ApiGetOneHelpMeBoard()
   findOne(
-    @Query('boardId') boardId: number,
+    @Query('board-id') boardId: number,
     @GetUserId() userId: number,
   ): Promise<oneHelpMeBoardResponseDTO> {
     return this.helpMeBoardService.findOneHelpMeBoard(boardId, userId);
@@ -107,18 +107,18 @@ export class HelpMeBoardController {
   @ApiUpdateHelpMeBoard()
   editBoard(
     @GetUserId() userId: number,
-    @Query('helpMeBoardId') boardId: number,
+    @Query('help-me-board-id') boardId: number,
     @Body() boardData: UpdateHelpMeBoardDto,
   ): Promise<HelpMeBoardResponseDTO> {
     return this.helpMeBoardService.updateBoard(userId, boardId, boardData);
   }
 
-  @Patch('/pullingUp')
+  @Patch('/pulling-up')
   @ApiPullingUpHelpMeBoard()
   @UseGuards(JwtAccessTokenGuard)
   pullingUpHelpMeBoard(
     @GetUserId() userId: number,
-    @Query('helpMeBoardId') boardId: number,
+    @Query('help-me-boardId') boardId: number,
   ) {
     return this.helpMeBoardService.pullingUpHelpMeBoards(userId, boardId);
   }
@@ -129,8 +129,8 @@ export class HelpMeBoardController {
   @UseInterceptors(FilesInterceptor('files', 3))
   async editBoardImages(
     @GetUserId() userId: number,
-    @Query('helpMeBoardId') boardId: number,
-    @Query('deleteImageUrl') deleteImageUrl: string[],
+    @Query('help-me-board-id') boardId: number,
+    @Query('delete-image-url') deleteImageUrl: string[],
     @UploadedFiles() files: Express.Multer.File[],
   ) {
     return await this.boardImagesService.updateHelpMeBoardImages(
@@ -145,7 +145,7 @@ export class HelpMeBoardController {
   @UseGuards(JwtAccessTokenGuard)
   @ApiDeleteHelpMeBoard()
   deleteBoard(
-    @Query('helpMeBoardId') boardId: number,
+    @Query('help-me-board-id') boardId: number,
     @GetUserId() userId: number,
   ) {
     this.helpMeBoardService.deleteBoard(boardId, userId);
