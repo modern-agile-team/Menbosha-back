@@ -14,7 +14,7 @@ import { UserReview } from 'src/users/entities/user-review.entity';
 import { UserIntro } from 'src/users/entities/user-intro.entity';
 import { MentorBoardImage } from 'src/boards/entities/mentor-board-image.entity';
 import { UserRanking } from 'src/users/entities/user-ranking.entity';
-import { TotalCount } from 'src/common/entity/total-count.entity';
+import { TotalCount } from 'src/total-count/entities/total-count.entity';
 
 // .env 파일 로드
 dotenv.config();

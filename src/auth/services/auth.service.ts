@@ -301,8 +301,4 @@ export class AuthService implements AuthServiceInterface {
     }
     return { message: '사용자 계정 삭제가 완료되었습니다.' };
   }
-
-  async createTotalCount(userId: number) {
-    await this.userRepository.createTotalCount(userId);
-  }
 }

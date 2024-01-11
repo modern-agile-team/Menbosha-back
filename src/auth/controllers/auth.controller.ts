@@ -1,3 +1,4 @@
+import { TotalCountService } from './../../total-count/services/total-count.service';
 import { AuthService } from '../services/auth.service';
 import {
   BadRequestException,
@@ -36,6 +37,7 @@ export class AuthController {
     private readonly tokenService: TokenService,
     private readonly s3Service: S3Service,
     private readonly redisService: RedisService,
+    private readonly totalCountService: TotalCountService,
   ) {}
 
   @ApiNaverLogin()
@@ -66,7 +68,7 @@ export class AuthController {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
     });
 
-    await this.authService.createTotalCount(userId);
+    await this.totalCountService.createTotalCount(userId);
 
     return res.json({ accessToken, refreshToken });
   }
@@ -99,7 +101,7 @@ export class AuthController {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
     });
 
-    await this.authService.createTotalCount(userId);
+    await this.totalCountService.createTotalCount(userId);
 
     return res.json({ accessToken, refreshToken });
   }
@@ -132,7 +134,7 @@ export class AuthController {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
     });
 
-    await this.authService.createTotalCount(userId);
+    await this.totalCountService.createTotalCount(userId);
 
     return res.json({ accessToken, refreshToken });
   }
