@@ -2,7 +2,6 @@ import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { RequiredLikeColumn } from '../types/like.type';
 import { LIKE_REPOSITORY_TOKEN } from '../constants/like.token';
 import {
-  DeepPartial,
   EntityManager,
   FindManyOptions,
   FindOptionsWhere,
