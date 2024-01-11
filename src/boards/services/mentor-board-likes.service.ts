@@ -10,7 +10,6 @@ import { MentorBoardJoinLikesDto } from '../dto/mentorBoard/mentor-board-join-li
 import { MentorBoardLikeDto } from '../dto/mentorBoard/mentor-board-like.dto';
 import { MentorBoardHotPostsService } from './mentor-board-hot-posts.service';
 import { DataSource } from 'typeorm';
-import { MentorBoardLikesRepository } from '../repository/mentor-board-likes.repository';
 
 @Injectable()
 export class MentorBoardLikeService {
@@ -18,7 +17,6 @@ export class MentorBoardLikeService {
     private readonly likesService: LikesService<MentorBoardLike>,
     private readonly dataSource: DataSource,
     private readonly mentorBoardService: MentorBoardService,
-    private readonly mentorBoardLikesRepository: MentorBoardLikesRepository,
     private readonly mentorBoardHotPostService: MentorBoardHotPostsService,
   ) {}
   async createMentorBoardLikeAndHotPost(
@@ -56,13 +54,14 @@ export class MentorBoardLikeService {
 
       const newLike =
         await this.mentorBoardLikesRepository.createMentorBoardLike(
+          entityManager,
           existBoard.id,
           userId,
         );
 
       const likeCount = existBoard.mentorBoardLikes.length + 1;
 
-      await this.mentorBoardHotPostRepository.createMentorBoardHotPostOrIncrease(
+      await this.mentorBoardHotPostService.createMentorBoardHotPostOrIncrease(
         entityManager,
         existBoard.id,
         likeCount,
