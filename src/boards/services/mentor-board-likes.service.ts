@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { MentorBoardLike } from '../entities/mentor-board-like.entity';
 import { MentorBoardService } from 'src/boards/services/mentor.board.service';
 import { LikesService } from 'src/like/services/likes.service';
@@ -34,6 +38,14 @@ export class MentorBoardLikeService {
         relations: ['mentorBoardLikes'],
       });
 
+    if (
+      existBoard.mentorBoardLikes.find(
+        (mentorBoardLike) => mentorBoardLike.userId === userId,
+      )
+    ) {
+      throw new ConflictException('이미 좋아요가 존재합니다.');
+    }
+
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -42,7 +54,7 @@ export class MentorBoardLikeService {
     try {
       const entityManager = queryRunner.manager;
 
-      const newLike = await this.likesService.createLike(
+      const newLike = await this.likesService.createLikeWithEntityManager(
         entityManager,
         existBoard.id,
         userId,
@@ -87,6 +99,14 @@ export class MentorBoardLikeService {
         relations: ['mentorBoardLikes'],
       });
 
+    if (
+      !existBoard.mentorBoardLikes.find(
+        (mentorBoardLike) => mentorBoardLike.userId === userId,
+      )
+    ) {
+      throw new ConflictException('이미 좋아요가 없습니다.');
+    }
+
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -95,7 +115,11 @@ export class MentorBoardLikeService {
     try {
       const entityManager = queryRunner.manager;
 
-      await this.likesService.deleteLike(entityManager, existBoard.id, userId);
+      await this.likesService.deleteLikeWithEntityManager(
+        entityManager,
+        existBoard.id,
+        userId,
+      );
 
       const likeCount = existBoard.mentorBoardLikes.length - 1;
 
