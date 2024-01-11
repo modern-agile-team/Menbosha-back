@@ -1,5 +1,5 @@
 import { DynamicModule, Module, Type } from '@nestjs/common';
-import { HotPostsRepository } from './services/hot-posts.repository';
+import { HotPostsRepository } from './repositories/hot-posts.repository';
 import { RequiredHotPostColumn } from './types/hot-post.type';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HOT_POST_REPOSITORY_TOKEN } from './constants/hot-post.token';

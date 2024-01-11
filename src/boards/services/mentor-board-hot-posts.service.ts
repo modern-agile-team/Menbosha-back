@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { HotPostsRepository } from 'src/hot-posts/services/hot-posts.repository';
+import { HotPostsRepository } from 'src/hot-posts/repositories/hot-posts.repository';
 import { MentorBoardHotPost } from '../entities/mentor-board-hot-post.entity';
 import { EntityManager } from 'typeorm';
 
