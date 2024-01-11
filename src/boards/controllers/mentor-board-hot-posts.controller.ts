@@ -13,7 +13,7 @@ import { ApiFindAllMentorBoardHotPostsWithLimit } from '../swagger-decorators/me
 
 @ApiTags('mentor-board-hot-posts')
 @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
-@Controller('mentorBoard/hot-posts')
+@Controller('mentor-board/hot-posts')
 export class MentorBoardHotPostsController {
   constructor(
     private readonly mentorBoardHotPostsService: MentorBoardHotPostsService,

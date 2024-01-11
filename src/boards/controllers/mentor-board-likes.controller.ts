@@ -21,7 +21,7 @@ import { ApiDeleteMentorBoardLike } from '../swagger-decorators/mentorBoard/dele
 /**
  * @todo restful하게 uri 수정
  */
-@Controller('mentorBoard')
+@Controller('mentor-board')
 export class MentorBoardLikeController {
   constructor(
     private readonly mentorBoardSLikeService: MentorBoardLikeService,
