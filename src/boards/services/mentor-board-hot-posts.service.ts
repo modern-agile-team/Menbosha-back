@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { HotPostsService } from 'src/hot-posts/services/hot-posts.service';
+import { HotPostsRepository } from 'src/hot-posts/services/hot-posts.repository';
 import { MentorBoardHotPost } from '../entities/mentor-board-hot-post.entity';
 import { EntityManager } from 'typeorm';
 
 @Injectable()
 export class MentorBoardHotPostsService {
   constructor(
-    private readonly hotPostsService: HotPostsService<MentorBoardHotPost>,
+    private readonly hotPostsRepository: HotPostsRepository<MentorBoardHotPost>,
   ) {}
   createMentorBoardHotPostOrIncrease(
     entityManager: EntityManager,
@@ -14,13 +14,13 @@ export class MentorBoardHotPostsService {
     likeCount: number,
   ): Promise<void> {
     if (likeCount === 10) {
-      return this.hotPostsService.createHotPost(
+      return this.hotPostsRepository.createHotPost(
         entityManager,
         mentorBoardId,
         likeCount,
       );
     } else if (likeCount > 10) {
-      return this.hotPostsService.increaseLikeCount(
+      return this.hotPostsRepository.increaseLikeCount(
         entityManager,
         mentorBoardId,
       );
@@ -30,7 +30,7 @@ export class MentorBoardHotPostsService {
   }
 
   findAllMentorBoardHotPostsWithLimit() {
-    return this.hotPostsService.findAllHotPosts({
+    return this.hotPostsRepository.findAllHotPosts({
       select: {
         id: true,
         likeCount: true,
@@ -76,9 +76,12 @@ export class MentorBoardHotPostsService {
     likeCount: number,
   ): Promise<void> {
     if (likeCount < 10) {
-      return this.hotPostsService.deleteHotPost(entityManager, mentorBoardId);
+      return this.hotPostsRepository.deleteHotPost(
+        entityManager,
+        mentorBoardId,
+      );
     } else if (likeCount > 9) {
-      return this.hotPostsService.decreaseLikeCount(
+      return this.hotPostsRepository.decreaseLikeCount(
         entityManager,
         mentorBoardId,
       );

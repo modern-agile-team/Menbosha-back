@@ -14,7 +14,7 @@ import {
 } from 'typeorm';
 
 @Injectable()
-export class HotPostsService<E extends RequiredHotPostColumn> {
+export class HotPostsRepository<E extends RequiredHotPostColumn> {
   constructor(
     @Inject(HOT_POST_REPOSITORY_TOKEN)
     private readonly HotPostRepository: Repository<E>,

@@ -1,5 +1,5 @@
 import { DynamicModule, Module, Type } from '@nestjs/common';
-import { HotPostsService } from './services/hot-posts.service';
+import { HotPostsRepository } from './services/hot-posts.repository';
 import { RequiredHotPostColumn } from './types/hot-post.type';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HOT_POST_REPOSITORY_TOKEN } from './constants/hot-post.token';
@@ -12,7 +12,7 @@ export class HotPostsModule {
       module: HotPostsModule,
       imports: [TypeOrmModule.forFeature([HotPostEntity])],
       providers: [
-        HotPostsService,
+        HotPostsRepository,
         {
           provide: HOT_POST_REPOSITORY_TOKEN,
           useFactory: (dataSource: DataSource) => {
@@ -21,7 +21,7 @@ export class HotPostsModule {
           inject: [DataSource],
         },
       ],
-      exports: [HotPostsService],
+      exports: [HotPostsRepository],
     };
   }
 }
