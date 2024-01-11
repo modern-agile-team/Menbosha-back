@@ -11,6 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { CategoryList } from 'src/common/entity/category-list.entity';
+import { MentorBoardLike } from './mentor-board-like.entity';
 import { MentorBoardImage } from './mentor-board-image.entity';
 
 @Entity({
@@ -55,4 +56,10 @@ export class MentorBoard {
   @ManyToOne(() => CategoryList, (categoryList) => categoryList.mentorBoard)
   @JoinColumn({ name: 'category_list_id' })
   categoryList: CategoryList;
+
+  @OneToMany(
+    () => MentorBoardLike,
+    (mentorBoardLike) => mentorBoardLike.mentorBoard,
+  )
+  mentorBoardLikes: MentorBoardLike[];
 }

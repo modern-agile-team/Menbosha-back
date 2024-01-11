@@ -10,6 +10,8 @@ import { PageByMentorBoardResponseDTO } from '../dto/mentorBoard/response.mentor
 import { MentorBoardResponseDTO } from '../dto/mentorBoard/update.mentor.board.response.dto';
 import { UpdateMentorBoardDto } from '../dto/mentorBoard/update.mentor.board.dto';
 import { oneMentorBoardResponseDTO } from '../dto/mentorBoard/one.response.mentor.boards.dto';
+import { FindOneOptions } from 'typeorm';
+import { MentorBoardDto } from '../dto/mentorBoard/mentor-board.dto';
 
 @Injectable()
 export class MentorBoardService {
@@ -72,6 +74,19 @@ export class MentorBoardService {
     );
 
     return { data: boardResponse };
+  }
+
+  async findOneByOrNotFound(
+    options: FindOneOptions<MentorBoard>,
+  ): Promise<MentorBoardDto> {
+    const existMentorBoard =
+      await this.mentorBoardRepository.findOneMentorBoard(options);
+
+    if (!existMentorBoard) {
+      throw new NotFoundException('게시물을 찾을 수 없습니다.');
+    }
+
+    return new MentorBoardDto(existMentorBoard);
   }
 
   async findOneMentorBoard(
