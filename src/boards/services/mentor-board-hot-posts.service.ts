@@ -8,6 +8,7 @@ export class MentorBoardHotPostsService {
   constructor(
     private readonly hotPostsRepository: HotPostsRepository<MentorBoardHotPost>,
   ) {}
+  
   createMentorBoardHotPostOrIncrease(
     entityManager: EntityManager,
     mentorBoardId: number,
