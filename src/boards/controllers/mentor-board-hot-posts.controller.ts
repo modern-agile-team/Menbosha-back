@@ -25,9 +25,14 @@ export class MentorBoardHotPostsController {
     const mentorBoardHotPosts =
       await this.mentorBoardHotPostsService.findAllMentorBoardHotPostsWithLimit();
 
-    return plainToInstance(
+    const plainObject = plainToInstance(
       ResponseMentorBoardHotPostsItemDto,
       mentorBoardHotPosts,
     );
+    console.log(plainObject);
+    console.log(plainObject[0].mentorBoard.mentorBoardImages);
+    console.log(plainObject[0].mentorBoard.user);
+
+    return;
   }
 }

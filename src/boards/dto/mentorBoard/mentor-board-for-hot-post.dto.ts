@@ -16,7 +16,7 @@ class MentorBoardHotPostUserDto implements Pick<User, 'name'> {
     description: '유저 이름',
   })
   name: string;
-  
+
   @ApiProperty({
     description: 'userImage 객체',
   })

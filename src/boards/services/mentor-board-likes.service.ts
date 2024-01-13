@@ -19,7 +19,7 @@ export class MentorBoardLikeService {
     private readonly mentorBoardService: MentorBoardService,
     private readonly mentorBoardHotPostService: MentorBoardHotPostsService,
   ) {}
-  
+
   async createMentorBoardLikeAndHotPost(
     boardId: number,
     userId: number,
@@ -107,7 +107,7 @@ export class MentorBoardLikeService {
         (mentorBoardLike) => mentorBoardLike.userId === userId,
       )
     ) {
-      throw new ConflictException('이미 좋아요가 없습니다.');
+      throw new ConflictException('아직 좋아요가 없습니다.');
     }
 
     const queryRunner = this.dataSource.createQueryRunner();
