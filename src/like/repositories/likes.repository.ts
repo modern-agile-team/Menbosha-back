@@ -16,12 +16,12 @@ export class LikesRepository<E extends RequiredLikeColumn> {
     private readonly LikeRepository: Repository<E>,
   ) {}
 
-  checkExistLike(options: FindManyOptions<E>) {
+  isExistLike(options: FindManyOptions<E>) {
     return this.LikeRepository.exist(options);
   }
 
-  async createLike(parentId: number, userId: number): Promise<void> {
-    await this.LikeRepository.save({
+  createLike(parentId: number, userId: number): Promise<E> {
+    return this.LikeRepository.save({
       userId,
       parentId,
     } as DeepPartial<E>);

@@ -7,8 +7,8 @@ import { LikesRepository } from '../repositories/likes.repository';
 export class LikesService<E extends RequiredLikeColumn> {
   constructor(private readonly likesRepository: LikesRepository<E>) {}
 
-  async createLike(parentId: number, userId: number): Promise<void> {
-    const isExistLike = await this.likesRepository.checkExistLike({
+  async createLike(parentId: number, userId: number): Promise<E> {
+    const isExistLike = await this.likesRepository.isExistLike({
       where: {
         userId,
         parentId,
@@ -39,7 +39,7 @@ export class LikesService<E extends RequiredLikeColumn> {
   }
 
   async deleteLike(parentId: number, userId: number): Promise<void> {
-    const isExistLike = await this.likesRepository.checkExistLike({
+    const isExistLike = await this.likesRepository.isExistLike({
       where: {
         userId,
         parentId,
