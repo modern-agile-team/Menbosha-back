@@ -3,6 +3,7 @@ import { RequiredLikeColumn } from '../types/like.type';
 import { LIKE_REPOSITORY_TOKEN } from '../constants/like.token';
 import {
   DeepPartial,
+  DeleteResult,
   EntityManager,
   FindManyOptions,
   FindOptionsWhere,
@@ -53,8 +54,8 @@ export class LikesRepository<E extends RequiredLikeColumn> {
     entityManager: EntityManager,
     parentId: number,
     userId: number,
-  ): Promise<void> {
-    await entityManager.withRepository(this.LikeRepository).delete({
+  ): Promise<DeleteResult> {
+    return entityManager.withRepository(this.LikeRepository).delete({
       parentId,
       userId,
     } as FindOptionsWhere<E>);

@@ -1,6 +1,15 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { RequiredLikeColumn } from '../types/like.type';
-import { EntityManager, FindManyOptions, FindOptionsWhere } from 'typeorm';
+import {
+  DeleteResult,
+  EntityManager,
+  FindManyOptions,
+  FindOptionsWhere,
+} from 'typeorm';
 import { LikesRepository } from '../repositories/likes.repository';
 
 @Injectable()
@@ -53,15 +62,22 @@ export class LikesService<E extends RequiredLikeColumn> {
     return this.likesRepository.deleteLike(parentId, userId);
   }
 
-  deleteLikeWithEntityManager(
+  async deleteLikeWithEntityManager(
     entityManager: EntityManager,
     parentId: number,
     userId: number,
-  ): Promise<void> {
-    return this.likesRepository.deleteLikeWithEntityManager(
-      entityManager,
-      parentId,
-      userId,
-    );
+  ): Promise<DeleteResult> {
+    const updatedResult =
+      await this.likesRepository.deleteLikeWithEntityManager(
+        entityManager,
+        parentId,
+        userId,
+      );
+
+    if (!updatedResult.affected) {
+      throw new InternalServerErrorException('좋아요 삭제 중 서버 에러 발생');
+    }
+
+    return updatedResult;
   }
 }
