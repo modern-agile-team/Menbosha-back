@@ -19,6 +19,7 @@ export class MentorBoardLikeService {
     private readonly mentorBoardService: MentorBoardService,
     private readonly mentorBoardHotPostService: MentorBoardHotPostsService,
   ) {}
+  
   async createMentorBoardLikeAndHotPost(
     boardId: number,
     userId: number,
