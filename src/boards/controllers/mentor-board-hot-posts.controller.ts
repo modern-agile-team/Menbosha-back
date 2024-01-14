@@ -30,4 +30,9 @@ export class MentorBoardHotPostsController {
       mentorBoardHotPosts,
     );
   }
+
+  @Get('test')
+  findAllMentorBoardQueryBuilder() {
+    return this.mentorBoardHotPostsService.findAllMentorBoardHotPostsWithLimitQuery();
+  }
 }
