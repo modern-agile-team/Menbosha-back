@@ -25,25 +25,6 @@ class MentorBoardHotPostUserDto implements Pick<User, 'name'> {
   userImage: MentorBoardHotPostUserImageDto;
 }
 
-class MentorBoardHotPostImagesItem
-  implements Pick<MentorBoardImage, 'id' | 'imageUrl'>
-{
-  @ApiProperty({
-    description: 'mentorBoardImage 고유 ID',
-  })
-  id: number;
-
-  @ApiProperty({
-    description: 'mentorBoard 이미지 url',
-  })
-  imageUrl: string;
-}
-
-class MentorBoardHotPostLikesItem extends PickType(MentorBoardLikeDto, [
-  'id',
-  'userId',
-]) {}
-
 export class MentorBoardForHotPostDto extends PickType(MentorBoardDto, [
   'id',
   'userId',
@@ -59,23 +40,34 @@ export class MentorBoardForHotPostDto extends PickType(MentorBoardDto, [
   })
   user: MentorBoardHotPostUserDto;
 
+  @Exclude()
+  mentorBoardImages: MentorBoardImage[];
+
   @ApiProperty({
-    description: '멘토 게시판 인기 게시글 이미지 객체',
-    isArray: true,
-    type: MentorBoardHotPostImagesItem,
+    description: '멘토 게시판 글 이미지 url',
+    type: () => String,
+    nullable: true,
   })
-  mentorBoardImages: MentorBoardHotPostImagesItem[];
+  imageUrl: string | null;
 
   @Exclude()
-  mentorBoardLikes: MentorBoardHotPostLikesItem[];
+  mentorBoardLikes: MentorBoardLikeDto[];
 
+  @ApiProperty({
+    description: '좋아요 갯수',
+    minimum: 10,
+  })
   likeCount: number;
 
-  constructor(
-    mentorBoardForHotPostDto: Partial<MentorBoardForHotPostDto> = {},
-  ) {
+  constructor(mentorBoardForHotPostDto: Partial<MentorBoardForHotPostDto>) {
+    const mentorBoardImages = mentorBoardForHotPostDto.mentorBoardImages;
+
     super();
     Object.assign(this, mentorBoardForHotPostDto);
+
     this.likeCount = mentorBoardForHotPostDto.mentorBoardLikes.length;
+    mentorBoardImages.length
+      ? (this.imageUrl = mentorBoardImages[0].imageUrl)
+      : (this.imageUrl = null);
   }
 }

@@ -40,16 +40,12 @@ export class MentorBoardHotPostsService {
     const boards = await this.entityManager
       .getRepository(MentorBoard)
       .createQueryBuilder('mentorBoard')
-      .leftJoinAndSelect(
-        (qb) =>
-          qb
-            .from(MentorBoardImage, 'mentorBoardImages')
-            .where('mentorBoardImages.mentorBoardId = mentorBoard.id')
-            .orderBy('mentorBoardImages.createdAt', 'DESC')
-            .limit(1),
+      .leftJoin(
+        'mentorBoard.mentorBoardImages',
         'mentorBoardImages',
+        'mentorBoardImages.id = (SELECT id FROM mentor_board_image WHERE mentor_board_id = mentorBoard.id ORDER BY id DESC LIMIT 1)',
       )
-      .leftJoin('mentorBoard.mentorBoardImages', 'mentorBoardImages')
+      .leftJoin('mentorBoard.mentorBoardLikes', 'mentorBoardLikes')
       .innerJoin('mentorBoard.user', 'user')
       .innerJoin('user.userImage', 'userImage')
       .select([
@@ -77,20 +73,12 @@ export class MentorBoardHotPostsService {
     /**
      * @todo limit값 프론트에서 받도록 변경
      */
-    if (filteredBoard.length > 5) {
-      const slicedBoards = filteredBoard.slice(0, 4);
 
-      const mentorBoardForHotPostDto = slicedBoards.map((slicedBoard) => {
-        return new MentorBoardForHotPostDto(slicedBoard);
-      });
+    const slicedBoards = filteredBoard.slice(0, 5);
 
-      return mentorBoardForHotPostDto;
-    }
-    const mentorBoardForHotPostDto = filteredBoard.map((filterBoard) => {
-      return new MentorBoardForHotPostDto(filterBoard);
+    return slicedBoards.map((slicedBoard) => {
+      return new MentorBoardForHotPostDto(slicedBoard);
     });
-
-    return mentorBoardForHotPostDto;
   }
 
   findAllMentorBoardHotPostsWithLimit() {
