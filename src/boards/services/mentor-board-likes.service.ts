@@ -8,8 +8,8 @@ import { MentorBoardService } from 'src/boards/services/mentor.board.service';
 import { LikesService } from 'src/like/services/likes.service';
 import { MentorBoardJoinLikesDto } from '../dto/mentorBoard/mentor-board-join-likes.dto';
 import { MentorBoardLikeDto } from '../dto/mentorBoard/mentor-board-like.dto';
-import { MentorBoardHotPostsService } from './mentor-board-hot-posts.service';
 import { DataSource } from 'typeorm';
+import { MentorBoardHotPostsService } from './mentor-board-hot-posts.service';
 
 @Injectable()
 export class MentorBoardLikeService {

@@ -3,6 +3,10 @@ import { HotPostsRepository } from 'src/hot-posts/repositories/hot-posts.reposit
 import { MentorBoardHotPost } from '../entities/mentor-board-hot-post.entity';
 import { EntityManager } from 'typeorm';
 import { MentorBoard } from '../entities/mentor-board.entity';
+import { MentorBoardLike } from '../entities/mentor-board-like.entity';
+import { MentorBoardForHotPostDto } from '../dto/mentorBoard/mentor-board-for-hot-post.dto';
+import { plainToInstance } from 'class-transformer';
+import { MentorBoardImage } from '../entities/mentor-board-image.entity';
 
 @Injectable()
 export class MentorBoardHotPostsService {
@@ -36,29 +40,60 @@ export class MentorBoardHotPostsService {
     const boards = await this.entityManager
       .getRepository(MentorBoard)
       .createQueryBuilder('mentorBoard')
-      .leftJoin('mentorBoard.mentorBoardLikes', 'mentorBoardLikes')
+      .leftJoinAndSelect(
+        (qb) =>
+          qb
+            .from(MentorBoardImage, 'mentorBoardImages')
+            .where('mentorBoardImages.mentorBoardId = mentorBoard.id')
+            .orderBy('mentorBoardImages.createdAt', 'DESC')
+            .limit(1),
+        'mentorBoardImages',
+      )
+      .leftJoin('mentorBoard.mentorBoardImages', 'mentorBoardImages')
       .innerJoin('mentorBoard.user', 'user')
-      .groupBy('mentorBoard.id')
-      .having('COUNT(mentorBoardLikes.id) >= :likeCount', { likeCount: 10 })
+      .innerJoin('user.userImage', 'userImage')
       .select([
         'mentorBoard.id',
         'mentorBoard.userId',
-        'mentorBoard.mentorBoardImages',
         'mentorBoard.head',
-        // 'mentorBoard.title', // 추가 필드들을 필요에 따라 추가
-        // ...
-        'COUNT(mentorBoardLikes.id) AS likeCount',
+        'mentorBoard.body',
+        'mentorBoard.categoryId',
+        'mentorBoard.createdAt',
+        'mentorBoard.updatedAt',
+        'user.name',
+        'userImage.imageUrl',
+        'mentorBoardLikes.id',
+        'mentorBoardLikes.userId',
+        'mentorBoardImages.id',
+        'mentorBoardImages.imageUrl',
       ])
       .orderBy('mentorBoard.createdAt', 'DESC')
-      .limit(5)
-      .getRawMany();
+      .getMany();
 
-    return boards;
+    const filteredBoard = boards.filter((board) => {
+      return board.mentorBoardLikes.length > 9;
+    });
+
+    /**
+     * @todo limit값 프론트에서 받도록 변경
+     */
+    if (filteredBoard.length > 5) {
+      const slicedBoards = filteredBoard.slice(0, 4);
+
+      const mentorBoardForHotPostDto = slicedBoards.map((slicedBoard) => {
+        return new MentorBoardForHotPostDto(slicedBoard);
+      });
+
+      return mentorBoardForHotPostDto;
+    }
+    const mentorBoardForHotPostDto = filteredBoard.map((filterBoard) => {
+      return new MentorBoardForHotPostDto(filterBoard);
+    });
+
+    return mentorBoardForHotPostDto;
   }
 
-  async findAllMentorBoardHotPostsWithLimit() {
-    const board = await this.hotPostsRepository.findAllHotPosts({});
-
+  findAllMentorBoardHotPostsWithLimit() {
     return this.hotPostsRepository.findAllHotPosts({
       select: {
         id: true,
@@ -81,6 +116,7 @@ export class MentorBoardHotPostsService {
             id: true,
             imageUrl: true,
           },
+          mentorBoardLikes: true,
         },
         createdAt: true,
       },
@@ -90,6 +126,7 @@ export class MentorBoardHotPostsService {
             userImage: true,
           },
           mentorBoardImages: true,
+          mentorBoardLikes: true,
         },
       },
       order: {

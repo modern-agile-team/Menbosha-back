@@ -3,6 +3,8 @@ import { MentorBoardDto } from './mentor-board.dto';
 import { User } from 'src/users/entities/user.entity';
 import { UserImage } from 'src/users/entities/user-image.entity';
 import { MentorBoardImage } from 'src/boards/entities/mentor-board-image.entity';
+import { MentorBoardLikeDto } from './mentor-board-like.dto';
+import { Exclude } from 'class-transformer';
 
 class MentorBoardHotPostUserImageDto implements Pick<UserImage, 'imageUrl'> {
   @ApiProperty({
@@ -37,6 +39,11 @@ class MentorBoardHotPostImagesItem
   imageUrl: string;
 }
 
+class MentorBoardHotPostLikesItem extends PickType(MentorBoardLikeDto, [
+  'id',
+  'userId',
+]) {}
+
 export class MentorBoardForHotPostDto extends PickType(MentorBoardDto, [
   'id',
   'userId',
@@ -59,8 +66,16 @@ export class MentorBoardForHotPostDto extends PickType(MentorBoardDto, [
   })
   mentorBoardImages: MentorBoardHotPostImagesItem[];
 
-  constructor(mentorBoardForHotPostDto: MentorBoardForHotPostDto) {
+  @Exclude()
+  mentorBoardLikes: MentorBoardHotPostLikesItem[];
+
+  likeCount: number;
+
+  constructor(
+    mentorBoardForHotPostDto: Partial<MentorBoardForHotPostDto> = {},
+  ) {
     super();
     Object.assign(this, mentorBoardForHotPostDto);
+    this.likeCount = mentorBoardForHotPostDto.mentorBoardLikes.length;
   }
 }
