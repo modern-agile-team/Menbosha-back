@@ -52,6 +52,13 @@ export class MentorBoard {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
+  @Column({
+    name: 'popular_at',
+    nullable: true,
+    comment: '인기 게시글 선정 일자',
+  })
+  popularAt: Date | null;
+
   @Column({ name: 'category_list_id' })
   categoryId: number;
 

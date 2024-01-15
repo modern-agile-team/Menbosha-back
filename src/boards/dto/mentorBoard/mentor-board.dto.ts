@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
 
 export class MentorBoardDto
@@ -33,6 +34,9 @@ export class MentorBoardDto
 
   @ApiProperty({ description: '멘토 게시판 글 업데이트 일자' })
   updatedAt: Date;
+
+  @Exclude()
+  popularAt: Date | null;
 
   @ApiProperty({ description: '멘토 게시판 글 카테고리 고유 id' })
   categoryId: number;

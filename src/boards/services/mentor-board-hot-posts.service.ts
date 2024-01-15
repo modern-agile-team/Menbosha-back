@@ -60,7 +60,7 @@ export class MentorBoardHotPostsService {
         'mentorBoardImages.id',
         'mentorBoardImages.imageUrl',
       ])
-      .orderBy('mentorBoard.createdAt', 'DESC')
+      .orderBy('mentorBoard.popularAt', 'DESC')
       .getMany();
 
     const filteredBoard = boards.filter((board) => {
