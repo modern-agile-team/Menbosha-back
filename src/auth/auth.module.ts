@@ -7,9 +7,10 @@ import { UserImageRepository } from 'src/users/repositories/user-image.repositor
 import { TokenRepository } from './repositories/token.repository';
 import { TokenService } from './services/token.service';
 import { RedisModule } from 'src/common/redis/redis.module';
+import { TotalCountModule } from 'src/total-count/total-count.module';
 
 @Module({
-  imports: [RedisModule],
+  imports: [RedisModule, TotalCountModule],
   exports: [TokenService, TokenRepository],
   controllers: [AuthController],
   providers: [
