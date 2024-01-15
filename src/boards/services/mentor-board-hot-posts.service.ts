@@ -3,10 +3,7 @@ import { HotPostsRepository } from 'src/hot-posts/repositories/hot-posts.reposit
 import { MentorBoardHotPost } from '../entities/mentor-board-hot-post.entity';
 import { EntityManager } from 'typeorm';
 import { MentorBoard } from '../entities/mentor-board.entity';
-import { MentorBoardLike } from '../entities/mentor-board-like.entity';
 import { MentorBoardForHotPostDto } from '../dto/mentorBoard/mentor-board-for-hot-post.dto';
-import { plainToInstance } from 'class-transformer';
-import { MentorBoardImage } from '../entities/mentor-board-image.entity';
 
 @Injectable()
 export class MentorBoardHotPostsService {
