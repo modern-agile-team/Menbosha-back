@@ -26,6 +26,36 @@ export class MentorBoardService {
     }
   }
 
+  async randomMentorBoards() {
+    const limit = 3;
+    const boards =
+      await this.mentorBoardRepository.findRandomMentorBoard(limit);
+    const randomBoardResponse: PageByMentorBoardResponseDTO[] =
+      await Promise.all(
+        boards.map(async (board) => {
+          return {
+            id: board.id,
+            head: board.head,
+            body: board.body.substring(0, 30),
+            createdAt: board.createdAt,
+            updatedAt: board.updatedAt,
+            categoryId: board.categoryId,
+            user: {
+              name: board.user.name,
+              userImage: board.user.userImage ? board.user.userImage : [],
+            },
+            mentorBoardImages: (board.mentorBoardImages || []).map((image) => ({
+              // 예외처리 - 이미지 없을경우 빈배열
+              id: image.id,
+              imageUrl: image.imageUrl,
+            })),
+          };
+        }),
+      );
+
+    return { data: randomBoardResponse };
+  }
+
   async countPagedMentorBoards(categoryId) {
     const limit = 10;
     const total = categoryId // 예외처리 - categoryId가 들어올 경우
@@ -63,7 +93,7 @@ export class MentorBoardService {
             name: board.user.name,
             userImage: board.user.userImage ? board.user.userImage : [],
           },
-          mentorBoardImage: (board.mentorBoardImages || []).map((image) => ({
+          mentorBoardImages: (board.mentorBoardImages || []).map((image) => ({
             // 예외처리 - 이미지 없을경우 빈배열
             id: image.id,
             imageUrl: image.imageUrl,

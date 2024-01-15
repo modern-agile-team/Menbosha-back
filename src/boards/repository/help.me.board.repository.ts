@@ -61,6 +61,18 @@ export class HelpMeBoardRepository {
     });
   }
 
+  async findLatestBoards(limit: number): Promise<HelpMeBoard[]> {
+    return await this.entityManager.find(HelpMeBoard, {
+      relations: ['user', 'user.userImage', 'helpMeBoardImages'],
+      order: { pullingUp: 'DESC' },
+      take: limit,
+    });
+  }
+
+  async pullingUpHelpMeBoard(board: HelpMeBoard): Promise<void> {
+    await this.entityManager.save(board);
+  }
+
   async updateHelpMeBoard(
     boardData: Partial<UpdateHelpMeBoardDto>,
   ): Promise<HelpMeBoard> {

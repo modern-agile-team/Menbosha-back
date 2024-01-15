@@ -31,6 +31,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateMentorBoardImageDto } from '../dto/mentorBoard/create.mentor.board.image.dto';
 import { ApiUploadMentorBoardImages } from '../swagger-decorators/mentorBoard/add-mentor-board-images-decorator';
 import { ApiGetPageNumberByMentorBoard } from '../swagger-decorators/mentorBoard/get-page-number-mentor-board-decorator';
+import { ApiGetRandomMentorBoards } from '../swagger-decorators/mentorBoard/get-random-mentor-boards-decorator';
 
 @Controller('mentor-board')
 @ApiTags('mentor-board API')
@@ -74,6 +75,12 @@ export class MentorBoardController {
     @Query('categoryId') categoryId: number,
   ): Promise<{ data: PageByMentorBoardResponseDTO[] }> {
     return this.mentorBoardService.findPagedMentorBoards(page, categoryId);
+  }
+
+  @Get('random') //랜덤한 멘토게시글 3개만 뽑아오기
+  @ApiGetRandomMentorBoards()
+  randomMentorBoards() {
+    return this.mentorBoardService.randomMentorBoards();
   }
 
   @Get('/page')

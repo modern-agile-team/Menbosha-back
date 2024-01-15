@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { HelpMeBoardRepository } from '../repository/help.me.board.repository';
 import { oneHelpMeBoardResponseDTO } from '../dto/helpMeBoard/one.response.help.me.board.dto';
 import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/create.help.me.board.dto';
@@ -6,6 +10,7 @@ import { HelpMeBoard } from '../entities/help-me-board.entity';
 import { PageByHelpMeBoardResponseDTO } from '../dto/helpMeBoard/response.help.me.board.dto';
 import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dto';
 import { HelpMeBoardResponseDTO } from '../dto/helpMeBoard/update.help.me.board.response.dto';
+import { PullingUpHelpMeBoardResponseDTO } from '../dto/helpMeBoard/pulling.up.response.dto';
 
 @Injectable()
 export class HelpMeBoardService {
@@ -75,10 +80,10 @@ export class HelpMeBoardService {
     userId: number,
   ): Promise<oneHelpMeBoardResponseDTO> {
     const board = await this.helpMeBoardRepository.findHelpMeBoardById(boardId);
-    const unitOwner = board.userId === userId;
     if (!board) {
-      throw new Error('게시물을 찾을 수 없습니다.');
+      throw new NotFoundException('게시물을 찾을 수 없습니다');
     }
+    const unitOwner = board.userId === userId;
     return {
       id: board.id,
       head: board.head,
@@ -96,6 +101,33 @@ export class HelpMeBoardService {
       })),
       unitOwner: unitOwner,
     };
+  }
+
+  async latestHelpMeBoards() {
+    const limit = 8;
+    const boards = await this.helpMeBoardRepository.findLatestBoards(limit);
+    const pullingUpBoardsResponse: PullingUpHelpMeBoardResponseDTO[] =
+      await Promise.all(
+        boards.map(async (board) => {
+          return {
+            id: board.id,
+            head: board.head,
+            body: board.body.substring(0, 30),
+            pullingUp: board.pullingUp,
+            category: board.categoryId,
+            user: {
+              name: board.user.name,
+              userImage: board.user.userImage ? board.user.userImage : [],
+            },
+            helpMeBoardImages: (board.helpMeBoardImages || []).map((image) => ({
+              id: image.id,
+              imageUrl: image.imageUrl,
+            })),
+          };
+        }),
+      );
+
+    return { data: pullingUpBoardsResponse };
   }
 
   async updateBoard(
@@ -131,15 +163,32 @@ export class HelpMeBoardService {
     };
   }
 
+  async pullingUpHelpMeBoards(
+    userId: number,
+    boardId: number,
+  ): Promise<string> {
+    const board = await this.helpMeBoardRepository.findHelpMeBoardById(boardId);
+    if (!board) {
+      throw new NotFoundException('게시물을 찾을 수 없습니다');
+    }
+    if (userId !== board.userId) {
+      throw new ForbiddenException('사용자가 작성한 게시물이 아닙니다');
+    }
+    const currentDate = new Date();
+    board.pullingUp = currentDate;
+    await this.helpMeBoardRepository.pullingUpHelpMeBoard(board);
+    return '끌어올리기가 완료되었습니다.';
+  }
+
   async deleteBoard(boardId: number, userId: number): Promise<void> {
     const board = await this.helpMeBoardRepository.findHelpMeBoardById(boardId);
 
     if (!board) {
-      throw new Error('존재하지 않는 게시물입니다.');
+      throw new NotFoundException('게시물을 찾을 수 없습니다');
     }
 
     if (board.userId !== userId) {
-      throw new Error('작성한 게시물이 아닙니다.');
+      throw new ForbiddenException('사용자가 작성한 게시물이 아닙니다');
     }
 
     await this.helpMeBoardRepository.deleteBoard(board);
