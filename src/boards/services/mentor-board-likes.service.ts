@@ -6,7 +6,6 @@ import {
 import { MentorBoardLike } from '../entities/mentor-board-like.entity';
 import { MentorBoardService } from 'src/boards/services/mentor.board.service';
 import { LikesService } from 'src/like/services/likes.service';
-import { MentorBoardJoinLikesDto } from '../dto/mentorBoard/mentor-board-join-likes.dto';
 import { MentorBoardLikeDto } from '../dto/mentorBoard/mentor-board-like.dto';
 import { DataSource } from 'typeorm';
 import { MentorBoardHotPostsService } from './mentor-board-hot-posts.service';
@@ -24,18 +23,17 @@ export class MentorBoardLikeService {
     boardId: number,
     userId: number,
   ): Promise<MentorBoardLikeDto> {
-    const existBoard: MentorBoardJoinLikesDto =
-      await this.mentorBoardService.findOneByOrNotFound({
-        select: {
+    const existBoard = await this.mentorBoardService.findOneByOrNotFound({
+      select: {
+        id: true,
+        mentorBoardLikes: {
           id: true,
-          mentorBoardLikes: {
-            id: true,
-            userId: true,
-          },
+          userId: true,
         },
-        where: { id: boardId },
-        relations: ['mentorBoardLikes'],
-      });
+      },
+      where: { id: boardId },
+      relations: ['mentorBoardLikes'],
+    });
 
     if (
       existBoard.mentorBoardLikes.find(
@@ -89,18 +87,17 @@ export class MentorBoardLikeService {
     boardId: number,
     userId: number,
   ): Promise<{ isLike: false }> {
-    const existBoard: MentorBoardJoinLikesDto =
-      await this.mentorBoardService.findOneByOrNotFound({
-        select: {
+    const existBoard = await this.mentorBoardService.findOneByOrNotFound({
+      select: {
+        id: true,
+        mentorBoardLikes: {
           id: true,
-          mentorBoardLikes: {
-            id: true,
-            userId: true,
-          },
+          userId: true,
         },
-        where: { id: boardId },
-        relations: ['mentorBoardLikes'],
-      });
+      },
+      where: { id: boardId },
+      relations: ['mentorBoardLikes'],
+    });
 
     if (
       !existBoard.mentorBoardLikes.find(
