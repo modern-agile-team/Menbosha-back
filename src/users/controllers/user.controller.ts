@@ -75,16 +75,18 @@ export class UserController {
 
   @Get('/page')
   @ApiGetPageNumberByMentor()
-  countPageMentor() {
-    return this.userService.countPageMentors();
+  countPageMentor(@Query('categoryId') categoryId: number) {
+    return this.userService.countPageMentors(categoryId);
   }
 
+  // 카테고리 id별 멘토 리스트 불러오기(페이지네이션) 추가
   @Get('mentor-list')
   @ApiGetMentorList()
   getMentorList(
     @Query('page') page: 1,
+    @Query('categoryId') categoryId: number,
   ): Promise<{ data: PageByMentorListResponseDTO[] }> {
-    return this.userService.getMentorList(page);
+    return this.userService.getMentorList(page, categoryId);
   }
 
   @UseGuards(JwtAccessTokenGuard)

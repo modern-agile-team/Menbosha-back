@@ -16,6 +16,7 @@ export class UserInfoDto
       | 'token'
       | 'categoryList'
       | 'totalCount'
+      | 'mentorBoardLikes'
     >
 {
   @ApiProperty({

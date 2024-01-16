@@ -21,7 +21,6 @@ export function ApiGetOneChatRoom() {
       description: '성공적으로 채팅방 (단일)조회',
       schema: {
         properties: {
-          statusCode: { example: 200, type: 'number' },
           content: {
             type: 'object',
             $ref: getSchemaPath(ChatRoomDto),

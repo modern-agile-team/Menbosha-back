@@ -1,4 +1,4 @@
-import { EntityManager } from 'typeorm';
+import { EntityManager, FindOneOptions } from 'typeorm';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { CreateMentorBoardDto } from '../dto/mentorBoard/create.mentor.board.dto';
 import { Injectable } from '@nestjs/common';
@@ -21,21 +21,55 @@ export class MentorBoardRepository {
     //이 부분 return은 dto로 수정하기
   }
 
+  async findRandomMentorBoard(limit: number): Promise<MentorBoard[]> {
+    return this.entityManager
+      .createQueryBuilder(MentorBoard, 'board')
+      .leftJoinAndSelect('board.user', 'user')
+      .leftJoinAndSelect('user.userImage', 'userImage')
+      .leftJoinAndSelect('board.mentorBoardImages', 'mentorBoardImages')
+      .orderBy('RAND()')
+      .take(limit)
+      .getMany();
+  }
+
+  async findTotalBoardsByCategoryId(categoryId: number): Promise<number> {
+    return this.entityManager.count(MentorBoard, {
+      where: { categoryId: categoryId },
+    });
+  }
+
   async findTotalBoards(): Promise<number> {
     return this.entityManager.count(MentorBoard);
   }
 
-  async findPagedBoards(skip: number, limit: number): Promise<MentorBoard[]> {
+  async findPagedBoardsByCategoryId(
+    skip: number,
+    limit: number,
+    categoryId: number,
+  ): Promise<MentorBoard[]> {
     return await this.entityManager.find(MentorBoard, {
-      relations: ['user', 'user.userImage'],
+      relations: ['user', 'user.userImage', 'mentorBoardImages'],
+      where: { categoryId },
       skip: skip,
       take: limit,
     });
   }
 
+  async findPagedBoards(skip: number, limit: number): Promise<MentorBoard[]> {
+    return await this.entityManager.find(MentorBoard, {
+      relations: ['user', 'user.userImage', 'mentorBoardImages'],
+      skip: skip,
+      take: limit,
+    });
+  }
+
+  findOneMentorBoard(options: FindOneOptions<MentorBoard>) {
+    return this.entityManager.getRepository(MentorBoard).findOne(options);
+  }
+
   async findMentorBoardById(id: number): Promise<MentorBoard> {
     return await this.entityManager.findOne(MentorBoard, {
-      relations: ['user', 'user.userImage'],
+      relations: ['user', 'user.userImage', 'mentorBoardImages'],
       where: { id },
     });
   }

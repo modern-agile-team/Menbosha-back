@@ -1,52 +1,19 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-export function ApiGetOneHelpMeBoard() {
+export function ApiPullingUpHelpMeBoard() {
   return applyDecorators(
     ApiOperation({
-      summary: '클릭한 멘티 보드 가져오는 API',
-      description: 'header - accessToken, param - helpMeBoardId',
+      summary: '도와주세요 게시글을 끌어올리는 API',
+      description: '도와주세요 게시글을 끌어올리는 API',
     }),
     ApiResponse({
       status: 200,
-      description: '성공적으로 멘토보드를 불러온 경우',
+      description: '게시판을 성공적으로 끌어올린 경우',
       content: {
         JSON: {
-          example: {
-            id: '8',
-            head: '제목',
-            body: '내용',
-            createdAt: '2023-12-06T23:51:47.969Z',
-            updatedAt: '2023-12-06T23:51:47.969Z',
-            categoryId: 4,
-            user: {
-              name: '홍길동',
-              userImage: {
-                id: 'image pk키 (number)',
-                userId: '유저 아이디 (number)',
-                imageUrl: '이미지 url(string)',
-              },
-            },
-            helpMeBoardImages: [
-              {
-                id: 9,
-                imageUrl: 's3 저장된 url 주소',
-              },
-              {
-                id: 10,
-                imageUrl: 's3 저장된 url 주소',
-              },
-            ],
-            unitOwner: 'boolean값',
-          },
+          example: '끌어올리기가 완료되었습니다.',
         },
-      },
-    }),
-    ApiResponse({
-      status: 200,
-      description: '성공적으로 멘티보드를 불러온 경우',
-      content: {
-        JSON: { example: { message: '멘티보드를 성공적으로 불러왔습니다.' } },
       },
     }),
     ApiResponse({
@@ -77,6 +44,18 @@ export function ApiGetOneHelpMeBoard() {
       },
     }),
     ApiResponse({
+      status: 404,
+      description: '사용자가 작성한 게시물이 아닐 경우',
+      content: {
+        JSON: {
+          example: {
+            statusCode: 404,
+            message: '사용자가 작성한 게시물이 아닙니다.',
+          },
+        },
+      },
+    }),
+    ApiResponse({
       status: 411,
       description: '액세스 토큰이 제공되지 않은 경우',
       content: {
@@ -87,12 +66,12 @@ export function ApiGetOneHelpMeBoard() {
     }),
     ApiResponse({
       status: 500,
-      description: '보드를 불러오는 중 오류가 발생한 경우',
+      description: 'DB혹은 서버 오류입니다.',
       content: {
         JSON: {
           example: {
             statusCode: 500,
-            message: '보드를 불러오는 중 오류가 발생했습니다.',
+            message: 'DB혹은 서버 오류입니다.',
           },
         },
       },

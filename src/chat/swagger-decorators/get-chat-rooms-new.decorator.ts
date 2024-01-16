@@ -20,10 +20,6 @@ export function ApiGetChatRoomsNew() {
       status: 200,
       schema: {
         properties: {
-          statusCode: {
-            example: 200,
-            type: 'number',
-          },
           content: {
             type: 'object',
             $ref: getSchemaPath(ResponseGetChatRoomsPaginationDto),

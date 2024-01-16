@@ -30,9 +30,11 @@ import { BoardImagesService } from '../services/BoardImage.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateMentorBoardImageDto } from '../dto/mentorBoard/create.mentor.board.image.dto';
 import { ApiUploadMentorBoardImages } from '../swagger-decorators/mentorBoard/add-mentor-board-images-decorator';
+import { ApiGetPageNumberByMentorBoard } from '../swagger-decorators/mentorBoard/get-page-number-mentor-board-decorator';
+import { ApiGetRandomMentorBoards } from '../swagger-decorators/mentorBoard/get-random-mentor-boards-decorator';
 
-@Controller('mentorBoard')
-@ApiTags('mentorBoard API')
+@Controller('mentor-board')
+@ApiTags('mentor-board API')
 export class MentorBoardController {
   constructor(
     private readonly mentorBoardService: MentorBoardService,
@@ -55,7 +57,7 @@ export class MentorBoardController {
   @ApiUploadMentorBoardImages()
   uploadImage(
     @GetUserId() userId: number,
-    @Query('helpMeBoardId') boardId: number,
+    @Query('mentorBoardId') boardId: number, // Param으로 바꿔서 하기 (URI 컨벤션 이상함)
     @UploadedFiles() files: Express.Multer.File[],
   ): Promise<CreateMentorBoardImageDto[]> {
     return this.boardImagesService.createMentorBoardImages(
@@ -66,12 +68,25 @@ export class MentorBoardController {
   }
 
   @Get('') // 이부분은 아직 프론트랑 상의중입니다
+  //categoryId별 유저 가져오기 추가해야함.
   @ApiGetPageMentorBoards()
   findPageMentorBoards(
     @Query('page') page = 1,
-    @Query('limit') limit = 30,
-  ): Promise<{ data: PageByMentorBoardResponseDTO[]; total: number }> {
-    return this.mentorBoardService.findPagedMentorBoards(page, limit);
+    @Query('categoryId') categoryId: number,
+  ): Promise<{ data: PageByMentorBoardResponseDTO[] }> {
+    return this.mentorBoardService.findPagedMentorBoards(page, categoryId);
+  }
+
+  @Get('random') //랜덤한 멘토게시글 3개만 뽑아오기
+  @ApiGetRandomMentorBoards()
+  randomMentorBoards() {
+    return this.mentorBoardService.randomMentorBoards();
+  }
+
+  @Get('/page')
+  @ApiGetPageNumberByMentorBoard()
+  countPageMentorBoards(@Query('categoryId') categoryId: number) {
+    return this.mentorBoardService.countPagedMentorBoards(categoryId);
   }
 
   @Get('/unit') //하나의 게시판 불러오기
