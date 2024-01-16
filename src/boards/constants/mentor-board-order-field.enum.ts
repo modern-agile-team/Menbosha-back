@@ -4,6 +4,6 @@ export enum MentorBoardOrderField {
   head = 'head',
   createdAt = 'createdAt',
   updatedAt = 'updatedAt',
-  categoryListId = 'categoryListId',
+  categoryListId = 'categoryId',
   popularAt = 'popularAt',
 }
