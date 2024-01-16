@@ -37,13 +37,13 @@ export class MentorBoardHotPostsService {
 
   async findAllMentorBoardHotPostsWithLimitQuery(
     mentorBoardPageQueryDto: MentorBoardPageQueryDto,
-  ) {
+    categoryId: number,
+  ): Promise<ResponseMentorBoardHotPostPaginationDto> {
     const { page, orderField, sortOrder, pageSize } = mentorBoardPageQueryDto;
 
-    // eslint-disable-next-line prefer-const
     let endIndex = pageSize;
 
-    for (let i = 0; i < page; i++) {
+    for (let i = 0; i < page - 1; i++) {
       endIndex += pageSize;
     }
 
@@ -75,7 +75,8 @@ export class MentorBoardHotPostsService {
         'mentorBoardImages.id',
         'mentorBoardImages.imageUrl',
       ])
-      .orderBy(orderField, sortOrder)
+      .where('mentorBoard.categoryId = :categoryId', { categoryId })
+      .orderBy(`mentorBoard.${orderField}`, sortOrder)
       .getMany();
 
     const filteredBoard = boards.filter((board) => {
