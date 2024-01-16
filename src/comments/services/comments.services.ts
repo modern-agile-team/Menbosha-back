@@ -1,7 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CommentsRepository } from '../repository/comments.repository';
 import { CreateCommentDto } from '../dto/create-comment-dto';
-import { HelpYouComment } from '../entities/help-you-comment.entity';
 import { CommentResponseDTO } from '../dto/get-all-comment-dto';
 // import { UpdateCommentDto } from '../dto/update-comment-dto';
 
@@ -13,12 +16,13 @@ export class CommentsService {
     commentData: CreateCommentDto,
     userId: number,
     boardId: number,
-  ): Promise<HelpYouComment> {
+  ): Promise<CreateCommentDto> {
     return await this.commentRepository.createComment(
       commentData,
       userId,
       boardId,
     );
+
     //나중에 예외처리 추가하기
   }
 
@@ -45,7 +49,21 @@ export class CommentsService {
     }));
   }
 
-  // 이부분의 기능은 아직 논의중입니다. (디자인팀 기능삭제)
+  async deleteComment(commentId: number, userId: number): Promise<void> {
+    const comment = await this.commentRepository.findOneComment(commentId);
+
+    if (!comment) {
+      throw new NotFoundException('존재하지 않는 댓글입니다.');
+    }
+
+    if (comment.userId !== userId) {
+      throw new ForbiddenException('작성한 댓글이 아닙니다.');
+    }
+
+    await this.commentRepository.deleteComment(comment);
+  }
+
+  // **이부분의 기능은 아직 논의중입니다. (디자인팀 기능삭제)**
   // async updateComment(
   //   commentId: number,
   //   commentData: Partial<UpdateCommentDto>,
@@ -63,17 +81,4 @@ export class CommentsService {
   //   );
   //   return updatedComment;
   // }
-
-  async deleteComment(commentId: number, userId: number): Promise<void> {
-    const comment = await this.commentRepository.findOneComment(commentId);
-
-    if (!comment) {
-      throw new Error('존재하지 않는 댓글입니다.');
-    }
-
-    if (comment.userId !== userId) {
-      throw new Error('작성한 댓글이 아닙니다.');
-    }
-    await this.commentRepository.deleteComment(comment);
-  }
 }

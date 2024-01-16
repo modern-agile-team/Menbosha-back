@@ -85,7 +85,7 @@ export function ApiAddComment() {
       },
     ]),
     ApiParam({
-      name: 'boardId',
+      name: 'helpMeBoardId',
       description: '댓글을 추가할 보드의 ID',
     }),
     ApiBody({

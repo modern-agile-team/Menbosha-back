@@ -36,7 +36,11 @@ export class CommentsRepository {
     });
   }
 
-  // 이부분은 디자인팀의 요청에 의해 쓰이지 않는 API입니다(논의중)
+  async deleteComment(comment: HelpYouComment): Promise<void> {
+    await this.entityManager.remove(HelpYouComment, comment);
+  }
+
+  // **이부분은 디자인팀의 요청에 의해 쓰이지 않는 API입니다(논의중)**
   // async updateComment(
   //   id: number,
   //   commentData: Partial<CreateCommentDto>,
@@ -53,8 +57,4 @@ export class CommentsRepository {
   //   await this.entityManager.save(HelpYouComment, existingComment);
   //   return existingComment;
   // }
-
-  async deleteComment(comment: HelpYouComment): Promise<void> {
-    await this.entityManager.remove(HelpYouComment, comment);
-  }
 }
