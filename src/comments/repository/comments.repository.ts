@@ -22,11 +22,8 @@ export class CommentsRepository {
     const query = this.entityManager
       .createQueryBuilder(HelpYouComment, 'comment')
       .innerJoinAndSelect('comment.user', 'user')
-      .leftJoinAndSelect('comment.reComment', 'reComment')
-      .leftJoinAndSelect('reComment.user', 'reCommentUser')
-      .leftJoinAndSelect('reCommentUser.userImage', 'reCommentUserImage')
       .leftJoinAndSelect('user.userImage', 'userImage')
-      .where('comment.boardId = :boardId', { boardId });
+      .where('comment.helpMeBoardId = :boardId', { boardId });
     return query.getMany();
   }
 

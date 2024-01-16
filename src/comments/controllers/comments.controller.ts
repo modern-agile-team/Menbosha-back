@@ -21,8 +21,8 @@ import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 
-@Controller('comments')
-@ApiTags('Comment API')
+@Controller('help-you-comments')
+@ApiTags('help-you-comment API')
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
@@ -31,7 +31,7 @@ export class CommentsController {
   @ApiAddComment()
   async createComment(
     @GetUserId() userId: number,
-    @Query('boardId') boardId: number,
+    @Query('helpMeBoardId') boardId: number,
     @Body() createCommentDto: CreateCommentDto,
   ): Promise<HelpYouComment> {
     return await this.commentsService.create(createCommentDto, userId, boardId);
@@ -42,7 +42,7 @@ export class CommentsController {
   @ApiGetAllComment()
   async getComment(
     @GetUserId() userId: number,
-    @Query('boardId') boardId: number,
+    @Query('helpMeBoardId') boardId: number,
   ): Promise<CommentResponseDTO[]> {
     return this.commentsService.findAllComments(boardId, userId);
   }
@@ -50,7 +50,7 @@ export class CommentsController {
   @Patch('')
   @ApiUpdateComment()
   async updateComment(
-    @Query('commentId') commentId: number,
+    @Query('helpYouCommentId') commentId: number,
     @Body() commentData: Partial<HelpYouComment>,
   ): Promise<HelpYouComment> {
     return this.commentsService.updateComment(commentId, commentData);

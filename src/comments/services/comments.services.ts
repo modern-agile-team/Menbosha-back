@@ -39,7 +39,10 @@ export class CommentsService {
       commentOwner: comment.userId === userId,
       user: {
         name: comment.user.name,
-        userImage: comment.user.userImage ? comment.user.userImage : [],
+        userId: comment.user.id,
+        rank: comment.user.rank,
+        categoryId: comment.user.activityCategoryId,
+        userImage: comment.user.userImage.imageUrl,
       },
     }));
   }
