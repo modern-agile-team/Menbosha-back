@@ -12,4 +12,8 @@ export class oneMentorBoardResponseDTO {
     name: string;
     userImage: UserImage | UserImage[];
   };
+  mentorBoardImages: {
+    id: number;
+    imageUrl: string;
+  }[];
 }

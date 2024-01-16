@@ -4,8 +4,8 @@ import { ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 export function ApiGetPageHelpMeBoards() {
   return applyDecorators(
     ApiOperation({
-      summary: '페이지별 멘티 게시판 불러오는 API',
-      description: '(Param)  page - 1',
+      summary: '카테고리 ID로 멘티 게시판 불러오는 API',
+      description: '카테고리 ID로 멘티 게시판 불러오는 API',
     }),
     ApiResponse({
       status: 200,
@@ -46,6 +46,7 @@ export function ApiGetPageHelpMeBoards() {
                 imageUrl: 's3에 저장된 보드 이미지 URL',
               },
             ],
+            total: '카테고리 id에 맞는 보드의 총 개수가 number로 넘어옵니다',
           },
         },
       },
@@ -63,5 +64,6 @@ export function ApiGetPageHelpMeBoards() {
       },
     }),
     ApiQuery({ name: 'page', type: Number }),
+    ApiQuery({ name: 'categoryId', type: Number }),
   );
 }

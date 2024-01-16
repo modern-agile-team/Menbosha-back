@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { HelpMeBoardRepository } from '../repository/help.me.board.repository';
 import { oneHelpMeBoardResponseDTO } from '../dto/helpMeBoard/one.response.help.me.board.dto';
 import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/create.help.me.board.dto';
@@ -6,6 +10,7 @@ import { HelpMeBoard } from '../entities/help-me-board.entity';
 import { PageByHelpMeBoardResponseDTO } from '../dto/helpMeBoard/response.help.me.board.dto';
 import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dto';
 import { HelpMeBoardResponseDTO } from '../dto/helpMeBoard/update.help.me.board.response.dto';
+import { PullingUpHelpMeBoardResponseDTO } from '../dto/helpMeBoard/pulling.up.response.dto';
 
 @Injectable()
 export class HelpMeBoardService {
@@ -21,9 +26,11 @@ export class HelpMeBoardService {
     }
   }
 
-  async countPagedHelpMeBoards() {
+  async countPagedHelpMeBoards(categoryId: number) {
     const limit = 10;
-    const total = await this.helpMeBoardRepository.findTotalBoards();
+    const total = categoryId // 예외처리 - categoryId가 들어올 경우
+      ? await this.helpMeBoardRepository.findTotalBoardsByCategoryId(categoryId)
+      : await this.helpMeBoardRepository.findTotalBoards();
     const page = total / limit;
     const totalPage = Math.ceil(page);
     return { total, totalPage };
@@ -32,14 +39,17 @@ export class HelpMeBoardService {
   // -----이 기능은 프론트와 상의중인 기능입니다 -----
   async findPagedHelpMeBoards(
     page: number,
-  ): Promise<{ data: PageByHelpMeBoardResponseDTO[]; total: number }> {
+    categoryId: number,
+  ): Promise<{ data: PageByHelpMeBoardResponseDTO[] }> {
     const limit = 10;
     const skip = (page - 1) * limit;
-    const boards = await this.helpMeBoardRepository.findPageByHelpMeBoards(
-      skip,
-      limit,
-    );
-    const total = await this.helpMeBoardRepository.findTotalBoards();
+    const boards = categoryId // 예외처리 - categoryId가 들어올 경우
+      ? await this.helpMeBoardRepository.findPagedBoardsByCategoryId(
+          skip,
+          limit,
+          categoryId,
+        )
+      : await this.helpMeBoardRepository.findPageByHelpMeBoards(skip, limit);
 
     const boardResponse: PageByHelpMeBoardResponseDTO[] = await Promise.all(
       boards.map(async (board) => {
@@ -54,7 +64,7 @@ export class HelpMeBoardService {
             name: board.user.name,
             userImage: board.user.userImage ? board.user.userImage : [],
           },
-          helpMeBoardImages: board.helpMeBoardImages.map((image) => ({
+          helpMeBoardImages: (board.helpMeBoardImages || []).map((image) => ({
             id: image.id,
             imageUrl: image.imageUrl,
           })),
@@ -62,7 +72,7 @@ export class HelpMeBoardService {
       }),
     );
 
-    return { data: boardResponse, total };
+    return { data: boardResponse };
   }
 
   async findOneHelpMeBoard(
@@ -70,10 +80,10 @@ export class HelpMeBoardService {
     userId: number,
   ): Promise<oneHelpMeBoardResponseDTO> {
     const board = await this.helpMeBoardRepository.findHelpMeBoardById(boardId);
-    const unitOwner = board.userId === userId;
     if (!board) {
-      throw new Error('게시물을 찾을 수 없습니다.');
+      throw new NotFoundException('게시물을 찾을 수 없습니다');
     }
+    const unitOwner = board.userId === userId;
     return {
       id: board.id,
       head: board.head,
@@ -91,6 +101,33 @@ export class HelpMeBoardService {
       })),
       unitOwner: unitOwner,
     };
+  }
+
+  async latestHelpMeBoards() {
+    const limit = 8;
+    const boards = await this.helpMeBoardRepository.findLatestBoards(limit);
+    const pullingUpBoardsResponse: PullingUpHelpMeBoardResponseDTO[] =
+      await Promise.all(
+        boards.map(async (board) => {
+          return {
+            id: board.id,
+            head: board.head,
+            body: board.body.substring(0, 30),
+            pullingUp: board.pullingUp,
+            category: board.categoryId,
+            user: {
+              name: board.user.name,
+              userImage: board.user.userImage ? board.user.userImage : [],
+            },
+            helpMeBoardImages: (board.helpMeBoardImages || []).map((image) => ({
+              id: image.id,
+              imageUrl: image.imageUrl,
+            })),
+          };
+        }),
+      );
+
+    return { data: pullingUpBoardsResponse };
   }
 
   async updateBoard(
@@ -126,15 +163,32 @@ export class HelpMeBoardService {
     };
   }
 
+  async pullingUpHelpMeBoards(
+    userId: number,
+    boardId: number,
+  ): Promise<string> {
+    const board = await this.helpMeBoardRepository.findHelpMeBoardById(boardId);
+    if (!board) {
+      throw new NotFoundException('게시물을 찾을 수 없습니다');
+    }
+    if (userId !== board.userId) {
+      throw new ForbiddenException('사용자가 작성한 게시물이 아닙니다');
+    }
+    const currentDate = new Date();
+    board.pullingUp = currentDate;
+    await this.helpMeBoardRepository.pullingUpHelpMeBoard(board);
+    return '끌어올리기가 완료되었습니다.';
+  }
+
   async deleteBoard(boardId: number, userId: number): Promise<void> {
     const board = await this.helpMeBoardRepository.findHelpMeBoardById(boardId);
 
     if (!board) {
-      throw new Error('존재하지 않는 게시물입니다.');
+      throw new NotFoundException('게시물을 찾을 수 없습니다');
     }
 
     if (board.userId !== userId) {
-      throw new Error('작성한 게시물이 아닙니다.');
+      throw new ForbiddenException('사용자가 작성한 게시물이 아닙니다');
     }
 
     await this.helpMeBoardRepository.deleteBoard(board);

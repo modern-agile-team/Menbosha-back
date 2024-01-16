@@ -1,6 +1,6 @@
 import { UserIntroRepository } from './../repositories/user-intro.repository';
 import { UserBadgeRepository } from './../repositories/user-badge.repository';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { UserImageRepository } from '../repositories/user-image.repository';
 import { FindManyOptions } from 'typeorm';
@@ -107,9 +107,11 @@ export class UserService {
     };
   }
 
-  async countPageMentors() {
+  async countPageMentors(categoryId: number) {
     const limit = 10;
-    const total = await this.userRepository.findIsMentors();
+    const total = categoryId
+      ? await this.userRepository.findCategoryIdByIsMentors(categoryId)
+      : await this.userRepository.findIsMentors();
     const page = total / limit;
     const totalPage = Math.ceil(page);
     return { total, totalPage };
@@ -117,11 +119,18 @@ export class UserService {
 
   async getMentorList(
     page: number,
+    categoryId: number,
   ): Promise<{ data: PageByMentorListResponseDTO[] }> {
     const limit = 10;
     const skip = (page - 1) * limit;
     const take = limit;
-    const mentors = await this.userRepository.findPageByMentors(skip, take);
+    const mentors = categoryId
+      ? await this.userRepository.findCategoryIdByMentors(
+          skip,
+          take,
+          categoryId,
+        )
+      : await this.userRepository.findPageByMentors(skip, limit);
     const mentorResponse: PageByMentorListResponseDTO[] = await Promise.all(
       mentors
         .filter((user) => user.isMentor === true) //filter로 user.isMentor = true인 경우만 불러오기
@@ -129,7 +138,11 @@ export class UserService {
           return {
             id: user.id,
             name: user.name,
-            userImage: user.userImage ? user.userImage : [],
+            categoryId: user.activityCategoryId,
+            userImage: {
+              imageId: user.userImage.id,
+              imageUrl: user.userImage.imageUrl,
+            },
             userIntro: {
               introduce: user.userIntro.introduce.substring(0, 30),
               mainField: user.userIntro.mainField.substring(0, 30),

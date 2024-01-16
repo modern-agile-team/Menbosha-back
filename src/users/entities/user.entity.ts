@@ -17,6 +17,7 @@ import { UserBadge } from './user-badge.entity';
 import { CategoryList } from '../../common/entity/category-list.entity';
 import { UserIntro } from './user-intro.entity';
 import { TotalCount } from 'src/total-count/entities/total-count.entity';
+import { MentorBoardLike } from 'src/boards/entities/mentor-board-like.entity';
 
 @Entity({
   name: 'user',
@@ -68,6 +69,9 @@ export class User {
   @OneToMany(() => MentorBoard, (mentorBoard) => mentorBoard.user)
   @JoinColumn({ name: 'mentor_board_id' })
   mentorBoard: MentorBoard;
+
+  @OneToMany(() => MentorBoardLike, (mentorBoardLike) => mentorBoardLike.user)
+  mentorBoardLikes: MentorBoardLike[];
 
   @OneToMany(() => HelpMeBoard, (helpMeBoard) => helpMeBoard.user)
   @JoinColumn({ name: 'help_me_board_id' })

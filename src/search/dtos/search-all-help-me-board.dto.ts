@@ -79,4 +79,5 @@ export class SearchAllHelpMeBoardDto
     this.helpMeBoardImages = searchAllHelpMeBoardsDto.helpMeBoardImages;
     this.categoryList = searchAllHelpMeBoardsDto.categoryList;
   }
+  pullingUp: Date;
 }

@@ -1,0 +1,1 @@
+export const LIKE_REPOSITORY_TOKEN = Symbol('LIKE_REPOSITORY_TOKEN');

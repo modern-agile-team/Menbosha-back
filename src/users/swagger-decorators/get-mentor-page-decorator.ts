@@ -1,11 +1,11 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 
 export function ApiGetPageNumberByMentor() {
   return applyDecorators(
     ApiOperation({
-      summary: '멘토의 페이지 개수 가져오는 API',
-      description: '페이지 개수, 총 멘토 수',
+      summary: '카테고리 id별 멘토의 페이지 개수 가져오는 API',
+      description: '카테고리 id별 페이지 개수, 총 멘토 수',
     }),
     ApiResponse({
       status: 200,
@@ -31,5 +31,6 @@ export function ApiGetPageNumberByMentor() {
         },
       },
     }),
+    ApiQuery({ name: 'categoryId', type: Number }),
   );
 }

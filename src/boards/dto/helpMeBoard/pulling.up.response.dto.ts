@@ -1,12 +1,11 @@
 import { UserImage } from 'src/users/entities/user-image.entity';
 
-export class PageByMentorBoardResponseDTO {
+export class PullingUpHelpMeBoardResponseDTO {
   id: number;
   head: string;
   body: string;
-  createdAt: Date;
-  updatedAt: Date;
-  categoryId: number;
+  pullingUp: Date;
+  category: number;
   user: {
     name: string;
     userImage: UserImage | UserImage[];

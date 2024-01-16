@@ -7,6 +7,7 @@ import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dt
 @Injectable()
 export class HelpMeBoardRepository {
   constructor(private readonly entityManager: EntityManager) {}
+
   async createBoard(
     boardData: CreateHelpMeBoardDto,
     userId: number,
@@ -19,8 +20,27 @@ export class HelpMeBoardRepository {
     return await this.entityManager.save(HelpMeBoard, helpMeBoard); //이 부분 return은 dto로 수정하기
   }
 
+  async findTotalBoardsByCategoryId(categoryId: number): Promise<number> {
+    return this.entityManager.count(HelpMeBoard, {
+      where: { categoryId: categoryId },
+    });
+  }
+
   async findTotalBoards(): Promise<number> {
     return this.entityManager.count(HelpMeBoard);
+  }
+
+  async findPagedBoardsByCategoryId(
+    skip: number,
+    limit: number,
+    categoryId: number,
+  ): Promise<HelpMeBoard[]> {
+    return await this.entityManager.find(HelpMeBoard, {
+      relations: ['user', 'user.userImage', 'helpMeBoardImages'],
+      where: { categoryId },
+      skip: skip,
+      take: limit,
+    });
   }
 
   async findPageByHelpMeBoards(
@@ -39,6 +59,18 @@ export class HelpMeBoardRepository {
       relations: ['user', 'user.userImage', 'helpMeBoardImages'],
       where: { id },
     });
+  }
+
+  async findLatestBoards(limit: number): Promise<HelpMeBoard[]> {
+    return await this.entityManager.find(HelpMeBoard, {
+      relations: ['user', 'user.userImage', 'helpMeBoardImages'],
+      order: { pullingUp: 'DESC' },
+      take: limit,
+    });
+  }
+
+  async pullingUpHelpMeBoard(board: HelpMeBoard): Promise<void> {
+    await this.entityManager.save(board);
   }
 
   async updateHelpMeBoard(
