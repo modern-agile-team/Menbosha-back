@@ -5,6 +5,7 @@ import * as dotenv from 'dotenv';
 import { UserImageRepository } from 'src/users/repositories/user-image.repository';
 import axios from 'axios';
 import { AuthServiceInterface } from '../interfaces/auth-service.interface';
+import { TotalCountService } from 'src/total-count/services/total-count.service';
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ export class AuthService implements AuthServiceInterface {
     private readonly userRepository: UserRepository,
     private readonly userImageRepository: UserImageRepository,
     private readonly tokenService: TokenService,
+    private readonly totalCountService: TotalCountService,
   ) {}
 
   async login(authorizeCode: string, provider: string) {
@@ -172,6 +174,7 @@ export class AuthService implements AuthServiceInterface {
         } else {
           await this.userImageRepository.uploadUserImage(userId, profileImage);
         }
+        await this.totalCountService.createTotalCount(userId);
         return {
           userId,
           socialAccessToken,

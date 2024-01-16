@@ -2,16 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { UserIntroRepository } from '../repositories/user-intro.repository';
 import { UserIntro } from '../entities/user-intro.entity';
 import { CreateUserIntroDto } from '../dtos/create-user-intro-dto';
-import { UserRepository } from '../repositories/user.repository';
 import { UpdateUserIntroDTO } from '../dtos/update-user-intro-dto';
 import { ResponseUserIntroDto } from '../dtos/response-user-dto';
 
 @Injectable()
 export class UserIntroService {
-  constructor(
-    private readonly userIntroRepository: UserIntroRepository,
-    private readonly userRepository: UserRepository,
-  ) {}
+  constructor(private readonly userIntroRepository: UserIntroRepository) {}
 
   async addUserIntro(
     userId: number,

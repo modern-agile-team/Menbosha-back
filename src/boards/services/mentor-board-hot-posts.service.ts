@@ -60,11 +60,11 @@ export class MentorBoardHotPostsService {
   ): Promise<ResponseMentorBoardHotPostPaginationDto> {
     const { page, orderField, sortOrder, pageSize } = mentorBoardPageQueryDto;
 
-    let endIndex = pageSize;
+    // let endIndex = pageSize;
 
-    for (let i = 0; i < page - 1; i++) {
-      endIndex += pageSize;
-    }
+    // for (let i = 0; i < page - 1; i++) {
+    //   endIndex += pageSize;
+    // }
 
     const skip = (page - 1) * pageSize;
 
@@ -97,13 +97,17 @@ export class MentorBoardHotPostsService {
       .where('mentorBoard.categoryId = :categoryId', { categoryId })
       .andWhere('mentorBoard.popularAt IS NOT NULL')
       .orderBy(`mentorBoard.${orderField}`, sortOrder)
+      .offset(skip)
+      .limit(pageSize)
       .getMany();
 
-    const slicedBoards = mentorBoardHotPosts.slice(skip, endIndex);
+    // const slicedBoards = mentorBoardHotPosts.slice(skip, endIndex);
 
-    const mentorBoardForHotPostDto = slicedBoards.map((slicedBoard) => {
-      return new MentorBoardForHotPostDto(slicedBoard);
-    });
+    const mentorBoardForHotPostDto = mentorBoardHotPosts.map(
+      (mentorBoardHotPost) => {
+        return new MentorBoardForHotPostDto(mentorBoardHotPost);
+      },
+    );
 
     return new ResponseMentorBoardHotPostPaginationDto(
       mentorBoardForHotPostDto,

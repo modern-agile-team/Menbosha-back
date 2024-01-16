@@ -13,6 +13,7 @@ export class SearchAllHelpMeBoardDto
       | 'user'
       | 'userId'
       | 'helpMeBoardImages'
+      | 'pullingUp'
     >
 {
   @ApiProperty({
