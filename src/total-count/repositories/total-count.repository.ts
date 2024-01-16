@@ -5,6 +5,8 @@ import { UserReview } from 'src/users/entities/user-review.entity';
 import { EntityManager } from 'typeorm';
 import { TotalCount } from '../entities/total-count.entity';
 import { User } from 'src/users/entities/user.entity';
+import { Type } from '../enums/type.enum';
+import { Action } from '../enums/action.enum';
 
 @Injectable()
 export class TotalCountRepository {
@@ -14,12 +16,8 @@ export class TotalCountRepository {
     await this.entityManager.insert('total_count', { userId });
   }
 
-  async counting(
-    userId: number,
-    type: string,
-    action: 'increment' | 'decrement',
-  ) {
-    if (action === 'increment') {
+  async counting(userId: number, type: Type, action: Action) {
+    if (action === Action.Increment) {
       await this.entityManager.increment(TotalCount, { userId }, type, 1);
       await this.entityManager.increment(
         TotalCount,
