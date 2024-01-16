@@ -6,6 +6,7 @@ import { HelpYouComment } from '../entities/help-you-comment.entity';
 @Injectable()
 export class CommentsRepository {
   constructor(private readonly entityManager: EntityManager) {}
+
   async createComment(
     commentData: CreateCommentDto,
     userId: number,
@@ -16,6 +17,7 @@ export class CommentsRepository {
     comment.userId = userId;
     comment.helpMeBoardId = boardId;
     return await this.entityManager.save(HelpYouComment, comment);
+    // 이부분 return 나중에 dto로 변경하기
   }
 
   async findCommentsByBoardId(boardId: number): Promise<HelpYouComment[]> {

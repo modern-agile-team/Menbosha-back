@@ -8,20 +8,18 @@ import { UpdateCommentDto } from '../dto/update-comment-dto';
 @Injectable()
 export class CommentsService {
   constructor(private commentRepository: CommentsRepository) {}
+
   async create(
     commentData: CreateCommentDto,
     userId: number,
     boardId: number,
   ): Promise<HelpYouComment> {
-    try {
-      return await this.commentRepository.createComment(
-        commentData,
-        userId,
-        boardId,
-      );
-    } catch (error) {
-      console.log(error);
-    }
+    return await this.commentRepository.createComment(
+      commentData,
+      userId,
+      boardId,
+    );
+    //나중에 예외처리 추가하기
   }
 
   async findAllComments(
