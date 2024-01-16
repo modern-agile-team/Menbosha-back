@@ -4,7 +4,7 @@ import {
   Body,
   Query,
   Get,
-  Patch,
+  // Patch,
   Delete,
   UseGuards,
 } from '@nestjs/common';
@@ -15,7 +15,7 @@ import { CreateCommentDto } from '../dto/create-comment-dto';
 import { ApiAddComment } from '../swagger-decorators/add-comment-decorators';
 import { ApiGetAllComment } from '../swagger-decorators/get-all-comment-decorators';
 import { CommentResponseDTO } from '../dto/get-all-comment-dto';
-import { ApiUpdateComment } from '../swagger-decorators/patch-comment-decorators';
+// import { ApiUpdateComment } from '../swagger-decorators/patch-comment-decorators';
 import { ApiDeleteComment } from '../swagger-decorators/delete-comment-decorator';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
@@ -47,14 +47,15 @@ export class CommentsController {
     return this.commentsService.findAllComments(boardId, userId);
   }
 
-  @Patch('')
-  @ApiUpdateComment()
-  async updateComment(
-    @Query('helpYouCommentId') commentId: number,
-    @Body() commentData: Partial<HelpYouComment>,
-  ): Promise<HelpYouComment> {
-    return this.commentsService.updateComment(commentId, commentData);
-  }
+  //이부분의 기능들은 디자인팀 요청에 의해 아직 보류중입니다.
+  // @Patch('')
+  // @ApiUpdateComment()
+  // async updateComment(
+  //   @Query('helpYouCommentId') commentId: number,
+  //   @Body() commentData: Partial<HelpYouComment>,
+  // ): Promise<HelpYouComment> {
+  //   return this.commentsService.updateComment(commentId, commentData);
+  // }
 
   @Delete('')
   @UseGuards(JwtAccessTokenGuard)
