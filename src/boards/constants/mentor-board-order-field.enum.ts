@@ -1,9 +1,9 @@
 export enum MentorBoardOrderField {
-  id = 'id',
-  userId = 'userId',
-  head = 'head',
-  createdAt = 'createdAt',
-  updatedAt = 'updatedAt',
-  categoryListId = 'categoryListId',
-  popularAt = 'popularAt',
+  id = 'mentorBoard.id',
+  userId = 'mentorBoard.userId',
+  head = 'mentorBoard.head',
+  createdAt = 'mentorBoard.createdAt',
+  updatedAt = 'mentorBoard.updatedAt',
+  categoryListId = 'mentorBoard.categoryListId',
+  popularAt = 'mentorBoard.popularAt',
 }

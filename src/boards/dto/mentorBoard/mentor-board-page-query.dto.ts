@@ -22,5 +22,5 @@ export class MentorBoardPageQueryDto extends PageQueryDto {
   })
   @IsOptional()
   @IsEnum(SortOrder)
-  SortOrder?: SortOrder = SortOrder.Asc;
+  sortOrder?: SortOrder = SortOrder.Asc;
 }

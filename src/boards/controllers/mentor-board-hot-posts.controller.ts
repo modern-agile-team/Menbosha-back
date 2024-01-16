@@ -2,6 +2,7 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
+  Query,
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
@@ -10,6 +11,7 @@ import { plainToInstance } from 'class-transformer';
 import { ResponseMentorBoardHotPostsItemDto } from '../dto/mentorBoard/response-mentor-board-hot-posts-item';
 import { ApiFindAllMentorBoardHotPostsWithLimit } from '../swagger-decorators/mentorBoard/find-all-mentor-board-hot-posts-with-limit';
 import { MentorBoardHotPostsService } from '../services/mentor-board-hot-posts.service';
+import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
 
 @ApiTags('mentor-board-hot-posts')
 @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
@@ -21,7 +23,7 @@ export class MentorBoardHotPostsController {
 
   @ApiFindAllMentorBoardHotPostsWithLimit()
   @Get()
-  async findAllMentorBoardHotPostsWithLimit() {
+  async findAllHotPosts() {
     const mentorBoardHotPosts =
       await this.mentorBoardHotPostsService.findAllMentorBoardHotPostsWithLimit();
 
@@ -32,7 +34,11 @@ export class MentorBoardHotPostsController {
   }
 
   @Get('test')
-  findAllMentorBoardQueryBuilder() {
-    return this.mentorBoardHotPostsService.findAllMentorBoardHotPostsWithLimitQuery();
+  findAllHotPostsWithPagination(
+    @Query() mentorBoardPageQueryDto: MentorBoardPageQueryDto,
+  ) {
+    return this.mentorBoardHotPostsService.findAllMentorBoardHotPostsWithLimitQuery(
+      mentorBoardPageQueryDto,
+    );
   }
 }

@@ -4,6 +4,8 @@ import { MentorBoardHotPost } from '../entities/mentor-board-hot-post.entity';
 import { EntityManager } from 'typeorm';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { MentorBoardForHotPostDto } from '../dto/mentorBoard/mentor-board-for-hot-post.dto';
+import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
+import { ResponseMentorBoardHotPostPaginationDto } from '../dto/mentorBoard/response-mentor-board-hot-post-pagination.dto';
 
 @Injectable()
 export class MentorBoardHotPostsService {
@@ -33,7 +35,20 @@ export class MentorBoardHotPostsService {
     return;
   }
 
-  async findAllMentorBoardHotPostsWithLimitQuery() {
+  async findAllMentorBoardHotPostsWithLimitQuery(
+    mentorBoardPageQueryDto: MentorBoardPageQueryDto,
+  ) {
+    const { page, orderField, sortOrder, pageSize } = mentorBoardPageQueryDto;
+
+    // eslint-disable-next-line prefer-const
+    let endIndex = pageSize;
+
+    for (let i = 0; i < page; i++) {
+      endIndex += pageSize;
+    }
+
+    const skip = (page - 1) * pageSize;
+
     const boards = await this.entityManager
       .getRepository(MentorBoard)
       .createQueryBuilder('mentorBoard')
@@ -60,22 +75,25 @@ export class MentorBoardHotPostsService {
         'mentorBoardImages.id',
         'mentorBoardImages.imageUrl',
       ])
-      .orderBy('mentorBoard.popularAt', 'DESC')
+      .orderBy(orderField, sortOrder)
       .getMany();
 
     const filteredBoard = boards.filter((board) => {
       return board.mentorBoardLikes.length > 9;
     });
 
-    /**
-     * @todo limit값 프론트에서 받도록 변경
-     */
+    const slicedBoards = filteredBoard.slice(skip, endIndex);
 
-    const slicedBoards = filteredBoard.slice(0, 5);
-
-    return slicedBoards.map((slicedBoard) => {
+    const mentorBoardForHotPostDto = slicedBoards.map((slicedBoard) => {
       return new MentorBoardForHotPostDto(slicedBoard);
     });
+
+    return new ResponseMentorBoardHotPostPaginationDto(
+      mentorBoardForHotPostDto,
+      filteredBoard.length,
+      page,
+      pageSize,
+    );
   }
 
   findAllMentorBoardHotPostsWithLimit() {
