@@ -42,7 +42,7 @@ export class CommentsController {
   async getComment(
     @GetUserId() userId: number,
     @Query('helpMeBoardId') boardId: number,
-  ): Promise<CommentResponseDTO[]> {
+  ): Promise<{ data: CommentResponseDTO[] }> {
     return this.commentsService.findAllComments(boardId, userId);
   }
 

@@ -20,13 +20,26 @@ export class CommentsRepository {
     // 이부분 return 나중에 dto로 변경하기
   }
 
+  // async findCommentsByBoardId(boardId: number): Promise<HelpYouComment[]> {
+  //   const query = this.entityManager
+  //     .createQueryBuilder(HelpYouComment, 'comment')
+  //     .innerJoinAndSelect('comment.user', 'user')
+  //     .leftJoinAndSelect('user.userImage', 'userImage')
+  //     .where('comment.helpMeBoardId = :boardId', { boardId });
+  //   return query.getMany();
+  // }
+
   async findCommentsByBoardId(boardId: number): Promise<HelpYouComment[]> {
-    const query = this.entityManager
-      .createQueryBuilder(HelpYouComment, 'comment')
-      .innerJoinAndSelect('comment.user', 'user')
-      .leftJoinAndSelect('user.userImage', 'userImage')
-      .where('comment.helpMeBoardId = :boardId', { boardId });
-    return query.getMany();
+    return await this.entityManager.find(HelpYouComment, {
+      relations: ['user', 'user.userImage'],
+      where: { helpMeBoardId: boardId },
+    });
+  }
+
+  async findCommentByUserId(userId: number): Promise<HelpYouComment> {
+    return await this.entityManager.findOne(HelpYouComment, {
+      where: { userId: userId },
+    });
   }
 
   async findOneComment(id: number): Promise<HelpYouComment> {
