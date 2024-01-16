@@ -19,7 +19,7 @@ export class TotalCountController {
       | 'countMentorBoardLike'
       | 'countBadge'
       | 'countReview',
-    @Body('action') action: 'increment' | 'decrement',
+    @Body('action') action: 'increment' | 'decrement', // 이거 dto 만들어서 무조건 두 값 중 하나만 받기
   ) {
     return await this.totalCountService.counting(
       userId,
