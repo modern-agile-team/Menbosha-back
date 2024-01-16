@@ -13,6 +13,9 @@ import {
   Repository,
 } from 'typeorm';
 
+/**
+ * @todo 추후에 어떤 방식 선택할지 결정하고 둘 중 하나 삭제
+ */
 @Injectable()
 export class HotPostsRepository<E extends RequiredHotPostColumn> {
   constructor(

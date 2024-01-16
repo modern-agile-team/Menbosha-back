@@ -1,17 +1,21 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { HotPostsRepository } from 'src/hot-posts/repositories/hot-posts.repository';
-import { MentorBoardHotPost } from '../entities/mentor-board-hot-post.entity';
+// import { HotPostsRepository } from 'src/hot-posts/repositories/hot-posts.repository';
+// import { MentorBoardHotPost } from '../entities/mentor-board-hot-post.entity';
 import { EntityManager } from 'typeorm';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { MentorBoardForHotPostDto } from '../dto/mentorBoard/mentor-board-for-hot-post.dto';
 import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
 import { ResponseMentorBoardHotPostPaginationDto } from '../dto/mentorBoard/response-mentor-board-hot-post-pagination.dto';
 import { MentorBoardRepository } from '../repository/mentor.boards.repository';
+import { HotPostsRepositoryNew } from 'src/hot-posts/repositories/hot-posts-new.repository';
 
+/**
+ * @todo 추후에 어떤 방식 선택할지 결정하고 둘 중 하나 삭제
+ */
 @Injectable()
 export class MentorBoardHotPostsService {
   constructor(
-    private readonly hotPostsRepository: HotPostsRepository<MentorBoardHotPost>,
+    private readonly hotPostsRepositoryNew: HotPostsRepositoryNew<MentorBoard>,
     private readonly mentorBoardRepository: MentorBoardRepository,
     private readonly entityManager: EntityManager,
   ) {}
@@ -22,16 +26,10 @@ export class MentorBoardHotPostsService {
     likeCount: number,
   ): Promise<void> {
     if (likeCount === 10) {
-      const updateResult =
-        await this.mentorBoardRepository.updateMentorBoardWithEntityManager(
-          entityManager,
-          {
-            id: mentorBoardId,
-          },
-          {
-            popularAt: new Date(),
-          },
-        );
+      const updateResult = await this.hotPostsRepositoryNew.createHotPost(
+        entityManager,
+        mentorBoardId,
+      );
 
       if (!updateResult.affected) {
         throw new InternalServerErrorException(
@@ -50,8 +48,6 @@ export class MentorBoardHotPostsService {
     //     mentorBoardId,
     //   );
     // }
-
-    return;
   }
 
   async findAllMentorBoardHotPostsWithLimitQuery(
@@ -62,7 +58,7 @@ export class MentorBoardHotPostsService {
 
     const skip = (page - 1) * pageSize;
 
-    const mentorBoardHotPosts = await this.entityManager
+    const query = this.entityManager
       .getRepository(MentorBoard)
       .createQueryBuilder('mentorBoard')
       .leftJoin(
@@ -92,8 +88,10 @@ export class MentorBoardHotPostsService {
       .andWhere('mentorBoard.popularAt IS NOT NULL')
       .orderBy(`mentorBoard.${orderField}`, sortOrder)
       .skip(skip)
-      .take(pageSize)
-      .getMany();
+      .take(pageSize);
+
+    const mentorBoardHotPosts =
+      await this.hotPostsRepositoryNew.findAllHotPostsByQueryBuilder(query);
 
     const mentorBoardForHotPostDto = mentorBoardHotPosts.map(
       (mentorBoardHotPost) => {
@@ -109,46 +107,46 @@ export class MentorBoardHotPostsService {
     );
   }
 
-  findAllMentorBoardHotPostsWithLimit() {
-    return this.hotPostsRepository.findAllHotPosts({
-      select: {
-        id: true,
-        likeCount: true,
-        mentorBoard: {
-          id: true,
-          userId: true,
-          head: true,
-          body: true,
-          categoryId: true,
-          createdAt: true,
-          updatedAt: true,
-          user: {
-            name: true,
-            userImage: {
-              imageUrl: true,
-            },
-          },
-          mentorBoardImages: {
-            id: true,
-            imageUrl: true,
-          },
-        },
-        createdAt: true,
-      },
-      relations: {
-        mentorBoard: {
-          user: {
-            userImage: true,
-          },
-          mentorBoardImages: true,
-        },
-      },
-      order: {
-        createdAt: 'DESC',
-      },
-      take: 5,
-    });
-  }
+  // findAllMentorBoardHotPostsWithLimit() {
+  //   return this.hotPostsRepository.findAllHotPosts({
+  //     select: {
+  //       id: true,
+  //       likeCount: true,
+  //       mentorBoard: {
+  //         id: true,
+  //         userId: true,
+  //         head: true,
+  //         body: true,
+  //         categoryId: true,
+  //         createdAt: true,
+  //         updatedAt: true,
+  //         user: {
+  //           name: true,
+  //           userImage: {
+  //             imageUrl: true,
+  //           },
+  //         },
+  //         mentorBoardImages: {
+  //           id: true,
+  //           imageUrl: true,
+  //         },
+  //       },
+  //       createdAt: true,
+  //     },
+  //     relations: {
+  //       mentorBoard: {
+  //         user: {
+  //           userImage: true,
+  //         },
+  //         mentorBoardImages: true,
+  //       },
+  //     },
+  //     order: {
+  //       createdAt: 'DESC',
+  //     },
+  //     take: 5,
+  //   });
+  // }
 
   async deleteMentorBoardHotPostOrDecrease(
     entityManager: EntityManager,
@@ -156,16 +154,10 @@ export class MentorBoardHotPostsService {
     likeCount: number,
   ): Promise<void> {
     if (likeCount < 10) {
-      const updateResult =
-        await this.mentorBoardRepository.updateMentorBoardWithEntityManager(
-          entityManager,
-          {
-            id: mentorBoardId,
-          },
-          {
-            popularAt: null,
-          },
-        );
+      const updateResult = await this.hotPostsRepositoryNew.deleteHotPost(
+        entityManager,
+        mentorBoardId,
+      );
 
       if (!updateResult.affected) {
         throw new InternalServerErrorException(
@@ -183,7 +175,5 @@ export class MentorBoardHotPostsService {
     //     mentorBoardId,
     //   );
     // }
-
-    return;
   }
 }

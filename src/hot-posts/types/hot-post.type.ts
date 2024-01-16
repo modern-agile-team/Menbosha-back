@@ -3,3 +3,8 @@ export interface RequiredHotPostColumn {
   parentId: number;
   likeCount: number;
 }
+
+export interface RequiredHotPostColumnNew {
+  id: number;
+  popularAt: Date | null;
+}
