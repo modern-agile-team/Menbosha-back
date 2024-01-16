@@ -5,11 +5,15 @@ import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { Type } from '../enums/type.enum';
 import { CountingDto } from '../dtos/counting.dto';
 import { Action } from '../enums/action.enum';
+import { ApiCounting } from '../swagger-decorators/counting.decorator';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('total-count')
+@ApiTags('total-count API')
 export class TotalCountController {
   constructor(private readonly totalCountService: TotalCountService) {}
 
+  @ApiCounting()
   @UseGuards(JwtAccessTokenGuard)
   @Patch('/counting')
   async counting(
