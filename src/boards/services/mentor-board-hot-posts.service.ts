@@ -60,12 +60,6 @@ export class MentorBoardHotPostsService {
   ): Promise<ResponseMentorBoardHotPostPaginationDto> {
     const { page, orderField, sortOrder, pageSize } = mentorBoardPageQueryDto;
 
-    // let endIndex = pageSize;
-
-    // for (let i = 0; i < page - 1; i++) {
-    //   endIndex += pageSize;
-    // }
-
     const skip = (page - 1) * pageSize;
 
     const mentorBoardHotPosts = await this.entityManager
@@ -97,11 +91,9 @@ export class MentorBoardHotPostsService {
       .where('mentorBoard.categoryId = :categoryId', { categoryId })
       .andWhere('mentorBoard.popularAt IS NOT NULL')
       .orderBy(`mentorBoard.${orderField}`, sortOrder)
-      .offset(skip)
-      .limit(pageSize)
+      .skip(skip)
+      .take(pageSize)
       .getMany();
-
-    // const slicedBoards = mentorBoardHotPosts.slice(skip, endIndex);
 
     const mentorBoardForHotPostDto = mentorBoardHotPosts.map(
       (mentorBoardHotPost) => {
