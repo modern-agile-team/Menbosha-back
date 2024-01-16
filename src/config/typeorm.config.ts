@@ -14,6 +14,8 @@ import { UserReview } from 'src/users/entities/user-review.entity';
 import { UserIntro } from 'src/users/entities/user-intro.entity';
 import { MentorBoardLike } from 'src/boards/entities/mentor-board-like.entity';
 import { MentorBoardImage } from 'src/boards/entities/mentor-board-image.entity';
+import { UserRanking } from 'src/users/entities/user-ranking.entity';
+import { TotalCount } from 'src/total-count/entities/total-count.entity';
 
 // .env 파일 로드
 dotenv.config();
@@ -39,6 +41,8 @@ export const TypeORMconfig: TypeOrmModuleOptions = {
     UserBadge,
     UserReview,
     UserIntro,
+    UserRanking,
+    TotalCount,
     MentorBoardLike,
   ], // 여기에 엔티티들을 추가해야 합니다.
   synchronize: process.env.NODE_ENV === 'true',

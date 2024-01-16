@@ -29,6 +29,8 @@ import { ApiPostUserIntro } from '../swagger-decorators/upload-user-Intro-decora
 import { ApiUpdateUserIntro } from '../swagger-decorators/patch-user-intro-decorator';
 import { ApiGetMyRank } from '../swagger-decorators/get-my-rank-decorators';
 import { ApiGetUserInfo } from '../swagger-decorators/get-user-info.decorators';
+import { UserRankingService } from '../services/user-ranking.service';
+import { TotalCountService } from 'src/total-count/services/total-count.service';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -37,6 +39,8 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly userIntroService: UserIntroService,
+    private readonly userRankingService: UserRankingService,
+    private readonly totalcountService: TotalCountService,
   ) {}
 
   @ApiGetMyProfile()
@@ -103,5 +107,15 @@ export class UserController {
     @Body() userData: UpdateUserIntroDTO,
   ): Promise<ResponseUserIntroDto> {
     return this.userIntroService.updateUserIntro(userId, userData);
+  }
+
+  @Get('/ranking')
+  getRanking(): Promise<any> {
+    return this.userRankingService.userRanking();
+  }
+
+  @Post('/sync-total-count')
+  async syncTotalCount() {
+    return this.totalcountService.syncTotalCount();
   }
 }

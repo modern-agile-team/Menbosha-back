@@ -16,6 +16,7 @@ import { UserReview } from './user-review.entity';
 import { UserBadge } from './user-badge.entity';
 import { CategoryList } from '../../common/entity/category-list.entity';
 import { UserIntro } from './user-intro.entity';
+import { TotalCount } from 'src/total-count/entities/total-count.entity';
 import { MentorBoardLike } from 'src/boards/entities/mentor-board-like.entity';
 
 @Entity({
@@ -88,4 +89,9 @@ export class User {
   @ManyToMany(() => CategoryList, (categoryList) => categoryList.user)
   @JoinColumn({ name: 'category_id' })
   categoryList: CategoryList;
+
+  @OneToOne(() => TotalCount, (totalcount) => totalcount.user, {
+    onDelete: 'CASCADE',
+  })
+  totalCount: TotalCount;
 }
