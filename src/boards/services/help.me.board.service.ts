@@ -106,6 +106,9 @@ export class HelpMeBoardService {
   async latestHelpMeBoards() {
     const limit = 8;
     const boards = await this.helpMeBoardRepository.findLatestBoards(limit);
+    if (!boards) {
+      throw new NotFoundException('게시물을 찾을 수 없습니다');
+    }
     const pullingUpBoardsResponse: PullingUpHelpMeBoardResponseDTO[] =
       await Promise.all(
         boards.map(async (board) => {
