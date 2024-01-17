@@ -137,6 +137,10 @@ export class ChatService {
   ): Promise<ChatRoomDto> {
     const { receiverId, chatRoomType } = createChatRoomBodyDto;
 
+    if (myId === receiverId) {
+      throw new ForbiddenException('본인과 채팅방을 생성할 수 없습니다.');
+    }
+
     const existChatRoom = await this.chatRepository.findOneChatRoom({
       $and: [
         { originalMembers: { $all: [myId, receiverId] } },

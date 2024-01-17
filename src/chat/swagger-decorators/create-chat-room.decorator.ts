@@ -44,11 +44,14 @@ export function ApiCreateChatRoom() {
       },
     }),
     ApiForbiddenResponse({
-      description: '토큰 만료 에러',
+      description: '토큰 만료 에러 혹은 본인과의 채팅방을 생성하려 한 경우',
       content: {
         JSON: {
           example: {
-            message: '만료된 토큰입니다.',
+            message: [
+              '만료된 토큰입니다.',
+              '본인과 채팅방을 생성할 수 없습니다.',
+            ],
             error: 'Forbidden',
             statusCode: 403,
           },

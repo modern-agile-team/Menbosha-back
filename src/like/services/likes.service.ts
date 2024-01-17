@@ -1,22 +1,23 @@
-import { ConflictException, Inject, Injectable } from '@nestjs/common';
-import { RequiredLikeColumn } from '../types/like.type';
-import { LIKE_REPOSITORY_TOKEN } from '../constants/like.token';
 import {
-  DeepPartial,
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import { RequiredLikeColumn } from '../types/like.type';
+import {
+  DeleteResult,
+  EntityManager,
   FindManyOptions,
   FindOptionsWhere,
-  Repository,
 } from 'typeorm';
+import { LikesRepository } from '../repositories/likes.repository';
 
 @Injectable()
 export class LikesService<E extends RequiredLikeColumn> {
-  constructor(
-    @Inject(LIKE_REPOSITORY_TOKEN)
-    private readonly LikeRepository: Repository<E>,
-  ) {}
+  constructor(private readonly likesRepository: LikesRepository<E>) {}
 
-  async createLike(parentId: number, userId: number) {
-    const isExistLike = await this.LikeRepository.exist({
+  async createLike(parentId: number, userId: number): Promise<E> {
+    const isExistLike = await this.likesRepository.isExistLike({
       where: {
         userId,
         parentId,
@@ -27,18 +28,27 @@ export class LikesService<E extends RequiredLikeColumn> {
       throw new ConflictException('이미 좋아요가 존재합니다.');
     }
 
-    return this.LikeRepository.save({
-      userId,
+    return this.likesRepository.createLike(parentId, userId);
+  }
+
+  createLikeWithEntityManager(
+    entityManager: EntityManager,
+    parentId: number,
+    userId: number,
+  ): Promise<E> {
+    return this.likesRepository.createLikeWithEntityManager(
+      entityManager,
       parentId,
-    } as DeepPartial<E>);
+      userId,
+    );
   }
 
-  findLikes(options: FindManyOptions<E>) {
-    return this.LikeRepository.find({ options } as FindManyOptions<E>);
+  findLikes(options: FindManyOptions<E>): Promise<E[]> {
+    return this.likesRepository.findLikes(options);
   }
 
-  async deleteLike(parentId: number, userId: number) {
-    const isExistLike = await this.LikeRepository.exist({
+  async deleteLike(parentId: number, userId: number): Promise<void> {
+    const isExistLike = await this.likesRepository.isExistLike({
       where: {
         userId,
         parentId,
@@ -46,12 +56,28 @@ export class LikesService<E extends RequiredLikeColumn> {
     });
 
     if (!isExistLike) {
-      throw new ConflictException('좋아요가 없습니다.');
+      throw new ConflictException('이미 좋아요가 없습니다.');
     }
 
-    await this.LikeRepository.delete({
-      parentId,
-      userId,
-    } as FindOptionsWhere<E>);
+    return this.likesRepository.deleteLike(parentId, userId);
+  }
+
+  async deleteLikeWithEntityManager(
+    entityManager: EntityManager,
+    parentId: number,
+    userId: number,
+  ): Promise<DeleteResult> {
+    const updatedResult =
+      await this.likesRepository.deleteLikeWithEntityManager(
+        entityManager,
+        parentId,
+        userId,
+      );
+
+    if (!updatedResult.affected) {
+      throw new InternalServerErrorException('좋아요 삭제 중 서버 에러 발생');
+    }
+
+    return updatedResult;
   }
 }

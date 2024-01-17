@@ -1,12 +1,24 @@
-import { EntityManager, FindOneOptions } from 'typeorm';
+import {
+  EntityManager,
+  FindOneOptions,
+  FindOptionsWhere,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { CreateMentorBoardDto } from '../dto/mentorBoard/create.mentor.board.dto';
 import { Injectable } from '@nestjs/common';
 import { UpdateMentorBoardDto } from '../dto/mentorBoard/update.mentor.board.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 @Injectable()
 export class MentorBoardRepository {
-  constructor(private readonly entityManager: EntityManager) {}
+  constructor(
+    private readonly entityManager: EntityManager,
+    @InjectRepository(MentorBoard)
+    private readonly mentorBoardRepository: Repository<MentorBoard>,
+  ) {}
 
   async createBoard(
     boardData: CreateMentorBoardDto,
@@ -78,6 +90,16 @@ export class MentorBoardRepository {
     boardData: Partial<UpdateMentorBoardDto>,
   ): Promise<MentorBoard> {
     return await this.entityManager.save(MentorBoard, boardData);
+  }
+
+  updateMentorBoardWithEntityManager(
+    entityManager: EntityManager,
+    criteria: FindOptionsWhere<MentorBoard>,
+    partialEntity: QueryDeepPartialEntity<MentorBoard>,
+  ): Promise<UpdateResult> {
+    return entityManager
+      .withRepository(this.mentorBoardRepository)
+      .update(criteria, partialEntity);
   }
 
   async deleteBoard(board: MentorBoard): Promise<void> {

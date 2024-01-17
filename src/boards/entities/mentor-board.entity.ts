@@ -50,10 +50,19 @@ export class MentorBoard {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
+  @Column('datetime', {
+    name: 'popular_at',
+    nullable: true,
+    comment: '인기 게시글 선정 일자',
+  })
+  popularAt: Date | null;
+
   @Column({ name: 'category_list_id' })
   categoryId: number;
 
-  @ManyToOne(() => CategoryList, (categoryList) => categoryList.mentorBoard)
+  @ManyToOne(() => CategoryList, (categoryList) => categoryList.mentorBoard, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'category_list_id' })
   categoryList: CategoryList;
 
