@@ -7,7 +7,7 @@ import { MentorBoardForHotPostDto } from '../dto/mentorBoard/mentor-board-for-ho
 import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
 import { ResponseMentorBoardHotPostPaginationDto } from '../dto/mentorBoard/response-mentor-board-hot-post-pagination.dto';
 import { MentorBoardRepository } from '../repository/mentor.boards.repository';
-import { HotPostsRepositoryNew } from 'src/hot-posts/repositories/hot-posts-new.repository';
+import { HotPostsRepository } from 'src/hot-posts/repositories/hot-posts.repository';
 
 /**
  * @todo 추후에 어떤 방식 선택할지 결정하고 둘 중 하나 삭제
@@ -15,7 +15,7 @@ import { HotPostsRepositoryNew } from 'src/hot-posts/repositories/hot-posts-new.
 @Injectable()
 export class MentorBoardHotPostsService {
   constructor(
-    private readonly hotPostsRepositoryNew: HotPostsRepositoryNew<MentorBoard>,
+    private readonly hotPostsRepository: HotPostsRepository<MentorBoard>,
     private readonly mentorBoardRepository: MentorBoardRepository,
     private readonly entityManager: EntityManager,
   ) {}
@@ -26,7 +26,7 @@ export class MentorBoardHotPostsService {
     likeCount: number,
   ): Promise<void> {
     if (likeCount === 10) {
-      const updateResult = await this.hotPostsRepositoryNew.createHotPost(
+      const updateResult = await this.hotPostsRepository.createHotPost(
         entityManager,
         mentorBoardId,
       );
@@ -36,18 +36,7 @@ export class MentorBoardHotPostsService {
           '멘토 게시글 업데이트 중 서버 에러 발생',
         );
       }
-      // return this.hotPostsRepository.createHotPost(
-      //   entityManager,
-      //   mentorBoardId,
-      //   likeCount,
-      // );
     }
-    //  else if (likeCount > 10) {
-    //   return this.hotPostsRepository.increaseLikeCount(
-    //     entityManager,
-    //     mentorBoardId,
-    //   );
-    // }
   }
 
   async findAllMentorBoardHotPostsWithLimitQuery(
@@ -91,7 +80,7 @@ export class MentorBoardHotPostsService {
       .take(pageSize);
 
     const mentorBoardHotPosts =
-      await this.hotPostsRepositoryNew.findAllHotPostsByQueryBuilder(query);
+      await this.hotPostsRepository.findAllHotPostsByQueryBuilder(query);
 
     const mentorBoardForHotPostDto = mentorBoardHotPosts.map(
       (mentorBoardHotPost) => {
@@ -107,54 +96,13 @@ export class MentorBoardHotPostsService {
     );
   }
 
-  // findAllMentorBoardHotPostsWithLimit() {
-  //   return this.hotPostsRepository.findAllHotPosts({
-  //     select: {
-  //       id: true,
-  //       likeCount: true,
-  //       mentorBoard: {
-  //         id: true,
-  //         userId: true,
-  //         head: true,
-  //         body: true,
-  //         categoryId: true,
-  //         createdAt: true,
-  //         updatedAt: true,
-  //         user: {
-  //           name: true,
-  //           userImage: {
-  //             imageUrl: true,
-  //           },
-  //         },
-  //         mentorBoardImages: {
-  //           id: true,
-  //           imageUrl: true,
-  //         },
-  //       },
-  //       createdAt: true,
-  //     },
-  //     relations: {
-  //       mentorBoard: {
-  //         user: {
-  //           userImage: true,
-  //         },
-  //         mentorBoardImages: true,
-  //       },
-  //     },
-  //     order: {
-  //       createdAt: 'DESC',
-  //     },
-  //     take: 5,
-  //   });
-  // }
-
   async deleteMentorBoardHotPostOrDecrease(
     entityManager: EntityManager,
     mentorBoardId: number,
     likeCount: number,
   ): Promise<void> {
     if (likeCount < 10) {
-      const updateResult = await this.hotPostsRepositoryNew.deleteHotPost(
+      const updateResult = await this.hotPostsRepository.deleteHotPost(
         entityManager,
         mentorBoardId,
       );
