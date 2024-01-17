@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { EntityManager, MoreThan } from 'typeorm';
+import { EntityManager, MoreThanOrEqual } from 'typeorm';
 import { User } from '../entities/user.entity';
-import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
-import { HelpYouComment } from 'src/comments/entities/help-you-comment.entity';
-import { UserReview } from '../entities/user-review.entity';
-import { UserBadge } from '../entities/user-badge.entity';
+import { TotalCount } from 'src/total-count/entities/total-count.entity';
 
 @Injectable()
 export class UserRankingRepository {
@@ -16,52 +13,24 @@ export class UserRankingRepository {
     return users.map((user) => user.id);
   }
 
-  async countMentorBoard(userId: number) {
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    return await this.entityManager.count(MentorBoard, {
-      where: { userId, createdAt: MoreThan(thirtyDaysAgo) },
-    });
-  }
-
-  async countHelpYouComment(userId: number) {
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    return await this.entityManager.count(HelpYouComment, {
-      where: { userId, createdAt: MoreThan(thirtyDaysAgo) },
-    });
-  }
-
-  async checkBoardLikeNum(userId: number) {
-    // const thirtyDaysAgo = new Date();
-    // thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    // return await this.entityManager.count(mentorboardlike, {
-    //   where: { id: userId, createdAt: MoreThan(thirtyDaysAgo) },
-    // });
-  }
-
-  async countUserReview(userId: number) {
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    return await this.entityManager.count(UserReview, {
-      where: { mentorId: userId }, // , createdAt: MoreThan(thirtyDaysAgo) },
-    });
-  }
-
-  async getUserRank(userId: number) {
-    const user = await this.entityManager.findOne(User, {
-      where: { id: userId },
-      select: ['rank'],
+  async allUserCounts() {
+    const allCounts = await this.entityManager.find(TotalCount, {
+      select: [
+        'userId',
+        'countMentorBoard7days',
+        'countMentorBoardLike7days',
+        'countHelpYouComment7days',
+        'countBadge7days',
+        'countReview7days',
+      ],
+      where: [
+        { countMentorBoard7days: MoreThanOrEqual(2) },
+        { countHelpYouComment7days: MoreThanOrEqual(3) },
+        { countMentorBoardLike7days: MoreThanOrEqual(6) },
+        { countReview7days: MoreThanOrEqual(1) },
+      ],
     });
 
-    return user.rank;
-  }
-
-  async countBadge(userId: number) {
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    return await this.entityManager.count(UserBadge, {
-      where: { userId, createdAt: MoreThan(thirtyDaysAgo) },
-    });
+    return allCounts;
   }
 }

@@ -110,7 +110,7 @@ export class UserController {
   }
 
   @Get('/ranking')
-  getRanking(): Promise<any> {
+  async getRanking() {
     return this.userRankingService.userRanking();
   }
 }
