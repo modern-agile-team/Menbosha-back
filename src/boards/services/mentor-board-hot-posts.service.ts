@@ -49,7 +49,7 @@ export class MentorBoardHotPostsService {
       )
       .leftJoin('mentorBoard.mentorBoardLikes', 'mentorBoardLikes')
       .innerJoin('mentorBoard.user', 'user')
-      .innerJoin('user.                      userImage', 'userImage')
+      .innerJoin('user.userImage', 'userImage')
       .select([
         'mentorBoard.id',
         'mentorBoard.userId',

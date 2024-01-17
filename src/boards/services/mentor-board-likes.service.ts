@@ -96,6 +96,7 @@ export class MentorBoardLikeService {
           id: true,
           userId: true,
         },
+        popularAt: true,
       },
       where: { id: boardId },
       relations: ['mentorBoardLikes'],
@@ -126,6 +127,7 @@ export class MentorBoardLikeService {
       const likeCount = existBoard.mentorBoardLikes.length - 1;
 
       if (likeCount === 9 && existBoard.popularAt) {
+        console.log('ㄲ');
         await this.mentorBoardHotPostService.deleteMentorBoardHotPost(
           entityManager,
           existBoard.id,
