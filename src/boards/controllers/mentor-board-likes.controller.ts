@@ -7,6 +7,8 @@ import {
   Post,
   UseGuards,
   UseInterceptors,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
@@ -17,10 +19,14 @@ import { ApiCreateMentorBoardLike } from '../swagger-decorators/mentorBoard/crea
 import { ApiDeleteMentorBoardLike } from '../swagger-decorators/mentorBoard/delete-mentor-board-like.decorator';
 
 @ApiTags('mentor-board-likes')
+@UsePipes(
+  new ValidationPipe({
+    transform: true,
+    whitelist: true,
+    forbidNonWhitelisted: true,
+  }),
+)
 @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
-/**
- * @todo restful하게 uri 수정
- */
 @Controller('mentor-board')
 export class MentorBoardLikeController {
   constructor(
