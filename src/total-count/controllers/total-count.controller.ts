@@ -3,7 +3,7 @@ import { TotalCountService } from '../services/total-count.service';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { Type } from '../enums/type.enum';
-import { CountingDto } from '../dtos/counting.dto';
+import { UpdateCountingDto } from '../dtos/update-counting.dto';
 import { Action } from '../enums/action.enum';
 import { ApiCounting } from '../swagger-decorators/counting.decorator';
 import { ApiTags } from '@nestjs/swagger';
@@ -18,7 +18,7 @@ export class TotalCountController {
   @Patch('/counting')
   async counting(
     @GetUserId() userId: number,
-    @Body() countingDto: CountingDto,
+    @Body() countingDto: UpdateCountingDto,
   ) {
     return await this.totalCountService.counting(
       userId,

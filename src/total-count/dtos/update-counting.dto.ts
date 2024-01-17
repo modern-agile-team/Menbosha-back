@@ -3,7 +3,7 @@ import { Action } from '../enums/action.enum';
 import { Type } from '../enums/type.enum';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CountingDto {
+export class UpdateCountingDto {
   mentorId?: number;
 
   @ApiProperty({

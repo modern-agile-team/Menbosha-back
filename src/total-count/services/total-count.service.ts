@@ -64,4 +64,8 @@ export class TotalCountService {
       reviewCount,
     );
   }
+
+  async clear7DaysCount() {
+    await this.totalCountRepository.clear7DaysCount();
+  }
 }
