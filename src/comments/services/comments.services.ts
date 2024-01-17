@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -17,31 +18,27 @@ export class CommentsService {
     userId: number,
     boardId: number,
   ): Promise<CreateCommentDto> {
+    const myComment = await this.commentRepository.findCommentByUserId(
+      userId,
+      boardId,
+    );
+
+    if (myComment) {
+      throw new ConflictException('이미 게시물에 댓글을 작성했습니다.');
+    }
     return await this.commentRepository.createComment(
       commentData,
       userId,
       boardId,
     );
-    // 각 게시글에 멘토는 1개의 도와줄게요 댓글만 남길 수 있음. 이에 대한 예외처리를 POST요청에서 하게된다면
-    // 버튼이 있고, 눌렀을 때 이미 게시물에 댓글을 작성했습니다. 라고 떠야함 --> 개인적인 생각으로 비효율적
   }
 
   async findAllComments(
     boardId: number,
     userId: number,
-  ): Promise<{ data: CommentResponseDTO[]; myComment }> {
+  ): Promise<{ data: CommentResponseDTO[] }> {
     const comments =
       await this.commentRepository.findCommentsByBoardId(boardId);
-    // if (!comments) {
-    //   return []; // 에러 말고 리턴으로 빈 배열
-    // }
-    // 그렇다면 여기서 예외처리로 myComment라는것에 token의 userId값과 모든 comment의 userId를 받아와서 값을 주면?
-    // 여기에 + 예외처리로 userId가 없을 경우도 생각해야함.
-    const writeComment = await this.commentRepository.findCommentByUserId(
-      userId,
-      boardId,
-    );
-    const myComment = writeComment.userId === userId;
     const commentsResponse: CommentResponseDTO[] = await Promise.all(
       comments.map(async (comment) => {
         return {
@@ -59,7 +56,7 @@ export class CommentsService {
       }),
     );
 
-    return { data: commentsResponse, myComment };
+    return { data: commentsResponse };
   }
 
   async deleteComment(commentId: number, userId: number): Promise<void> {
