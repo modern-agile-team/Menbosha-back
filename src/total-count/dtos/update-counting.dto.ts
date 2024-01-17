@@ -10,7 +10,6 @@ export class UpdateCountingDto {
     description:
       'countMentorBoard: 멘토 게시글 조회수, countHelpYouComment: 도와주세요 댓글 조회수, countMentorBoardLike: 멘토 게시글 좋아요 수, countBadge: 멘토 뱃지 수, countReview: 멘토 후기 수',
     enum: Type,
-    default: Type.CountMentorBoard,
   })
   @IsEnum(Type, {
     message:
@@ -21,7 +20,6 @@ export class UpdateCountingDto {
   @ApiProperty({
     description: 'increment: 증가, decrement: 감소',
     enum: Action,
-    default: Action.Increment,
   })
   @IsEnum(Action, {
     message: 'action은 increment 또는 decrement만 가능합니다.',
