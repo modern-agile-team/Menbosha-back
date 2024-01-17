@@ -7,11 +7,11 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 
-export function ApiAddComment() {
+export function ApiAddHelpComment() {
   return applyDecorators(
     ApiOperation({
-      summary: '댓글을 생성하는 API',
-      description: '댓글을 생성하는 API',
+      summary: '도와줄게요 댓글을 생성하는 API',
+      description: '도와줄게요 댓글을 생성하는 API',
     }),
     ApiResponse({
       status: 200,
@@ -56,6 +56,18 @@ export function ApiAddComment() {
       },
     }),
     ApiResponse({
+      status: 409,
+      description: '이미 게시물에 댓글을 작성한 경우',
+      content: {
+        JSON: {
+          example: {
+            statusCode: 409,
+            message: '이미 댓글을 남긴 게시물입니다.',
+          },
+        },
+      },
+    }),
+    ApiResponse({
       status: 411,
       description: '액세스 토큰이 제공되지 않은 경우',
       content: {
@@ -85,7 +97,7 @@ export function ApiAddComment() {
       },
     ]),
     ApiParam({
-      name: 'boardId',
+      name: 'helpMeBoardId',
       description: '댓글을 추가할 보드의 ID',
     }),
     ApiBody({
