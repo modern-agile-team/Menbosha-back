@@ -29,13 +29,13 @@ export class MentorBoardLikeController {
 
   @ApiCreateMentorBoardLike()
   @UseGuards(JwtAccessTokenGuard)
-  @Post(':boardId/like')
+  @Post(':mentorBoardId/like')
   async createMentorBoardLike(
     @GetUserId() userId: number,
-    @Param('boardId', ParseIntPipe) boardId: number,
+    @Param('mentorBoardId', ParseIntPipe) mentorBoardId: number,
   ): Promise<{ isLike: true }> {
     await this.mentorBoardSLikeService.createMentorBoardLikeAndHotPost(
-      boardId,
+      mentorBoardId,
       userId,
     );
     return { isLike: true };
@@ -43,11 +43,14 @@ export class MentorBoardLikeController {
 
   @ApiDeleteMentorBoardLike()
   @UseGuards(JwtAccessTokenGuard)
-  @Delete(':boardId/like')
+  @Delete(':mentorBoardId/like')
   deleteMentorBoardLike(
     @GetUserId() userId: number,
-    @Param('boardId', ParseIntPipe) boardId: number,
+    @Param('mentorBoardId', ParseIntPipe) mentorBoardId: number,
   ): Promise<{ isLike: false }> {
-    return this.mentorBoardSLikeService.deleteMentorBoardLike(boardId, userId);
+    return this.mentorBoardSLikeService.deleteMentorBoardLike(
+      mentorBoardId,
+      userId,
+    );
   }
 }
