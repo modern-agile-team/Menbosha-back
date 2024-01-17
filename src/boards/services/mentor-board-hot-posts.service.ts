@@ -65,7 +65,9 @@ export class MentorBoardHotPostsService {
         'mentorBoardImages.id',
         'mentorBoardImages.imageUrl',
       ])
-      .where('mentorBoard.categoryId = :categoryId', { categoryId })
+      .where(categoryId === 1 ? '' : 'mentorBoard.categoryId = :categoryId', {
+        categoryId,
+      })
       .andWhere('mentorBoard.popularAt IS NOT NULL')
       .orderBy(`mentorBoard.${orderField}`, sortOrder)
       .skip(skip)
