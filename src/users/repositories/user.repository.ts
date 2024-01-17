@@ -40,8 +40,8 @@ export class UserRepository {
     user.provider = userInfo.provider;
     user.name = userInfo.nickname;
     user.email = userInfo.email;
-    user.hopeCategoryId = 3;
-    user.activityCategoryId = 3;
+    user.hopeCategoryId = 1;
+    user.activityCategoryId = 1;
     user.isMentor = false;
 
     return this.entityManager.save(user);
