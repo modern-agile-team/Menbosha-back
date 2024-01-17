@@ -50,7 +50,7 @@ export class MentorBoard {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @Column({
+  @Column('datetime', {
     name: 'popular_at',
     nullable: true,
     comment: '인기 게시글 선정 일자',
