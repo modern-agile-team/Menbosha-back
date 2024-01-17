@@ -4,21 +4,19 @@ import {
   Body,
   Query,
   Get,
-  // Patch,
   Delete,
   UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CommentsService } from '../services/comments.services';
 import { CreateCommentDto } from '../dto/create-comment-dto';
-import { ApiAddComment } from '../swagger-decorators/add-comment-decorators';
 import { ApiGetAllComment } from '../swagger-decorators/get-all-comment-decorators';
 import { CommentResponseDTO } from '../dto/get-all-comment-dto';
 import { ApiDeleteComment } from '../swagger-decorators/delete-comment-decorator';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
-// import { ApiUpdateComment } from '../swagger-decorators/patch-comment-decorators';
+import { ApiAddHelpComment } from '../swagger-decorators/post-help-you-comment-decorator';
 
 @Controller('help-you-comments')
 @ApiTags('help-you-comment API')
@@ -27,7 +25,7 @@ export class CommentsController {
 
   @Post('')
   @UseGuards(JwtAccessTokenGuard)
-  @ApiAddComment()
+  @ApiAddHelpComment()
   async createComment(
     @GetUserId() userId: number,
     @Query('helpMeBoardId') boardId: number,
