@@ -36,53 +36,6 @@ export class TotalCountRepository {
     }
   }
 
-  async syncTotalCount(
-    userId: number,
-    mentorBoardCount: number,
-    helpYouCommentCount: number,
-    mentorBoardLikeCount: number,
-    badgeCount: number,
-    reviewCount: number,
-  ) {
-    return await this.entityManager.update(
-      TotalCount,
-      { userId },
-      {
-        countMentorBoard: mentorBoardCount,
-        countHelpYouComment: helpYouCommentCount,
-        countMentorBoardLike: mentorBoardLikeCount,
-        countBadge: badgeCount,
-        countReview: reviewCount,
-      },
-    );
-  }
-
-  async getAllUserId() {
-    const users = await this.entityManager.find(User, { select: ['id'] });
-
-    return users.map((user) => user.id);
-  }
-
-  async getMentorBoardCount(userId: number) {
-    return await this.entityManager.countBy(MentorBoard, { userId });
-  }
-
-  async getHelpYouCommentCount(userId: number) {
-    return await this.entityManager.countBy(HelpYouComment, { userId });
-  }
-
-  async getMentorBoardLikeCount(userId: number) {
-    // return await this.entityManager.countBy(MentorBoardLike, { userId });
-  }
-
-  async getbadgeCount(userId: number) {
-    return await this.entityManager.countBy(MentorBoard, { userId });
-  }
-
-  async getReviewCount(userId: number) {
-    return await this.entityManager.countBy(UserReview, { mentorId: userId });
-  }
-
   async clear7DaysCount() {
     return await this.entityManager.update(
       TotalCount,

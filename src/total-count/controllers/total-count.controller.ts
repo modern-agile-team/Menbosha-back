@@ -27,9 +27,4 @@ export class TotalCountController {
       countingDto.action as Action,
     );
   }
-
-  @Post('/sync')
-  async syncTotalCount() {
-    return await this.totalCountService.syncTotalCount();
-  }
 }
