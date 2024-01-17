@@ -50,7 +50,7 @@ export class CommentsService {
             userId: comment.user.id,
             rank: comment.user.rank,
             categoryId: comment.user.activityCategoryId,
-            userImage: comment.user.userImage.imageUrl,
+            imageUrl: comment.user.userImage.imageUrl,
           },
         };
       }),

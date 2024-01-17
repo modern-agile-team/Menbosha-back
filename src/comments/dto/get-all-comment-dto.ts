@@ -7,6 +7,6 @@ export class CommentResponseDTO {
     userId: number;
     rank: number;
     categoryId: number;
-    userImage: string;
+    imageUrl: string;
   };
 }
