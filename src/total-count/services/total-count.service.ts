@@ -1,5 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { TotalCountRepository } from '../repositories/total-count.repository';
+import { Type } from '../enums/type.enum';
+import { Action } from '../enums/action.enum';
 
 @Injectable()
 export class TotalCountService {
@@ -9,25 +11,29 @@ export class TotalCountService {
     await this.totalCountRepository.createTotalCount(userId);
   }
 
-  async counting(
-    userId: number,
-    mentorId: number,
-    type: string,
-    action: 'increment' | 'decrement',
-  ) {
+  async counting(userId: number, mentorId: number, type: Type, action: Action) {
     try {
-      if (type === 'countMentorBoardLike' || type === 'countReview') {
+      if (type === Type.CountMentorBoardLike || type === Type.CountReview) {
+        if (!mentorId) {
+          throw new HttpException(
+            'mentorId가 필요한 요청입니다.',
+            HttpStatus.BAD_REQUEST,
+          );
+        }
         await this.totalCountRepository.counting(mentorId, type, action);
       } else {
         await this.totalCountRepository.counting(userId, type, action);
       }
       return { message: '카운팅 성공' };
     } catch (error) {
-      console.log(error);
-      throw new HttpException(
-        '카운팅 도중 에러가 발생했습니다.',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (error instanceof HttpException) throw error;
+      else {
+        console.log(error);
+        throw new HttpException(
+          '카운팅 도중 에러가 발생했습니다.',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 
@@ -57,5 +63,9 @@ export class TotalCountService {
       badgeCount,
       reviewCount,
     );
+  }
+
+  async clear7DaysCount() {
+    await this.totalCountRepository.clear7DaysCount();
   }
 }
