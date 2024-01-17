@@ -84,12 +84,16 @@ export class TotalCountRepository {
   }
 
   async clear7DaysCount() {
-    await this.entityManager.delete(TotalCount, {
-      countMentorBoard7days: 0,
-      countHelpYouComment7days: 0,
-      countMentorBoardLike7days: 0,
-      countBadge7days: 0,
-      countReview7days: 0,
-    });
+    return await this.entityManager.update(
+      TotalCount,
+      {},
+      {
+        countMentorBoard7days: 0,
+        countHelpYouComment7days: 0,
+        countMentorBoardLike7days: 0,
+        countBadge7days: 0,
+        countReview7days: 0,
+      },
+    );
   }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Patch, UseGuards } from '@nestjs/common';
+import { Body, Controller, Patch, Post, UseGuards } from '@nestjs/common';
 import { TotalCountService } from '../services/total-count.service';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
@@ -26,5 +26,10 @@ export class TotalCountController {
       countingDto.type as Type,
       countingDto.action as Action,
     );
+  }
+
+  @Post('/sync')
+  async syncTotalCount() {
+    return await this.totalCountService.syncTotalCount();
   }
 }

@@ -113,9 +113,4 @@ export class UserController {
   getRanking(): Promise<any> {
     return this.userRankingService.userRanking();
   }
-
-  @Post('/sync-total-count')
-  async syncTotalCount() {
-    return this.totalcountService.syncTotalCount();
-  }
 }

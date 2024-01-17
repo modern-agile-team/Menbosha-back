@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { TotalCountRepository } from '../repositories/total-count.repository';
 import { Type } from '../enums/type.enum';
 import { Action } from '../enums/action.enum';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class TotalCountService {
@@ -65,7 +66,17 @@ export class TotalCountService {
     );
   }
 
+  @Cron('0 0 9 * * 1') // 매주 월요일 오전 9시에 실행
   async clear7DaysCount() {
-    await this.totalCountRepository.clear7DaysCount();
+    const clear = await this.totalCountRepository.clear7DaysCount();
+
+    if (clear.affected) {
+      return { message: '7일 카운트 초기화 성공' };
+    } else {
+      throw new HttpException(
+        '7일 카운트 초기화 실패',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
