@@ -21,7 +21,7 @@ export class MentorBoardLikeService {
   ) {}
 
   async createMentorBoardLikeAndHotPost(
-    boardId: number,
+    mentorBoardId: number,
     userId: number,
   ): Promise<MentorBoardLikeDto> {
     const existBoard = await this.mentorBoardService.findOneByOrNotFound({
@@ -34,7 +34,7 @@ export class MentorBoardLikeService {
         },
         popularAt: true,
       },
-      where: { id: boardId },
+      where: { id: mentorBoardId },
       relations: ['mentorBoardLikes'],
     });
 
@@ -94,7 +94,7 @@ export class MentorBoardLikeService {
   }
 
   async deleteMentorBoardLike(
-    boardId: number,
+    mentorBoardId: number,
     userId: number,
   ): Promise<{ isLike: false }> {
     const existBoard = await this.mentorBoardService.findOneByOrNotFound({
@@ -106,7 +106,7 @@ export class MentorBoardLikeService {
         },
         popularAt: true,
       },
-      where: { id: boardId },
+      where: { id: mentorBoardId },
       relations: ['mentorBoardLikes'],
     });
 
