@@ -36,9 +36,12 @@ export class CommentsRepository {
     });
   }
 
-  async findCommentByUserId(userId: number): Promise<HelpYouComment> {
+  async findCommentByUserId(
+    userId: number,
+    boardId: number,
+  ): Promise<HelpYouComment> {
     return await this.entityManager.findOne(HelpYouComment, {
-      where: { userId: userId },
+      where: { userId: userId, helpMeBoardId: boardId },
     });
   }
 

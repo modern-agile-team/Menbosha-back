@@ -29,15 +29,19 @@ export class CommentsService {
   async findAllComments(
     boardId: number,
     userId: number,
-  ): Promise<{ data: CommentResponseDTO[]; writeComment }> {
+  ): Promise<{ data: CommentResponseDTO[]; myComment }> {
     const comments =
       await this.commentRepository.findCommentsByBoardId(boardId);
     // if (!comments) {
     //   return []; // 에러 말고 리턴으로 빈 배열
     // }
     // 그렇다면 여기서 예외처리로 myComment라는것에 token의 userId값과 모든 comment의 userId를 받아와서 값을 주면?
-    const myComment = await this.commentRepository.findCommentByUserId(userId);
-    const writeComment = myComment.userId === userId;
+    // 여기에 + 예외처리로 userId가 없을 경우도 생각해야함.
+    const writeComment = await this.commentRepository.findCommentByUserId(
+      userId,
+      boardId,
+    );
+    const myComment = writeComment.userId === userId;
     const commentsResponse: CommentResponseDTO[] = await Promise.all(
       comments.map(async (comment) => {
         return {
@@ -55,7 +59,7 @@ export class CommentsService {
       }),
     );
 
-    return { data: commentsResponse, writeComment };
+    return { data: commentsResponse, myComment };
   }
 
   async deleteComment(commentId: number, userId: number): Promise<void> {
