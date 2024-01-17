@@ -1,10 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
-import { HelpYouComment } from 'src/comments/entities/help-you-comment.entity';
-import { UserReview } from 'src/users/entities/user-review.entity';
 import { EntityManager } from 'typeorm';
 import { TotalCount } from '../entities/total-count.entity';
-import { User } from 'src/users/entities/user.entity';
 import { Type } from '../enums/type.enum';
 import { Action } from '../enums/action.enum';
 
