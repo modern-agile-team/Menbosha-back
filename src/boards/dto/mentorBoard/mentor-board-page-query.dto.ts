@@ -13,7 +13,7 @@ export class MentorBoardPageQueryDto extends PageQueryDto {
   })
   @IsOptional()
   @IsEnum(MentorBoardOrderField)
-  orderField?: MentorBoardOrderField = MentorBoardOrderField.id;
+  orderField: MentorBoardOrderField = MentorBoardOrderField.id;
 
   @ApiPropertyOptional({
     description: '오름차순 혹은 내림차순',
@@ -22,5 +22,5 @@ export class MentorBoardPageQueryDto extends PageQueryDto {
   })
   @IsOptional()
   @IsEnum(SortOrder)
-  sortOrder?: SortOrder = SortOrder.Asc;
+  sortOrder: SortOrder = SortOrder.Asc;
 }
