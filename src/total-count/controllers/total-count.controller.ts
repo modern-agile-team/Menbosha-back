@@ -22,7 +22,7 @@ export class TotalCountController {
   ) {
     return await this.totalCountService.counting(
       userId,
-      countingDto.mentorId,
+      countingDto.mentorId as number,
       countingDto.type as Type,
       countingDto.action as Action,
     );
