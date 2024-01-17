@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
@@ -26,6 +27,7 @@ export class MentorBoardLikeService {
     const existBoard = await this.mentorBoardService.findOneByOrNotFound({
       select: {
         id: true,
+        userId: true,
         mentorBoardLikes: {
           id: true,
           userId: true,
@@ -35,6 +37,12 @@ export class MentorBoardLikeService {
       where: { id: boardId },
       relations: ['mentorBoardLikes'],
     });
+
+    if (existBoard.userId === userId) {
+      throw new ForbiddenException(
+        '본인의 게시글에는 좋아요를 누를 수 없습니다.',
+      );
+    }
 
     if (
       existBoard.mentorBoardLikes.find(
