@@ -5,6 +5,8 @@ import { UserReview } from 'src/users/entities/user-review.entity';
 import { EntityManager } from 'typeorm';
 import { TotalCount } from '../entities/total-count.entity';
 import { User } from 'src/users/entities/user.entity';
+import { Type } from '../enums/type.enum';
+import { Action } from '../enums/action.enum';
 
 @Injectable()
 export class TotalCountRepository {
@@ -14,12 +16,8 @@ export class TotalCountRepository {
     await this.entityManager.insert('total_count', { userId });
   }
 
-  async counting(
-    userId: number,
-    type: string,
-    action: 'increment' | 'decrement',
-  ) {
-    if (action === 'increment') {
+  async counting(userId: number, type: Type, action: Action) {
+    if (action === Action.Increment) {
       await this.entityManager.increment(TotalCount, { userId }, type, 1);
       await this.entityManager.increment(
         TotalCount,
@@ -83,5 +81,15 @@ export class TotalCountRepository {
 
   async getReviewCount(userId: number) {
     return await this.entityManager.countBy(UserReview, { mentorId: userId });
+  }
+
+  async clear7DaysCount() {
+    await this.entityManager.delete(TotalCount, {
+      countMentorBoard7days: 0,
+      countHelpYouComment7days: 0,
+      countMentorBoardLike7days: 0,
+      countBadge7days: 0,
+      countReview7days: 0,
+    });
   }
 }

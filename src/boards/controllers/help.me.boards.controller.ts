@@ -86,7 +86,7 @@ export class HelpMeBoardController {
     return this.helpMeBoardService.countPagedHelpMeBoards(categoryId);
   }
 
-  @Get('/pulling-up')
+  @Get('/pulling-up') //끌어올린 게시물 보여주기
   @ApiGetPullingUpHelpMeBoard()
   latestHelpMeBoard(): Promise<{ data: PullingUpHelpMeBoardResponseDTO[] }> {
     return this.helpMeBoardService.latestHelpMeBoards();
