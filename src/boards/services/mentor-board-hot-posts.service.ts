@@ -1,42 +1,34 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-// import { HotPostsRepository } from 'src/hot-posts/repositories/hot-posts.repository';
-// import { MentorBoardHotPost } from '../entities/mentor-board-hot-post.entity';
 import { EntityManager } from 'typeorm';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { MentorBoardForHotPostDto } from '../dto/mentorBoard/mentor-board-for-hot-post.dto';
 import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
 import { ResponseMentorBoardHotPostPaginationDto } from '../dto/mentorBoard/response-mentor-board-hot-post-pagination.dto';
-import { MentorBoardRepository } from '../repository/mentor.boards.repository';
 import { HotPostsRepository } from 'src/hot-posts/repositories/hot-posts.repository';
 
-/**
- * @todo 추후에 어떤 방식 선택할지 결정하고 둘 중 하나 삭제
- */
 @Injectable()
 export class MentorBoardHotPostsService {
   constructor(
     private readonly hotPostsRepository: HotPostsRepository<MentorBoard>,
-    private readonly mentorBoardRepository: MentorBoardRepository,
     private readonly entityManager: EntityManager,
   ) {}
 
-  async createMentorBoardHotPostOrIncrease(
+  async createMentorBoardHotPost(
     entityManager: EntityManager,
     mentorBoardId: number,
-    likeCount: number,
   ): Promise<void> {
-    if (likeCount === 10) {
-      const updateResult = await this.hotPostsRepository.createHotPost(
-        entityManager,
-        mentorBoardId,
-      );
+    const updateResult = await this.hotPostsRepository.updateToHotPost(
+      entityManager,
+      mentorBoardId,
+    );
 
-      if (!updateResult.affected) {
-        throw new InternalServerErrorException(
-          '멘토 게시글 업데이트 중 서버 에러 발생',
-        );
-      }
+    if (!updateResult.affected) {
+      throw new InternalServerErrorException(
+        '멘토 게시글 업데이트 중 서버 에러 발생',
+      );
     }
+
+    return;
   }
 
   async findAllMentorBoardHotPostsWithLimitQuery(
@@ -57,7 +49,7 @@ export class MentorBoardHotPostsService {
       )
       .leftJoin('mentorBoard.mentorBoardLikes', 'mentorBoardLikes')
       .innerJoin('mentorBoard.user', 'user')
-      .innerJoin('user.userImage', 'userImage')
+      .innerJoin('user.                      userImage', 'userImage')
       .select([
         'mentorBoard.id',
         'mentorBoard.userId',
@@ -96,32 +88,21 @@ export class MentorBoardHotPostsService {
     );
   }
 
-  async deleteMentorBoardHotPostOrDecrease(
+  async deleteMentorBoardHotPost(
     entityManager: EntityManager,
     mentorBoardId: number,
-    likeCount: number,
   ): Promise<void> {
-    if (likeCount < 10) {
-      const updateResult = await this.hotPostsRepository.deleteHotPost(
-        entityManager,
-        mentorBoardId,
-      );
+    const updateResult = await this.hotPostsRepository.updateToNotHotPost(
+      entityManager,
+      mentorBoardId,
+    );
 
-      if (!updateResult.affected) {
-        throw new InternalServerErrorException(
-          '멘토 게시글 업데이트 중 서버 에러 발생',
-        );
-      }
-      // return this.hotPostsRepository.deleteHotPost(
-      //   entityManager,
-      //   mentorBoardId,
-      // );
+    if (!updateResult.affected) {
+      throw new InternalServerErrorException(
+        '멘토 게시글 업데이트 중 서버 에러 발생',
+      );
     }
-    // } else if (likeCount > 9) {
-    //   return this.hotPostsRepository.decreaseLikeCount(
-    //     entityManager,
-    //     mentorBoardId,
-    //   );
-    // }
+
+    return;
   }
 }

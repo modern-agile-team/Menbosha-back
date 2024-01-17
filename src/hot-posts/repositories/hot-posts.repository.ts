@@ -11,9 +11,6 @@ import {
 } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
-/**
- * @todo 추후에 어떤 방식 선택할지 결정하고 둘 중 하나 삭제
- */
 @Injectable()
 export class HotPostsRepository<E extends RequiredHotPostColumn> {
   constructor(
@@ -21,7 +18,7 @@ export class HotPostsRepository<E extends RequiredHotPostColumn> {
     private readonly HotPostRepository: Repository<E>,
   ) {}
 
-  async createHotPost(
+  async updateToHotPost(
     entityManager: EntityManager,
     boardId: number,
   ): Promise<UpdateResult> {
@@ -43,7 +40,7 @@ export class HotPostsRepository<E extends RequiredHotPostColumn> {
     return queryBuilder.getMany();
   }
 
-  async deleteHotPost(
+  async updateToNotHotPost(
     entityManager: EntityManager,
     boardId: number,
   ): Promise<UpdateResult> {

@@ -62,7 +62,9 @@ export class MentorBoard {
   @Column({ name: 'category_list_id' })
   categoryId: number;
 
-  @ManyToOne(() => CategoryList, (categoryList) => categoryList.mentorBoard)
+  @ManyToOne(() => CategoryList, (categoryList) => categoryList.mentorBoard, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'category_list_id' })
   categoryList: CategoryList;
 

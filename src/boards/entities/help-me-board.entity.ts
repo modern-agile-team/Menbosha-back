@@ -55,7 +55,9 @@ export class HelpMeBoard {
   @Column({ name: 'category_list_id' })
   categoryId: number;
 
-  @ManyToOne(() => CategoryList, (categoryList) => categoryList.helpMeBoard)
+  @ManyToOne(() => CategoryList, (categoryList) => categoryList.helpMeBoard, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'category_list_id' })
   categoryList: CategoryList;
 }

@@ -30,6 +30,7 @@ export class MentorBoardLikeService {
           id: true,
           userId: true,
         },
+        popularAt: true,
       },
       where: { id: boardId },
       relations: ['mentorBoardLikes'],
@@ -59,11 +60,12 @@ export class MentorBoardLikeService {
 
       const likeCount = existBoard.mentorBoardLikes.length + 1;
 
-      await this.mentorBoardHotPostService.createMentorBoardHotPostOrIncrease(
-        entityManager,
-        existBoard.id,
-        likeCount,
-      );
+      if (likeCount === 10 && !existBoard.popularAt) {
+        await this.mentorBoardHotPostService.createMentorBoardHotPost(
+          entityManager,
+          existBoard.id,
+        );
+      }
 
       await queryRunner.commitTransaction();
 
@@ -123,11 +125,12 @@ export class MentorBoardLikeService {
 
       const likeCount = existBoard.mentorBoardLikes.length - 1;
 
-      await this.mentorBoardHotPostService.deleteMentorBoardHotPostOrDecrease(
-        entityManager,
-        existBoard.id,
-        likeCount,
-      );
+      if (likeCount === 9 && existBoard.popularAt) {
+        await this.mentorBoardHotPostService.deleteMentorBoardHotPost(
+          entityManager,
+          existBoard.id,
+        );
+      }
 
       await queryRunner.commitTransaction();
 
