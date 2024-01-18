@@ -43,12 +43,12 @@ export class TotalCountService {
     const clear = await this.totalCountRepository.clear7DaysCount();
 
     if (!clear.affected) {
-       throw new HttpException(
+      throw new HttpException(
         '7일 카운트 초기화 실패',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
-    } 
-    
+    }
+
     return { message: '7일 카운트 초기화 성공' };
   }
 }
