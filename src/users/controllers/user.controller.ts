@@ -30,7 +30,6 @@ import { ApiUpdateUserIntro } from '../swagger-decorators/patch-user-intro-decor
 import { ApiGetMyRank } from '../swagger-decorators/get-my-rank-decorators';
 import { ApiGetUserInfo } from '../swagger-decorators/get-user-info.decorators';
 import { UserRankingService } from '../services/user-ranking.service';
-import { TotalCountService } from 'src/total-count/services/total-count.service';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -40,7 +39,6 @@ export class UserController {
     private readonly userService: UserService,
     private readonly userIntroService: UserIntroService,
     private readonly userRankingService: UserRankingService,
-    private readonly totalcountService: TotalCountService,
   ) {}
 
   @ApiGetMyProfile()
@@ -109,8 +107,8 @@ export class UserController {
     return this.userIntroService.updateUserIntro(userId, userData);
   }
 
-  @Get('/ranking')
-  async getRanking() {
-    return this.userRankingService.userRanking();
-  }
+  // @Get('/ranking')
+  // async getRanking() {
+  //   return this.userRankingService.userRanking();
+  // }
 }
