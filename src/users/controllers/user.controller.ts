@@ -118,4 +118,10 @@ export class UserController {
   async syncTotalCount() {
     return this.totalCountService.syncTotalCount();
   }
+
+  @UseGuards(JwtAccessTokenGuard)
+  @Get('/badge')
+  getBadge(@GetUserId() userId: number) {
+    return this.userService.userBadge(userId);
+  }
 }
