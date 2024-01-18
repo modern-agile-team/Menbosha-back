@@ -2,8 +2,6 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
-  Param,
-  ParseIntPipe,
   Query,
   UseInterceptors,
   UsePipes,
@@ -32,14 +30,12 @@ export class MentorBoardHotPostsController {
   ) {}
 
   @ApiFindAllHotPostsWithPagination()
-  @Get(':categoryId')
+  @Get()
   findAllHotPostsWithPagination(
-    @Param('categoryId', ParseIntPipe) categoryId: number,
     @Query() mentorBoardPageQueryDto: MentorBoardPageQueryDto,
   ): Promise<ResponseMentorBoardHotPostPaginationDto> {
     return this.mentorBoardHotPostsService.findAllMentorBoardHotPostsWithLimitQuery(
       mentorBoardPageQueryDto,
-      categoryId,
     );
   }
 }

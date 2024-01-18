@@ -5,12 +5,14 @@ import { MentorBoardForHotPostDto } from '../dto/mentorBoard/mentor-board-for-ho
 import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
 import { ResponseMentorBoardHotPostPaginationDto } from '../dto/mentorBoard/response-mentor-board-hot-post-pagination.dto';
 import { HotPostsRepository } from 'src/hot-posts/repositories/hot-posts.repository';
+import { CategoryService } from 'src/category/services/category.service';
 
 @Injectable()
 export class MentorBoardHotPostsService {
   constructor(
     private readonly hotPostsRepository: HotPostsRepository<MentorBoard>,
     private readonly entityManager: EntityManager,
+    private readonly categoryService: CategoryService,
   ) {}
 
   async createMentorBoardHotPost(
@@ -33,9 +35,12 @@ export class MentorBoardHotPostsService {
 
   async findAllMentorBoardHotPostsWithLimitQuery(
     mentorBoardPageQueryDto: MentorBoardPageQueryDto,
-    categoryId: number,
   ): Promise<ResponseMentorBoardHotPostPaginationDto> {
-    const { page, orderField, sortOrder, pageSize } = mentorBoardPageQueryDto;
+    const { page, orderField, sortOrder, pageSize, categoryId } =
+      mentorBoardPageQueryDto;
+
+    const category =
+      await this.categoryService.findOneCategoryOrNotFound(categoryId);
 
     const skip = (page - 1) * pageSize;
 
@@ -65,8 +70,8 @@ export class MentorBoardHotPostsService {
         'mentorBoardImages.id',
         'mentorBoardImages.imageUrl',
       ])
-      .where(categoryId === 1 ? '' : 'mentorBoard.categoryId = :categoryId', {
-        categoryId,
+      .where(category.id === 1 ? '' : 'mentorBoard.categoryId = :categoryId', {
+        categoryId: category.id,
       })
       .andWhere('mentorBoard.popularAt IS NOT NULL')
       .orderBy(`mentorBoard.${orderField}`, sortOrder)
