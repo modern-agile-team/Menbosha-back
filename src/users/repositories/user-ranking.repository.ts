@@ -36,7 +36,7 @@ export class UserRankingRepository {
     return allCounts;
   }
 
-  async saveUserRanking(userIds: Array<any>) {
+  async saveUserRanking(userIds: Array<number | null>) {
     return await this.entityManager
       .createQueryBuilder()
       .insert()
