@@ -147,6 +147,8 @@ export class UserService {
               introduce: user.userIntro.introduce.substring(0, 30),
               mainField: user.userIntro.mainField.substring(0, 30),
             },
+            countReview: user.totalCount.countReview,
+            countBoard: user.totalCount.countMentorBoard,
           };
         }),
     );
