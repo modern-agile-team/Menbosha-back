@@ -8,9 +8,7 @@ export class UserRankingService {
 
   async getUserRanking() {
     try {
-      const userRanking = await this.userRankingRepository.getUserRanking();
-
-      return { userRanking };
+      return await this.userRankingRepository.getUserRanking();
     } catch (error) {
       console.log(error);
       throw new HttpException(
