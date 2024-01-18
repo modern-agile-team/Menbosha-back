@@ -40,11 +40,20 @@ export function ApiDeleteComment() {
       },
     }),
     ApiResponse({
+      status: 403,
+      description: '자신이 작성한 댓글이 아닐 경우',
+      content: {
+        JSON: {
+          example: { statusCode: 403, message: '작성한 댓글이 아닙니다.' },
+        },
+      },
+    }),
+    ApiResponse({
       status: 404,
       description: 'DB에서 댓글을 찾을 수 없는 경우',
       content: {
         JSON: {
-          example: { statusCode: 404, message: '댓글을 찾을 수 없습니다.' },
+          example: { statusCode: 404, message: '존재하지 않는 댓글입니다.' },
         },
       },
     }),

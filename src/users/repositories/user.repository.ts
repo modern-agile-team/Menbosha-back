@@ -72,7 +72,7 @@ export class UserRepository {
     activityCategoryId: number,
   ): Promise<User[]> {
     return await this.entityManager.find(User, {
-      relations: ['userImage', 'userIntro'],
+      relations: ['userImage', 'userIntro', 'totalCount'],
       where: { activityCategoryId },
       skip: skip,
       take: limit,
@@ -81,7 +81,7 @@ export class UserRepository {
 
   async findPageByMentors(skip: number, limit: number): Promise<User[]> {
     return await this.entityManager.find(User, {
-      relations: ['userImage', 'userIntro'],
+      relations: ['userImage', 'userIntro', 'totalCount'],
       skip: skip,
       take: limit,
     });

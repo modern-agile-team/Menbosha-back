@@ -4,6 +4,7 @@ import { RequiredLikeColumn } from './types/like.type';
 import { LIKE_REPOSITORY_TOKEN } from './constants/like.token';
 import { DataSource } from 'typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { LikesRepository } from './repositories/likes.repository';
 
 @Module({})
 export class LikesModule {
@@ -13,6 +14,7 @@ export class LikesModule {
       imports: [TypeOrmModule.forFeature([LikeEntity])],
       providers: [
         LikesService,
+        LikesRepository,
         {
           provide: LIKE_REPOSITORY_TOKEN,
           useFactory: (dataSource: DataSource) => {
@@ -21,7 +23,7 @@ export class LikesModule {
           inject: [DataSource],
         },
       ],
-      exports: [LikesService],
+      exports: [LikesService, LikesRepository],
     };
   }
 }

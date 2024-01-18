@@ -26,6 +26,8 @@ export function ApiGetMentorList() {
                   introduce: 'substring(0, 30)',
                   mainField: 'substring(0, 30)',
                 },
+                countReview: 'number',
+                countBoard: 'number',
               },
             ],
           },

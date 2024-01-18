@@ -38,7 +38,7 @@ import { ApiGetChatRoomsNew } from '../swagger-decorators/get-chat-rooms-new.dec
 import { Observable } from 'rxjs';
 import { ApiGetChatNotificationSse } from '../swagger-decorators/get-chat-notification-Sse.decorator';
 import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
-import { PageQueryDto } from 'src/search/dtos/page-query.dto';
+import { PageQueryDto } from 'src/common/dto/page-query.dto';
 import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
 import { ChatImageDto } from '../dto/chat-image.dto';
 import { ChatRoomsWithoutChatsItemDto } from '../dto/chat-rooms-without-chats-item.dto';
