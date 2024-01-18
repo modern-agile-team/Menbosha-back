@@ -19,7 +19,7 @@ export class UserRankingService {
   }
 
   @Cron('0 59 8 * * 1') // 매주 월요일 오전 8시 59분에 실행 (7days 칼럼 초기화 전에 실행)
-  async userRanking() {
+  async saveUserRanking() {
     try {
       const allUserCounts = await this.userRankingRepository.allUserCounts();
       const userRankingArray = allUserCounts
