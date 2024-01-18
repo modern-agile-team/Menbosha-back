@@ -14,7 +14,7 @@ import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
 import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
 import { UserReview } from './user-review.entity';
 import { UserBadge } from './user-badge.entity';
-import { CategoryList } from '../../common/entity/category-list.entity';
+import { CategoryList } from '../../category/entity/category-list.entity';
 import { UserIntro } from './user-intro.entity';
 import { TotalCount } from 'src/total-count/entities/total-count.entity';
 import { MentorBoardLike } from 'src/boards/entities/mentor-board-like.entity';
