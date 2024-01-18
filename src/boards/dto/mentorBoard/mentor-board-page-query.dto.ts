@@ -4,7 +4,7 @@ import { IsEnum, IsOptional } from 'class-validator';
 import { MentorBoardOrderField } from 'src/boards/constants/mentor-board-order-field.enum';
 import { SortOrder } from '../../../common/constants/sort-order.enum';
 import { PageQueryDto } from 'src/common/dto/page-query.dto';
-import { IsPositiveInt } from 'src/common/dto/validators/is-positive-int.decorator';
+import { IsPositiveInt } from 'src/common/decorators/validators/is-positive-int.decorator';
 
 export class MentorBoardPageQueryDto extends PageQueryDto {
   @ApiPropertyOptional({
