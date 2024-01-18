@@ -5,7 +5,7 @@ import { MentorBoardForHotPostDto } from '../dto/mentorBoard/mentor-board-for-ho
 import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
 import { ResponseMentorBoardHotPostPaginationDto } from '../dto/mentorBoard/response-mentor-board-hot-post-pagination.dto';
 import { HotPostsRepository } from 'src/hot-posts/repositories/hot-posts.repository';
-import { CategoryService } from 'src/common/category/services/category.service';
+import { CategoryService } from 'src/category/services/category.service';
 
 @Injectable()
 export class MentorBoardHotPostsService {
