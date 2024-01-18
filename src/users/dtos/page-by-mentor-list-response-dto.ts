@@ -10,6 +10,6 @@ export class PageByMentorListResponseDTO {
     introduce: string;
     mainField: string;
   };
-  countReviews: number;
-  countBoards: number;
+  countReview: number;
+  countBoard: number;
 }
