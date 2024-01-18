@@ -40,7 +40,7 @@ export class UserController {
     private readonly userService: UserService,
     private readonly userIntroService: UserIntroService,
     private readonly userRankingService: UserRankingService,
-    private readonly totalcountService: TotalCountService,
+    private readonly totalCountService: TotalCountService,
   ) {}
 
   @ApiGetMyProfile()
@@ -116,6 +116,6 @@ export class UserController {
 
   @Post('/sync-total-count')
   async syncTotalCount() {
-    return this.totalcountService.syncTotalCount();
+    return this.totalCountService.syncTotalCount();
   }
 }
