@@ -12,13 +12,13 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
-import { MentorBoardLikeService } from '../services/mentor-board-like.service';
+import { MentorBoardLikeService } from '../services/mentor-board-likes.service';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { ApiCreateMentorBoardLike } from '../swagger-decorators/mentorBoard/create-mentor-board-like.decorator';
 import { ApiDeleteMentorBoardLike } from '../swagger-decorators/mentorBoard/delete-mentor-board-like.decorator';
 
-@ApiTags('mentor-board-like')
+@ApiTags('mentor-board-likes')
 @UsePipes(
   new ValidationPipe({
     transform: true,
@@ -27,10 +27,7 @@ import { ApiDeleteMentorBoardLike } from '../swagger-decorators/mentorBoard/dele
   }),
 )
 @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
-/**
- * @todo restful하게 uri 수정
- */
-@Controller('mentorBoard')
+@Controller('mentor-board')
 export class MentorBoardLikeController {
   constructor(
     private readonly mentorBoardSLikeService: MentorBoardLikeService,
@@ -38,22 +35,28 @@ export class MentorBoardLikeController {
 
   @ApiCreateMentorBoardLike()
   @UseGuards(JwtAccessTokenGuard)
-  @Post(':boardId/like')
+  @Post(':mentorBoardId/like')
   async createMentorBoardLike(
     @GetUserId() userId: number,
-    @Param('boardId', ParseIntPipe) boardId: number,
+    @Param('mentorBoardId', ParseIntPipe) mentorBoardId: number,
   ): Promise<{ isLike: true }> {
-    await this.mentorBoardSLikeService.createMentorBoardLike(boardId, userId);
+    await this.mentorBoardSLikeService.createMentorBoardLikeAndHotPost(
+      mentorBoardId,
+      userId,
+    );
     return { isLike: true };
   }
 
   @ApiDeleteMentorBoardLike()
   @UseGuards(JwtAccessTokenGuard)
-  @Delete(':boardId/like')
+  @Delete(':mentorBoardId/like')
   deleteMentorBoardLike(
     @GetUserId() userId: number,
-    @Param('boardId', ParseIntPipe) boardId: number,
+    @Param('mentorBoardId', ParseIntPipe) mentorBoardId: number,
   ): Promise<{ isLike: false }> {
-    return this.mentorBoardSLikeService.deleteMentorBoardLike(boardId, userId);
+    return this.mentorBoardSLikeService.deleteMentorBoardLike(
+      mentorBoardId,
+      userId,
+    );
   }
 }
