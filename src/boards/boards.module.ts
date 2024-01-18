@@ -22,6 +22,7 @@ import { MentorBoardLikeService } from './services/mentor-board-likes.service';
 import { HotPostsModule } from 'src/hot-posts/hot-posts.module';
 import { MentorBoardHotPostsController } from './controllers/mentor-board-hot-posts.controller';
 import { MentorBoardHotPostsService } from './services/mentor-board-hot-posts.service';
+import { CategoryModule } from 'src/common/category/category.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { MentorBoardHotPostsService } from './services/mentor-board-hot-posts.se
     RedisModule,
     LikesModule.forFeature(MentorBoardLike),
     HotPostsModule.forFeature(MentorBoard),
+    CategoryModule,
   ],
   controllers: [
     MentorBoardController,
