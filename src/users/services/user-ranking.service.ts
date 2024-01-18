@@ -6,6 +6,20 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 export class UserRankingService {
   constructor(private readonly userRankingRepository: UserRankingRepository) {}
 
+  async getUserRanking() {
+    try {
+      const userRanking = await this.userRankingRepository.getUserRanking();
+
+      return { userRanking };
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(
+        '랭킹을 불러오는 중 에러가 발생했습니다.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   @Cron('0 59 8 * * 1') // 매주 월요일 오전 8시 59분에 실행 (7days 칼럼 초기화 전에 실행)
   async userRanking() {
     try {

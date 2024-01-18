@@ -9,10 +9,20 @@ import { UserIntro } from '../entities/user-intro.entity';
 export class UserRankingRepository {
   constructor(private readonly entityManager: EntityManager) {}
 
-  async getAllUserId() {
-    const users = await this.entityManager.find(User, { select: ['id'] });
-
-    return users.map((user) => user.id);
+  async getUserRanking() {
+    return await this.entityManager.find(UserRanking, {
+      select: [
+        'userId',
+        'activityCategoryId',
+        'name',
+        'rank',
+        'countReview',
+        'mainField',
+        'career',
+        'introduce',
+      ],
+      take: 10,
+    });
   }
 
   async allUserCounts() {

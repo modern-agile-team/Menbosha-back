@@ -87,6 +87,11 @@ export class UserController {
     return this.userService.getMentorList(page, categoryId);
   }
 
+  @Get('total-ranking')
+  getUserRanking() {
+    return this.userRankingService.getUserRanking();
+  }
+
   @UseGuards(JwtAccessTokenGuard)
   @ApiPostUserIntro()
   @Post('/intro')
