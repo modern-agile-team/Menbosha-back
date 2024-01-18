@@ -9,6 +9,6 @@ export class CategoryRepository {
   findOneCategoryOrNotFound(categoryId: number) {
     return this.entityManager
       .getRepository(CategoryList)
-      .findOneByOrFail({ id: categoryId });
+      .findOneBy({ id: categoryId });
   }
 }
