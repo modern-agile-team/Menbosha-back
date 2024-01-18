@@ -106,9 +106,4 @@ export class UserController {
   ): Promise<ResponseUserIntroDto> {
     return this.userIntroService.updateUserIntro(userId, userData);
   }
-
-  // @Get('/ranking')
-  // async getRanking() {
-  //   return this.userRankingService.userRanking();
-  // }
 }

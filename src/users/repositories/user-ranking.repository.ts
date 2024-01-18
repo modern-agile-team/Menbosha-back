@@ -61,7 +61,7 @@ export class UserRankingRepository {
       select: ['mainField', 'career', 'introduce'],
     });
 
-    await this.entityManager
+    return await this.entityManager
       .createQueryBuilder()
       .update(UserRanking)
       .set({
