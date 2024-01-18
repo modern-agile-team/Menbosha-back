@@ -33,9 +33,9 @@ export class MentorBoardHotPostsService {
 
   async findAllMentorBoardHotPostsWithLimitQuery(
     mentorBoardPageQueryDto: MentorBoardPageQueryDto,
-    categoryId: number,
   ): Promise<ResponseMentorBoardHotPostPaginationDto> {
-    const { page, orderField, sortOrder, pageSize } = mentorBoardPageQueryDto;
+    const { page, orderField, sortOrder, pageSize, categoryId } =
+      mentorBoardPageQueryDto;
 
     const skip = (page - 1) * pageSize;
 
