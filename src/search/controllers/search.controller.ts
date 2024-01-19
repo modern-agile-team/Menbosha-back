@@ -36,7 +36,7 @@ import { SearchAllMentorDto } from '../dtos/search-all-mentor.dto';
 export class SearchController {
   constructor(private searchService: SearchService) {}
 
-  @Get('all')
+  @Get()
   @ApiSearchAllBoardsAndMentors()
   searchAllBoardsAndMentors(
     @Query()
@@ -50,7 +50,7 @@ export class SearchController {
     );
   }
 
-  @Get('all/count')
+  @Get('count')
   @ApiSearchAllBoardsAndMentorsForPageSize()
   searchAllBoardsAndMentorsForPageSize(
     @Query()
