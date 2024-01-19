@@ -14,7 +14,7 @@ export class ParsePositiveIntPipe implements PipeTransform<string> {
 
     if (!this.isPositiveNumeric(value)) {
       throw new BadRequestException(
-        `${type} internal the ${data} must be a numeric string`,
+        `${type} internal the ${data} must be a positive integer string`,
       );
     }
 
