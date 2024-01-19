@@ -14,7 +14,7 @@ import { Observable, Subject, catchError, map } from 'rxjs';
 import { In } from 'typeorm';
 import { UserService } from 'src/users/services/user.service';
 import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
-import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
+import { ResponseFindChatRoomsDto } from '../dto/response-find-chat-rooms.dto';
 import { ChatRoomDto } from '../dto/chat-room.dto';
 import { AggregateChatRoomsDto } from '../dto/aggregate-chat-rooms.dto';
 import { ChatDto } from '../dto/chat.dto';
@@ -23,7 +23,7 @@ import { ChatRoomType } from '../constants/chat-rooms-enum';
 import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 import { ChatRepository } from '../repositories/chat.repository';
 import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
-import { ResponseGetChatRoomsPaginationDto } from '../dto/response-get-chat-rooms-pagination.dto';
+import { ResponseFindChatRoomsPaginationDto } from '../dto/response-find-chat-rooms-pagination.dto';
 // import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 
 @Injectable()
@@ -343,7 +343,7 @@ export class ChatService {
   async findAllChatRoomsWithUserAndChat(
     myId: number,
     page: number,
-  ): Promise<ResponseGetChatRoomsPaginationDto> {
+  ): Promise<ResponseFindChatRoomsPaginationDto> {
     const pageSize = 15;
     const skip = (page - 1) * pageSize;
 
@@ -438,7 +438,7 @@ export class ChatService {
       return new AggregateChatRoomsDto(chat);
     });
 
-    const responseGetChatRoomsDto = aggregateChatRoomsDto.map(
+    const responseFindChatRoomsDto = aggregateChatRoomsDto.map(
       (aggregateChatRoomDto) => {
         const { chatMembers } = aggregateChatRoomDto;
 
@@ -446,13 +446,13 @@ export class ChatService {
           chatMembers.includes(chatUserDto.id),
         );
 
-        return new ResponseGetChatRoomsDto(aggregateChatRoomDto, chatUserDto);
+        return new ResponseFindChatRoomsDto(aggregateChatRoomDto, chatUserDto);
       },
     );
 
-    return new ResponseGetChatRoomsPaginationDto(
-      responseGetChatRoomsDto,
-      responseGetChatRoomsDto.length,
+    return new ResponseFindChatRoomsPaginationDto(
+      responseFindChatRoomsDto,
+      responseFindChatRoomsDto.length,
       page,
       pageSize,
     );

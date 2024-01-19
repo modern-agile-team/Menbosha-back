@@ -32,15 +32,15 @@ import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { ApiCreateChatImage } from '../swagger-decorators/create-chat-image.decorators';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
 import { ChatRoomDto } from '../dto/chat-room.dto';
-import { ApiFindChatRooms } from '../swagger-decorators/get-chat-rooms-new.decorator';
+import { ApiFindChatRooms } from '../swagger-decorators/find-chat-rooms-new.decorator';
 import { Observable } from 'rxjs';
-import { ApiGetChatNotificationSse } from '../swagger-decorators/get-chat-notification-Sse.decorator';
+import { ApiFindChatNotificationSse } from '../swagger-decorators/find-chat-notification-Sse.decorator';
 import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 import { PageQueryDto } from 'src/common/dto/page-query.dto';
 import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
 import { ChatImageDto } from '../dto/chat-image.dto';
 import { ApiGetOneChatRoomByUserId } from '../swagger-decorators/get-one-chat-room-by-user-id.decorator';
-import { ResponseGetChatRoomsPaginationDto } from '../dto/response-get-chat-rooms-pagination.dto';
+import { ResponseFindChatRoomsPaginationDto } from '../dto/response-find-chat-rooms-pagination.dto';
 import { ApiDeleteChat } from '../swagger-decorators/delete-chat.decorator';
 /**
  * @todo 1:1 채팅 컨트롤러 서비스 완성
@@ -65,7 +65,7 @@ export class ChatController {
    * @todo 추후 다른 기능들에서도 호출이 필요할 경우 service코드에 별도의 비즈니스 로직 추가
    */
   @UseGuards(JwtAccessTokenGuard)
-  @ApiGetChatNotificationSse()
+  @ApiFindChatNotificationSse()
   @Sse('listener')
   notificationListener(@GetUserId() userId: number): Observable<string> {
     return this.chatService.notificationListener(userId);
@@ -82,7 +82,7 @@ export class ChatController {
   findAllChatRoomsWithUserAndChat(
     @GetUserId() userId: number,
     @Query() pageQueryDto: PageQueryDto,
-  ): Promise<ResponseGetChatRoomsPaginationDto> {
+  ): Promise<ResponseFindChatRoomsPaginationDto> {
     return this.chatService.findAllChatRoomsWithUserAndChat(
       userId,
       pageQueryDto.page,
