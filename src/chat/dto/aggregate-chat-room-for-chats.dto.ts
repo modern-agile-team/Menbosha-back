@@ -1,11 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ChatRoomDto } from './chat-room.dto';
 import { PaginationResponseDto } from 'src/common/dto/pagination-response.dto';
+import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
 
 export class AggregateChatRoomForChatsDto
   extends ChatRoomDto
   implements PaginationResponseDto
 {
+  @ApiProperty({
+    description: '채팅 상대 유저의 정보',
+    isArray: true,
+    type: ChatUserDto,
+  })
+  chatPartners: ChatUserDto[];
+
   @ApiProperty({
     description: '해당 채팅방 내의 채팅 총 개수.',
   })
@@ -40,11 +48,13 @@ export class AggregateChatRoomForChatsDto
 
   constructor(
     aggregateChatRoomsForChatsDto: AggregateChatRoomForChatsDto,
+    chatPartners: ChatUserDto[],
     page: number,
     pageSize: number,
   ) {
     super(aggregateChatRoomsForChatsDto);
 
+    this.chatPartners = chatPartners;
     this.totalCount = aggregateChatRoomsForChatsDto.totalCount;
     this.currentPage = page;
     this.pageSize = pageSize;

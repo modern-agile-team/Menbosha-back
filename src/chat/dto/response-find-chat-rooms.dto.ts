@@ -13,10 +13,13 @@ export class ResponseFindChatRoomsDto {
     isArray: true,
     type: ChatUserDto,
   })
-  chatPartner: ChatUserDto[];
+  chatPartners: ChatUserDto[];
 
-  constructor(chatRoomsDto: AggregateChatRoomsDto, chatUserDto: ChatUserDto[]) {
+  constructor(
+    chatRoomsDto: AggregateChatRoomsDto,
+    chatUserDtos: ChatUserDto[],
+  ) {
     this.chatRooms = chatRoomsDto;
-    this.chatPartner = chatUserDto;
+    this.chatPartners = chatUserDtos;
   }
 }
