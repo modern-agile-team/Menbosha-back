@@ -23,7 +23,6 @@ import mongoose from 'mongoose';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ParseObjectIdPipe } from '../validation-pipe/parse-object-id.pipe';
 import { ApiCreateChatRoom } from '../swagger-decorators/create-chat-room.decorator';
-import { ApiGetChatRooms } from '../swagger-decorators/get-chat-rooms.decorator';
 import { ApiGetOneChatRoom } from '../swagger-decorators/get-one-chat-room.decorator';
 import { ApiLeaveChatRoom } from '../swagger-decorators/leave-chat-room.decorator';
 import { ApiGetChats } from '../swagger-decorators/get-chats.decorator';
@@ -33,15 +32,13 @@ import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { ApiCreateChatImage } from '../swagger-decorators/create-chat-image.decorators';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
 import { ChatRoomDto } from '../dto/chat-room.dto';
-import { plainToInstance } from 'class-transformer';
-import { ApiGetChatRoomsNew } from '../swagger-decorators/get-chat-rooms-new.decorator';
+import { ApiFindChatRooms } from '../swagger-decorators/get-chat-rooms-new.decorator';
 import { Observable } from 'rxjs';
 import { ApiGetChatNotificationSse } from '../swagger-decorators/get-chat-notification-Sse.decorator';
 import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 import { PageQueryDto } from 'src/common/dto/page-query.dto';
 import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
 import { ChatImageDto } from '../dto/chat-image.dto';
-import { ChatRoomsWithoutChatsItemDto } from '../dto/chat-rooms-without-chats-item.dto';
 import { ApiGetOneChatRoomByUserId } from '../swagger-decorators/get-one-chat-room-by-user-id.decorator';
 import { ResponseGetChatRoomsPaginationDto } from '../dto/response-get-chat-rooms-pagination.dto';
 import { ApiDeleteChat } from '../swagger-decorators/delete-chat.decorator';
@@ -80,7 +77,7 @@ export class ChatController {
    * @returns find all chat rooms with mapped user
    */
   @UseGuards(JwtAccessTokenGuard)
-  @ApiGetChatRoomsNew()
+  @ApiFindChatRooms()
   @Get()
   findAllChatRoomsWithUserAndChat(
     @GetUserId() userId: number,

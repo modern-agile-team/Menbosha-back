@@ -9,7 +9,7 @@ import {
 } from '@nestjs/swagger';
 import { ResponseGetChatRoomsPaginationDto } from '../dto/response-get-chat-rooms-pagination.dto';
 
-export function ApiGetChatRoomsNew() {
+export function ApiFindChatRooms() {
   return applyDecorators(
     ApiOperation({
       summary:

@@ -23,7 +23,6 @@ import { ChatRoomType } from '../constants/chat-rooms-enum';
 import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 import { ChatRepository } from '../repositories/chat.repository';
 import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
-import { ChatRoomsWithoutChatsItemDto } from '../dto/chat-rooms-without-chats-item.dto';
 import { ResponseGetChatRoomsPaginationDto } from '../dto/response-get-chat-rooms-pagination.dto';
 // import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 
@@ -55,24 +54,6 @@ export class ChatService {
         this.logger.error('notificationListener : ' + err.message);
         throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
       }),
-    );
-  }
-
-  /**
-   *
-   * @param myId
-   * @returns 1:1, 단톡 관련 없이 삭제된 채팅방 이외에 다 불러옴
-   */
-  findAllChatRooms(myId: number): Promise<ChatRoomsWithoutChatsItemDto[]> {
-    return this.chatRepository.findAllChatRooms(
-      {
-        $and: [
-          { originalMembers: myId },
-          { chatMembers: myId },
-          { deletedAt: null },
-        ],
-      },
-      { chats: 0 },
     );
   }
 
