@@ -104,6 +104,16 @@ export class UserController {
     return this.userIntroService.addUserIntro(userId, userData);
   }
 
+  // @Get('/ranking')
+  // getRanking(): Promise<any> {
+  //   return this.userRankingService.userRanking();
+  // }
+
+  // @Post('/sync-total-count')
+  // async syncTotalCount() {
+  //   return this.totalCountService.syncTotalCount();
+  // }
+
   @UseGuards(JwtAccessTokenGuard)
   @ApiUpdateUserIntro()
   @Patch('/intro')
