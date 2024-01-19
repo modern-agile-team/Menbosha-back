@@ -19,15 +19,15 @@ export class ParsePositiveIntPipe implements PipeTransform<string> {
     }
 
     /**
-     * 10진수 정수형으로 변환 후 return
+     * 10진수 정수형으로 변환한 값을 return
      */
     return parseInt(value, 10);
   }
   /**
    * 1. string || number type인지 확인
-   * 2. 정수 허용(소수 제외)
-   * 3. Infinite, NaN 거기기
-   * 4. 양의 정수인지 확인
+   * 2. 정수인지 확인
+   * 3. Infinite, NaN 거르기
+   * 4. 최소 1의 양의 유리수인지 확인
    */
   private isPositiveNumeric(value: string): boolean {
     return (
