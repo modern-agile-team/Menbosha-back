@@ -30,6 +30,7 @@ import { ApiUpdateUserIntro } from '../swagger-decorators/patch-user-intro-decor
 import { ApiGetMyRank } from '../swagger-decorators/get-my-rank-decorators';
 import { ApiGetUserInfo } from '../swagger-decorators/get-user-info.decorators';
 import { UserRankingService } from '../services/user-ranking.service';
+import { ApiGetTotalRanking } from '../swagger-decorators/get-total-ranking.decorator';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -87,6 +88,7 @@ export class UserController {
     return this.userService.getMentorList(page, categoryId);
   }
 
+  @ApiGetTotalRanking()
   @Get('total-ranking')
   getUserRanking() {
     return this.userRankingService.getUserRanking();
