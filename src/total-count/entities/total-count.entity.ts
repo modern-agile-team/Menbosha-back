@@ -15,35 +15,35 @@ export class TotalCount {
   @Column({ name: 'user_id' })
   userId: number;
 
-  @Column({ name: 'count_mentor_board', default: 0 })
-  countMentorBoard: number;
+  @Column({ name: 'mentor_board_count', default: 0 })
+  mentorBoardCount: number;
 
-  @Column({ name: 'count_help_you_comment', default: 0 })
-  countHelpYouComment: number;
+  @Column({ name: 'help_you_comment_count', default: 0 })
+  helpYouCommentCount: number;
 
-  @Column({ name: 'count_mentor_board_like', default: 0 })
-  countMentorBoardLike: number;
+  @Column({ name: 'mentor_board_like_count', default: 0 })
+  mentorBoardLikeCount: number;
 
-  @Column({ name: 'count_badge', default: 0 })
-  countBadge: number;
+  @Column({ name: 'badge_count', default: 0 })
+  badgeCount: number;
 
-  @Column({ name: 'count_review', default: 0 })
-  countReview: number;
+  @Column({ name: 'review_count', default: 0 })
+  reviewCount: number;
 
-  @Column({ name: 'count_mentor_board_7days', default: 0 })
-  countMentorBoard7days: number;
+  @Column({ name: 'mentor_board_count_7days', default: 0 })
+  mentorBoardCount7days: number;
 
-  @Column({ name: 'count_help_you_comment_7days', default: 0 })
-  countHelpYouComment7days: number;
+  @Column({ name: 'help_you_comment_count_7days', default: 0 })
+  helpYouCommentCount7days: number;
 
-  @Column({ name: 'count_mentor_board_like_7days', default: 0 })
-  countMentorBoardLike7days: number;
+  @Column({ name: 'mentor_board_like_count_7days', default: 0 })
+  mentorBoardLikeCount7days: number;
 
-  @Column({ name: 'count_badge_7days', default: 0 })
-  countBadge7days: number;
+  @Column({ name: 'badge_count_7days', default: 0 })
+  badgeCount7days: number;
 
-  @Column({ name: 'count_review_7days', default: 0 })
-  countReview7days: number;
+  @Column({ name: 'review_count_7days', default: 0 })
+  reviewCount7days: number;
 
   @OneToOne(() => User, (userId: User) => userId.id, {
     onDelete: 'CASCADE',

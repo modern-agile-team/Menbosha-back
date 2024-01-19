@@ -210,10 +210,4 @@ export class AuthController {
     await this.s3Service.deleteImagesWithPrefix(userId + '_');
     return await this.authService.accountDelete(userId);
   }
-
-  @UseGuards(JwtAccessTokenGuard)
-  @Get('status')
-  async status() {
-    return { success: true };
-  }
 }

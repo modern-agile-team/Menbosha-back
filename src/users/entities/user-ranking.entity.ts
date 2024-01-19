@@ -5,27 +5,27 @@ export class UserRanking {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'user_id' })
-  userId: number;
+  @Column({ name: 'user_id', nullable: true })
+  userId: number | null;
 
-  @Column({ name: 'activity_category_list_id' })
-  activityCategoryId: number;
+  @Column({ name: 'activity_category_list_id', nullable: true })
+  activityCategoryId: number | null;
 
-  @Column({ name: 'name' })
-  name: string;
+  @Column({ name: 'name', nullable: true })
+  name: string | null;
 
-  @Column({ name: 'main_field' })
-  mainField: string;
+  @Column({ name: 'main_field', nullable: true })
+  mainField: string | null;
 
-  @Column({ name: 'introduce' })
-  introduce: string;
+  @Column({ name: 'introduce', nullable: true })
+  introduce: string | null;
 
-  @Column({ name: 'career' })
-  career: string;
+  @Column({ name: 'career', nullable: true })
+  career: string | null;
 
-  @Column({ name: 'rank' })
-  rank: number;
+  @Column({ name: 'rank', nullable: true })
+  rank: number | null;
 
-  @Column({ name: 'review_count' })
-  reviewCount: number;
+  @Column({ name: 'count_review', nullable: true })
+  reviewCount: number | null;
 }

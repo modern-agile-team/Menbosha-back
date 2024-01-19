@@ -1,10 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
-import { HelpYouComment } from 'src/comments/entities/help-you-comment.entity';
-import { UserReview } from 'src/users/entities/user-review.entity';
 import { EntityManager } from 'typeorm';
 import { TotalCount } from '../entities/total-count.entity';
-import { User } from 'src/users/entities/user.entity';
 import { Type } from '../enums/type.enum';
 import { Action } from '../enums/action.enum';
 
@@ -36,60 +32,17 @@ export class TotalCountRepository {
     }
   }
 
-  async syncTotalCount(
-    userId: number,
-    mentorBoardCount: number,
-    helpYouCommentCount: number,
-    mentorBoardLikeCount: number,
-    badgeCount: number,
-    reviewCount: number,
-  ) {
+  async clear7DaysCount() {
     return await this.entityManager.update(
       TotalCount,
-      { userId },
+      {},
       {
-        countMentorBoard: mentorBoardCount,
-        countHelpYouComment: helpYouCommentCount,
-        countMentorBoardLike: mentorBoardLikeCount,
-        countBadge: badgeCount,
-        countReview: reviewCount,
+        mentorBoardCount7days: 0,
+        helpYouCommentCount7days: 0,
+        mentorBoardLikeCount7days: 0,
+        badgeCount7days: 0,
+        reviewCount7days: 0,
       },
     );
-  }
-
-  async getAllUserId() {
-    const users = await this.entityManager.find(User, { select: ['id'] });
-
-    return users.map((user) => user.id);
-  }
-
-  async getMentorBoardCount(userId: number) {
-    return await this.entityManager.countBy(MentorBoard, { userId });
-  }
-
-  async getHelpYouCommentCount(userId: number) {
-    return await this.entityManager.countBy(HelpYouComment, { userId });
-  }
-
-  async getMentorBoardLikeCount(userId: number) {
-    // return await this.entityManager.countBy(MentorBoardLike, { userId });
-  }
-
-  async getbadgeCount(userId: number) {
-    return await this.entityManager.countBy(MentorBoard, { userId });
-  }
-
-  async getReviewCount(userId: number) {
-    return await this.entityManager.countBy(UserReview, { mentorId: userId });
-  }
-
-  async clear7DaysCount() {
-    await this.entityManager.delete(TotalCount, {
-      countMentorBoard7days: 0,
-      countHelpYouComment7days: 0,
-      countMentorBoardLike7days: 0,
-      countBadge7days: 0,
-      countReview7days: 0,
-    });
   }
 }
