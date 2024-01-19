@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  ConflictException,
   ForbiddenException,
   HttpException,
   HttpStatus,
@@ -14,7 +13,7 @@ import { Observable, Subject, catchError, map } from 'rxjs';
 import { In } from 'typeorm';
 import { UserService } from 'src/users/services/user.service';
 import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
-import { ResponseGetChatRoomsDto } from '../dto/response-get-chat-rooms.dto';
+import { ResponseFindChatRoomsDto } from '../dto/response-find-chat-rooms.dto';
 import { ChatRoomDto } from '../dto/chat-room.dto';
 import { AggregateChatRoomsDto } from '../dto/aggregate-chat-rooms.dto';
 import { ChatDto } from '../dto/chat.dto';
@@ -23,8 +22,7 @@ import { ChatRoomType } from '../constants/chat-rooms-enum';
 import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 import { ChatRepository } from '../repositories/chat.repository';
 import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
-import { ChatRoomsWithoutChatsItemDto } from '../dto/chat-rooms-without-chats-item.dto';
-import { ResponseGetChatRoomsPaginationDto } from '../dto/response-get-chat-rooms-pagination.dto';
+import { ResponseFindChatRoomsPaginationDto } from '../dto/response-find-chat-rooms-pagination.dto';
 // import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 
 @Injectable()
@@ -60,24 +58,6 @@ export class ChatService {
 
   /**
    *
-   * @param myId
-   * @returns 1:1, 단톡 관련 없이 삭제된 채팅방 이외에 다 불러옴
-   */
-  findAllChatRooms(myId: number): Promise<ChatRoomsWithoutChatsItemDto[]> {
-    return this.chatRepository.findAllChatRooms(
-      {
-        $and: [
-          { originalMembers: myId },
-          { chatMembers: myId },
-          { deletedAt: null },
-        ],
-      },
-      { chats: 0 },
-    );
-  }
-
-  /**
-   *
    * @param roomId
    * @returns 채팅방을 1개 return. 없을 시에 에러 던짐.(roomId)
    */
@@ -105,11 +85,11 @@ export class ChatService {
    */
   async findOneChatRoomByUserIds(
     myId: number,
-    guestId: number,
+    chatPartnerId: number,
   ): Promise<ChatRoomDto> {
     const returnedRoom = await this.chatRepository.findOneChatRoom({
-      originalMembers: { $all: [myId, guestId] },
-      chatMembers: { $all: [myId, guestId] },
+      originalMembers: { $all: [myId, chatPartnerId] },
+      chatMembers: { $all: [myId, chatPartnerId] },
       deletedAt: null,
       chatRoomType: ChatRoomType.OneOnOne,
     });
@@ -164,7 +144,7 @@ export class ChatService {
     const pushUserId = chatMembers.includes(myId) ? receiverId : myId;
 
     if (chatMembers.length === 2) {
-      throw new ConflictException('해당 유저들의 채팅방이 이미 존재합니다.');
+      return new ChatRoomDto(existChatRoom);
     }
 
     await this.chatRepository.updateOneChatRoom(
@@ -224,15 +204,15 @@ export class ChatService {
       throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
     }
 
-    await this.chatRepository.updateOneChatRoom(
+    await this.chatRepository.findOneAndUpdateChatRoom(
       {
         _id: roomId,
       },
       { $push: { 'chats.$[elem].seenUsers': myId } },
-      { arrayFilters: [{ 'elem.seenUsers': { $ne: myId } }] },
+      { arrayFilters: [{ 'elem.seenUsers': { $ne: myId } }], new: true },
     );
 
-    const returnedChatRoom: AggregateChatRoomForChatsDto[] =
+    const returnedChatRooms: AggregateChatRoomForChatsDto[] =
       await this.chatRepository.aggregateChatRooms([
         {
           $match: { _id: new mongoose.Types.ObjectId(roomId), deletedAt: null },
@@ -269,8 +249,38 @@ export class ChatService {
         },
       ]);
 
+    const chatPartnerIds = returnedChatRooms[0].chatMembers.filter(
+      (userId) => userId !== myId,
+    );
+
+    const chatPartners = await this.userService.findAll({
+      select: {
+        id: true,
+        name: true,
+        userImage: {
+          imageUrl: true,
+        },
+      },
+      relations: {
+        userImage: true,
+      },
+      where: {
+        id: In(chatPartnerIds),
+      },
+    });
+
+    const chatUsersDto = chatPartners.map(
+      (chatPartner) =>
+        new ChatUserDto({
+          id: chatPartner.id,
+          name: chatPartner.name,
+          userImage: chatPartner.userImage.imageUrl,
+        }),
+    );
+
     return new AggregateChatRoomForChatsDto(
-      returnedChatRoom[0],
+      returnedChatRooms[0],
+      chatUsersDto,
       page,
       pageSize,
     );
@@ -362,7 +372,7 @@ export class ChatService {
   async findAllChatRoomsWithUserAndChat(
     myId: number,
     page: number,
-  ): Promise<ResponseGetChatRoomsPaginationDto> {
+  ): Promise<ResponseFindChatRoomsPaginationDto> {
     const pageSize = 15;
     const skip = (page - 1) * pageSize;
 
@@ -457,7 +467,7 @@ export class ChatService {
       return new AggregateChatRoomsDto(chat);
     });
 
-    const responseGetChatRoomsDto = aggregateChatRoomsDto.map(
+    const responseFindChatRoomsDto = aggregateChatRoomsDto.map(
       (aggregateChatRoomDto) => {
         const { chatMembers } = aggregateChatRoomDto;
 
@@ -465,13 +475,13 @@ export class ChatService {
           chatMembers.includes(chatUserDto.id),
         );
 
-        return new ResponseGetChatRoomsDto(aggregateChatRoomDto, chatUserDto);
+        return new ResponseFindChatRoomsDto(aggregateChatRoomDto, chatUserDto);
       },
     );
 
-    return new ResponseGetChatRoomsPaginationDto(
-      responseGetChatRoomsDto,
-      responseGetChatRoomsDto.length,
+    return new ResponseFindChatRoomsPaginationDto(
+      responseFindChatRoomsDto,
+      responseFindChatRoomsDto.length,
       page,
       pageSize,
     );
@@ -497,7 +507,7 @@ export class ChatService {
       throw new NotFoundException('해당 채팅이 존재하지 않습니다.');
     }
 
-    return this.chatRepository.updateOneChatRoom(
+    return this.chatRepository.findOneAndUpdateChatRoom(
       {
         _id: new mongoose.Types.ObjectId(roomId),
         'chats._id': new mongoose.Types.ObjectId(chatId),

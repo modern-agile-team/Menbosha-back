@@ -10,7 +10,7 @@ import {
 } from '@nestjs/swagger';
 import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
 
-export function ApiGetChats() {
+export function ApiFindChats() {
   return applyDecorators(
     ApiOperation({
       summary: '해당 채팅룸 채팅 전체 조회',

@@ -8,11 +8,12 @@ import {
 } from '@nestjs/swagger';
 import { ChatRoomDto } from '../dto/chat-room.dto';
 
-export function ApiGetOneChatRoomByUserId() {
+export function ApiFindOneChatRoomByUserId() {
   return applyDecorators(
     ApiOperation({
       summary: '유저 id로 채팅룸 단일 조회',
       description: 'Param - roomId',
+      deprecated: true,
     }),
     ApiResponse({
       status: 200,

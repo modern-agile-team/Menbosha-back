@@ -2,31 +2,21 @@ import { applyDecorators } from '@nestjs/common';
 import {
   ApiExtraModels,
   ApiHeaders,
-  ApiNotFoundResponse,
   ApiOperation,
   ApiResponse,
-  getSchemaPath,
 } from '@nestjs/swagger';
-import { ResponseGetChatRoomsPaginationDto } from '../dto/response-get-chat-rooms-pagination.dto';
+import { ChatDto } from '../dto/chat.dto';
 
-export function ApiGetChatRoomsNew() {
+export function ApiFindChatNotificationSse() {
   return applyDecorators(
     ApiOperation({
-      summary:
-        '챗룸에 유저 정보를 매핑하고 최신의 챗 1개만 가져오도록 하는 api 페이지네이션이 구현됨. 15개씩 잘라서 가져옴.',
-      description: 'Header - user-token',
+      summary: '채팅 실시간 SSE 알람(미사용 예정)',
+      description: 'listener',
     }),
     ApiResponse({
       status: 200,
-      schema: {
-        properties: {
-          content: {
-            type: 'object',
-            $ref: getSchemaPath(ResponseGetChatRoomsPaginationDto),
-          },
-        },
-      },
-      description: '성공적으로 채팅방 조회',
+      description: '성공적으로 SSE 연결 및 서버로부터 데이터 수신',
+      type: ChatDto,
     }),
     ApiResponse({
       status: 401,
@@ -46,14 +36,12 @@ export function ApiGetChatRoomsNew() {
         },
       },
     }),
-    ApiNotFoundResponse({
-      description: '내 정보를 찾을 수 없는 경우',
-      schema: {
-        type: 'object',
-        example: {
-          statusCode: 404,
-          message: '사용자를 찾을 수 없습니다.',
-          error: 'Not Found',
+    ApiResponse({
+      status: 404,
+      description: 'DB에서 사용자를 찾을 수 없는 경우',
+      content: {
+        JSON: {
+          example: { statusCode: 404, message: '사용자를 찾을 수 없습니다.' },
         },
       },
     }),
@@ -74,6 +62,6 @@ export function ApiGetChatRoomsNew() {
         example: '여기에 액세스 토큰',
       },
     ]),
-    ApiExtraModels(ResponseGetChatRoomsPaginationDto),
+    ApiExtraModels(ChatDto),
   );
 }

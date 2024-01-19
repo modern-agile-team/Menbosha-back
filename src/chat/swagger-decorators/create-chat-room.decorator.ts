@@ -1,7 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import {
   ApiBody,
-  ApiConflictResponse,
   ApiExtraModels,
   ApiForbiddenResponse,
   ApiHeaders,
@@ -66,18 +65,6 @@ export function ApiCreateChatRoom() {
             message: '사용자를 찾을 수 없습니다.',
             error: 'Not Found',
             statusCode: 404,
-          },
-        },
-      },
-    }),
-    ApiConflictResponse({
-      description: '해당 유저들의 채팅방이 이미 존재 및 서버에서 중복에러 발생',
-      content: {
-        JSON: {
-          example: {
-            message: '해당 유저들의 채팅방이 이미 존재합니다.',
-            error: 'Conflict',
-            statusCode: 409,
           },
         },
       },

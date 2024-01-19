@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
 import { AggregateChatRoomsDto } from './aggregate-chat-rooms.dto';
 
-export class ResponseGetChatRoomsDto {
+export class ResponseFindChatRoomsDto {
   @ApiProperty({
     description: '최신 채팅 내역이 포함된 chatRoom 객체',
   })
@@ -13,10 +13,13 @@ export class ResponseGetChatRoomsDto {
     isArray: true,
     type: ChatUserDto,
   })
-  chatPartner: ChatUserDto[];
+  chatPartners: ChatUserDto[];
 
-  constructor(chatRoomsDto: AggregateChatRoomsDto, chatUserDto: ChatUserDto[]) {
+  constructor(
+    chatRoomsDto: AggregateChatRoomsDto,
+    chatUserDtos: ChatUserDto[],
+  ) {
     this.chatRooms = chatRoomsDto;
-    this.chatPartner = chatUserDto;
+    this.chatPartners = chatUserDtos;
   }
 }

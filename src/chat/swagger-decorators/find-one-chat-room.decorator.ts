@@ -10,7 +10,7 @@ import {
 } from '@nestjs/swagger';
 import { ChatRoomDto } from '../dto/chat-room.dto';
 
-export function ApiGetOneChatRoom() {
+export function ApiFindOneChatRoom() {
   return applyDecorators(
     ApiOperation({
       summary: '채팅룸 단일 조회',
