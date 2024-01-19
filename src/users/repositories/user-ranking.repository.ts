@@ -16,7 +16,7 @@ export class UserRankingRepository {
         'activityCategoryId',
         'name',
         'rank',
-        'countReview',
+        'reviewCount',
         'mainField',
         'career',
         'introduce',
@@ -29,17 +29,17 @@ export class UserRankingRepository {
     const allCounts = await this.entityManager.find(TotalCount, {
       select: [
         'userId',
-        'countMentorBoard7days',
-        'countMentorBoardLike7days',
-        'countHelpYouComment7days',
-        'countBadge7days',
-        'countReview7days',
+        'mentorBoardCount7days',
+        'mentorBoardLikeCount7days',
+        'helpYouCommentCount7days',
+        'badgeCount7days',
+        'reviewCount7days',
       ],
       where: [
-        { countMentorBoard7days: MoreThanOrEqual(2) },
-        { countHelpYouComment7days: MoreThanOrEqual(3) },
-        { countMentorBoardLike7days: MoreThanOrEqual(6) },
-        { countReview7days: MoreThanOrEqual(1) },
+        { mentorBoardCount7days: MoreThanOrEqual(2) },
+        { helpYouCommentCount7days: MoreThanOrEqual(3) },
+        { mentorBoardLikeCount7days: MoreThanOrEqual(6) },
+        { reviewCount7days: MoreThanOrEqual(1) },
       ],
     });
 
@@ -63,7 +63,7 @@ export class UserRankingRepository {
 
     const totalCount = await this.entityManager.findOne(TotalCount, {
       where: { userId },
-      select: ['countReview'],
+      select: ['reviewCount'],
     });
 
     const userIntro = await this.entityManager.findOne(UserIntro, {
@@ -78,7 +78,7 @@ export class UserRankingRepository {
         activityCategoryId: user.activityCategoryId,
         name: user.name,
         rank: user.rank,
-        countReview: totalCount.countReview,
+        countReview: totalCount.reviewCount,
         mainField: userIntro.mainField,
         career: userIntro.career,
         introduce: userIntro.introduce,

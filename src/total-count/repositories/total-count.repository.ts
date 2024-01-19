@@ -37,11 +37,11 @@ export class TotalCountRepository {
       TotalCount,
       {},
       {
-        countMentorBoard7days: 0,
-        countHelpYouComment7days: 0,
-        countMentorBoardLike7days: 0,
-        countBadge7days: 0,
-        countReview7days: 0,
+        mentorBoardCount7days: 0,
+        helpYouCommentCount7days: 0,
+        mentorBoardLikeCount7days: 0,
+        badgeCount7days: 0,
+        reviewCount7days: 0,
       },
     );
   }

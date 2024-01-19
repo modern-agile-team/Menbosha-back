@@ -27,5 +27,5 @@ export class UserRanking {
   rank: number | null;
 
   @Column({ name: 'count_review', nullable: true })
-  countReview: number | null;
+  reviewCount: number | null;
 }
