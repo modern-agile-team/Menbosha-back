@@ -152,7 +152,7 @@ export class TokenService {
         throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
       } else {
         console.log(error);
-        throw new HttpException('토큰 검증 에러', HttpStatus.BAD_REQUEST);
+        throw new HttpException('jwt error', HttpStatus.BAD_REQUEST);
       }
     }
   }
