@@ -47,5 +47,5 @@ export class ResponseUserRankingDto {
     description: '리뷰 수',
     example: 3,
   })
-  countReview: number;
+  reviewCount: number;
 }
