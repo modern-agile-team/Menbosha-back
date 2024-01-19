@@ -34,7 +34,6 @@ import { TotalCountService } from 'src/total-count/services/total-count.service'
 import { UserBadgeService } from '../services/user-badge.service';
 import { ApiGetTotalRanking } from '../swagger-decorators/get-total-ranking.decorator';
 
-
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
 @ApiTags('user API')
@@ -109,16 +108,6 @@ export class UserController {
     return this.userIntroService.addUserIntro(userId, userData);
   }
 
-  // @Get('/ranking')
-  // getRanking(): Promise<any> {
-  //   return this.userRankingService.userRanking();
-  // }
-
-  // @Post('/sync-total-count')
-  // async syncTotalCount() {
-  //   return this.totalCountService.syncTotalCount();
-  // }
-
   @UseGuards(JwtAccessTokenGuard)
   @ApiUpdateUserIntro()
   @Patch('/intro')
@@ -127,16 +116,6 @@ export class UserController {
     @Body() userData: UpdateUserIntroDTO,
   ): Promise<ResponseUserIntroDto> {
     return this.userIntroService.updateUserIntro(userId, userData);
-  }
-
-  @Get('/ranking')
-  getRanking(): Promise<any> {
-    return this.userRankingService.userRanking();
-  }
-
-  @Post('/sync-total-count')
-  async syncTotalCount() {
-    return this.totalCountService.syncTotalCount();
   }
 
   @UseGuards(JwtAccessTokenGuard)
