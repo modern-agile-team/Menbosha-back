@@ -11,7 +11,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { CategoryList } from 'src/common/entity/category-list.entity';
+import { CategoryList } from 'src/category/entity/category-list.entity';
 
 @Entity({
   name: 'help_me_board',

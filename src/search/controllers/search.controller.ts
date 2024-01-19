@@ -36,7 +36,11 @@ import { SearchAllMentorDto } from '../dtos/search-all-mentor.dto';
 export class SearchController {
   constructor(private searchService: SearchService) {}
 
-  @Get('all')
+  /**
+   * @todo 추후 변경 가능성 높음.
+   * 검색할 type(제목, 본문 등)이 있는지에 따라 어디를 검색할지 한 메서드에서 처리할 수 있을 것 같음.
+   */
+  @Get()
   @ApiSearchAllBoardsAndMentors()
   searchAllBoardsAndMentors(
     @Query()
@@ -50,7 +54,7 @@ export class SearchController {
     );
   }
 
-  @Get('all/count')
+  @Get('count')
   @ApiSearchAllBoardsAndMentorsForPageSize()
   searchAllBoardsAndMentorsForPageSize(
     @Query()
@@ -61,6 +65,9 @@ export class SearchController {
     );
   }
 
+  /**
+   * @deprecated 삭제 예정
+   */
   @ApiSearchBoardsByHeadOrBodyOrUserName()
   @Get('boards/:category')
   async searchBoardsByHeadOrUserOrName(
@@ -81,6 +88,9 @@ export class SearchController {
     );
   }
 
+  /**
+   * @deprecated 삭제 예정
+   */
   @ApiSearchBoardsByHead()
   @Get('boards/:category/head')
   async searchBoardsByHead(
@@ -97,6 +107,9 @@ export class SearchController {
     );
   }
 
+  /**
+   * @deprecated 삭제 예정
+   */
   @ApiSearchBoardsByBody()
   @Get('boards/:category/body')
   async searchBoardsByBody(
@@ -113,6 +126,9 @@ export class SearchController {
     );
   }
 
+  /**
+   * @deprecated 삭제 예정
+   */
   @ApiSearchBoardsByUserName()
   @Get('boards/:category/userName')
   async searchBoardsByUserName(
@@ -129,6 +145,9 @@ export class SearchController {
     );
   }
 
+  /**
+   * @deprecated 삭제 예정
+   */
   @Get('users')
   async searchUsersByName(@Query('searchQuery') searchQuery: string) {
     return this.searchService.searchUsersByName(searchQuery);

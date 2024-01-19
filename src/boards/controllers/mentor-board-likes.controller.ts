@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Param,
-  ParseIntPipe,
   Post,
   UseGuards,
   UseInterceptors,
@@ -17,6 +16,7 @@ import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { ApiCreateMentorBoardLike } from '../swagger-decorators/mentorBoard/create-mentor-board-like.decorator';
 import { ApiDeleteMentorBoardLike } from '../swagger-decorators/mentorBoard/delete-mentor-board-like.decorator';
+import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
 
 @ApiTags('mentor-board-likes')
 @UsePipes(
@@ -38,7 +38,7 @@ export class MentorBoardLikeController {
   @Post(':mentorBoardId/like')
   async createMentorBoardLike(
     @GetUserId() userId: number,
-    @Param('mentorBoardId', ParseIntPipe) mentorBoardId: number,
+    @Param('mentorBoardId', ParsePositiveIntPipe) mentorBoardId: number,
   ): Promise<{ isLike: true }> {
     await this.mentorBoardSLikeService.createMentorBoardLikeAndHotPost(
       mentorBoardId,
@@ -52,7 +52,7 @@ export class MentorBoardLikeController {
   @Delete(':mentorBoardId/like')
   deleteMentorBoardLike(
     @GetUserId() userId: number,
-    @Param('mentorBoardId', ParseIntPipe) mentorBoardId: number,
+    @Param('mentorBoardId', ParsePositiveIntPipe) mentorBoardId: number,
   ): Promise<{ isLike: false }> {
     return this.mentorBoardSLikeService.deleteMentorBoardLike(
       mentorBoardId,

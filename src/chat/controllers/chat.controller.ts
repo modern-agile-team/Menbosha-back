@@ -21,7 +21,7 @@ import { ChatService } from '../services/chat.service';
 import { ApiTags } from '@nestjs/swagger';
 import mongoose from 'mongoose';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ParseObjectIdPipe } from '../validation-pipe/parse-object-id.pipe';
+import { ParseObjectIdPipe } from '../pipes/parse-object-id.pipe';
 import { ApiCreateChatRoom } from '../swagger-decorators/create-chat-room.decorator';
 import { ApiLeaveChatRoom } from '../swagger-decorators/leave-chat-room.decorator';
 // import { ApiGetChatUnreadCounts } from '../swagger-decorators/get-chat-unread-counts.decorator';

@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { TotalCountRepository } from '../repositories/total-count.repository';
 import { Type } from '../enums/type.enum';
 import { Action } from '../enums/action.enum';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class TotalCountService {
@@ -37,35 +38,17 @@ export class TotalCountService {
     }
   }
 
-  async syncTotalCount() {
-    const userIds = await this.totalCountRepository.getAllUserId();
-
-    for (const userId of userIds) {
-      await this.syncTotalCountById(userId);
-    }
-  }
-
-  async syncTotalCountById(userId: number) {
-    const mentorBoardCount =
-      await this.totalCountRepository.getMentorBoardCount(userId);
-    const helpYouCommentCount =
-      await this.totalCountRepository.getHelpYouCommentCount(userId);
-    const mentorBoardLikeCount = 0;
-    // await this.totalCountRepository.getMentorBoardLikeCount(userId);
-    const badgeCount = await this.totalCountRepository.getbadgeCount(userId);
-    const reviewCount = await this.totalCountRepository.getReviewCount(userId);
-
-    return await this.totalCountRepository.syncTotalCount(
-      userId,
-      mentorBoardCount,
-      helpYouCommentCount,
-      mentorBoardLikeCount,
-      badgeCount,
-      reviewCount,
-    );
-  }
-
+  @Cron('0 0 9 * * 1') // 매주 월요일 오전 9시에 실행
   async clear7DaysCount() {
-    await this.totalCountRepository.clear7DaysCount();
+    const clear = await this.totalCountRepository.clear7DaysCount();
+
+    if (!clear.affected) {
+      throw new HttpException(
+        '7일 카운트 초기화 실패',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    return { message: '7일 카운트 초기화 성공' };
   }
 }
