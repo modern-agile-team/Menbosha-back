@@ -32,6 +32,8 @@ import { ApiGetUserInfo } from '../swagger-decorators/get-user-info.decorators';
 import { UserRankingService } from '../services/user-ranking.service';
 import { TotalCountService } from 'src/total-count/services/total-count.service';
 import { UserBadgeService } from '../services/user-badge.service';
+import { ApiGetTotalRanking } from '../swagger-decorators/get-total-ranking.decorator';
+
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -89,6 +91,12 @@ export class UserController {
     @Query('categoryId') categoryId: number,
   ): Promise<{ data: PageByMentorListResponseDTO[] }> {
     return this.userService.getMentorList(page, categoryId);
+  }
+
+  @ApiGetTotalRanking()
+  @Get('total-ranking')
+  getUserRanking() {
+    return this.userRankingService.getUserRanking();
   }
 
   @UseGuards(JwtAccessTokenGuard)
