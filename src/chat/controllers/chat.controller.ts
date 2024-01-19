@@ -7,6 +7,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Post,
   Query,
   Sse,
@@ -18,7 +19,6 @@ import {
 } from '@nestjs/common';
 import { ChatService } from '../services/chat.service';
 import { ApiTags } from '@nestjs/swagger';
-import { ReceivedUserDto } from '../dto/received-user.dto';
 import mongoose from 'mongoose';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ParseObjectIdPipe } from '../validation-pipe/parse-object-id.pipe';
@@ -30,7 +30,7 @@ import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { ApiCreateChatImage } from '../swagger-decorators/create-chat-image.decorators';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
 import { ChatRoomDto } from '../dto/chat-room.dto';
-import { ApiFindChatRooms } from '../swagger-decorators/find-chat-rooms-new.decorator';
+import { ApiFindChatRooms } from '../swagger-decorators/find-chat-rooms.decorator';
 import { Observable } from 'rxjs';
 import { ApiFindChatNotificationSse } from '../swagger-decorators/find-chat-notification-Sse.decorator';
 import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
@@ -91,21 +91,16 @@ export class ChatController {
 
   /**
    *
-   * @param userId
-   * @param receivedUserDto
-   * @returns findOneChatRoomByUserIds
+   * @deprecated 삭제 예정
    */
   @UseGuards(JwtAccessTokenGuard)
   @ApiFindOneChatRoomByUserId()
   @Get('check')
   findOneChatRoomByUserIds(
     @GetUserId() userId: number,
-    @Body() receivedUserDto: ReceivedUserDto,
+    @Query('chatPartnerId', ParseIntPipe) chatPartnerId: number,
   ): Promise<ChatRoomDto> {
-    return this.chatService.findOneChatRoomByUserIds(
-      userId,
-      receivedUserDto.receiverId,
-    );
+    return this.chatService.findOneChatRoomByUserIds(userId, chatPartnerId);
   }
 
   /**

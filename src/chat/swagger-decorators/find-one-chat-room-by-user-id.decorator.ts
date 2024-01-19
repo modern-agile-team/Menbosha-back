@@ -13,6 +13,7 @@ export function ApiFindOneChatRoomByUserId() {
     ApiOperation({
       summary: '유저 id로 채팅룸 단일 조회',
       description: 'Param - roomId',
+      deprecated: true,
     }),
     ApiResponse({
       status: 200,

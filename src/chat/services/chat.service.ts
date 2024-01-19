@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  ConflictException,
   ForbiddenException,
   HttpException,
   HttpStatus,
@@ -86,11 +85,11 @@ export class ChatService {
    */
   async findOneChatRoomByUserIds(
     myId: number,
-    guestId: number,
+    chatPartnerId: number,
   ): Promise<ChatRoomDto> {
     const returnedRoom = await this.chatRepository.findOneChatRoom({
-      originalMembers: { $all: [myId, guestId] },
-      chatMembers: { $all: [myId, guestId] },
+      originalMembers: { $all: [myId, chatPartnerId] },
+      chatMembers: { $all: [myId, chatPartnerId] },
       deletedAt: null,
       chatRoomType: ChatRoomType.OneOnOne,
     });
@@ -145,7 +144,7 @@ export class ChatService {
     const pushUserId = chatMembers.includes(myId) ? receiverId : myId;
 
     if (chatMembers.length === 2) {
-      throw new ConflictException('해당 유저들의 채팅방이 이미 존재합니다.');
+      return new ChatRoomDto(existChatRoom);
     }
 
     await this.chatRepository.updateOneChatRoom(
