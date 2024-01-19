@@ -31,6 +31,7 @@ import { ApiGetMyRank } from '../swagger-decorators/get-my-rank-decorators';
 import { ApiGetUserInfo } from '../swagger-decorators/get-user-info.decorators';
 import { UserRankingService } from '../services/user-ranking.service';
 import { TotalCountService } from 'src/total-count/services/total-count.service';
+import { UserBadgeService } from '../services/user-badge.service';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -41,6 +42,7 @@ export class UserController {
     private readonly userIntroService: UserIntroService,
     private readonly userRankingService: UserRankingService,
     private readonly totalCountService: TotalCountService,
+    private readonly userBadgeService: UserBadgeService,
   ) {}
 
   @ApiGetMyProfile()
@@ -122,6 +124,12 @@ export class UserController {
   @UseGuards(JwtAccessTokenGuard)
   @Get('/badge')
   getBadge(@GetUserId() userId: number) {
-    return this.userService.userBadge(userId);
+    return this.userBadgeService.userBadge(userId);
+  }
+
+  @UseGuards(JwtAccessTokenGuard)
+  @Post('/badge')
+  addBadge(@GetUserId() userId: number) {
+    return this.userBadgeService.checkBadge(userId);
   }
 }
