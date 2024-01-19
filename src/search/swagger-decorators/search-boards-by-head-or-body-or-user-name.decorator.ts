@@ -9,6 +9,7 @@ export function ApiSearchBoardsByHeadOrBodyOrUserName() {
       ex)'흑돼지 고기' 검색 - '흑돼지', '고기' 라는 단어 단위로 검색. (정확성 순으로 정렬됨)
       제목 검색 시 head, 본문 검색시 body, 작성자 검색시 userName
       ex) http://localhost:3000/search/boards/전체?head=흑돼지&page=1&limit=16`,
+      deprecated: true,
     }),
     ApiResponse({
       status: 200,

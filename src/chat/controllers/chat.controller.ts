@@ -21,7 +21,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { ReceivedUserDto } from '../dto/received-user.dto';
 import mongoose from 'mongoose';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ParseObjectIdPipe } from '../validation-pipe/parse-object-id.pipe';
+import { ParseObjectIdPipe } from '../pipes/parse-object-id.pipe';
 import { ApiCreateChatRoom } from '../swagger-decorators/create-chat-room.decorator';
 import { ApiGetChatRooms } from '../swagger-decorators/get-chat-rooms.decorator';
 import { ApiGetOneChatRoom } from '../swagger-decorators/get-one-chat-room.decorator';
