@@ -30,7 +30,10 @@ import { ApiUpdateUserIntro } from '../swagger-decorators/patch-user-intro-decor
 import { ApiGetMyRank } from '../swagger-decorators/get-my-rank-decorators';
 import { ApiGetUserInfo } from '../swagger-decorators/get-user-info.decorators';
 import { UserRankingService } from '../services/user-ranking.service';
+import { TotalCountService } from 'src/total-count/services/total-count.service';
+import { UserBadgeService } from '../services/user-badge.service';
 import { ApiGetTotalRanking } from '../swagger-decorators/get-total-ranking.decorator';
+
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -40,6 +43,8 @@ export class UserController {
     private readonly userService: UserService,
     private readonly userIntroService: UserIntroService,
     private readonly userRankingService: UserRankingService,
+    private readonly totalCountService: TotalCountService,
+    private readonly userBadgeService: UserBadgeService,
   ) {}
 
   @ApiGetMyProfile()
@@ -112,5 +117,21 @@ export class UserController {
     @Body() userData: UpdateUserIntroDTO,
   ): Promise<ResponseUserIntroDto> {
     return this.userIntroService.updateUserIntro(userId, userData);
+  }
+
+  @Get('/ranking')
+  getRanking(): Promise<any> {
+    return this.userRankingService.userRanking();
+  }
+
+  @Post('/sync-total-count')
+  async syncTotalCount() {
+    return this.totalCountService.syncTotalCount();
+  }
+
+  @UseGuards(JwtAccessTokenGuard)
+  @Get('/badge')
+  getBadge(@GetUserId() userId: number) {
+    return this.userBadgeService.userBadge(userId);
   }
 }
