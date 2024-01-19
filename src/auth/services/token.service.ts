@@ -140,27 +140,19 @@ export class TokenService {
       }
       return { message: '유효한 토큰입니다.' };
     } catch (error) {
-      if (error.message == 'jwt expired') {
-        throw new HttpException('만료된 토큰입니다.', HttpStatus.FORBIDDEN);
-      } else if (
-        error.message == 'invalid token' ||
+      if (
+        error.message == 'jwt expired' ||
         error.message == 'invalid signature'
       ) {
-        throw new HttpException(
-          '유효하지 않은 토큰입니다.',
-          HttpStatus.UNAUTHORIZED,
-        );
-      } else if (error.message == 'jwt must be provided') {
-        throw new HttpException(
-          '토큰이 제공되지 않았습니다.',
-          HttpStatus.LENGTH_REQUIRED,
-        );
+        throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
+      } else if (
+        error.message == 'invalid token' ||
+        error.message == 'jwt must be provided'
+      ) {
+        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
       } else {
         console.log(error);
-        throw new HttpException(
-          '토큰 검증에 실패했습니다.',
-          HttpStatus.BAD_REQUEST,
-        );
+        throw new HttpException('토큰 검증 에러', HttpStatus.BAD_REQUEST);
       }
     }
   }

@@ -13,10 +13,13 @@ export function ApiGetMyProfile() {
       content: {
         JSON: {
           example: {
+            id: 1,
             name: '홍길동',
             email: 'abcd@naver.com',
             isMentor: false,
+            hopeCategoryId: 3,
             activityCategoryId: 3,
+            rank: 10,
             phone: 'true',
             image: 'http://img.jpg',
             intro: {
