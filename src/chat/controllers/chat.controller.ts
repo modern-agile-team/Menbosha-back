@@ -7,7 +7,6 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  ParseIntPipe,
   Post,
   Query,
   Sse,
@@ -42,6 +41,7 @@ import { ApiDeleteChat } from '../swagger-decorators/delete-chat.decorator';
 import { ApiFindOneChatRoomByUserId } from '../swagger-decorators/find-one-chat-room-by-user-id.decorator';
 import { ApiFindOneChatRoom } from '../swagger-decorators/find-one-chat-room.decorator';
 import { ApiFindChats } from '../swagger-decorators/find-chats.decorator';
+import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
 /**
  * @todo 1:1 채팅 컨트롤러 서비스 완성
  */
@@ -98,7 +98,7 @@ export class ChatController {
   @Get('check')
   findOneChatRoomByUserIds(
     @GetUserId() userId: number,
-    @Query('chatPartnerId', ParseIntPipe) chatPartnerId: number,
+    @Query('chatPartnerId', ParsePositiveIntPipe) chatPartnerId: number,
   ): Promise<ChatRoomDto> {
     return this.chatService.findOneChatRoomByUserIds(userId, chatPartnerId);
   }
