@@ -8,10 +8,4 @@ export class MyProfileResponseDTO extends UserInfoDto {
 
   @Exclude()
   admin: boolean;
-
-  @Exclude()
-  rank: number;
-
-  @Exclude()
-  hopeCategoryId: number;
 }
