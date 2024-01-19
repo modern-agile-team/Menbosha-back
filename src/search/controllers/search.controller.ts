@@ -66,7 +66,7 @@ export class SearchController {
   }
 
   /**
-   * @todo 삭제 예정
+   * @deprecated 삭제 예정
    */
   @ApiSearchBoardsByHeadOrBodyOrUserName()
   @Get('boards/:category')
@@ -89,7 +89,7 @@ export class SearchController {
   }
 
   /**
-   * @todo 삭제 예정
+   * @deprecated 삭제 예정
    */
   @ApiSearchBoardsByHead()
   @Get('boards/:category/head')
@@ -108,7 +108,7 @@ export class SearchController {
   }
 
   /**
-   * @todo 삭제 예정
+   * @deprecated 삭제 예정
    */
   @ApiSearchBoardsByBody()
   @Get('boards/:category/body')
@@ -127,7 +127,7 @@ export class SearchController {
   }
 
   /**
-   * @todo 삭제 예정
+   * @deprecated 삭제 예정
    */
   @ApiSearchBoardsByUserName()
   @Get('boards/:category/userName')
@@ -146,7 +146,7 @@ export class SearchController {
   }
 
   /**
-   * @todo 삭제 예정
+   * @deprecated 삭제 예정
    */
   @Get('users')
   async searchUsersByName(@Query('searchQuery') searchQuery: string) {
