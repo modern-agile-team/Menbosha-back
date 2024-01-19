@@ -22,7 +22,6 @@ export class UserInfoDto
   @ApiProperty({
     description: '유저 아이디',
   })
-  @Exclude()
   id: number;
 
   @ApiProperty({

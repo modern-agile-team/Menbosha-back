@@ -31,6 +31,9 @@ import { ApiGetMyRank } from '../swagger-decorators/get-my-rank-decorators';
 import { ApiGetUserInfo } from '../swagger-decorators/get-user-info.decorators';
 import { UserRankingService } from '../services/user-ranking.service';
 import { TotalCountService } from 'src/total-count/services/total-count.service';
+import { UserBadgeService } from '../services/user-badge.service';
+import { ApiGetTotalRanking } from '../swagger-decorators/get-total-ranking.decorator';
+
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -41,6 +44,7 @@ export class UserController {
     private readonly userIntroService: UserIntroService,
     private readonly userRankingService: UserRankingService,
     private readonly totalCountService: TotalCountService,
+    private readonly userBadgeService: UserBadgeService,
   ) {}
 
   @ApiGetMyProfile()
@@ -89,6 +93,12 @@ export class UserController {
     return this.userService.getMentorList(page, categoryId);
   }
 
+  @ApiGetTotalRanking()
+  @Get('total-ranking')
+  getUserRanking() {
+    return this.userRankingService.getUserRanking();
+  }
+
   @UseGuards(JwtAccessTokenGuard)
   @ApiPostUserIntro()
   @Post('/intro')
@@ -117,5 +127,11 @@ export class UserController {
   @Post('/sync-total-count')
   async syncTotalCount() {
     return this.totalCountService.syncTotalCount();
+  }
+
+  @UseGuards(JwtAccessTokenGuard)
+  @Get('/badge')
+  getBadge(@GetUserId() userId: number) {
+    return this.userBadgeService.userBadge(userId);
   }
 }

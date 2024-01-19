@@ -9,4 +9,6 @@ export class UserBadgeRepository {
   async getUserBadge(userId: number) {
     return await this.entityManager.find(UserBadge, { where: { userId } });
   }
+
+  // async checkUserBadge(userId: number) {}
 }
