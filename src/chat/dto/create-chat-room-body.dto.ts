@@ -11,5 +11,5 @@ export class CreateChatRoomBodyDto extends ReceivedUserDto {
   })
   @IsOptional()
   @IsEnum(ChatRoomType)
-  chatRoomType?: ChatRoomType = ChatRoomType.OneOnOne;
+  chatRoomType: ChatRoomType = ChatRoomType.OneOnOne;
 }
