@@ -77,29 +77,11 @@ export class ChatController {
   /**
    *
    * @param userId
-   * @returns find all chat rooms by userId without chats
-   */
-  @UseGuards(JwtAccessTokenGuard)
-  @ApiGetChatRooms()
-  @Get()
-  async findAllChatRooms(
-    @GetUserId() userId: number,
-  ): Promise<ChatRoomsWithoutChatsItemDto[]> {
-    const returnedChatRooms = await this.chatService.findAllChatRooms(userId);
-
-    return plainToInstance(ChatRoomsWithoutChatsItemDto, returnedChatRooms, {
-      excludeExtraneousValues: true,
-    });
-  }
-
-  /**
-   *
-   * @param userId
    * @returns find all chat rooms with mapped user
    */
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetChatRoomsNew()
-  @Get('new')
+  @Get()
   findAllChatRoomsWithUserAndChat(
     @GetUserId() userId: number,
     @Query() pageQueryDto: PageQueryDto,
