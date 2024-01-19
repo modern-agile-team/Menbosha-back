@@ -23,9 +23,7 @@ import mongoose from 'mongoose';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ParseObjectIdPipe } from '../validation-pipe/parse-object-id.pipe';
 import { ApiCreateChatRoom } from '../swagger-decorators/create-chat-room.decorator';
-import { ApiGetOneChatRoom } from '../swagger-decorators/get-one-chat-room.decorator';
 import { ApiLeaveChatRoom } from '../swagger-decorators/leave-chat-room.decorator';
-import { ApiGetChats } from '../swagger-decorators/get-chats.decorator';
 // import { ApiGetChatUnreadCounts } from '../swagger-decorators/get-chat-unread-counts.decorator';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
@@ -39,9 +37,11 @@ import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 import { PageQueryDto } from 'src/common/dto/page-query.dto';
 import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
 import { ChatImageDto } from '../dto/chat-image.dto';
-import { ApiGetOneChatRoomByUserId } from '../swagger-decorators/get-one-chat-room-by-user-id.decorator';
 import { ResponseFindChatRoomsPaginationDto } from '../dto/response-find-chat-rooms-pagination.dto';
 import { ApiDeleteChat } from '../swagger-decorators/delete-chat.decorator';
+import { ApiFindOneChatRoomByUserId } from '../swagger-decorators/find-one-chat-room-by-user-id.decorator';
+import { ApiFindOneChatRoom } from '../swagger-decorators/find-one-chat-room.decorator';
+import { ApiFindChats } from '../swagger-decorators/find-chats.decorator';
 /**
  * @todo 1:1 채팅 컨트롤러 서비스 완성
  */
@@ -96,7 +96,7 @@ export class ChatController {
    * @returns findOneChatRoomByUserIds
    */
   @UseGuards(JwtAccessTokenGuard)
-  @ApiGetOneChatRoomByUserId()
+  @ApiFindOneChatRoomByUserId()
   @Get('check')
   findOneChatRoomByUserIds(
     @GetUserId() userId: number,
@@ -113,7 +113,7 @@ export class ChatController {
    * @param roomId
    * @returns find one chat room or fail
    */
-  @ApiGetOneChatRoom()
+  @ApiFindOneChatRoom()
   @Get(':roomId')
   findOneChatRoomOrFail(
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
@@ -161,7 +161,7 @@ export class ChatController {
    * @returns chatRoom
    */
   @UseGuards(JwtAccessTokenGuard)
-  @ApiGetChats()
+  @ApiFindChats()
   @Get(':roomId/chat')
   findAllChats(
     @GetUserId() userId: number,
