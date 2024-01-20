@@ -16,9 +16,39 @@ import { MentorBoardLike } from 'src/boards/entities/mentor-board-like.entity';
 import { MentorBoardImage } from 'src/boards/entities/mentor-board-image.entity';
 import { UserRanking } from 'src/users/entities/user-ranking.entity';
 import { TotalCount } from 'src/total-count/entities/total-count.entity';
+import { DataSource } from 'typeorm';
 
 // .env 파일 로드
 dotenv.config();
+
+export default new DataSource({
+  type: 'mysql',
+  host: process.env.DATABASE_HOST,
+  port: +process.env.DATABASE_PORT,
+  username: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME,
+  entities: [
+    User,
+    UserImage,
+    Token,
+    MentorBoard,
+    MentorBoardImage,
+    HelpMeBoard,
+    HelpMeBoardImage,
+    HelpYouComment,
+    CategoryList,
+    BadgeList,
+    UserBadge,
+    UserReview,
+    UserIntro,
+    UserRanking,
+    TotalCount,
+    MentorBoardLike,
+  ], // 여기에 엔티티들을 추가해야 합니다.
+  migrationsTableName: 'migrations', // migration 이력을 저장하는 테이블
+  migrations: ['migrations/*.ts'], // migration 할 파일들이 있는 directory
+});
 
 export const TypeORMconfig: TypeOrmModuleOptions = {
   type: 'mysql',
@@ -45,5 +75,7 @@ export const TypeORMconfig: TypeOrmModuleOptions = {
     TotalCount,
     MentorBoardLike,
   ], // 여기에 엔티티들을 추가해야 합니다.
+  migrationsTableName: 'migrations', // migration 이력을 저장하는 테이블
+  migrations: ['migrations/*.ts'], // migration 할 파일들이 있는 directory
   synchronize: process.env.NODE_ENV === 'true',
 };

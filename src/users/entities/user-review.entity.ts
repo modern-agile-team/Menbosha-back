@@ -9,7 +9,7 @@ import { User } from './user.entity';
 
 @Entity({ name: 'user_review' })
 export class UserReview {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
 
   @Column({ name: 'mentor_id' })
