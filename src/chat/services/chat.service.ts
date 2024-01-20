@@ -439,6 +439,8 @@ export class ChatService {
       return chatRoom.chatMembers.filter((userId: number) => userId !== myId);
     });
 
+    const oneDimensionalUserIds = [].concat(...userIds);
+
     const targetUsers = await this.userService.findAll({
       select: {
         id: true,
@@ -451,7 +453,7 @@ export class ChatService {
         userImage: true,
       },
       where: {
-        id: In(userIds),
+        id: In(oneDimensionalUserIds),
       },
     });
 
