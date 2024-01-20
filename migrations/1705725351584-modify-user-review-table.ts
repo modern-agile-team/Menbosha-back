@@ -21,7 +21,7 @@ const generatePrimaryColumn = (
   };
 };
 
-const checklistBooleanColumn = (
+const generateBooleanColumn = (
   name: string,
   comment: string,
 ): TableColumnOptions => {
@@ -63,15 +63,15 @@ export class ModifyUserReviewTable1705725351584 implements MigrationInterface {
             isNullable: false,
             comment: '멘토 리뷰 고유 ID',
           },
-          checklistBooleanColumn('is_good_work', '잘가르쳐요'),
-          checklistBooleanColumn('is_clear', '깔끔해요'),
-          checklistBooleanColumn('is_quick', '답변이 빨라요'),
-          checklistBooleanColumn('is_accurate', '정확해요'),
-          checklistBooleanColumn('is_kindness', '친절해요'),
-          checklistBooleanColumn('is_fun', '재밌어요'),
-          checklistBooleanColumn('is_informative', '알차요'),
-          checklistBooleanColumn('is_bad', '아쉬워요'),
-          checklistBooleanColumn('is_stuffy', '답답해요'),
+          generateBooleanColumn('is_good_work', '잘가르쳐요'),
+          generateBooleanColumn('is_clear', '깔끔해요'),
+          generateBooleanColumn('is_quick', '답변이 빨라요'),
+          generateBooleanColumn('is_accurate', '정확해요'),
+          generateBooleanColumn('is_kindness', '친절해요'),
+          generateBooleanColumn('is_fun', '재밌어요'),
+          generateBooleanColumn('is_informative', '알차요'),
+          generateBooleanColumn('is_bad', '아쉬워요'),
+          generateBooleanColumn('is_stuffy', '답답해요'),
         ],
         foreignKeys: [
           {
