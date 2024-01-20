@@ -91,7 +91,6 @@ export class UserController {
     return this.userService.getMentorList(page, categoryId);
   }
 
-  //
   @ApiGetTotalRanking()
   @Get('total-ranking')
   getUserRanking() {
