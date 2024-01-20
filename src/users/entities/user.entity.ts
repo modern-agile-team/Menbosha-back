@@ -12,7 +12,7 @@ import { UserImage } from './user-image.entity';
 import { Token } from 'src/auth/entities/token.entity';
 import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
 import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
-import { UserReview } from './user-review.entity';
+import { MentorReview } from './mentor-review.entity';
 import { UserBadge } from './user-badge.entity';
 import { CategoryList } from '../../category/entity/category-list.entity';
 import { UserIntro } from './user-intro.entity';
@@ -32,11 +32,11 @@ export class User {
   @OneToOne(() => UserIntro, (userIntro) => userIntro.user)
   userIntro: UserIntro;
 
-  @OneToOne(() => UserReview, (userReview) => userReview.mentor)
-  mentor: UserReview;
+  @OneToOne(() => MentorReview, (mentorReview) => mentorReview.mentor)
+  mentor: MentorReview;
 
-  @OneToOne(() => UserReview, (userReview) => userReview.mentee)
-  mentee: UserReview;
+  @OneToOne(() => MentorReview, (mentorReview) => mentorReview.mentee)
+  mentee: MentorReview;
 
   @Column({ length: 10 })
   provider: string;
