@@ -99,6 +99,13 @@ export class MentorReviewChecklist {
   })
   isStuffy: boolean;
 
+  @Column('int', {
+    name: 'mentor_review_id',
+    comment: '멘토 리뷰 고유 ID',
+    unsigned: true,
+  })
+  mentorReviewId: number;
+
   @ManyToOne(
     () => MentorReview,
     (mentorReview) => mentorReview.mentorReviewChecklists,
