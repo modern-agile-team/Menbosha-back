@@ -5,11 +5,11 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { UserReview } from './user-review.entity';
+import { MentorReview } from './mentor-review.entity';
 import { BooleanTransformer } from './transformers/boolean.transformer';
 
-@Entity('review_checklist', { schema: 'ma6_menbosha_db' })
-export class ReviewChecklist {
+@Entity('mentor_review_checklist', { schema: 'ma6_menbosha_db' })
+export class MentorReviewChecklist {
   @PrimaryGeneratedColumn({
     type: 'int',
     name: 'id',
@@ -99,10 +99,14 @@ export class ReviewChecklist {
   })
   isStuffy: boolean;
 
-  @ManyToOne(() => UserReview, (userReview) => userReview.reviewChecklists, {
-    onDelete: 'CASCADE',
-    onUpdate: 'NO ACTION',
-  })
-  @JoinColumn([{ name: 'user_review_id', referencedColumnName: 'id' }])
-  userReview: UserReview;
+  @ManyToOne(
+    () => MentorReview,
+    (mentorReview) => mentorReview.mentorReviewChecklists,
+    {
+      onDelete: 'CASCADE',
+      onUpdate: 'NO ACTION',
+    },
+  )
+  @JoinColumn([{ name: 'mentor_review_id', referencedColumnName: 'id' }])
+  mentorReview: MentorReview;
 }
