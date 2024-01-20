@@ -38,9 +38,11 @@ const generateBooleanColumn = (
 
 export class ModifyUserReviewTable1705725351584 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.renameTable('user_review', 'mentor_review');
+
     // 리뷰 테이블 created_at 추가
     await queryRunner.addColumn(
-      'user_review',
+      'mentor_review',
       new TableColumn({
         name: 'created_at',
         type: 'timestamp',
@@ -53,11 +55,11 @@ export class ModifyUserReviewTable1705725351584 implements MigrationInterface {
     // 체크리스트 테이블
     await queryRunner.createTable(
       new Table({
-        name: 'review_checklist',
+        name: 'mentor_review_checklist',
         columns: [
-          generatePrimaryColumn('리뷰 체크리스트 고유 ID'),
+          generatePrimaryColumn('멘토 리뷰 체크리스트 고유 ID'),
           {
-            name: 'user_review_id',
+            name: 'mentor_review_id',
             type: 'int',
             unsigned: true,
             isNullable: false,
@@ -75,27 +77,27 @@ export class ModifyUserReviewTable1705725351584 implements MigrationInterface {
         ],
         foreignKeys: [
           {
-            referencedTableName: 'user_review',
+            referencedTableName: 'mentor_review',
             referencedColumnNames: ['id'],
-            columnNames: ['user_review_id'],
+            columnNames: ['mentor_review_id'],
             onDelete: 'CASCADE',
           },
         ],
       }),
     );
     await queryRunner.query(
-      'ALTER TABLE review_checklist COMMENT = "멘토 리뷰 체크리스트"',
+      'ALTER TABLE mentor_review_checklist COMMENT = "멘토 리뷰 체크리스트"',
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.dropColumn(
-      'user_review',
+      'mentor_review',
       new TableColumn({
         name: 'created_at',
         type: 'timestamp',
       }),
     );
-    await queryRunner.dropTable(new Table({ name: 'review_checklist' }));
+    await queryRunner.dropTable(new Table({ name: 'mentor_review_checklist' }));
   }
 }

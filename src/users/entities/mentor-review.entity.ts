@@ -7,10 +7,10 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './user.entity';
-import { ReviewChecklist } from './review-check-list.entity';
+import { MentorReviewChecklist } from './mentor-review-checklist.entity';
 
-@Entity({ name: 'user_review' })
-export class UserReview {
+@Entity({ name: 'mentor_review' })
+export class MentorReview {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
   id: number;
 
@@ -35,10 +35,10 @@ export class UserReview {
   mentee: User;
 
   @OneToMany(
-    () => ReviewChecklist,
-    (reviewChecklist) => reviewChecklist.userReview,
+    () => MentorReviewChecklist,
+    (mentorReviewChecklist) => mentorReviewChecklist.mentorReview,
   )
-  reviewChecklists: ReviewChecklist[];
+  mentorReviewChecklists: MentorReviewChecklist[];
 
   @Column('timestamp', {
     name: 'created_at',
