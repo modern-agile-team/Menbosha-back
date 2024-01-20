@@ -12,6 +12,7 @@ import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
 import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
 import { MentorsService } from '../services/mentors.service';
+import { CreateMentorReviewRequestBodyDto } from '../dtos/create-mentor-review-request-body.dto';
 
 @UsePipes(
   new ValidationPipe({
@@ -28,7 +29,12 @@ export class MentorsController {
   createMentorReview(
     @GetUserId() userId: number,
     @Param('mentorId', ParsePositiveIntPipe) mentorId: number,
+    @Body() createMentorReviewRequestBodyDto: CreateMentorReviewRequestBodyDto,
   ) {
-    return this.mentorsService.createMentorReview(userId, mentorId);
+    return this.mentorsService.createMentorReview(
+      userId,
+      mentorId,
+      createMentorReviewRequestBodyDto,
+    );
   }
 }
