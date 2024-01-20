@@ -48,5 +48,5 @@ export class UserReview {
   createdAt: Date;
 
   @Column('varchar', { name: 'review', length: 255 })
-  reviewd: string;
+  review: string;
 }
