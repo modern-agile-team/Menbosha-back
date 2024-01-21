@@ -7,6 +7,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -26,6 +27,8 @@ import { ApiTags } from '@nestjs/swagger';
 import { MentorBoardPageQueryDto } from '../dtos/mentor-review-page-query-dto';
 import { ApiFindMentorReviews } from '../swagger-decorators/find-mentor-reviews.decorator';
 import { ApiFindOneMentorReview } from '../swagger-decorators/find-one-mentor-review.decorator';
+import { ApiRemoveMentorReview } from '../swagger-decorators/remove-mentor-review.decorator';
+import { PatchUpdateMentorReviewDto } from '../dtos/patch-update-mentor-review.dto';
 
 @UsePipes(
   new ValidationPipe({
@@ -77,7 +80,24 @@ export class MentorsController {
   }
 
   @UseGuards(JwtAccessTokenGuard)
+  @Patch('reviews/:reviewId')
+  patchUpdateMentorReview(
+    @GetUserId() userId: number,
+    @Param('mentorId', ParsePositiveIntPipe) mentorId: number,
+    @Param('reviewId', ParsePositiveIntPipe) reviewId: number,
+    @Body() patchUpdateMentorReviewDto: PatchUpdateMentorReviewDto,
+  ) {
+    return this.mentorsService.patchUpdateMentorReview(
+      mentorId,
+      userId,
+      reviewId,
+      patchUpdateMentorReviewDto,
+    );
+  }
+
+  @UseGuards(JwtAccessTokenGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiRemoveMentorReview()
   @Delete('reviews/:reviewId')
   removeMentorReview(
     @GetUserId() userId: number,

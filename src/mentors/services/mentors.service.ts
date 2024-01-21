@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -14,6 +15,8 @@ import { MentorReviewsPaginationResponseDto } from '../dtos/mentor-reviews-pagin
 import { UserService } from 'src/users/services/user.service';
 import { FindOneOptions } from 'typeorm';
 import { MentorReview } from '../entities/mentor-review.entity';
+import { PatchUpdateMentorReviewDto } from '../dtos/patch-update-mentor-review.dto';
+import { isNotEmptyObject } from 'class-validator';
 
 @Injectable()
 export class MentorsService {
@@ -119,6 +122,53 @@ export class MentorsService {
     });
 
     return new MentorReviewDto(existReview);
+  }
+
+  async patchUpdateMentorReview(
+    mentorId: number,
+    menteeId: number,
+    reviewId: number,
+    patchUpdateMentorReviewDto: PatchUpdateMentorReviewDto,
+  ) {
+    const { mentorReviewChecklist, review } = patchUpdateMentorReviewDto;
+
+    if (!isNotEmptyObject(patchUpdateMentorReviewDto)) {
+      throw new BadRequestException('At least one update field must exist.');
+    }
+
+    const existReview = await this.findOneMentorReviewOrFail(mentorId, {
+      where: {
+        mentorId,
+        id: reviewId,
+      },
+      relations: {
+        mentorReviewChecklist: true,
+      },
+    });
+
+    if (existReview.menteeId !== menteeId) {
+      throw new ForbiddenException('해당 리뷰에 권한이 없습니다.');
+    }
+
+    mentorReviewChecklist && review
+      ? await this.mentorsRepository.patchUpdateAllMentorReview(
+          mentorId,
+          menteeId,
+          reviewId,
+          mentorReviewChecklist,
+          review,
+        )
+      : await this.mentorsRepository.patchUpdateOptionalMentorReview(
+          mentorId,
+          menteeId,
+          reviewId,
+          mentorReviewChecklist,
+          review,
+        );
+
+    const updatedMentorReview = Object.assign(existReview, patchUpdateMentorReviewDto.review);
+
+    return new MentorReviewDto(updatedMentorReview);
   }
 
   async removeMentorReview(
