@@ -112,8 +112,8 @@ export function ApiPatchUpdateMentorReview() {
             'Forbidden Error': {
               value: {
                 message: '해당 리뷰에 권한이 없습니다.',
-                error: 'Not Found',
-                statusCode: 404,
+                error: 'Forbidden',
+                statusCode: 403,
               },
             },
           },
