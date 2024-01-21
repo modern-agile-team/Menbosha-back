@@ -39,14 +39,14 @@ import { ApiPatchUpdateMentorReview } from '../swagger-decorators/patch-update-m
   }),
 )
 @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
-@ApiTags('mentors')
-@Controller('mentors/:mentorId')
+@ApiTags('mentors-reviews')
+@Controller('mentors/:mentorId/reviews')
 export class MentorsController {
   constructor(private readonly mentorsService: MentorsService) {}
 
   @UseGuards(JwtAccessTokenGuard)
   @ApiCreateMentorReview()
-  @Post('reviews')
+  @Post()
   createMentorReview(
     @GetUserId() userId: number,
     @Param('mentorId', ParsePositiveIntPipe) mentorId: number,
@@ -60,7 +60,7 @@ export class MentorsController {
   }
 
   @ApiFindMentorReviews()
-  @Get('reviews')
+  @Get()
   findMentorReviews(
     @Param('mentorId', ParsePositiveIntPipe) mentorId: number,
     @Query() mentorBoardPageQueryDto: MentorBoardPageQueryDto,
@@ -72,7 +72,7 @@ export class MentorsController {
   }
 
   @ApiFindOneMentorReview()
-  @Get('reviews/:reviewId')
+  @Get(':reviewId')
   findOneMentorReview(
     @Param('mentorId', ParsePositiveIntPipe) mentorId: number,
     @Param('reviewId', ParsePositiveIntPipe) reviewId: number,
@@ -82,7 +82,7 @@ export class MentorsController {
 
   @UseGuards(JwtAccessTokenGuard)
   @ApiPatchUpdateMentorReview()
-  @Patch('reviews/:reviewId')
+  @Patch(':reviewId')
   patchUpdateMentorReview(
     @GetUserId() userId: number,
     @Param('mentorId', ParsePositiveIntPipe) mentorId: number,
@@ -100,7 +100,7 @@ export class MentorsController {
   @UseGuards(JwtAccessTokenGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiRemoveMentorReview()
-  @Delete('reviews/:reviewId')
+  @Delete(':reviewId')
   removeMentorReview(
     @GetUserId() userId: number,
     @Param('mentorId', ParsePositiveIntPipe) mentorId: number,
