@@ -12,7 +12,7 @@ import { MentorReviewsItemResponseDto } from '../dtos/mentor-reviews-item-respon
 import { plainToInstance } from 'class-transformer';
 import { MentorReviewsPaginationResponseDto } from '../dtos/mentor-reviews-pagination-response.dto';
 import { UserService } from 'src/users/services/user.service';
-import { FindOneOptions } from 'typeorm';
+import { FindOneOptions, IsNull } from 'typeorm';
 import { MentorReview } from '../entities/mentor-review.entity';
 
 @Injectable()

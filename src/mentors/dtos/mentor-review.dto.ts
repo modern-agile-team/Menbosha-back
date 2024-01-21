@@ -50,5 +50,8 @@ export class MentorReviewDto
 
   constructor(mentorReviewDto: MentorReviewDto) {
     Object.assign(this, mentorReviewDto);
+    this.mentorReviewChecklist = new MentorReviewChecklistDto(
+      mentorReviewDto.mentorReviewChecklist,
+    );
   }
 }

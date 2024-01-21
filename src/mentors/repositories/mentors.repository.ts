@@ -161,9 +161,7 @@ export class MentorsRepository {
         );
 
       if (!mentorReviewUpdateResult.affected) {
-        throw new InternalServerErrorException(
-          '멘토 리뷰 삭제 중 알 수 없는 서버에러 발생',
-        );
+        throw new Error('멘토 리뷰 삭제 중 알 수 없는 서버에러 발생');
       }
 
       const mentorReviewChecklistUpdateResult = await entityManager
@@ -178,7 +176,7 @@ export class MentorsRepository {
         );
 
       if (!mentorReviewChecklistUpdateResult.affected) {
-        throw new InternalServerErrorException(
+        throw new Error(
           '멘토 리뷰 체크리스트 삭제 중 알 수 없는 서버에러 발생',
         );
       }

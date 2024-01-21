@@ -1,5 +1,6 @@
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -50,7 +51,7 @@ export class MentorReview {
   })
   createdAt: Date;
 
-  @Column('timestamp', {
+  @DeleteDateColumn({
     name: 'deleted_at',
     nullable: true,
     comment: '삭제 일자',

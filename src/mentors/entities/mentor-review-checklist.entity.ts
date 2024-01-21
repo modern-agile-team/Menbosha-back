@@ -1,5 +1,6 @@
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   OneToOne,
@@ -116,7 +117,7 @@ export class MentorReviewChecklist {
   @JoinColumn([{ name: 'mentor_review_id', referencedColumnName: 'id' }])
   mentorReview: MentorReview;
 
-  @Column('timestamp', {
+  @DeleteDateColumn({
     name: 'deleted_at',
     nullable: true,
     comment: '삭제 일자',
