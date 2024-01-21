@@ -3,6 +3,10 @@ import { MentorsRepository } from '../repositories/mentors.repository';
 import { CreateMentorReviewRequestBodyDto } from '../dtos/create-mentor-review-request-body.dto';
 import { MentorReviewDto } from '../dtos/mentor-review.dto';
 import { MentorReviewChecklistDto } from '../dtos/mentor-review-checklist.dto';
+import { MentorBoardPageQueryDto } from '../dtos/mentor-review-page-query-dto';
+import { MentorReviewsItemResponseDto } from '../dtos/mentor-reviews-item-response.dto';
+import { plainToInstance } from 'class-transformer';
+import { MentorReviewsPaginationResponseDto } from '../dtos/mentor-reviews-pagination-response.dto';
 
 @Injectable()
 export class MentorsService {
@@ -29,5 +33,38 @@ export class MentorsService {
         mentorReviewChecklist,
       ),
     });
+  }
+  async findMentorReviews(
+    mentorId: number,
+    mentorBoardPageQueryDto: MentorBoardPageQueryDto,
+  ) {
+    const { page, pageSize, id, menteeId, review, orderField, sortOrder } =
+      mentorBoardPageQueryDto;
+
+    const skip = (page - 1) * pageSize;
+
+    const [mentorReviews, count] =
+      await this.mentorsRepository.findMentorReviews(
+        skip,
+        pageSize,
+        id,
+        menteeId,
+        mentorId,
+        review,
+        orderField,
+        sortOrder,
+      );
+
+    const mentorReviewsItemResponseDto = plainToInstance(
+      MentorReviewsItemResponseDto,
+      mentorReviews,
+    );
+
+    return new MentorReviewsPaginationResponseDto(
+      mentorReviewsItemResponseDto,
+      count,
+      page,
+      pageSize,
+    );
   }
 }

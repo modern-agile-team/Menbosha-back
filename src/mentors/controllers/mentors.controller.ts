@@ -2,8 +2,10 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Get,
   Param,
   Post,
+  Query,
   UseGuards,
   UseInterceptors,
   UsePipes,
@@ -18,6 +20,7 @@ import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { MentorReviewDto } from '../dtos/mentor-review.dto';
 import { ApiCreateMentorReview } from '../swagger-decorators/create-mentor-review.decorator';
 import { ApiTags } from '@nestjs/swagger';
+import { MentorBoardPageQueryDto } from '../dtos/mentor-review-page-query-dto';
 
 @UsePipes(
   new ValidationPipe({
@@ -28,13 +31,13 @@ import { ApiTags } from '@nestjs/swagger';
 )
 @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
 @ApiTags('mentors')
-@Controller('mentors')
+@Controller('mentors/:mentorId')
 export class MentorsController {
   constructor(private readonly mentorsService: MentorsService) {}
 
   @UseGuards(JwtAccessTokenGuard)
   @ApiCreateMentorReview()
-  @Post(':mentorId/review')
+  @Post('review')
   createMentorReview(
     @GetUserId() userId: number,
     @Param('mentorId', ParsePositiveIntPipe) mentorId: number,
@@ -44,6 +47,17 @@ export class MentorsController {
       mentorId,
       userId,
       createMentorReviewRequestBodyDto,
+    );
+  }
+
+  @Get('review')
+  async findMentorReviews(
+    @Param('mentorId', ParsePositiveIntPipe) mentorId: number,
+    @Query() mentorBoardPageQueryDto: MentorBoardPageQueryDto,
+  ) {
+    return this.mentorsService.findMentorReviews(
+      mentorId,
+      mentorBoardPageQueryDto,
     );
   }
 }

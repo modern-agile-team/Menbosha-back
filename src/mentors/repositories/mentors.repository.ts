@@ -1,5 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, Like, Repository } from 'typeorm';
 import { CreateMentorReviewChecklistRequestBodyDto } from '../dtos/create-mentor-review-checklist-request-body.dto';
 import { MentorReviewChecklist } from '../entities/mentor-review-checklist.entity';
 import { MentorReview } from '../entities/mentor-review.entity';
@@ -65,5 +65,68 @@ export class MentorsRepository {
         await queryRunner.release();
       }
     }
+  }
+
+  findMentorReviews(
+    skip,
+    pageSize,
+    id,
+    menteeId,
+    mentorId,
+    review,
+    orderField,
+    sortOrder,
+  ) {
+    return this.dataSource.manager.getRepository(MentorReview).findAndCount({
+      select: {
+        id: true,
+        mentee: {
+          id: true,
+          name: true,
+          rank: true,
+          userImage: {
+            imageUrl: true,
+          },
+          userIntro: {
+            mainField: true,
+            career: true,
+            introduce: true,
+          },
+        },
+        mentorReviewChecklist: {
+          id: true,
+          mentorReviewId: true,
+          isGoodWork: true,
+          isClear: true,
+          isQuick: true,
+          isAccurate: true,
+          isKindness: true,
+          isFun: true,
+          isInformative: true,
+          isBad: true,
+          isStuffy: true,
+        },
+        review: true,
+        createdAt: true,
+      },
+      where: {
+        mentorId,
+        ...(id ? { id } : {}),
+        ...(menteeId ? { menteeId } : {}),
+        ...(review ? { review: Like(review) } : {}),
+      },
+      relations: {
+        mentee: {
+          userImage: true,
+          userIntro: true,
+        },
+        mentorReviewChecklist: true,
+      },
+      order: {
+        [orderField]: sortOrder,
+      },
+      skip,
+      take: pageSize,
+    });
   }
 }
