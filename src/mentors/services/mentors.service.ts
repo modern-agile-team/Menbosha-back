@@ -12,7 +12,7 @@ import { MentorReviewsItemResponseDto } from '../dtos/mentor-reviews-item-respon
 import { plainToInstance } from 'class-transformer';
 import { MentorReviewsPaginationResponseDto } from '../dtos/mentor-reviews-pagination-response.dto';
 import { UserService } from 'src/users/services/user.service';
-import { FindOneOptions, IsNull } from 'typeorm';
+import { FindOneOptions } from 'typeorm';
 import { MentorReview } from '../entities/mentor-review.entity';
 
 @Injectable()
@@ -83,6 +83,11 @@ export class MentorsService {
     );
   }
 
+  /**
+   * TypeORM은 soft delete 기능을 지원.
+   * 1. deletedAt 칼럼에 DeleteDateColumn 데코레이터를 달고, softDelete 메서드를 쓰거나 날짜를 직접 new Date()하면 알아서 걸러줌.
+   * 2. 날짜를 직접 new Date()로 추가, where 조건에 deletedAt: IsNull()
+   */
   async findOneMentorReviewOrFail(
     mentorId: number,
     options: FindOneOptions<MentorReview>,
