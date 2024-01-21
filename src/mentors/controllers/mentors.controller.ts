@@ -21,6 +21,7 @@ import { MentorReviewDto } from '../dtos/mentor-review.dto';
 import { ApiCreateMentorReview } from '../swagger-decorators/create-mentor-review.decorator';
 import { ApiTags } from '@nestjs/swagger';
 import { MentorBoardPageQueryDto } from '../dtos/mentor-review-page-query-dto';
+import { ApiFindMentorReviews } from '../swagger-decorators/find-mentor-reviews.decorator';
 
 @UsePipes(
   new ValidationPipe({
@@ -50,6 +51,7 @@ export class MentorsController {
     );
   }
 
+  @ApiFindMentorReviews()
   @Get('review')
   async findMentorReviews(
     @Param('mentorId', ParsePositiveIntPipe) mentorId: number,

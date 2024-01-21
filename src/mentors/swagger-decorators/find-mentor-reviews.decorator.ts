@@ -1,27 +1,25 @@
 import { applyDecorators } from '@nestjs/common';
 import {
   ApiExtraModels,
-  ApiHeaders,
-  ApiInternalServerErrorResponse,
   ApiOperation,
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { MentorReviewDto } from '../dtos/mentor-review.dto';
+import { MentorReviewsPaginationResponseDto } from '../dtos/mentor-reviews-pagination-response.dto';
 
-export function ApiCreateMentorReview() {
+export function ApiFindMentorReviews() {
   return applyDecorators(
     ApiOperation({
-      summary: 'CreateMentorReview',
-      description: '멘토에 대한 리뷰를 생성합니다.',
+      summary: 'FindMentorReviews',
+      description: '멘토에 대한 리뷰를 pagination으로 조회합니다.',
     }),
     ApiResponse({
-      status: 201,
-      description: '성공적으로 멘토 리뷰가 생성됨.',
+      status: 200,
+      description: '성공적으로 멘토 리뷰조회.',
       schema: {
         properties: {
           contents: {
-            $ref: getSchemaPath(MentorReviewDto),
+            $ref: getSchemaPath(MentorReviewsPaginationResponseDto),
           },
         },
       },
@@ -52,17 +50,16 @@ export function ApiCreateMentorReview() {
             'validation failed': {
               value: {
                 message: [
-                  'createMentorReviewChecklistRequestBodyDto must be a non-empty object',
-                  'review must be a string',
-                  'createMentorReviewChecklistRequestBodyDto.isGoodWork must be a boolean value',
-                  'createMentorReviewChecklistRequestBodyDto.isClear must be a boolean value',
-                  'createMentorReviewChecklistRequestBodyDto.isQuick must be a boolean value',
-                  'createMentorReviewChecklistRequestBodyDto.isAccurate must be a boolean value',
-                  'createMentorReviewChecklistRequestBodyDto.isKindness must be a boolean value',
-                  'createMentorReviewChecklistRequestBodyDto.isFun must be a boolean value',
-                  'createMentorReviewChecklistRequestBodyDto.isInformative must be a boolean value',
-                  'createMentorReviewChecklistRequestBodyDto.isBad must be a boolean value',
-                  'createMentorReviewChecklistRequestBodyDto.isStuffy must be a boolean value',
+                  'page must not be less than 1',
+                  'page must be an integer number',
+                  'pageSize must not be less than 5',
+                  'pageSize must be an integer number',
+                  'menteeId must be an integer number',
+                  'menteeId must not be less than 1',
+                  'id must be an integer number',
+                  'id must not be less than 1',
+                  'orderField must be one of the following values: id, createdAt',
+                  'sortOrder must be one of the following values: DESC, ASC',
                   'property [허용하지 않은 데이터] should not exist',
                 ],
                 error: 'Bad Request',
@@ -92,26 +89,6 @@ export function ApiCreateMentorReview() {
         },
       },
     }),
-    ApiInternalServerErrorResponse({
-      description: '500 server error',
-      content: {
-        JSON: {
-          example: {
-            message: '멘토 리뷰 생성 중 알 수 없는 서버에러 발생',
-            error: 'Internal Server Error',
-            statusCode: 500,
-          },
-        },
-      },
-    }),
-    ApiHeaders([
-      {
-        name: 'access_token',
-        description: '액세스 토큰',
-        required: true,
-        example: '여기에 액세스 토큰',
-      },
-    ]),
-    ApiExtraModels(MentorReviewDto),
+    ApiExtraModels(MentorReviewsPaginationResponseDto),
   );
 }
