@@ -4,6 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { UserInfoDto } from 'src/users/dtos/user-info.dto';
 import { UserImage } from 'src/users/entities/user-image.entity';
 import { UserIntro } from 'src/users/entities/user-intro.entity';
+import { Exclude } from 'class-transformer';
 
 class UserImageDto implements Pick<UserImage, 'imageUrl'> {
   @ApiProperty({
@@ -87,12 +88,15 @@ export class MentorReviewsItemResponseDto
     description: '멘티가 작성한 리뷰 체크리스트',
     type: MentorReviewChecklistDto,
   })
-  mentorReviewChecklistsDto: MentorReviewChecklistDto;
+  mentorReviewChecklist: MentorReviewChecklistDto;
 
   @ApiProperty({
     description: '생성일자',
   })
   createdAt: Date;
+
+  @Exclude()
+  deletedAt: Date;
 
   constructor(
     responseMentorReviewsPaginationResponseDto: MentorReviewsItemResponseDto,

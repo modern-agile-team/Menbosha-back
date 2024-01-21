@@ -42,10 +42,11 @@ export class MentorsService {
       ),
     });
   }
+
   async findMentorReviews(
     mentorId: number,
     mentorBoardPageQueryDto: MentorBoardPageQueryDto,
-  ) {
+  ): Promise<MentorReviewsPaginationResponseDto> {
     await this.userService.findOneByOrNotFound(mentorId);
 
     const { page, pageSize, id, menteeId, review, orderField, sortOrder } =
@@ -78,7 +79,9 @@ export class MentorsService {
     );
   }
 
-  async findOneMentorReviewOrFail(options: FindOneOptions<MentorReview>) {
+  async findOneMentorReviewOrFail(
+    options: FindOneOptions<MentorReview>,
+  ): Promise<MentorReview> {
     const existReview =
       await this.mentorsRepository.findOneMentorReview(options);
 
@@ -89,7 +92,10 @@ export class MentorsService {
     return existReview;
   }
 
-  async findOneMentorReview(mentorId: number, reviewId: number) {
+  async findOneMentorReview(
+    mentorId: number,
+    reviewId: number,
+  ): Promise<MentorReviewDto> {
     await this.userService.findOneByOrNotFound(mentorId);
 
     const existReview = await this.findOneMentorReviewOrFail({

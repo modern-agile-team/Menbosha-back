@@ -67,7 +67,7 @@ export class MentorsController {
   findOneMentorReview(
     @Param('mentorId', ParsePositiveIntPipe) mentorId: number,
     @Param('reviewId', ParsePositiveIntPipe) reviewId: number,
-  ) {
+  ): Promise<MentorReviewDto> {
     return this.mentorsService.findOneMentorReview(mentorId, reviewId);
   }
 }
