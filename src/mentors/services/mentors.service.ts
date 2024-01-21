@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { MentorsRepository } from '../repositories/mentors.repository';
 import { CreateMentorReviewRequestBodyDto } from '../dtos/create-mentor-review-request-body.dto';
+import { MentorReviewDto } from '../dtos/mentor-review.dto';
+import { MentorReviewChecklistDto } from '../dtos/mentor-review-checklist.dto';
 
 @Injectable()
 export class MentorsService {
@@ -9,18 +11,23 @@ export class MentorsService {
     mentorId: number,
     menteeId: number,
     createMentorReviewRequestBodyDto: CreateMentorReviewRequestBodyDto,
-  ) {
+  ): Promise<MentorReviewDto> {
     const { review, createMentorReviewChecklistRequestBodyDto } =
       createMentorReviewRequestBodyDto;
 
-    console.log(mentorId, menteeId, review);
+    const { mentorReview, mentorReviewChecklist } =
+      await this.mentorsRepository.createMentorReview(
+        mentorId,
+        menteeId,
+        { ...createMentorReviewChecklistRequestBodyDto },
+        review,
+      );
 
-    const mentorReview = await this.mentorsRepository.createMentorReview(
-      mentorId,
-      menteeId,
-      review,
-    );
-
-    return mentorReview;
+    return new MentorReviewDto({
+      ...mentorReview,
+      mentorReviewChecklistsDto: new MentorReviewChecklistDto(
+        mentorReviewChecklist,
+      ),
+    });
   }
 }

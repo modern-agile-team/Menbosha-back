@@ -28,8 +28,10 @@ export class MentorReviewDto
 
   @ApiProperty({
     description: '멘티가 작성한 리뷰',
+    nullable: true,
+    type: () => String,
   })
-  review: string;
+  review: string | null;
 
   @ApiProperty({
     description: '멘티가 작성한 리뷰 체크리스트',
@@ -41,4 +43,8 @@ export class MentorReviewDto
     description: '생성일자',
   })
   createdAt: Date;
+
+  constructor(mentorReviewDto: MentorReviewDto) {
+    Object.assign(this, mentorReviewDto);
+  }
 }

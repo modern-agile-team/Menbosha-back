@@ -15,6 +15,7 @@ import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
 import { MentorsService } from '../services/mentors.service';
 import { CreateMentorReviewRequestBodyDto } from '../dtos/create-mentor-review-request-body.dto';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
+import { MentorReviewDto } from '../dtos/mentor-review.dto';
 
 @UsePipes(
   new ValidationPipe({
@@ -34,9 +35,7 @@ export class MentorsController {
     @GetUserId() userId: number,
     @Param('mentorId', ParsePositiveIntPipe) mentorId: number,
     @Body() createMentorReviewRequestBodyDto: CreateMentorReviewRequestBodyDto,
-  ) {
-    console.log(createMentorReviewRequestBodyDto);
-
+  ): Promise<MentorReviewDto> {
     return this.mentorsService.createMentorReview(
       mentorId,
       userId,
