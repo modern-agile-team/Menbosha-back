@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 import { MentorReviewChecklist } from 'src/mentors/entities/mentor-review-checklist.entity';
 
 export class MentorReviewChecklistDto
@@ -71,6 +72,9 @@ export class MentorReviewChecklistDto
     default: false,
   })
   isStuffy: boolean;
+
+  @Exclude()
+  deletedAt: Date;
 
   constructor(mentorReviewChecklistDto: MentorReviewChecklistDto) {
     Object.assign(this, mentorReviewChecklistDto);

@@ -115,4 +115,11 @@ export class MentorReviewChecklist {
   )
   @JoinColumn([{ name: 'mentor_review_id', referencedColumnName: 'id' }])
   mentorReview: MentorReview;
+
+  @Column('timestamp', {
+    name: 'deleted_at',
+    nullable: true,
+    comment: '삭제 일자',
+  })
+  deletedAt: Date | null;
 }

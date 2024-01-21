@@ -11,12 +11,12 @@ import { MentorReviewsPaginationResponseDto } from '../dtos/mentor-reviews-pagin
 export function ApiFindMentorReviews() {
   return applyDecorators(
     ApiOperation({
-      summary: 'FindMentorReviews',
+      summary: '멘토 리뷰 pagination 조회',
       description: '멘토에 대한 리뷰를 pagination으로 조회합니다.',
     }),
     ApiResponse({
       status: 200,
-      description: '성공적으로 멘토 리뷰조회.',
+      description: '성공적으로 멘토 리뷰 조회.',
       schema: {
         properties: {
           contents: {
@@ -31,14 +31,6 @@ export function ApiFindMentorReviews() {
       content: {
         JSON: {
           examples: {
-            'invalid token': {
-              value: { statusCode: 400, message: 'invalid token' },
-              description: '유효하지 않은 토큰인 경우',
-            },
-            'jwt must be provided': {
-              value: { statusCode: 400, message: 'jwt must be provided' },
-              description: '토큰이 제공되지 않은 경우',
-            },
             'param internal the mentorId must be a positive integer string': {
               value: {
                 message:
@@ -67,24 +59,6 @@ export function ApiFindMentorReviews() {
                 statusCode: 400,
               },
               description: '유효성 검사 실패',
-            },
-          },
-        },
-      },
-    }),
-    ApiResponse({
-      status: 401,
-      description: '401 error',
-      content: {
-        JSON: {
-          examples: {
-            'invalid signature': {
-              value: { statusCode: 401, message: 'invalid signature' },
-              description: '우리 서비스의 토큰이 아닌 경우',
-            },
-            'jwt expired': {
-              value: { statusCode: 401, message: 'jwt expired' },
-              description: '만료된 토큰인 경우',
             },
           },
         },

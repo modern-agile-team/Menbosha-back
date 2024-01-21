@@ -2,7 +2,10 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   Query,
@@ -22,6 +25,7 @@ import { ApiCreateMentorReview } from '../swagger-decorators/create-mentor-revie
 import { ApiTags } from '@nestjs/swagger';
 import { MentorBoardPageQueryDto } from '../dtos/mentor-review-page-query-dto';
 import { ApiFindMentorReviews } from '../swagger-decorators/find-mentor-reviews.decorator';
+import { ApiFindOneMentorReview } from '../swagger-decorators/find-one-mentor-review.decorator';
 
 @UsePipes(
   new ValidationPipe({
@@ -38,7 +42,7 @@ export class MentorsController {
 
   @UseGuards(JwtAccessTokenGuard)
   @ApiCreateMentorReview()
-  @Post('review')
+  @Post('reviews')
   createMentorReview(
     @GetUserId() userId: number,
     @Param('mentorId', ParsePositiveIntPipe) mentorId: number,
@@ -52,8 +56,8 @@ export class MentorsController {
   }
 
   @ApiFindMentorReviews()
-  @Get('review')
-  async findMentorReviews(
+  @Get('reviews')
+  findMentorReviews(
     @Param('mentorId', ParsePositiveIntPipe) mentorId: number,
     @Query() mentorBoardPageQueryDto: MentorBoardPageQueryDto,
   ) {
@@ -63,11 +67,23 @@ export class MentorsController {
     );
   }
 
-  @Get('review/:reviewId')
+  @ApiFindOneMentorReview()
+  @Get('reviews/:reviewId')
   findOneMentorReview(
     @Param('mentorId', ParsePositiveIntPipe) mentorId: number,
     @Param('reviewId', ParsePositiveIntPipe) reviewId: number,
   ): Promise<MentorReviewDto> {
     return this.mentorsService.findOneMentorReview(mentorId, reviewId);
+  }
+
+  @UseGuards(JwtAccessTokenGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete('reviews/:reviewId')
+  removeMentorReview(
+    @GetUserId() userId: number,
+    @Param('mentorId', ParsePositiveIntPipe) mentorId: number,
+    @Param('reviewId', ParsePositiveIntPipe) reviewId: number,
+  ) {
+    return this.mentorsService.removeMentorReview(mentorId, userId, reviewId);
   }
 }

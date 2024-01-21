@@ -13,7 +13,7 @@ import { MentorReviewDto } from '../dtos/mentor-review.dto';
 export function ApiCreateMentorReview() {
   return applyDecorators(
     ApiOperation({
-      summary: 'CreateMentorReview',
+      summary: '멘토 리뷰 생성',
       description: '멘토에 대한 리뷰를 생성합니다.',
     }),
     ApiResponse({

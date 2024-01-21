@@ -133,4 +133,73 @@ export class MentorsRepository {
   findOneMentorReview(options: FindOneOptions<MentorReview>) {
     return this.dataSource.manager.getRepository(MentorReview).findOne(options);
   }
+
+  async removeMentorReview(
+    reviewId: number,
+    mentorId: number,
+    menteeId: number,
+  ) {
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const entityManager = queryRunner.manager;
+
+      const mentorReviewUpdateResult = await entityManager
+        .withRepository(this.mentorReviewRepository)
+        .update(
+          {
+            id: reviewId,
+            mentorId,
+            menteeId,
+          },
+          {
+            deletedAt: new Date(),
+          },
+        );
+
+      if (!mentorReviewUpdateResult.affected) {
+        throw new InternalServerErrorException(
+          '멘토 리뷰 삭제 중 알 수 없는 서버에러 발생',
+        );
+      }
+
+      const mentorReviewChecklistUpdateResult = await entityManager
+        .withRepository(this.mentorReviewChecklistRepository)
+        .update(
+          {
+            mentorReviewId: reviewId,
+          },
+          {
+            deletedAt: new Date(),
+          },
+        );
+
+      if (!mentorReviewChecklistUpdateResult.affected) {
+        throw new InternalServerErrorException(
+          '멘토 리뷰 체크리스트 삭제 중 알 수 없는 서버에러 발생',
+        );
+      }
+
+      await queryRunner.commitTransaction();
+
+      return { mentorReviewUpdateResult, mentorReviewChecklistUpdateResult };
+    } catch (error) {
+      if (queryRunner.isTransactionActive) {
+        await queryRunner.rollbackTransaction();
+      }
+
+      console.error(error);
+
+      throw new InternalServerErrorException(
+        '멘토 리뷰 삭제 중 알 수 없는 서버에러 발생',
+      );
+    } finally {
+      if (!queryRunner.isReleased) {
+        await queryRunner.release();
+      }
+    }
+  }
 }

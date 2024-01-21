@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { MentorsRepository } from '../repositories/mentors.repository';
 import { CreateMentorReviewRequestBodyDto } from '../dtos/create-mentor-review-request-body.dto';
 import { MentorReviewDto } from '../dtos/mentor-review.dto';
@@ -80,8 +84,11 @@ export class MentorsService {
   }
 
   async findOneMentorReviewOrFail(
+    mentorId: number,
     options: FindOneOptions<MentorReview>,
   ): Promise<MentorReview> {
+    await this.userService.findOneByOrNotFound(mentorId);
+
     const existReview =
       await this.mentorsRepository.findOneMentorReview(options);
 
@@ -96,9 +103,7 @@ export class MentorsService {
     mentorId: number,
     reviewId: number,
   ): Promise<MentorReviewDto> {
-    await this.userService.findOneByOrNotFound(mentorId);
-
-    const existReview = await this.findOneMentorReviewOrFail({
+    const existReview = await this.findOneMentorReviewOrFail(mentorId, {
       where: {
         id: reviewId,
         mentorId,
@@ -109,5 +114,29 @@ export class MentorsService {
     });
 
     return new MentorReviewDto(existReview);
+  }
+
+  async removeMentorReview(
+    mentorId: number,
+    menteeId: number,
+    reviewId: number,
+  ) {
+    const existReview = await this.findOneMentorReviewOrFail(mentorId, {
+      select: ['id', 'menteeId', 'mentorId'],
+      where: {
+        mentorId,
+        id: reviewId,
+      },
+    });
+
+    if (existReview.menteeId !== menteeId) {
+      throw new ForbiddenException('해당 리뷰에 권한이 없습니다.');
+    }
+
+    await this.mentorsRepository.removeMentorReview(
+      existReview.id,
+      existReview.mentorId,
+      existReview.menteeId,
+    );
   }
 }
