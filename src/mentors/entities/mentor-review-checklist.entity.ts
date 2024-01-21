@@ -2,7 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { MentorReview } from './mentor-review.entity';
@@ -101,14 +101,13 @@ export class MentorReviewChecklist {
 
   @Column('int', {
     name: 'mentor_review_id',
-    comment: '멘토 리뷰 고유 ID',
     unsigned: true,
   })
   mentorReviewId: number;
 
-  @ManyToOne(
+  @OneToOne(
     () => MentorReview,
-    (mentorReview) => mentorReview.mentorReviewChecklists,
+    (mentorReview) => mentorReview.mentorReviewChecklist,
     {
       onDelete: 'CASCADE',
       onUpdate: 'NO ACTION',

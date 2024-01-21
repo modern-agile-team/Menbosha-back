@@ -1,17 +1,17 @@
-import { MentorReviewChecklist } from 'src/users/entities/mentor-review-checklist.entity';
+import { MentorReviewChecklist } from 'src/mentors/entities/mentor-review-checklist.entity';
 
 export class MentorReviewChecklistDto
   implements Omit<MentorReviewChecklist, 'mentorReview'>
 {
   id: number;
   mentorReviewId: number;
-  isAccurate: boolean;
-  isBad: boolean;
-  isClear: boolean;
-  isFun: boolean;
   isGoodWork: boolean;
-  isInformative: boolean;
-  isKindness: boolean;
+  isClear: boolean;
   isQuick: boolean;
+  isAccurate: boolean;
+  isKindness: boolean;
+  isFun: boolean;
+  isInformative: boolean;
+  isBad: boolean;
   isStuffy: boolean;
 }

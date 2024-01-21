@@ -5,9 +5,22 @@ import { CreateMentorReviewRequestBodyDto } from '../dtos/create-mentor-review-r
 @Injectable()
 export class MentorsService {
   constructor(private readonly mentorsRepository: MentorsRepository) {}
-  createMentorReview(
-    menteeId: number,
+  async createMentorReview(
     mentorId: number,
+    menteeId: number,
     createMentorReviewRequestBodyDto: CreateMentorReviewRequestBodyDto,
-  ) {}
+  ) {
+    const { review, createMentorReviewChecklistRequestBodyDto } =
+      createMentorReviewRequestBodyDto;
+
+    console.log(mentorId, menteeId, review);
+
+    const mentorReview = await this.mentorsRepository.createMentorReview(
+      mentorId,
+      menteeId,
+      review,
+    );
+
+    return mentorReview;
+  }
 }

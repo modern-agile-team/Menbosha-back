@@ -2,12 +2,16 @@ import { Module } from '@nestjs/common';
 import { MentorsController } from './controllers/mentors.controller';
 import { MentorsService } from './services/mentors.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MentorReview } from 'src/users/entities/mentor-review.entity';
-import { MentorReviewChecklist } from 'src/users/entities/mentor-review-checklist.entity';
+import { MentorReview } from 'src/mentors/entities/mentor-review.entity';
+import { MentorReviewChecklist } from 'src/mentors/entities/mentor-review-checklist.entity';
 import { MentorsRepository } from './repositories/mentors.repository';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([MentorReview, MentorReviewChecklist])],
+  imports: [
+    TypeOrmModule.forFeature([MentorReview, MentorReviewChecklist]),
+    AuthModule,
+  ],
   controllers: [MentorsController],
   providers: [MentorsService, MentorsRepository],
 })
