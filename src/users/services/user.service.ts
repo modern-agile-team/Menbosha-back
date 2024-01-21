@@ -1,9 +1,9 @@
 import { UserIntroRepository } from './../repositories/user-intro.repository';
 import { UserBadgeRepository } from './../repositories/user-badge.repository';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { UserImageRepository } from '../repositories/user-image.repository';
-import { FindManyOptions } from 'typeorm';
+import { FindManyOptions, FindOneOptions } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { PageByMentorListResponseDTO } from '../dtos/page-by-mentor-list-response-dto';
 import { UserBadgeResponseDTO } from '../dtos/get-user-badge.dto';
@@ -22,6 +22,16 @@ export class UserService {
 
   findAll(options: FindManyOptions<User>) {
     return this.userRepository.findAll(options);
+  }
+
+  async findOneByOrNotFound(userId: number) {
+    const existUser = await this.userRepository.findOneUser(userId);
+
+    if (!existUser) {
+      throw new NotFoundException('해당 유저를 찾지 못했습니다.');
+    }
+
+    return existUser;
   }
 
   async getMyProfile(userId: number) {

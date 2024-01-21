@@ -1,5 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { DataSource, Like, Repository } from 'typeorm';
+import { DataSource, FindOneOptions, Like, Repository } from 'typeorm';
 import { CreateMentorReviewChecklistRequestBodyDto } from '../dtos/create-mentor-review-checklist-request-body.dto';
 import { MentorReviewChecklist } from '../entities/mentor-review-checklist.entity';
 import { MentorReview } from '../entities/mentor-review.entity';
@@ -128,5 +128,9 @@ export class MentorsRepository {
       skip,
       take: pageSize,
     });
+  }
+
+  findOneMentorReview(options: FindOneOptions<MentorReview>) {
+    return this.dataSource.manager.getRepository(MentorReview).findOne(options);
   }
 }

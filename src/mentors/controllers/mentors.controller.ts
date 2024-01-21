@@ -64,4 +64,10 @@ export class MentorsController {
   }
 
   @Get('review/:reviewId')
+  findOneMentorReview(
+    @Param('mentorId', ParsePositiveIntPipe) mentorId: number,
+    @Param('reviewId', ParsePositiveIntPipe) reviewId: number,
+  ) {
+    return this.mentorsService.findOneMentorReview(mentorId, reviewId);
+  }
 }

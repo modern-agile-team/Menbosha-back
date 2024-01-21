@@ -7,7 +7,7 @@ export class MentorReviewsPaginationResponseDto extends PaginationResponseDto {
     description: '멘토 리뷰 조회 item',
     type: [MentorReviewsItemResponseDto],
   })
-  mentorReviewsItemResponseDtos: MentorReviewsItemResponseDto[];
+  mentorReviewsItemResponses: MentorReviewsItemResponseDto[];
 
   constructor(
     mentorReviewsItemResponseDtos: MentorReviewsItemResponseDto[],
@@ -17,6 +17,6 @@ export class MentorReviewsPaginationResponseDto extends PaginationResponseDto {
   ) {
     super(totalCount, page, pageSize);
 
-    this.mentorReviewsItemResponseDtos = mentorReviewsItemResponseDtos;
+    this.mentorReviewsItemResponses = mentorReviewsItemResponseDtos;
   }
 }

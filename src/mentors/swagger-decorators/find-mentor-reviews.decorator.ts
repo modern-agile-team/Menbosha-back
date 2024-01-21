@@ -1,6 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import {
   ApiExtraModels,
+  ApiNotFoundResponse,
   ApiOperation,
   ApiResponse,
   getSchemaPath,
@@ -85,6 +86,18 @@ export function ApiFindMentorReviews() {
               value: { statusCode: 401, message: 'jwt expired' },
               description: '만료된 토큰인 경우',
             },
+          },
+        },
+      },
+    }),
+    ApiNotFoundResponse({
+      description: '해딩 멘토를 찾지 못함',
+      content: {
+        JSON: {
+          example: {
+            message: '해당 유저를 찾지 못했습니다.',
+            error: 'Not Found',
+            statusCode: 404,
           },
         },
       },

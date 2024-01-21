@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { MentorReview } from 'src/mentors/entities/mentor-review.entity';
 import { MentorReviewChecklistDto } from './mentor-review-checklist.dto';
+import { Exclude } from 'class-transformer';
 
 export class MentorReviewDto
   implements Omit<MentorReview, 'mentor' | 'mentee' | 'mentorReviewChecklist'>
@@ -37,12 +38,15 @@ export class MentorReviewDto
     description: '멘티가 작성한 리뷰 체크리스트',
     type: MentorReviewChecklistDto,
   })
-  mentorReviewChecklistsDto: MentorReviewChecklistDto;
+  mentorReviewChecklist: MentorReviewChecklistDto;
 
   @ApiProperty({
     description: '생성일자',
   })
   createdAt: Date;
+
+  @Exclude()
+  deletedAt: Date;
 
   constructor(mentorReviewDto: MentorReviewDto) {
     Object.assign(this, mentorReviewDto);
