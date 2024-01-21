@@ -62,4 +62,6 @@ export class MentorsController {
       mentorBoardPageQueryDto,
     );
   }
+
+  @Get('review/:reviewId')
 }

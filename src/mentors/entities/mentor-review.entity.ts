@@ -40,6 +40,9 @@ export class MentorReview {
   )
   mentorReviewChecklist: MentorReviewChecklist;
 
+  @Column('varchar', { name: 'review', length: 255, nullable: true })
+  review: string | null;
+
   @Column('timestamp', {
     name: 'created_at',
     comment: '생성일자',
@@ -47,6 +50,10 @@ export class MentorReview {
   })
   createdAt: Date;
 
-  @Column('varchar', { name: 'review', length: 255, nullable: true })
-  review: string | null;
+  @Column('timestamp', {
+    name: 'deleted_at',
+    nullable: true,
+    comment: '삭제 일자',
+  })
+  deletedAt: Date | null;
 }
