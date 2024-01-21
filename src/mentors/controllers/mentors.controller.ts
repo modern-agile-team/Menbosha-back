@@ -29,6 +29,7 @@ import { ApiFindMentorReviews } from '../swagger-decorators/find-mentor-reviews.
 import { ApiFindOneMentorReview } from '../swagger-decorators/find-one-mentor-review.decorator';
 import { ApiRemoveMentorReview } from '../swagger-decorators/remove-mentor-review.decorator';
 import { PatchUpdateMentorReviewDto } from '../dtos/patch-update-mentor-review.dto';
+import { ApiPatchUpdateMentorReview } from '../swagger-decorators/patch-update-mentor-review.decorator';
 
 @UsePipes(
   new ValidationPipe({
@@ -80,13 +81,14 @@ export class MentorsController {
   }
 
   @UseGuards(JwtAccessTokenGuard)
+  @ApiPatchUpdateMentorReview()
   @Patch('reviews/:reviewId')
   patchUpdateMentorReview(
     @GetUserId() userId: number,
     @Param('mentorId', ParsePositiveIntPipe) mentorId: number,
     @Param('reviewId', ParsePositiveIntPipe) reviewId: number,
     @Body() patchUpdateMentorReviewDto: PatchUpdateMentorReviewDto,
-  ) {
+  ): Promise<MentorReviewDto> {
     return this.mentorsService.patchUpdateMentorReview(
       mentorId,
       userId,

@@ -7,7 +7,6 @@ import {
 import { MentorsRepository } from '../repositories/mentors.repository';
 import { CreateMentorReviewRequestBodyDto } from '../dtos/create-mentor-review-request-body.dto';
 import { MentorReviewDto } from '../dtos/mentor-review.dto';
-import { MentorReviewChecklistDto } from '../dtos/mentor-review-checklist.dto';
 import { MentorBoardPageQueryDto } from '../dtos/mentor-review-page-query-dto';
 import { MentorReviewsItemResponseDto } from '../dtos/mentor-reviews-item-response.dto';
 import { plainToInstance } from 'class-transformer';
@@ -29,7 +28,15 @@ export class MentorsService {
     menteeId: number,
     createMentorReviewRequestBodyDto: CreateMentorReviewRequestBodyDto,
   ): Promise<MentorReviewDto> {
-    await this.userService.findOneByOrNotFound(mentorId);
+    await this.userService.findOneByOrNotFound({
+      select: {
+        id: true,
+      },
+      where: {
+        id: mentorId,
+        isMentor: true,
+      },
+    });
 
     const { review, createMentorReviewChecklistRequestBodyDto } =
       createMentorReviewRequestBodyDto;
@@ -44,9 +51,7 @@ export class MentorsService {
 
     return new MentorReviewDto({
       ...mentorReview,
-      mentorReviewChecklist: new MentorReviewChecklistDto(
-        mentorReviewChecklist,
-      ),
+      mentorReviewChecklist,
     });
   }
 
@@ -54,7 +59,15 @@ export class MentorsService {
     mentorId: number,
     mentorBoardPageQueryDto: MentorBoardPageQueryDto,
   ): Promise<MentorReviewsPaginationResponseDto> {
-    await this.userService.findOneByOrNotFound(mentorId);
+    await this.userService.findOneByOrNotFound({
+      select: {
+        id: true,
+      },
+      where: {
+        id: mentorId,
+        isMentor: true,
+      },
+    });
 
     const { page, pageSize, id, menteeId, review, orderField, sortOrder } =
       mentorBoardPageQueryDto;
@@ -95,7 +108,15 @@ export class MentorsService {
     mentorId: number,
     options: FindOneOptions<MentorReview>,
   ): Promise<MentorReview> {
-    await this.userService.findOneByOrNotFound(mentorId);
+    await this.userService.findOneByOrNotFound({
+      select: {
+        id: true,
+      },
+      where: {
+        id: mentorId,
+        isMentor: true,
+      },
+    });
 
     const existReview =
       await this.mentorsRepository.findOneMentorReview(options);
@@ -129,7 +150,7 @@ export class MentorsService {
     menteeId: number,
     reviewId: number,
     patchUpdateMentorReviewDto: PatchUpdateMentorReviewDto,
-  ) {
+  ): Promise<MentorReviewDto> {
     const { mentorReviewChecklist, review } = patchUpdateMentorReviewDto;
 
     if (!isNotEmptyObject(patchUpdateMentorReviewDto)) {
@@ -152,30 +173,41 @@ export class MentorsService {
 
     mentorReviewChecklist && review
       ? await this.mentorsRepository.patchUpdateAllMentorReview(
-          mentorId,
-          menteeId,
-          reviewId,
+          existReview.mentorId,
+          existReview.menteeId,
+          existReview.id,
           mentorReviewChecklist,
           review,
         )
       : await this.mentorsRepository.patchUpdateOptionalMentorReview(
-          mentorId,
-          menteeId,
-          reviewId,
+          existReview.mentorId,
+          existReview.menteeId,
+          existReview.id,
           mentorReviewChecklist,
           review,
         );
 
-    const updatedMentorReview = Object.assign(existReview, patchUpdateMentorReviewDto.review);
+    const updatedMentorReviewChecklist = Object.assign(
+      existReview.mentorReviewChecklist,
+      mentorReviewChecklist,
+    );
 
-    return new MentorReviewDto(updatedMentorReview);
+    const updatedMentorReview = Object.assign(
+      existReview,
+      patchUpdateMentorReviewDto,
+    );
+
+    return new MentorReviewDto({
+      ...updatedMentorReview,
+      mentorReviewChecklist: updatedMentorReviewChecklist,
+    });
   }
 
   async removeMentorReview(
     mentorId: number,
     menteeId: number,
     reviewId: number,
-  ) {
+  ): Promise<void> {
     const existReview = await this.findOneMentorReviewOrFail(mentorId, {
       select: ['id', 'menteeId', 'mentorId'],
       where: {

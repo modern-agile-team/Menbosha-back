@@ -12,6 +12,7 @@ import { MentorReview } from '../entities/mentor-review.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MentorReviewOrderField } from '../constants/mentor-review-order-field.enum';
 import { SortOrder } from 'src/common/constants/sort-order.enum';
+import { MentorReviewsItemResponseDto } from '../dtos/mentor-reviews-item-response.dto';
 
 @Injectable()
 export class MentorsRepository {
@@ -84,7 +85,7 @@ export class MentorsRepository {
     review: string,
     orderField: MentorReviewOrderField,
     sortOrder: SortOrder,
-  ) {
+  ): Promise<[MentorReviewsItemResponseDto[], number]> {
     return this.mentorReviewRepository.findAndCount({
       select: {
         id: true,
@@ -138,7 +139,9 @@ export class MentorsRepository {
     });
   }
 
-  findOneMentorReview(options: FindOneOptions<MentorReview>) {
+  findOneMentorReview(
+    options: FindOneOptions<MentorReview>,
+  ): Promise<MentorReview> {
     return this.mentorReviewRepository.findOne(options);
   }
 
@@ -195,7 +198,7 @@ export class MentorsRepository {
       console.error(error);
 
       throw new InternalServerErrorException(
-        '멘토 리뷰 생성 중 알 수 없는 서버에러 발생',
+        '멘토 리뷰 업데이트 중 알 수 없는 서버에러 발생',
       );
     } finally {
       if (!queryRunner.isReleased) {
@@ -210,7 +213,7 @@ export class MentorsRepository {
     reviewId: number,
     patchMentorReviewChecklistRequestBodyDto: CreateMentorReviewChecklistRequestBodyDto,
     review: string,
-  ) {
+  ): Promise<UpdateResult> {
     return review
       ? this.mentorReviewRepository.update(
           {
@@ -236,7 +239,10 @@ export class MentorsRepository {
     reviewId: number,
     mentorId: number,
     menteeId: number,
-  ) {
+  ): Promise<{
+    mentorReviewUpdateResult: UpdateResult;
+    mentorReviewChecklistUpdateResult: UpdateResult;
+  }> {
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();

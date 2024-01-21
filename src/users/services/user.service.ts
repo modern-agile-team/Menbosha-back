@@ -24,8 +24,8 @@ export class UserService {
     return this.userRepository.findAll(options);
   }
 
-  async findOneByOrNotFound(userId: number) {
-    const existUser = await this.userRepository.findOneUser(userId);
+  async findOneByOrNotFound(options: FindOneOptions<User>) {
+    const existUser = await this.userRepository.findOne(options);
 
     if (!existUser) {
       throw new NotFoundException('해당 유저를 찾지 못했습니다.');
