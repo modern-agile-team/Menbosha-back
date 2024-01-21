@@ -16,6 +16,8 @@ import { MentorsService } from '../services/mentors.service';
 import { CreateMentorReviewRequestBodyDto } from '../dtos/create-mentor-review-request-body.dto';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { MentorReviewDto } from '../dtos/mentor-review.dto';
+import { ApiCreateMentorReview } from '../swagger-decorators/create-mentor-review.decorator';
+import { ApiTags } from '@nestjs/swagger';
 
 @UsePipes(
   new ValidationPipe({
@@ -25,11 +27,13 @@ import { MentorReviewDto } from '../dtos/mentor-review.dto';
   }),
 )
 @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
+@ApiTags('mentors')
 @Controller('mentors')
 export class MentorsController {
   constructor(private readonly mentorsService: MentorsService) {}
 
   @UseGuards(JwtAccessTokenGuard)
+  @ApiCreateMentorReview()
   @Post(':mentorId/review')
   createMentorReview(
     @GetUserId() userId: number,
