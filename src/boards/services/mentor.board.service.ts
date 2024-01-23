@@ -26,7 +26,7 @@ export class MentorBoardService {
     }
   }
 
-  async randomMentorBoards() {
+  async randomMentorBoards(categoryId: number) {
     const limit = 3;
     const boards =
       await this.mentorBoardRepository.findRandomMentorBoard(limit);
