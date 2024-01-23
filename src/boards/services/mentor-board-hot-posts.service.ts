@@ -63,6 +63,7 @@ export class MentorBoardHotPostsService {
         'mentorBoard.categoryId',
         'mentorBoard.createdAt',
         'mentorBoard.updatedAt',
+        'mentorBoard.popularAt',
         'user.name',
         'userImage.imageUrl',
         'mentorBoardLikes.id',
