@@ -436,11 +436,11 @@ export class ChatService {
       return null;
     }
 
-    const userIds = returnedChatRoomsAggregate.flatMap((chatRoom) => {
-      return chatRoom.originalMembers.filter(
-        (userId: number) => userId !== myId,
-      );
+    const userIds = returnedChatRoomsAggregate.map((chatRoom) => {
+      return chatRoom.chatMembers.filter((userId: number) => userId !== myId);
     });
+
+    const oneDimensionalUserIds = [].concat(...userIds);
 
     const targetUsers = await this.userService.findAll({
       select: {
@@ -454,7 +454,7 @@ export class ChatService {
         userImage: true,
       },
       where: {
-        id: In(userIds),
+        id: In(oneDimensionalUserIds),
       },
     });
 
