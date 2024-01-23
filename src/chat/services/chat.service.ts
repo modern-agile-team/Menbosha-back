@@ -23,6 +23,7 @@ import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 import { ChatRepository } from '../repositories/chat.repository';
 import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
 import { ResponseFindChatRoomsPaginationDto } from '../dto/response-find-chat-rooms-pagination.dto';
+import { PageQueryDto } from 'src/common/dto/page-query.dto';
 // import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 
 @Injectable()
@@ -193,16 +194,10 @@ export class ChatService {
   async findAllChats(
     myId: number,
     roomId: mongoose.Types.ObjectId,
-    page: number,
+    pageQueryDto: PageQueryDto,
   ): Promise<AggregateChatRoomForChatsDto> {
-    const pageSize = 20;
+    const { page, pageSize } = pageQueryDto;
     const skip = (page - 1) * pageSize;
-
-    const existChatRoom = await this.findOneChatRoomOrFail(roomId);
-
-    if (!existChatRoom.chatMembers.includes(myId)) {
-      throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
-    }
 
     await this.chatRepository.findOneAndUpdateChatRoom(
       {
@@ -212,7 +207,7 @@ export class ChatService {
       { arrayFilters: [{ 'elem.seenUsers': { $ne: myId } }], new: true },
     );
 
-    const returnedChatRooms: AggregateChatRoomForChatsDto[] =
+    const aggregatedChatRooms: AggregateChatRoomForChatsDto[] =
       await this.chatRepository.aggregateChatRooms([
         {
           $match: { _id: new mongoose.Types.ObjectId(roomId), deletedAt: null },
@@ -239,6 +234,7 @@ export class ChatService {
         {
           $project: {
             _id: 1,
+            originalMembers: 1,
             chatMembers: 1,
             totalCount: 1,
             chats: '$paginatedChat',
@@ -249,7 +245,11 @@ export class ChatService {
         },
       ]);
 
-    const chatPartnerIds = returnedChatRooms[0].chatMembers.filter(
+    if (!aggregatedChatRooms[0].chatMembers.includes(myId)) {
+      throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
+    }
+
+    const chatPartnerIds = aggregatedChatRooms[0].originalMembers.filter(
       (userId) => userId !== myId,
     );
 
@@ -279,7 +279,7 @@ export class ChatService {
     );
 
     return new AggregateChatRoomForChatsDto(
-      returnedChatRooms[0],
+      aggregatedChatRooms[0],
       chatUsersDto,
       page,
       pageSize,
@@ -371,9 +371,9 @@ export class ChatService {
    */
   async findAllChatRoomsWithUserAndChat(
     myId: number,
-    page: number,
+    pageQueryDto: PageQueryDto,
   ): Promise<ResponseFindChatRoomsPaginationDto> {
-    const pageSize = 15;
+    const { page, pageSize } = pageQueryDto;
     const skip = (page - 1) * pageSize;
 
     const returnedChatRoomsAggregate: AggregateChatRoomsDto[] =
@@ -417,6 +417,7 @@ export class ChatService {
         {
           $project: {
             _id: 1,
+            originalMembers: 1,
             chatMembers: 1,
             chatRoomType: 1,
             createdAt: 1,
@@ -435,11 +436,11 @@ export class ChatService {
       return null;
     }
 
-    const userIds = returnedChatRoomsAggregate.map((chatRoom) => {
-      return chatRoom.chatMembers.filter((userId: number) => userId !== myId);
+    const userIds = returnedChatRoomsAggregate.flatMap((chatRoom) => {
+      return chatRoom.originalMembers.filter(
+        (userId: number) => userId !== myId,
+      );
     });
-
-    const oneDimensionalUserIds = [].concat(...userIds);
 
     const targetUsers = await this.userService.findAll({
       select: {
@@ -453,7 +454,7 @@ export class ChatService {
         userImage: true,
       },
       where: {
-        id: In(oneDimensionalUserIds),
+        id: In(userIds),
       },
     });
 
@@ -471,10 +472,10 @@ export class ChatService {
 
     const responseFindChatRoomsDto = aggregateChatRoomsDto.map(
       (aggregateChatRoomDto) => {
-        const { chatMembers } = aggregateChatRoomDto;
+        const { originalMembers } = aggregateChatRoomDto;
 
         const chatUserDto = chatUsersDtoArray.filter((chatUserDto) =>
-          chatMembers.includes(chatUserDto.id),
+          originalMembers.includes(chatUserDto.id),
         );
 
         return new ResponseFindChatRoomsDto(aggregateChatRoomDto, chatUserDto);
