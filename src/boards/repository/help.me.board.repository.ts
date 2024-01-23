@@ -61,6 +61,18 @@ export class HelpMeBoardRepository {
     });
   }
 
+  async findLatestBoardsByCategoryId(
+    limit: number,
+    categoryId: number,
+  ): Promise<HelpMeBoard[]> {
+    return await this.entityManager.find(HelpMeBoard, {
+      relations: ['user', 'user.userImage', 'helpMeBoardImages'],
+      where: { categoryId: categoryId },
+      order: { pullingUp: 'DESC' },
+      take: limit,
+    });
+  }
+
   async findLatestBoards(limit: number): Promise<HelpMeBoard[]> {
     return await this.entityManager.find(HelpMeBoard, {
       relations: ['user', 'user.userImage', 'helpMeBoardImages'],
