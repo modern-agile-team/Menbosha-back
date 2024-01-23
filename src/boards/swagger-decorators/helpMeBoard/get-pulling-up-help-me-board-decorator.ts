@@ -1,5 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 
 export function ApiGetPullingUpHelpMeBoard() {
   return applyDecorators(
@@ -59,5 +59,6 @@ export function ApiGetPullingUpHelpMeBoard() {
         },
       },
     }),
+    ApiQuery({ name: 'categoryId', type: Number }),
   );
 }
