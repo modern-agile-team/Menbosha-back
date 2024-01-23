@@ -26,22 +26,22 @@ export class UserRankingService {
       const userRankingArray = allUserCounts
         .map((user) => {
           let totalScore =
-            user.mentorBoardCount7days * 23 +
-            user.mentorBoardLikeCount7days * 10 +
-            user.helpYouCommentCount7days * 7 +
-            user.reviewCount7days * 97 +
-            user.badgeCount7days * 18;
+            user.mentorBoardCountInSevenDays * 23 +
+            user.mentorBoardLikeCountInSevenDays * 10 +
+            user.helpYouCommentCountInSevenDays * 7 +
+            user.reviewCountInSevenDays * 97 +
+            user.badgeCountInSevenDays * 18;
 
-          if (user.mentorBoardCount7days > 10) {
-            const after = user.mentorBoardCount7days - 10;
+          if (user.mentorBoardCountInSevenDays > 10) {
+            const after = user.mentorBoardCountInSevenDays - 10;
             totalScore = totalScore - after * 13;
           }
-          if (user.helpYouCommentCount7days > 20) {
-            const after = user.helpYouCommentCount7days - 20;
+          if (user.helpYouCommentCountInSevenDays > 20) {
+            const after = user.helpYouCommentCountInSevenDays - 20;
             totalScore = totalScore - after * 4;
           }
-          if (user.reviewCount7days > 5) {
-            const after = user.reviewCount7days - 5;
+          if (user.reviewCountInSevenDays > 5) {
+            const after = user.reviewCountInSevenDays - 5;
             totalScore = totalScore + after * 49;
           }
           if (totalScore < 60) {

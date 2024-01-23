@@ -37,17 +37,17 @@ export class UserRankingRepository {
     const allCounts = await this.entityManager.find(TotalCount, {
       select: [
         'userId',
-        'mentorBoardCount7days',
-        'mentorBoardLikeCount7days',
-        'helpYouCommentCount7days',
-        'badgeCount7days',
-        'reviewCount7days',
+        'mentorBoardCountInSevenDays',
+        'mentorBoardLikeCountInSevenDays',
+        'helpYouCommentCountInSevenDays',
+        'badgeCountInSevenDays',
+        'reviewCountInSevenDays',
       ],
       where: [
-        { mentorBoardCount7days: MoreThanOrEqual(2) },
-        { helpYouCommentCount7days: MoreThanOrEqual(3) },
-        { mentorBoardLikeCount7days: MoreThanOrEqual(6) },
-        { reviewCount7days: MoreThanOrEqual(1) },
+        { mentorBoardCountInSevenDays: MoreThanOrEqual(2) },
+        { helpYouCommentCountInSevenDays: MoreThanOrEqual(3) },
+        { mentorBoardLikeCountInSevenDays: MoreThanOrEqual(6) },
+        { reviewCountInSevenDays: MoreThanOrEqual(1) },
       ],
     });
 
