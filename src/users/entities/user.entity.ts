@@ -18,6 +18,7 @@ import { CategoryList } from '../../category/entity/category-list.entity';
 import { UserIntro } from './user-intro.entity';
 import { TotalCount } from 'src/total-count/entities/total-count.entity';
 import { MentorBoardLike } from 'src/boards/entities/mentor-board-like.entity';
+import { UserRanking } from './user-ranking.entity';
 
 @Entity({
   name: 'user',
@@ -94,4 +95,9 @@ export class User {
     onDelete: 'CASCADE',
   })
   totalCount: TotalCount;
+
+  @OneToMany(() => UserRanking, (userRanking) => userRanking.user, {
+    onDelete: 'CASCADE',
+  })
+  userRanking: UserRanking;
 }
