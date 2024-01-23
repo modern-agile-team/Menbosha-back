@@ -1,5 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 
 export function ApiGetRandomMentorBoards() {
   return applyDecorators(
@@ -82,5 +82,6 @@ export function ApiGetRandomMentorBoards() {
         },
       },
     }),
+    ApiQuery({ name: 'categoryId', type: Number }),
   );
 }
