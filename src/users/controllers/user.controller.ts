@@ -124,7 +124,11 @@ export class UserController {
 
   @UseGuards(JwtAccessTokenGuard)
   @Post('/badge')
-  addBadge(@GetUserId() userId: number) {
-    return this.userBadgeService.countBadge(userId);
+  addBadge(
+    @GetUserId() userId: number,
+    @Param() mentorId: number,
+    @Param() category: string,
+  ) {
+    return this.userBadgeService.countBadge(userId, mentorId, category);
   }
 }

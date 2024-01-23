@@ -57,4 +57,8 @@ export class TotalCountRepository {
   async countLikes(userId: number) {
     return await this.entityManager.countBy(TotalCount, { userId });
   }
+
+  async countReviews(userId: number) {
+    return await this.entityManager.countBy(TotalCount, { userId });
+  }
 }
