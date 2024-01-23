@@ -12,4 +12,18 @@ export class UserBadgeService {
   async userBadge(userId: number) {
     return await this.userBadgeRepository.getUserBadge(userId);
   }
+
+  async countBadge(userId: number) {
+    const myBadge = await this.userBadgeRepository.getUserBadge(userId); // 내 뱃지 종류 불러와야함
+    const countBoard = await this.totalCountRepository.countBoards(userId); // 획득조건: 게시글 몇개 인지
+    const countComment = await this.totalCountRepository.countComments(userId); // 획득조건: 댓글이 몇개 인지
+    const likesCount = await this.totalCountRepository.countLikes(userId); // 획득조건: 게시물의 좋아요 수가 몇개인지.
+
+    // 예외처리(조건) 보드생성, 댓글생성, 좋아요 개수 / 근데 그 전에 내가 이미 획득한 뱃지인지 판별해야함.
+    if (countBoard >= 10) {
+    }
+    if (countComment >= 10) {
+    }
+    return { countBoard, countComment };
+  }
 }

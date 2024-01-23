@@ -45,4 +45,16 @@ export class TotalCountRepository {
       },
     );
   }
+
+  async countBoards(userId: number) {
+    return await this.entityManager.countBy(TotalCount, { userId });
+  }
+
+  async countComments(userId: number) {
+    return await this.entityManager.countBy(TotalCount, { userId });
+  }
+
+  async countLikes(userId: number) {
+    return await this.entityManager.countBy(TotalCount, { userId });
+  }
 }
