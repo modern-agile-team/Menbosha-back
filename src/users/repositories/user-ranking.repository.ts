@@ -4,25 +4,33 @@ import { User } from '../entities/user.entity';
 import { TotalCount } from 'src/total-count/entities/total-count.entity';
 import { UserRanking } from '../entities/user-ranking.entity';
 import { UserIntro } from '../entities/user-intro.entity';
+import { UserImage } from '../entities/user-image.entity';
 
 @Injectable()
 export class UserRankingRepository {
   constructor(private readonly entityManager: EntityManager) {}
 
   async getUserRanking() {
-    return await this.entityManager.find(UserRanking, {
-      select: [
-        'userId',
-        'activityCategoryId',
-        'name',
-        'rank',
-        'reviewCount',
-        'mainField',
-        'career',
-        'introduce',
-      ],
-      take: 10,
-    });
+    return await this.entityManager
+      .createQueryBuilder(UserRanking, 'userRanking')
+      .leftJoin(User, 'user', 'user.id = userRanking.userId')
+      .leftJoin(UserImage, 'userImage', 'user.id = userImage.userId')
+      .leftJoin(TotalCount, 'totalCount', 'user.id = totalCount.userId')
+      .select([
+        'userRanking.userId as userId',
+        'userRanking.name as `name`',
+        'userRanking.rank as `rank`',
+        'userRanking.mainField as mainField',
+        'userRanking.introduce as introduce',
+        'userRanking.career as career',
+        'userRanking.activityCategoryId as activityCategoryId',
+        'userImage.imageUrl as imageUrl',
+        'totalCount.reviewCount as reviewCount',
+        'totalCount.mentorBoardCount as mentorBoardCount',
+      ])
+      .distinct(true)
+      .take(10)
+      .getRawMany();
   }
 
   async allUserCounts() {
