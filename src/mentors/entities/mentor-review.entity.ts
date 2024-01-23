@@ -1,12 +1,13 @@
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
-  OneToMany,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from './user.entity';
+import { User } from '../../users/entities/user.entity';
 import { MentorReviewChecklist } from './mentor-review-checklist.entity';
 
 @Entity({ name: 'mentor_review' })
@@ -20,25 +21,28 @@ export class MentorReview {
   @Column({ name: 'mentee_id' })
   menteeId: number;
 
-  @OneToOne(() => User, (user) => user.mentor, {
+  @ManyToOne(() => User, (user) => user.mentor, {
     onDelete: 'CASCADE',
     onUpdate: 'NO ACTION',
   })
   @JoinColumn({ name: 'mentor_id' })
   mentor: User;
 
-  @OneToOne(() => User, (user) => user.mentee, {
+  @ManyToOne(() => User, (user) => user.mentee, {
     onDelete: 'CASCADE',
     onUpdate: 'NO ACTION',
   })
   @JoinColumn({ name: 'mentee_id' })
   mentee: User;
 
-  @OneToMany(
+  @OneToOne(
     () => MentorReviewChecklist,
     (mentorReviewChecklist) => mentorReviewChecklist.mentorReview,
   )
-  mentorReviewChecklists: MentorReviewChecklist[];
+  mentorReviewChecklist: MentorReviewChecklist;
+
+  @Column('varchar', { name: 'review', length: 255, nullable: true })
+  review: string | null;
 
   @Column('timestamp', {
     name: 'created_at',
@@ -47,6 +51,10 @@ export class MentorReview {
   })
   createdAt: Date;
 
-  @Column('varchar', { name: 'review', length: 255 })
-  review: string;
+  @DeleteDateColumn({
+    name: 'deleted_at',
+    nullable: true,
+    comment: '삭제 일자',
+  })
+  deletedAt: Date | null;
 }

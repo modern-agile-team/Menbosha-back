@@ -13,6 +13,6 @@ export class BooleanTransformer implements ValueTransformer {
   }
 
   public to(value?: boolean | null): number | undefined {
-    return Number(value);
+    return Number(value) || 0;
   }
 }

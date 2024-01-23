@@ -1,5 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DeleteResult, EntityManager, FindManyOptions } from 'typeorm';
+import {
+  DeleteResult,
+  EntityManager,
+  FindManyOptions,
+  FindOneOptions,
+} from 'typeorm';
 import { User } from '../entities/user.entity';
 
 @Injectable()
@@ -103,5 +108,9 @@ export class UserRepository {
     return await this.entityManager.findOne(User, {
       where: { id: userId },
     });
+  }
+
+  findOne(options: FindOneOptions<User>) {
+    return this.entityManager.findOne(User, options);
   }
 }

@@ -18,6 +18,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { SearchModule } from './search/search.module';
 import { ExceptionsModule } from './http-exceptions/exceptions.module';
 import { CategoryModule } from './category/category.module';
+import { MentorsModule } from './mentors/mentors.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { CategoryModule } from './category/category.module';
     SearchModule,
     ExceptionsModule,
     CategoryModule,
+    MentorsModule,
   ], //
   providers: [UserImageService, UserImageRepository, S3Service],
 })

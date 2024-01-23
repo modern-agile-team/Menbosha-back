@@ -1,8 +1,9 @@
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
-  ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { MentorReview } from './mentor-review.entity';
@@ -99,9 +100,15 @@ export class MentorReviewChecklist {
   })
   isStuffy: boolean;
 
-  @ManyToOne(
+  @Column('int', {
+    name: 'mentor_review_id',
+    unsigned: true,
+  })
+  mentorReviewId: number;
+
+  @OneToOne(
     () => MentorReview,
-    (mentorReview) => mentorReview.mentorReviewChecklists,
+    (mentorReview) => mentorReview.mentorReviewChecklist,
     {
       onDelete: 'CASCADE',
       onUpdate: 'NO ACTION',
@@ -109,4 +116,11 @@ export class MentorReviewChecklist {
   )
   @JoinColumn([{ name: 'mentor_review_id', referencedColumnName: 'id' }])
   mentorReview: MentorReview;
+
+  @DeleteDateColumn({
+    name: 'deleted_at',
+    nullable: true,
+    comment: '삭제 일자',
+  })
+  deletedAt: Date | null;
 }
