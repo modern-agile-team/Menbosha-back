@@ -78,4 +78,18 @@ export class UserRankingService {
       );
     }
   }
+
+  @Cron('0 58 8 * * 1') // 매주 월요일 오전 8시 58분에 실행 (유저 랭킹 저장 전에 실행)
+  async clearUserRanking() {
+    try {
+      await this.userRankingRepository.clearUserRanking();
+      return { message: '랭킹 초기화 성공' };
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(
+        '랭킹 초기화 중 에러가 발생했습니다.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }

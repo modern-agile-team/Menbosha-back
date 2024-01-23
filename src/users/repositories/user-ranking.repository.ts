@@ -94,4 +94,12 @@ export class UserRankingRepository {
       .where('userId = :userId', { userId })
       .execute();
   }
+
+  async clearUserRanking() {
+    return await this.entityManager
+      .createQueryBuilder()
+      .delete()
+      .from(UserRanking)
+      .execute();
+  }
 }
