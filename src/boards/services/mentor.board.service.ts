@@ -26,10 +26,14 @@ export class MentorBoardService {
     }
   }
 
-  async randomMentorBoards() {
+  async randomMentorBoards(categoryId: number) {
     const limit = 3;
-    const boards =
-      await this.mentorBoardRepository.findRandomMentorBoard(limit);
+    const boards = categoryId
+      ? await this.mentorBoardRepository.findRandomMentorBoardByCategoryId(
+          limit,
+          categoryId,
+        )
+      : await this.mentorBoardRepository.findRandomMentorBoard(limit);
     const randomBoardResponse: PageByMentorBoardResponseDTO[] =
       await Promise.all(
         boards.map(async (board) => {

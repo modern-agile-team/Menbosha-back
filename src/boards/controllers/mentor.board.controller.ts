@@ -77,10 +77,10 @@ export class MentorBoardController {
     return this.mentorBoardService.findPagedMentorBoards(page, categoryId);
   }
 
-  @Get('random') //랜덤한 멘토게시글 3개만 뽑아오기
+  @Get('/random') //랜덤한 멘토게시글 3개만 뽑아오기
   @ApiGetRandomMentorBoards()
-  randomMentorBoards() {
-    return this.mentorBoardService.randomMentorBoards();
+  randomMentorBoards(@Query('categoryId') categoryId: number) {
+    return this.mentorBoardService.randomMentorBoards(categoryId);
   }
 
   @Get('/page')
