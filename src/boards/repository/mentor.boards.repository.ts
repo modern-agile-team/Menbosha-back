@@ -43,8 +43,8 @@ export class MentorBoardRepository {
       .leftJoinAndSelect('user.userImage', 'userImage')
       .leftJoinAndSelect('board.mentorBoardImages', 'mentorBoardImages')
       .orderBy('RAND()')
+      .where({ categoryId })
       .take(limit)
-      .take(categoryId)
       .getMany();
   }
 
