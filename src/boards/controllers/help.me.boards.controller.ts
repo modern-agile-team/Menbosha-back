@@ -88,8 +88,10 @@ export class HelpMeBoardController {
 
   @Get('/pulling-up') //끌어올린 게시물 보여주기
   @ApiGetPullingUpHelpMeBoard()
-  latestHelpMeBoard(): Promise<{ data: PullingUpHelpMeBoardResponseDTO[] }> {
-    return this.helpMeBoardService.latestHelpMeBoards();
+  latestHelpMeBoard(
+    @Query('categoryId') categoryId: number,
+  ): Promise<{ data: PullingUpHelpMeBoardResponseDTO[] }> {
+    return this.helpMeBoardService.latestHelpMeBoards(categoryId);
   }
 
   @Get('/unit') //하나의 게시판 불러오기

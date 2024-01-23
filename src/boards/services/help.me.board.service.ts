@@ -103,9 +103,14 @@ export class HelpMeBoardService {
     };
   }
 
-  async latestHelpMeBoards() {
+  async latestHelpMeBoards(categoryId: number) {
     const limit = 8;
-    const boards = await this.helpMeBoardRepository.findLatestBoards(limit);
+    const boards = categoryId
+      ? await this.helpMeBoardRepository.findLatestBoardsByCategoryId(
+          limit,
+          categoryId,
+        )
+      : await this.helpMeBoardRepository.findLatestBoards(limit);
     if (!boards) {
       throw new NotFoundException('게시물을 찾을 수 없습니다');
     }
