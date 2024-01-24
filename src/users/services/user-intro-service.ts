@@ -16,7 +16,7 @@ export class UserIntroService {
     return await this.userIntroRepository.createUserIntro(userId, userData);
   }
 
-  async updateUserIntro(
+  async updateMyIntro(
     userId: number,
     userData: UpdateUserIntroDTO,
   ): Promise<ResponseUserIntroDto> {

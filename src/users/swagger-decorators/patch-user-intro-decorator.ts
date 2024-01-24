@@ -4,18 +4,23 @@ import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
 export function ApiUpdateUserIntro() {
   return applyDecorators(
     ApiOperation({
-      summary: '유저 프로필을 수정하는 API',
-      description: '유저 프로필을 수정하는 API',
+      summary: '내 프로필을 수정하는 API',
+      description: '내 프로필을 수정하는 API',
     }),
     ApiResponse({
       status: 200,
-      description: '유저 프로필의 내용을 성공적으로 수정한 경우',
+      description: '내 프로필의 내용을 성공적으로 수정한 경우',
       content: {
         JSON: {
           example: {
-            mainField: '내이름은 코난 탐정이죠~를 수정해보겠습니다',
-            introduce: '백엔드 공부하고있습니다~ 를 수정해보겠습니다',
-            career: '모던 애자일 6기~를 수정해보겠어',
+            id: 4,
+            userId: 24,
+            shortIntro: '안녕하세요 박준혁이에요',
+            career: '숨쉬기 경력 21년',
+            customCategory: '숨잘쉬기',
+            detail: '숨을 잘 쉬고 싶으신가요? 제가 알려드리겠습니다.',
+            portfolio: 'naver.com',
+            sns: 'naver.com',
           },
         },
       },
