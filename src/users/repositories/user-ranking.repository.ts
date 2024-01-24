@@ -76,7 +76,7 @@ export class UserRankingRepository {
 
     const userIntro = await this.entityManager.findOne(UserIntro, {
       where: { userId },
-      select: ['mainField', 'career', 'introduce'],
+      select: ['shortIntro', 'career', 'customCategory'],
     });
 
     return await this.entityManager
@@ -87,9 +87,9 @@ export class UserRankingRepository {
         name: user.name,
         rank: user.rank,
         countReview: totalCount.reviewCount,
-        mainField: userIntro.mainField,
+        customCategory: userIntro.customCategory,
         career: userIntro.career,
-        introduce: userIntro.introduce,
+        shortIntro: userIntro.shortIntro,
       })
       .where('userId = :userId', { userId })
       .execute();
