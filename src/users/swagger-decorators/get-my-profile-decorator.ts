@@ -44,13 +44,12 @@ export function ApiGetMyProfile() {
         },
       },
     }),
-    // ApiHeaders([
-    //   {
-    //     name: 'access_token',
-    //     description: '액세스 토큰',
-    //     required: true,
-    //     example: '여기에 액세스 토큰',
-    //   },
-    // ]),
+    ApiHeaders([
+      {
+        name: 'access_token',
+        description: '액세스 토큰',
+        example: '여기에 액세스 토큰',
+      },
+    ]),
   );
 }
