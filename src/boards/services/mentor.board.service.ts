@@ -11,10 +11,14 @@ import { MentorBoardResponseDTO } from '../dto/mentorBoard/update.mentor.board.r
 import { UpdateMentorBoardDto } from '../dto/mentorBoard/update.mentor.board.dto';
 import { oneMentorBoardResponseDTO } from '../dto/mentorBoard/one.response.mentor.boards.dto';
 import { FindOneOptions } from 'typeorm';
+import { MentorBoardLikeRepository } from '../repository/mentor.board.likes.repository';
 
 @Injectable()
 export class MentorBoardService {
-  constructor(private mentorBoardRepository: MentorBoardRepository) {}
+  constructor(
+    private mentorBoardRepository: MentorBoardRepository,
+    private readonly mentorBoardLikeRepository: MentorBoardLikeRepository,
+  ) {}
   async create(
     boardData: CreateMentorBoardDto,
     userId: number,
@@ -128,6 +132,8 @@ export class MentorBoardService {
   ): Promise<oneMentorBoardResponseDTO> {
     const mentorBoard =
       await this.mentorBoardRepository.findMentorBoardById(mentorBoardId);
+    const mentorBoardLike =
+      await this.mentorBoardLikeRepository.countMentorBoardLike(mentorBoardId);
     const unitOwner = mentorBoard.userId === userId;
 
     if (!mentorBoard) {
@@ -149,6 +155,7 @@ export class MentorBoardService {
         imageUrl: image.imageUrl,
       })),
       unitOwner: unitOwner,
+      mentorBoardLike: mentorBoardLike,
     };
   }
 
