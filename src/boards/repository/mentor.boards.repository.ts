@@ -42,6 +42,7 @@ export class MentorBoardRepository {
       .leftJoinAndSelect('board.user', 'user')
       .leftJoinAndSelect('user.userImage', 'userImage')
       .leftJoinAndSelect('board.mentorBoardImages', 'mentorBoardImages')
+      .leftJoinAndSelect('board.mentorBoardLikes', 'mentorBoardLikes')
       .orderBy('RAND()')
       .where({ categoryId })
       .take(limit)
@@ -54,6 +55,7 @@ export class MentorBoardRepository {
       .leftJoinAndSelect('board.user', 'user')
       .leftJoinAndSelect('user.userImage', 'userImage')
       .leftJoinAndSelect('board.mentorBoardImages', 'mentorBoardImages')
+      .leftJoinAndSelect('board.mentorBoardLikes', 'mentorBoardLikes')
       .orderBy('RAND()')
       .take(limit)
       .getMany();
@@ -75,7 +77,12 @@ export class MentorBoardRepository {
     categoryId: number,
   ): Promise<MentorBoard[]> {
     return await this.entityManager.find(MentorBoard, {
-      relations: ['user', 'user.userImage', 'mentorBoardImages'],
+      relations: [
+        'user',
+        'user.userImage',
+        'mentorBoardImages',
+        'mentorBoardLikes',
+      ],
       where: { categoryId },
       skip: skip,
       take: limit,
@@ -84,7 +91,12 @@ export class MentorBoardRepository {
 
   async findPagedBoards(skip: number, limit: number): Promise<MentorBoard[]> {
     return await this.entityManager.find(MentorBoard, {
-      relations: ['user', 'user.userImage', 'mentorBoardImages'],
+      relations: [
+        'user',
+        'user.userImage',
+        'mentorBoardImages',
+        'mentorBoardLikes',
+      ],
       skip: skip,
       take: limit,
     });
