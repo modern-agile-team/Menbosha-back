@@ -82,22 +82,16 @@ export class User {
   @JoinColumn({ name: 'user_badge_id' })
   userBadge: UserBadge;
 
-  @OneToOne(() => Token, (token) => token.user, {
-    onDelete: 'CASCADE',
-  })
+  @OneToOne(() => Token, (token) => token.user)
   token: Token;
 
   @ManyToMany(() => CategoryList, (categoryList) => categoryList.user)
   @JoinColumn({ name: 'category_id' })
   categoryList: CategoryList;
 
-  @OneToOne(() => TotalCount, (totalcount) => totalcount.user, {
-    onDelete: 'CASCADE',
-  })
+  @OneToOne(() => TotalCount, (totalcount) => totalcount.user)
   totalCount: TotalCount;
 
-  @OneToMany(() => UserRanking, (userRanking) => userRanking.user, {
-    onDelete: 'CASCADE',
-  })
+  @OneToMany(() => UserRanking, (userRanking) => userRanking.user)
   userRanking: UserRanking;
 }
