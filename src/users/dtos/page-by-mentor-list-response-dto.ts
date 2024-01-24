@@ -7,8 +7,8 @@ export class PageByMentorListResponseDTO {
     imageUrl: string;
   };
   userIntro: {
-    introduce: string;
-    mainField: string;
+    shortIntro: string;
+    career: string;
   };
   reviewCount: number;
   boardCount: number;

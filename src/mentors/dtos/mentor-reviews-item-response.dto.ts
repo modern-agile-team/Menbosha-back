@@ -14,12 +14,12 @@ class UserImageDto implements Pick<UserImage, 'imageUrl'> {
 }
 
 class UserIntroDto
-  implements Pick<UserIntro, 'mainField' | 'career' | 'introduce'>
+  implements Pick<UserIntro, 'customCategory' | 'career' | 'shortIntro'>
 {
   @ApiProperty({
-    description: '대표 멘토링 분야',
+    description: '커스텀 카테고리',
   })
-  mainField: string;
+  customCategory: string;
 
   @ApiProperty({
     description: '유저 커리어',
@@ -29,7 +29,7 @@ class UserIntroDto
   @ApiProperty({
     description: '멘토 소개',
   })
-  introduce: string;
+  shortIntro: string;
 }
 
 class Mentee implements Pick<UserInfoDto, 'id' | 'name' | 'rank'> {

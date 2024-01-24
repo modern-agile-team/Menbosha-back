@@ -79,28 +79,6 @@ export class UserService {
     return { ...userInfo, image, intro, badge };
   }
 
-  // async getMyInfo(userId: number) {
-  //   if (!userId) {
-  //     throw new HttpException(
-  //       '토큰이 제공되지 않았습니다.',
-  //       HttpStatus.LENGTH_REQUIRED,
-  //     );
-  //   }
-
-  //   const userInfo = plainToInstance(
-  //     MyProfileResponseDTO,
-  //     await this.userRepository.getUserInfo(userId),
-  //   );
-  //   const image = (await this.userImageRepository.checkUserImage(userId))
-  //     .imageUrl;
-  //   const badge = plainToInstance(
-  //     UserBadgeResponseDTO,
-  //     await this.userBadgeRepository.getUserBadge(userId),
-  //   );
-
-  //   return { ...userInfo, image, badge };
-  // }
-
   async getMyInfoWithOwner(userId: number, targetId: number) {
     const { name, email, admin, provider } =
       await this.userRepository.getUserInfo(userId);
@@ -154,8 +132,8 @@ export class UserService {
               imageUrl: user.userImage.imageUrl,
             },
             userIntro: {
-              introduce: user.userIntro.introduce.substring(0, 30),
-              mainField: user.userIntro.mainField.substring(0, 30),
+              shortIntro: user.userIntro.shortIntro.substring(0, 30),
+              career: user.userIntro.career.substring(0, 30),
             },
             reviewCount: user.totalCount.reviewCount,
             boardCount: user.totalCount.mentorBoardCount,

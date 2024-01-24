@@ -31,10 +31,13 @@ export class UserIntroService {
       await this.userIntroRepository.updateUserIntro(existingUserIntro);
     return {
       id: updateUserIntro.id,
-      mainFiled: updateUserIntro.mainField,
-      introduce: updateUserIntro.introduce,
-      career: updateUserIntro.career,
       userId: updateUserIntro.userId,
+      shortIntro: updateUserIntro.shortIntro,
+      career: updateUserIntro.career,
+      customCategory: updateUserIntro.customCategory,
+      detail: updateUserIntro.detail,
+      portfolio: updateUserIntro.portfolio,
+      sns: updateUserIntro.sns,
     };
   }
 }

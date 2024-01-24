@@ -17,9 +17,12 @@ export class UserIntroRepository {
     userData: CreateUserIntroDto,
   ): Promise<UserIntro> {
     const userIntro = new UserIntro();
-    userIntro.introduce = userData.introduce;
-    userIntro.mainField = userData.mainField;
+    userIntro.shortIntro = userData.shortIntro;
     userIntro.career = userData.career;
+    userIntro.customCategory = userData.customCategory;
+    userIntro.detail = userData.detail;
+    userIntro.portfolio = userData.portfolio;
+    userIntro.sns = userData.sns;
     userIntro.userId = userId;
     return await this.entityManager.save(UserIntro, userIntro);
   }
