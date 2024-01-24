@@ -3,6 +3,7 @@ import { EntityManager } from 'typeorm';
 import { UserIntro } from '../entities/user-intro.entity';
 import { UpdateUserIntroDTO } from '../dtos/update-user-intro-dto';
 import { CreateUserIntroDto } from '../dtos/create-user-intro-dto';
+import { User } from '../entities/user.entity';
 
 @Injectable()
 export class UserIntroRepository {
@@ -42,5 +43,9 @@ export class UserIntroRepository {
     userData: Partial<UpdateUserIntroDTO>,
   ): Promise<UserIntro> {
     return await this.entityManager.save(UserIntro, userData);
+  }
+
+  async updateUser(userId: number, userData: Partial<UpdateUserIntroDTO>) {
+    return await this.entityManager.update(User, userId, userData);
   }
 }

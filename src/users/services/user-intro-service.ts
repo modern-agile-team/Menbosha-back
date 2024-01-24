@@ -27,17 +27,18 @@ export class UserIntroService {
         existingUserIntro[key] = userData[key];
       }
     }
-    const updateUserIntro =
-      await this.userIntroRepository.updateUserIntro(existingUserIntro);
+    await this.userIntroRepository.updateUserIntro(existingUserIntro);
+
+    await this.userIntroRepository.updateUser(userId, {
+      hopeCategoryId: userData.hopeCategoryId,
+      activityCategoryId: userData.activityCategoryId,
+      isMentor: userData.isMentor,
+    });
     return {
-      id: updateUserIntro.id,
-      userId: updateUserIntro.userId,
-      shortIntro: updateUserIntro.shortIntro,
-      career: updateUserIntro.career,
-      customCategory: updateUserIntro.customCategory,
-      detail: updateUserIntro.detail,
-      portfolio: updateUserIntro.portfolio,
-      sns: updateUserIntro.sns,
+      ...existingUserIntro,
+      hopeCategoryId: userData.hopeCategoryId,
+      activityCategoryId: userData.activityCategoryId,
+      isMentor: userData.isMentor,
     };
   }
 }

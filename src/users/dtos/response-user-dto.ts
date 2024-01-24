@@ -7,4 +7,7 @@ export class ResponseUserIntroDto {
   detail: string;
   portfolio: string;
   sns: string;
+  hopeCategoryId: number;
+  activityCategoryId: number;
+  isMentor: boolean;
 }
