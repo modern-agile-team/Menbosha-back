@@ -42,9 +42,6 @@ import { ApiFindOneChatRoomByUserId } from '../swagger-decorators/find-one-chat-
 import { ApiFindOneChatRoom } from '../swagger-decorators/find-one-chat-room.decorator';
 import { ApiFindChats } from '../swagger-decorators/find-chats.decorator';
 import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
-/**
- * @todo 1:1 채팅 컨트롤러 서비스 완성
- */
 @ApiTags('CHAT')
 @UsePipes(
   new ValidationPipe({
@@ -85,7 +82,7 @@ export class ChatController {
   ): Promise<ResponseFindChatRoomsPaginationDto> {
     return this.chatService.findAllChatRoomsWithUserAndChat(
       userId,
-      pageQueryDto.page,
+      pageQueryDto,
     );
   }
 
@@ -163,7 +160,7 @@ export class ChatController {
     @Query() pageQueryDto: PageQueryDto,
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
   ): Promise<AggregateChatRoomForChatsDto> {
-    return this.chatService.findAllChats(userId, roomId, pageQueryDto.page);
+    return this.chatService.findAllChats(userId, roomId, pageQueryDto);
   }
 
   @UseGuards(JwtAccessTokenGuard)

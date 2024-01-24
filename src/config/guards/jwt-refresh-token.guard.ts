@@ -7,9 +7,13 @@ export class JwtRefreshTokenGuard {
 
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
-    const refreshToken = request.headers['refresh_token'];
+    const authorization = request.headers['authorization'];
+    if (!authorization) {
+      return false;
+    }
 
-    if (!refreshToken) {
+    const [type, refreshToken] = authorization.split(' ');
+    if (type !== 'Bearer') {
       return false;
     }
 

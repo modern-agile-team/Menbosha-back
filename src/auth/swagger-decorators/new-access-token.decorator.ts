@@ -66,7 +66,6 @@ export function ApiNewAccessToken() {
       {
         name: 'refresh_token',
         description: '리프레시 토큰',
-        required: true,
         example: '여기에 리프레시 토큰',
       },
     ]),

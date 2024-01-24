@@ -126,6 +126,7 @@ export class UserService {
           return {
             id: user.id,
             name: user.name,
+            rank: user.rank,
             categoryId: user.activityCategoryId,
             userImage: {
               imageId: user.userImage.id,
