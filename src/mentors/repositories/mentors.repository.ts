@@ -97,9 +97,9 @@ export class MentorsRepository {
             imageUrl: true,
           },
           userIntro: {
-            mainField: true,
+            customCategory: true,
             career: true,
-            introduce: true,
+            shortIntro: true,
           },
         },
         mentorReviewChecklist: {

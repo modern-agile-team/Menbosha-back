@@ -13,20 +13,33 @@ export function ApiGetUserInfo() {
       content: {
         JSON: {
           example: {
-            name: '홍길동',
-            email: 'abcd@naver.com',
-            isMentor: false,
+            id: 24,
+            name: '박준혁',
+            email: 'pjh_2004@naver.com',
+            isMentor: true,
+            hopeCategoryId: 3,
             activityCategoryId: 3,
-            phone: 'true',
-            image: 'http://img.jpg',
+            rank: 10,
+            phone: '',
+            image:
+              'https://menbosha-s3.s3.ap-northeast-2.amazonaws.com/UserImages/24_1704421233846.jpeg',
             intro: {
-              mainField: 'FPS',
-              introduce: '발로란트 1대1 코칭해드려요',
+              shortIntro: null,
               career: '발로란트 최대 티어 불멸',
+              customCategory: null,
+              detail: null,
+              portfolio: null,
+              sns: null,
             },
             badge: [
-              { badgeId: 1, createdAt: '2023-12-12T19:59:18.000Z' },
-              { badgeId: 2, createdAt: '2023-12-12T19:59:18.000Z' },
+              {
+                badgeId: 1,
+                createdAt: '2023-12-12T19:59:18.000Z',
+              },
+              {
+                badgeId: 2,
+                createdAt: '2023-12-12T19:59:18.000Z',
+              },
             ],
           },
         },

@@ -113,12 +113,12 @@ export class UserController {
   @ApiBearerAuth('access-token')
   @UseGuards(JwtAccessTokenGuard)
   @ApiUpdateUserIntro()
-  @Patch('/intro')
-  patchUserIntro(
+  @Patch('/my/intro')
+  patchMyIntro(
     @GetUserId() userId: number,
     @Body() userData: UpdateUserIntroDTO,
   ): Promise<ResponseUserIntroDto> {
-    return this.userIntroService.updateUserIntro(userId, userData);
+    return this.userIntroService.updateMyIntro(userId, userData);
   }
 
   @ApiBearerAuth('access-token')
