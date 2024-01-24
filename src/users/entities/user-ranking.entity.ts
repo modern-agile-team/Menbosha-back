@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from './user.entity';
 
 @Entity({ name: 'user_ranking' })
 export class UserRanking {
@@ -28,4 +35,10 @@ export class UserRanking {
 
   @Column({ name: 'review_count', nullable: true })
   reviewCount: number | null;
+
+  @ManyToOne(() => User, (userId: User) => userId.userRanking, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 }

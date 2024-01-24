@@ -18,6 +18,7 @@ import { CategoryList } from '../../category/entity/category-list.entity';
 import { UserIntro } from './user-intro.entity';
 import { TotalCount } from 'src/total-count/entities/total-count.entity';
 import { MentorBoardLike } from 'src/boards/entities/mentor-board-like.entity';
+import { UserRanking } from './user-ranking.entity';
 
 @Entity({
   name: 'user',
@@ -81,17 +82,16 @@ export class User {
   @JoinColumn({ name: 'user_badge_id' })
   userBadge: UserBadge;
 
-  @OneToOne(() => Token, (token) => token.user, {
-    onDelete: 'CASCADE',
-  })
+  @OneToOne(() => Token, (token) => token.user)
   token: Token;
 
   @ManyToMany(() => CategoryList, (categoryList) => categoryList.user)
   @JoinColumn({ name: 'category_id' })
   categoryList: CategoryList;
 
-  @OneToOne(() => TotalCount, (totalcount) => totalcount.user, {
-    onDelete: 'CASCADE',
-  })
+  @OneToOne(() => TotalCount, (totalcount) => totalcount.user)
   totalCount: TotalCount;
+
+  @OneToMany(() => UserRanking, (userRanking) => userRanking.user)
+  userRanking: UserRanking;
 }

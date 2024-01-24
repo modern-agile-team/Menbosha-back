@@ -4,42 +4,50 @@ import { User } from '../entities/user.entity';
 import { TotalCount } from 'src/total-count/entities/total-count.entity';
 import { UserRanking } from '../entities/user-ranking.entity';
 import { UserIntro } from '../entities/user-intro.entity';
+import { UserImage } from '../entities/user-image.entity';
 
 @Injectable()
 export class UserRankingRepository {
   constructor(private readonly entityManager: EntityManager) {}
 
   async getUserRanking() {
-    return await this.entityManager.find(UserRanking, {
-      select: [
-        'userId',
-        'activityCategoryId',
-        'name',
-        'rank',
-        'reviewCount',
-        'mainField',
-        'career',
-        'introduce',
-      ],
-      take: 10,
-    });
+    return await this.entityManager
+      .createQueryBuilder(UserRanking, 'userRanking')
+      .leftJoin(User, 'user', 'user.id = userRanking.userId')
+      .leftJoin(UserImage, 'userImage', 'user.id = userImage.userId')
+      .leftJoin(TotalCount, 'totalCount', 'user.id = totalCount.userId')
+      .select([
+        'userRanking.userId as userId',
+        'userRanking.name as `name`',
+        'userRanking.rank as `rank`',
+        'userRanking.mainField as mainField',
+        'userRanking.introduce as introduce',
+        'userRanking.career as career',
+        'userRanking.activityCategoryId as activityCategoryId',
+        'userImage.imageUrl as imageUrl',
+        'totalCount.reviewCount as reviewCount',
+        'totalCount.mentorBoardCount as mentorBoardCount',
+      ])
+      .distinct(true)
+      .take(10)
+      .getRawMany();
   }
 
   async allUserCounts() {
     const allCounts = await this.entityManager.find(TotalCount, {
       select: [
         'userId',
-        'mentorBoardCount7days',
-        'mentorBoardLikeCount7days',
-        'helpYouCommentCount7days',
-        'badgeCount7days',
-        'reviewCount7days',
+        'mentorBoardCountInSevenDays',
+        'mentorBoardLikeCountInSevenDays',
+        'helpYouCommentCountInSevenDays',
+        'badgeCountInSevenDays',
+        'reviewCountInSevenDays',
       ],
       where: [
-        { mentorBoardCount7days: MoreThanOrEqual(2) },
-        { helpYouCommentCount7days: MoreThanOrEqual(3) },
-        { mentorBoardLikeCount7days: MoreThanOrEqual(6) },
-        { reviewCount7days: MoreThanOrEqual(1) },
+        { mentorBoardCountInSevenDays: MoreThanOrEqual(2) },
+        { helpYouCommentCountInSevenDays: MoreThanOrEqual(3) },
+        { mentorBoardLikeCountInSevenDays: MoreThanOrEqual(6) },
+        { reviewCountInSevenDays: MoreThanOrEqual(1) },
       ],
     });
 
@@ -84,6 +92,14 @@ export class UserRankingRepository {
         introduce: userIntro.introduce,
       })
       .where('userId = :userId', { userId })
+      .execute();
+  }
+
+  async clearUserRanking() {
+    return await this.entityManager
+      .createQueryBuilder()
+      .delete()
+      .from(UserRanking)
       .execute();
   }
 }
