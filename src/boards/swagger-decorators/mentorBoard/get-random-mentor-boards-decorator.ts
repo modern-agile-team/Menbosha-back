@@ -30,6 +30,7 @@ export function ApiGetRandomMentorBoards() {
                   },
                 },
                 mentorBoardImage: ['있을 경우 배열, 없을 경우 빈 배열'],
+                mentorBoardLikes: 'number',
               },
               {
                 id: 23,
@@ -47,6 +48,7 @@ export function ApiGetRandomMentorBoards() {
                   },
                 },
                 mentorBoardImage: ['있을 경우 배열, 없을 경우 빈 배열'],
+                mentorBoardLikes: 'number',
               },
               {
                 id: 20,
@@ -64,6 +66,7 @@ export function ApiGetRandomMentorBoards() {
                   },
                 },
                 mentorBoardImage: ['있을 경우 배열, 없을 경우 빈 배열'],
+                mentorBoardLikes: 'number',
               },
             ],
           },

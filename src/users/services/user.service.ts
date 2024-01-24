@@ -148,14 +148,15 @@ export class UserService {
           return {
             id: user.id,
             name: user.name,
+            rank: user.rank,
             categoryId: user.activityCategoryId,
             userImage: {
               imageId: user.userImage.id,
               imageUrl: user.userImage.imageUrl,
             },
             userIntro: {
-              introduce: user.userIntro.introduce.substring(0, 30),
-              mainField: user.userIntro.mainField.substring(0, 30),
+              introduce: user.userIntro.introduce.substring(0, 20),
+              mainField: user.userIntro.mainField.substring(0, 20),
             },
             reviewCount: user.totalCount.reviewCount,
             boardCount: user.totalCount.mentorBoardCount,
