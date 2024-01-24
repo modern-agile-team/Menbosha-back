@@ -1,10 +1,10 @@
 import { applyDecorators } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiConsumes,
   ApiExtraModels,
   ApiForbiddenResponse,
-  ApiHeaders,
   ApiNotFoundResponse,
   ApiOperation,
   ApiParam,
@@ -116,14 +116,7 @@ export function ApiCreateChatImage() {
         },
       },
     }),
-    ApiHeaders([
-      {
-        name: 'access_token',
-        description: '액세스 토큰',
-        required: true,
-        example: '여기에 액세스 토큰',
-      },
-    ]),
+    ApiBearerAuth('access-token'),
     ApiParam({
       name: 'roomId',
       description: '채팅방의 id',

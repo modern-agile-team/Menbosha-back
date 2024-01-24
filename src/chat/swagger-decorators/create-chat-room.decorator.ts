@@ -1,9 +1,9 @@
 import { applyDecorators } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiExtraModels,
   ApiForbiddenResponse,
-  ApiHeaders,
   ApiNotFoundResponse,
   ApiOperation,
   ApiResponse,
@@ -113,14 +113,7 @@ export function ApiCreateChatRoom() {
         },
       },
     }),
-    ApiHeaders([
-      {
-        name: 'access_token',
-        description: '액세스 토큰',
-        required: true,
-        example: '여기에 액세스 토큰',
-      },
-    ]),
+    ApiBearerAuth('access-token'),
     ApiBody({
       type: CreateChatRoomBodyDto,
       description: '채팅 룸 생성 body',

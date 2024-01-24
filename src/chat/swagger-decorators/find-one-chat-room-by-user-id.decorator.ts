@@ -1,7 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiExtraModels,
-  ApiHeaders,
   ApiOperation,
   ApiResponse,
   getSchemaPath,
@@ -71,14 +71,7 @@ export function ApiFindOneChatRoomByUserId() {
         },
       },
     }),
-    ApiHeaders([
-      {
-        name: 'access_token',
-        description: '액세스 토큰',
-        required: true,
-        example: '여기에 액세스 토큰',
-      },
-    ]),
+    ApiBearerAuth('access-token'),
     ApiExtraModels(ChatRoomDto),
   );
 }
