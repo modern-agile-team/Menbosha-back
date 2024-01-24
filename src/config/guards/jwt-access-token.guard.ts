@@ -7,7 +7,12 @@ export class JwtAccessTokenGuard {
 
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
-    const accessToken = request.headers['access_token'];
+    const authorization = request.headers['authorization'];
+
+    const [type, accessToken] = authorization.split(' ');
+    if (type !== 'Bearer') {
+      return false;
+    }
 
     const userId = await this.tokenService.decodeToken(accessToken);
     request.user = { userId };

@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { setupSwagger } from './config/swagger';
-import { AsyncApiDocumentBuilder, AsyncApiModule } from 'nestjs-asyncapi';
 import * as cookieParser from 'cookie-parser';
 // import { HttpBadRequestExceptionFilter } from './http-exceptions/exception-filters/http-bad-request-exception.filter';
 // import { HttpProcessErrorExceptionFilter } from './http-exceptions/exception-filters/http-process-error-exception.filter';
@@ -25,18 +24,6 @@ async function bootstrap() {
   });
   app.use(cookieParser());
   setupSwagger(app);
-  const asyncApiOptions = new AsyncApiDocumentBuilder()
-    .setTitle('ma6-main-asyncapi')
-    .setDescription('모던애자일 6기 메인프로젝트 AsyncAPI 문서')
-    .setVersion('1.0')
-    .setDefaultContentType('application/json')
-    .build();
-
-  const asyncApiDocument = await AsyncApiModule.createDocument(
-    app,
-    asyncApiOptions,
-  );
-  await AsyncApiModule.setup('asyncapi', app, asyncApiDocument);
   app.useLogger(logger);
 
   // app.useGlobalFilters(
