@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UserImageService } from '../services/user-image.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ApiUpdateUserImage } from '../swagger-decorators/update-user-image.decorator';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
@@ -17,6 +17,7 @@ import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 export class UserImageController {
   constructor(private readonly userImageService: UserImageService) {}
 
+  @ApiBearerAuth('access-token')
   @ApiUpdateUserImage()
   @UseGuards(JwtAccessTokenGuard)
   @Patch()
