@@ -11,4 +11,5 @@ export class PageByMentorBoardResponseDTO {
     name: string;
     userImage: UserImage | UserImage[];
   };
+  mentorBoardLike: number;
 }
