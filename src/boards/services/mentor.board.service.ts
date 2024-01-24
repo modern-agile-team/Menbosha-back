@@ -57,7 +57,7 @@ export class MentorBoardService {
               id: image.id,
               imageUrl: image.imageUrl,
             })),
-            mentorBoardLike: board.mentorBoardLikes.length,
+            mentorBoardLikes: board.mentorBoardLikes.length,
           };
         }),
       );
@@ -107,7 +107,7 @@ export class MentorBoardService {
             id: image.id,
             imageUrl: image.imageUrl,
           })),
-          mentorBoardLike: board.mentorBoardLikes.length,
+          mentorBoardLikes: board.mentorBoardLikes.length,
         };
       }),
     );
@@ -157,7 +157,7 @@ export class MentorBoardService {
         imageUrl: image.imageUrl,
       })),
       unitOwner: unitOwner,
-      mentorBoardLike: mentorBoardLike,
+      mentorBoardLikes: mentorBoardLike,
     };
   }
 
