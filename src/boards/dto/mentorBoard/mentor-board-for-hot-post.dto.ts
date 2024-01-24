@@ -33,6 +33,7 @@ export class MentorBoardForHotPostDto extends PickType(MentorBoardDto, [
   'categoryId',
   'createdAt',
   'updatedAt',
+  'popularAt',
 ]) {
   @ApiProperty({
     description: '멘토 게시판 인기 게시글 유저 정보 객체',
