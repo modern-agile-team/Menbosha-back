@@ -17,6 +17,7 @@ export function ApiGetMentorList() {
               {
                 id: 'number',
                 name: '이승우',
+                rank: 'number',
                 userImage: {
                   id: 'number',
                   userId: 'number',
