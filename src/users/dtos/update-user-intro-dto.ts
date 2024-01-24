@@ -1,8 +1,8 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdateUserIntroDTO {
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: '안녕하세요',
     description: '한 줄 소개',
   })
@@ -10,7 +10,7 @@ export class UpdateUserIntroDTO {
   @IsString()
   shortIntro?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: '숨쉬기 경력 20년',
     description: '경력',
   })
@@ -18,7 +18,7 @@ export class UpdateUserIntroDTO {
   @IsString()
   career?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: '코로 숨쉬기, 입으로 숨쉬기',
     description: '커스텀 카테고리',
   })
@@ -26,7 +26,7 @@ export class UpdateUserIntroDTO {
   @IsString()
   customCategory?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example:
       '안녕하세요. 저는 트위치에서 방송을 하고 있는 스트리머 케인입니다.',
     description: '상세 소개(옵션)',
@@ -35,7 +35,7 @@ export class UpdateUserIntroDTO {
   @IsString()
   detail?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 'https://www.naver.com',
     description: '포트폴리오 링크',
   })
@@ -43,7 +43,7 @@ export class UpdateUserIntroDTO {
   @IsString()
   portfolio?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 'https://www.naver.com',
     description: 'sns 링크',
   })
@@ -51,7 +51,7 @@ export class UpdateUserIntroDTO {
   @IsString()
   sns?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 1,
     description: '희망 카테고리 id',
   })
@@ -59,7 +59,7 @@ export class UpdateUserIntroDTO {
   @IsNumber()
   hopeCategoryId?: number;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 1,
     description: '활동 카테고리 id',
   })
@@ -67,7 +67,7 @@ export class UpdateUserIntroDTO {
   @IsNumber()
   activityCategoryId?: number;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: true,
     description: '멘토 여부',
   })
