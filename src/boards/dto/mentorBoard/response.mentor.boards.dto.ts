@@ -1,3 +1,4 @@
+// import { MentorBoardLike } from 'src/boards/entities/mentor-board-like.entity';
 import { UserImage } from 'src/users/entities/user-image.entity';
 
 export class PageByMentorBoardResponseDTO {

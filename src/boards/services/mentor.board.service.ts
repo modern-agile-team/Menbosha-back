@@ -41,8 +41,6 @@ export class MentorBoardService {
     const randomBoardResponse: PageByMentorBoardResponseDTO[] =
       await Promise.all(
         boards.map(async (board) => {
-          const mentorBoardLike =
-            await this.mentorBoardLikeRepository.countMentorBoardLike(board.id);
           return {
             id: board.id,
             head: board.head,
@@ -59,7 +57,7 @@ export class MentorBoardService {
               id: image.id,
               imageUrl: image.imageUrl,
             })),
-            mentorBoardLike: mentorBoardLike,
+            mentorBoardLike: board.mentorBoardLikes.length,
           };
         }),
       );
@@ -93,8 +91,6 @@ export class MentorBoardService {
 
     const boardResponse: PageByMentorBoardResponseDTO[] = await Promise.all(
       boards.map(async (board) => {
-        const mentorBoardLike =
-          await this.mentorBoardLikeRepository.countMentorBoardLike(board.id);
         return {
           id: board.id,
           head: board.head,
@@ -111,7 +107,7 @@ export class MentorBoardService {
             id: image.id,
             imageUrl: image.imageUrl,
           })),
-          mentorBoardLike: mentorBoardLike,
+          mentorBoardLike: board.mentorBoardLikes.length,
         };
       }),
     );
