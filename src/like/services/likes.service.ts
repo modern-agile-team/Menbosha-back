@@ -4,12 +4,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { RequiredLikeColumn } from '../types/like.type';
-import {
-  DeleteResult,
-  EntityManager,
-  FindManyOptions,
-  FindOptionsWhere,
-} from 'typeorm';
+import { DeleteResult, EntityManager, FindManyOptions } from 'typeorm';
 import { LikesRepository } from '../repositories/likes.repository';
 
 @Injectable()
@@ -17,12 +12,10 @@ export class LikesService<E extends RequiredLikeColumn> {
   constructor(private readonly likesRepository: LikesRepository<E>) {}
 
   async createLike(parentId: number, userId: number): Promise<E> {
-    const isExistLike = await this.likesRepository.isExistLike({
-      where: {
-        userId,
-        parentId,
-      } as FindOptionsWhere<E>,
-    });
+    const isExistLike = await this.likesRepository.isExistLike(
+      userId,
+      parentId,
+    );
 
     if (isExistLike) {
       throw new ConflictException('이미 좋아요가 존재합니다.');
@@ -48,12 +41,10 @@ export class LikesService<E extends RequiredLikeColumn> {
   }
 
   async deleteLike(parentId: number, userId: number): Promise<void> {
-    const isExistLike = await this.likesRepository.isExistLike({
-      where: {
-        userId,
-        parentId,
-      } as FindOptionsWhere<E>,
-    });
+    const isExistLike = await this.likesRepository.isExistLike(
+      userId,
+      parentId,
+    );
 
     if (!isExistLike) {
       throw new ConflictException('이미 좋아요가 없습니다.');
