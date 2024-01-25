@@ -1,7 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiExtraModels,
-  ApiHeaders,
   ApiNotFoundResponse,
   ApiOperation,
   ApiResponse,
@@ -29,20 +29,52 @@ export function ApiFindChatRooms() {
       description: '성공적으로 채팅방 조회',
     }),
     ApiResponse({
-      status: 401,
-      description: '우리 서비스의 액세스 토큰이 아닌 경우',
+      status: 400,
+      description: '400 error',
       content: {
         JSON: {
-          example: { statusCode: 401, message: '유효하지 않은 토큰입니다.' },
+          examples: {
+            'invalid token': {
+              value: { statusCode: 400, message: 'invalid token' },
+              description: '유효하지 않은 토큰인 경우',
+            },
+            'jwt must be provided': {
+              value: { statusCode: 400, message: 'jwt must be provided' },
+              description: '토큰이 제공되지 않은 경우',
+            },
+            'validation failed': {
+              value: {
+                message: [
+                  'page must not be less than 1',
+                  'page must be an integer number',
+                  'pageSize must not be less than 5',
+                  'pageSize must be an integer number',
+                  'property [허용하지 않은 데이터] should not exist',
+                ],
+                error: 'Bad Request',
+                statusCode: 400,
+              },
+              description: '유효성 검사 실패',
+            },
+          },
         },
       },
     }),
     ApiResponse({
-      status: 403,
-      description: '만료된 액세스 토큰인 경우',
+      status: 401,
+      description: '401 error',
       content: {
         JSON: {
-          example: { statusCode: 403, message: '만료된 토큰입니다.' },
+          examples: {
+            'invalid signature': {
+              value: { statusCode: 401, message: 'invalid signature' },
+              description: '우리 서비스의 토큰이 아닌 경우',
+            },
+            'jwt expired': {
+              value: { statusCode: 401, message: 'jwt expired' },
+              description: '만료된 토큰인 경우',
+            },
+          },
         },
       },
     }),
@@ -57,23 +89,7 @@ export function ApiFindChatRooms() {
         },
       },
     }),
-    ApiResponse({
-      status: 411,
-      description: '액세스 토큰이 제공되지 않은 경우',
-      content: {
-        JSON: {
-          example: { statusCode: 411, message: '토큰이 제공되지 않았습니다.' },
-        },
-      },
-    }),
-    ApiHeaders([
-      {
-        name: 'access_token',
-        description: '액세스 토큰',
-        required: true,
-        example: '여기에 액세스 토큰',
-      },
-    ]),
+    ApiBearerAuth('access-token'),
     ApiExtraModels(ResponseFindChatRoomsPaginationDto),
   );
 }

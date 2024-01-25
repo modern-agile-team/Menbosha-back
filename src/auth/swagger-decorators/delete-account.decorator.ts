@@ -68,7 +68,6 @@ export function ApiDeleteAccount() {
       {
         name: 'access_token',
         description: '액세스 토큰',
-        required: true,
         example: '여기에 액세스 토큰',
       },
     ]),

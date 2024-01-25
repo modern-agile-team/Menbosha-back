@@ -12,7 +12,7 @@ export function setupSwagger(app: INestApplication): void {
         scheme: 'bearer',
         bearerFormat: 'JWT',
         name: 'JWT',
-        description: '여기에 토큰 입력',
+        description: '액세스 토큰 입력',
         in: 'header',
       },
       'access-token',
@@ -23,7 +23,7 @@ export function setupSwagger(app: INestApplication): void {
         type: 'http',
         in: 'Header',
         scheme: 'Bearer',
-        description: '여기에 토큰 입력',
+        description: '리프레시 토큰 입력',
       },
       'refresh-token',
     )

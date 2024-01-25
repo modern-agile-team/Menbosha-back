@@ -32,17 +32,17 @@ export class SearchAllMentorDto
     description: '멘토 유저 소개 object',
     type: 'object',
     properties: {
-      mainField: {
-        description: '대표 멘토링 분야',
+      customCategory: {
+        description: '커스텀 카테고리',
         type: 'string',
       },
-      introduce: {
-        description: '멘토 소개',
+      shortIntro: {
+        description: '멘토 한 줄 소개',
         type: 'string',
       },
     },
   })
-  userIntro: Pick<UserIntro, 'mainField' | 'introduce'>;
+  userIntro: Pick<UserIntro, 'customCategory' | 'shortIntro'>;
 
   @ApiProperty({
     description: '멘토 여부',

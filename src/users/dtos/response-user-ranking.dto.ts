@@ -48,4 +48,16 @@ export class ResponseUserRankingDto {
     example: 3,
   })
   reviewCount: number;
+
+  @ApiProperty({
+    description: '멘토 게시글 수',
+    example: 2,
+  })
+  mentorBoardCount: number;
+
+  @ApiProperty({
+    description: '유저 프로필 이미지',
+    example: 'https://image.com',
+  })
+  imageUrl: string;
 }

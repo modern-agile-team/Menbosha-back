@@ -30,20 +30,20 @@ export class TotalCount {
   @Column({ name: 'review_count', default: 0 })
   reviewCount: number;
 
-  @Column({ name: 'mentor_board_count_7days', default: 0 })
-  mentorBoardCount7days: number;
+  @Column({ name: 'mentor_board_count_in_seven_days', default: 0 })
+  mentorBoardCountInSevenDays: number;
 
-  @Column({ name: 'help_you_comment_count_7days', default: 0 })
-  helpYouCommentCount7days: number;
+  @Column({ name: 'help_you_comment_count_in_seven_days', default: 0 })
+  helpYouCommentCountInSevenDays: number;
 
-  @Column({ name: 'mentor_board_like_count_7days', default: 0 })
-  mentorBoardLikeCount7days: number;
+  @Column({ name: 'mentor_board_like_count_in_seven_days', default: 0 })
+  mentorBoardLikeCountInSevenDays: number;
 
-  @Column({ name: 'badge_count_7days', default: 0 })
-  badgeCount7days: number;
+  @Column({ name: 'badge_count_in_seven_days', default: 0 })
+  badgeCountInSevenDays: number;
 
-  @Column({ name: 'review_count_7days', default: 0 })
-  reviewCount7days: number;
+  @Column({ name: 'review_count_in_seven_days', default: 0 })
+  reviewCountInSevenDays: number;
 
   @OneToOne(() => User, (userId: User) => userId.id, {
     onDelete: 'CASCADE',

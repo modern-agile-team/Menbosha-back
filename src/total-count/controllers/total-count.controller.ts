@@ -6,13 +6,14 @@ import { Type } from '../enums/type.enum';
 import { UpdateCountingDto } from '../dtos/update-counting.dto';
 import { Action } from '../enums/action.enum';
 import { ApiCounting } from '../swagger-decorators/counting.decorator';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('total-count')
 @ApiTags('total-count API')
 export class TotalCountController {
   constructor(private readonly totalCountService: TotalCountService) {}
 
+  @ApiBearerAuth('access-token')
   @ApiCounting()
   @UseGuards(JwtAccessTokenGuard)
   @Patch('/counting')

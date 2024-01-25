@@ -1,4 +1,3 @@
-import { TotalCountService } from './../../total-count/services/total-count.service';
 import { AuthService } from '../services/auth.service';
 import {
   BadRequestException,
@@ -12,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { S3Service } from 'src/common/s3/s3.service';
 import { TokenService } from '../services/token.service';
-import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import { ApiNaverLogin } from '../swagger-decorators/naver-login.decorator';
 import { ApiKakaoLogin } from '../swagger-decorators/kakao-login.decorator';
 import { ApiNewAccessToken } from '../swagger-decorators/new-access-token.decorator';
@@ -141,6 +140,7 @@ export class AuthController {
     return res.json({ accessToken: newAccessToken });
   }
 
+  @ApiBearerAuth('access-token')
   @ApiKakaoLogout()
   @UseGuards(JwtAccessTokenGuard)
   @Post('kakao/logout')
@@ -154,6 +154,7 @@ export class AuthController {
     );
   }
 
+  @ApiBearerAuth('access-token')
   @ApiKakaoUnlink()
   @UseGuards(JwtAccessTokenGuard)
   @Post('kakao/unlink')
@@ -167,6 +168,7 @@ export class AuthController {
     );
   }
 
+  @ApiBearerAuth('access-token')
   @ApiNaverLogout()
   @UseGuards(JwtAccessTokenGuard)
   @Post('naver/logout')
@@ -174,6 +176,7 @@ export class AuthController {
     return await this.tokenService.deleteTokens(userId);
   }
 
+  @ApiBearerAuth('access-token')
   @ApiNaverUnlink()
   @UseGuards(JwtAccessTokenGuard)
   @Post('naver/unlink')
@@ -187,6 +190,7 @@ export class AuthController {
     );
   }
 
+  @ApiBearerAuth('access-token')
   @ApiGoogleLogout()
   @UseGuards(JwtAccessTokenGuard)
   @Post('google/logout')
@@ -194,6 +198,7 @@ export class AuthController {
     return await this.tokenService.deleteTokens(userId);
   }
 
+  @ApiBearerAuth('access-token')
   @ApiGoogleUnlink()
   @UseGuards(JwtAccessTokenGuard)
   @Post('google/unlink')
@@ -203,6 +208,7 @@ export class AuthController {
     return await this.authService.googleUnlink(socialAccessToken);
   }
 
+  @ApiBearerAuth('access-token')
   @ApiDeleteAccount()
   @UseGuards(JwtAccessTokenGuard)
   @Delete('account')

@@ -4,18 +4,27 @@ import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
 export function ApiUpdateUserIntro() {
   return applyDecorators(
     ApiOperation({
-      summary: '유저 프로필을 수정하는 API',
-      description: '유저 프로필을 수정하는 API',
+      summary: '내 소개를 수정하는 API',
+      description: '내 소개를 수정하는 API',
     }),
     ApiResponse({
       status: 200,
-      description: '유저 프로필의 내용을 성공적으로 수정한 경우',
+      description: '내 소개를 성공적으로 수정한 경우',
       content: {
         JSON: {
           example: {
-            mainField: '내이름은 코난 탐정이죠~를 수정해보겠습니다',
-            introduce: '백엔드 공부하고있습니다~ 를 수정해보겠습니다',
-            career: '모던 애자일 6기~를 수정해보겠어',
+            id: 4,
+            userId: 24,
+            shortIntro: '안녕하세요',
+            career: '숨쉬기 경력 20년',
+            customCategory: '코로 숨쉬기, 입으로 숨쉬기',
+            detail:
+              '안녕하세요. 저는 트위치에서 방송을 하고 있는 스트리머 케인입니다.',
+            portfolio: 'https://www.naver.com',
+            sns: 'https://www.naver.com',
+            hopeCategoryId: 4,
+            activityCategoryId: 4,
+            isMentor: true,
           },
         },
       },
@@ -71,12 +80,12 @@ export function ApiUpdateUserIntro() {
     }),
     ApiResponse({
       status: 500,
-      description: '프로필 수정중 오류가 발생했습니다',
+      description: '소개 수정중 오류가 발생했습니다',
       content: {
         JSON: {
           example: {
             statusCode: 500,
-            message: '프로필 수정 중 오류가 발생했습니다.',
+            message: '소개 수정 중 오류가 발생했습니다.',
           },
         },
       },
@@ -85,7 +94,6 @@ export function ApiUpdateUserIntro() {
       {
         name: 'access_token',
         description: '액세스 토큰',
-        required: true,
         example: '여기에 액세스 토큰',
       },
     ]),
