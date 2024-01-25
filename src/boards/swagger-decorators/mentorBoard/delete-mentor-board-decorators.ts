@@ -1,5 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiHeaders } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 
 export function ApiDeleteMentorBoard() {
   return applyDecorators(
@@ -32,13 +32,6 @@ export function ApiDeleteMentorBoard() {
         },
       },
     }),
-    ApiHeaders([
-      {
-        name: 'access_token',
-        description: '액세스 토큰',
-        required: true,
-        example: '여기에 액세스 토큰',
-      },
-    ]),
+    ApiBearerAuth('access-token'),
   );
 }

@@ -1,9 +1,9 @@
 import { applyDecorators } from '@nestjs/common';
 import {
-  ApiHeaders,
   ApiOperation,
   ApiBody,
   ApiResponse,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 
 export function ApiUploadMentorBoardImages() {
@@ -67,14 +67,7 @@ export function ApiUploadMentorBoardImages() {
         },
       },
     }),
-    ApiHeaders([
-      {
-        name: 'access_token',
-        description: '액세스 토큰',
-        required: true,
-        example: '여기에 액세스 토큰',
-      },
-    ]),
+    ApiBearerAuth('access-token'),
     ApiBody({
       schema: {
         type: 'form-data',
