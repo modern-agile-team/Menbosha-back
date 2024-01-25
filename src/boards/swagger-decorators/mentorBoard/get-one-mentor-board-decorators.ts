@@ -30,6 +30,7 @@ export function ApiGetOneMentorBoard() {
             mentorBoardImages: ['imageUrl이 들어옵니다'],
             unitOwner: 'boolean값',
             mentorBoardLikes: 'number',
+            isLike: 'boolean값',
           },
         },
       },
