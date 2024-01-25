@@ -19,7 +19,7 @@ import { PatchUpdateMentorReviewDto } from '../dtos/patch-update-mentor-review.d
 import { isNotEmptyObject } from 'class-validator';
 import { MentorReviewChecklistService } from '../mentor-review-checklist/services/mentor-review-checklist.service';
 @Injectable()
-export class MentorsService {
+export class MentorReviewsService {
   constructor(
     private readonly dataSource: DataSource,
     private readonly mentorReviewChecklistService: MentorReviewChecklistService,

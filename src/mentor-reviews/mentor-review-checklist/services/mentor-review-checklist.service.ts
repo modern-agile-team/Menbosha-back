@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MentorReviewChecklistRepository } from '../repositories/mentor-review-checklists.repository';
-import { CreateMentorReviewChecklistRequestBodyDto } from 'src/mentors/dtos/create-mentor-review-checklist-request-body.dto';
+import { CreateMentorReviewChecklistRequestBodyDto } from 'src/mentor-reviews/dtos/create-mentor-review-checklist-request-body.dto';
 import { EntityManager } from 'typeorm';
 
 @Injectable()

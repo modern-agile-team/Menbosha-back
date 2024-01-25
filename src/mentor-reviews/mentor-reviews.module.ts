@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { MentorsController } from './controllers/mentors.controller';
-import { MentorsService } from './services/mentors.service';
+import { MentorReviewsController } from './controllers/mentor-reviews.controller';
+import { MentorReviewsService } from './services/mentor-reviews.service';
 import { AuthModule } from 'src/auth/auth.module';
 import { UserModule } from 'src/users/user.module';
 import { TypeOrmExModule } from 'src/config/type-orm/type-orm-ex.module';
@@ -14,7 +14,7 @@ import { MentorReviewChecklistModule } from './mentor-review-checklist/mentor-re
     UserModule,
     MentorReviewChecklistModule,
   ],
-  controllers: [MentorsController],
-  providers: [MentorsService],
+  controllers: [MentorReviewsController],
+  providers: [MentorReviewsService],
 })
-export class MentorsModule {}
+export class MentorReviewsModule {}
