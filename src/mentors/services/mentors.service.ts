@@ -18,8 +18,6 @@ import { MentorReview } from '../entities/mentor-review.entity';
 import { PatchUpdateMentorReviewDto } from '../dtos/patch-update-mentor-review.dto';
 import { isNotEmptyObject } from 'class-validator';
 import { MentorReviewChecklistService } from '../mentor-review-checklist/services/mentor-review-checklist.service';
-import { MentorReviewChecklistDto } from '../dtos/mentor-review-checklist.dto';
-
 @Injectable()
 export class MentorsService {
   constructor(
