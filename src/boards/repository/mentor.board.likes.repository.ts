@@ -12,4 +12,10 @@ export class MentorBoardLikeRepository {
       where: { mentorBoard: { id: mentorBoardId } },
     });
   }
+
+  async isLike(userId: number, mentorBoardId: number): Promise<boolean> {
+    return await this.entityManager.exists(MentorBoardLike, {
+      where: { parentId: mentorBoardId, userId },
+    });
+  }
 }
