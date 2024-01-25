@@ -56,7 +56,7 @@ export class MentorsService {
       const mentorReview = await entityManager
         .withRepository(this.mentorReviewRepository)
         .save({
-          id: existMentor.id,
+          mentorId: existMentor.id,
           menteeId,
           review,
         });
@@ -68,11 +68,17 @@ export class MentorsService {
           { ...createMentorReviewChecklistRequestBodyDto },
         );
 
+      await queryRunner.commitTransaction();
+
       return new MentorReviewDto({
         ...mentorReview,
         mentorReviewChecklist,
       });
     } catch (error) {
+      if (queryRunner.isTransactionActive) {
+        await queryRunner.rollbackTransaction();
+      }
+
       console.error(error);
 
       throw new InternalServerErrorException(
@@ -89,7 +95,7 @@ export class MentorsService {
     mentorId: number,
     mentorBoardPageQueryDto: MentorBoardPageQueryDto,
   ): Promise<MentorReviewsPaginationResponseDto> {
-    await this.userService.findOneByOrNotFound({
+    const existMentor = await this.userService.findOneByOrNotFound({
       select: {
         id: true,
       },
@@ -110,7 +116,7 @@ export class MentorsService {
         pageSize,
         id,
         menteeId,
-        mentorId,
+        existMentor.id,
         review,
         orderField,
         sortOrder,
@@ -205,13 +211,42 @@ export class MentorsService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
-    try{
-      await this.mentorReviewRepository.update({ 
-        id: existReview.id, mentorId, menteeId },
+    try {
+      await this.mentorReviewRepository.update(
         {
-        review
-      });
+          id: existReview.id,
+          mentorId,
+          menteeId,
+        },
+        {
+          review,
+        },
+      );
 
+      const updatedMentorReviewChecklist = Object.assign(
+        existReview.mentorReviewChecklist,
+        mentorReviewChecklist,
+      );
+
+      const updatedMentorReview = Object.assign(
+        existReview,
+        patchUpdateMentorReviewDto,
+      );
+
+      return new MentorReviewDto({
+        ...updatedMentorReview,
+        mentorReviewChecklist: updatedMentorReviewChecklist,
+      });
+    } catch (error) {
+      if (queryRunner.isTransactionActive) {
+        await queryRunner.rollbackTransaction();
+      }
+
+      console.error(error);
+
+      throw new InternalServerErrorException(
+        '멘토 리뷰 업데이트 중 에러가 발생했습니다.',
+      );
     }
 
     // mentorReviewChecklist && review
@@ -229,21 +264,6 @@ export class MentorsService {
     //       mentorReviewChecklist,
     //       review,
     //     );
-
-    const updatedMentorReviewChecklist = Object.assign(
-      existReview.mentorReviewChecklist,
-      mentorReviewChecklist,
-    );
-
-    const updatedMentorReview = Object.assign(
-      existReview,
-      patchUpdateMentorReviewDto,
-    );
-
-    return new MentorReviewDto({
-      ...updatedMentorReview,
-      mentorReviewChecklist: updatedMentorReviewChecklist,
-    });
   }
 
   async removeMentorReview(

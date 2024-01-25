@@ -24,6 +24,21 @@ export class MentorReviewChecklistService {
       });
   }
 
+  patchUpdateMentorReviewChecklist(
+    entityManager: EntityManager,
+    mentorReviewId: number,
+    patchUpdateMentorReviewChecklist: CreateMentorReviewChecklistRequestBodyDto,
+  ) {
+    return entityManager
+      .withRepository(this.mentorReviewChecklistRepository)
+      .update(
+        {
+          mentorReviewId,
+        },
+        { ...patchUpdateMentorReviewChecklist },
+      );
+  }
+
   removeMentorReviewChecklist(
     entityManager: EntityManager,
     mentorReviewId: number,
