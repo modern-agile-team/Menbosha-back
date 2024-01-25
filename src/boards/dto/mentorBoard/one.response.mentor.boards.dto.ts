@@ -17,4 +17,5 @@ export class oneMentorBoardResponseDTO {
     imageUrl: string;
   }[];
   mentorBoardLikes: number;
+  isLike: boolean;
 }

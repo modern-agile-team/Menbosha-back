@@ -30,7 +30,7 @@ import { ApiUpdateUserIntro } from '../swagger-decorators/patch-user-intro-decor
 import { ApiGetMyRank } from '../swagger-decorators/get-my-rank-decorators';
 import { ApiGetUserInfo } from '../swagger-decorators/get-user-info.decorators';
 import { UserRankingService } from '../services/user-ranking.service';
-import { TotalCountService } from 'src/total-count/services/total-count.service';
+// import { TotalCountService } from 'src/total-count/services/total-count.service';
 import { UserBadgeService } from '../services/user-badge.service';
 import { ApiGetTotalRanking } from '../swagger-decorators/get-total-ranking.decorator';
 

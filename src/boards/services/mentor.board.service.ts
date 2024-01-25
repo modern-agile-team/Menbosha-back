@@ -137,6 +137,10 @@ export class MentorBoardService {
     const mentorBoardLike =
       await this.mentorBoardLikeRepository.countMentorBoardLike(mentorBoardId);
     const unitOwner = mentorBoard.userId === userId;
+    const isLike = await this.mentorBoardLikeRepository.isLike(
+      userId,
+      mentorBoardId,
+    );
 
     if (!mentorBoard) {
       throw new NotFoundException('게시물을 찾을 수 없습니다.');
@@ -158,6 +162,7 @@ export class MentorBoardService {
       })),
       unitOwner: unitOwner,
       mentorBoardLikes: mentorBoardLike,
+      isLike: isLike,
     };
   }
 
