@@ -18,6 +18,7 @@ import { MentorReview } from '../entities/mentor-review.entity';
 import { PatchUpdateMentorReviewDto } from '../dtos/patch-update-mentor-review.dto';
 import { isNotEmptyObject } from 'class-validator';
 import { MentorReviewChecklistService } from '../mentor-review-checklist/services/mentor-review-checklist.service';
+import { MentorReviewChecklistDto } from '../dtos/mentor-review-checklist.dto';
 
 @Injectable()
 export class MentorsService {
@@ -223,6 +224,7 @@ export class MentorsService {
           review,
         );
       }
+
       if (mentorReviewChecklist !== undefined) {
         await this.mentorReviewChecklistService.patchUpdateMentorReviewChecklist(
           entityManager,
@@ -230,22 +232,19 @@ export class MentorsService {
           mentorReviewChecklist,
         );
       }
+
       await queryRunner.commitTransaction();
 
-      const updatedMentorReviewChecklist = Object.assign(
-        existReview.mentorReviewChecklist,
-        mentorReviewChecklist,
-      );
+      const updatedMentorReview = {
+        ...existReview,
+        ...patchUpdateMentorReviewDto,
+        mentorReviewChecklist: {
+          ...existReview.mentorReviewChecklist,
+          ...mentorReviewChecklist,
+        },
+      };
 
-      const updatedMentorReview = Object.assign(
-        existReview,
-        patchUpdateMentorReviewDto,
-      );
-
-      return new MentorReviewDto({
-        ...updatedMentorReview,
-        mentorReviewChecklist: updatedMentorReviewChecklist,
-      });
+      return new MentorReviewDto(updatedMentorReview);
     } catch (error) {
       if (queryRunner.isTransactionActive) {
         await queryRunner.rollbackTransaction();
