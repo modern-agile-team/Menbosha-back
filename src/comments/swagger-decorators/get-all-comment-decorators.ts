@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import {
-  ApiHeaders,
+  ApiBearerAuth,
   ApiOperation,
   ApiParam,
   ApiResponse,
@@ -100,14 +100,7 @@ export function ApiGetAllComment() {
         },
       },
     }),
-    ApiHeaders([
-      {
-        name: 'access_token',
-        description: '액세스 토큰',
-        required: true,
-        example: '여기에 액세스 토큰',
-      },
-    ]),
+    ApiBearerAuth('access-token'),
     ApiParam({
       name: 'helpMeBoardId',
       description: '댓글을 불러올 보드의 ID',

@@ -1,7 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiBody,
-  ApiHeaders,
   ApiOperation,
   ApiParam,
   ApiResponse,
@@ -88,14 +88,7 @@ export function ApiAddHelpComment() {
         },
       },
     }),
-    ApiHeaders([
-      {
-        name: 'access_token',
-        description: '액세스 토큰',
-        required: true,
-        example: '여기에 액세스 토큰',
-      },
-    ]),
+    ApiBearerAuth('access-token'),
     ApiParam({
       name: 'helpMeBoardId',
       description: '댓글을 추가할 보드의 ID',
