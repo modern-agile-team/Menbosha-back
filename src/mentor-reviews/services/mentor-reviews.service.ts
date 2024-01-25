@@ -302,34 +302,21 @@ export class MentorReviewsService {
     try {
       const entityManager = queryRunner.manager;
 
-      const mentorReviewUpdateResult = await entityManager
-        .withRepository(this.mentorReviewRepository)
-        .update(
-          {
-            id: reviewId,
-            mentorId,
-            menteeId,
-          },
-          {
-            deletedAt: new Date(),
-          },
-        );
+      await entityManager.withRepository(this.mentorReviewRepository).update(
+        {
+          id: existReview.id,
+          mentorId: existReview.mentorId,
+          menteeId: existReview.menteeId,
+        },
+        {
+          deletedAt: new Date(),
+        },
+      );
 
-      if (!mentorReviewUpdateResult.affected) {
-        throw new Error('멘토 리뷰 삭제 중 알 수 없는 서버에러 발생');
-      }
-
-      const mentorReviewChecklistUpdateResult =
-        await this.mentorReviewChecklistService.removeMentorReviewChecklist(
-          entityManager,
-          existReview.id,
-        );
-
-      if (!mentorReviewChecklistUpdateResult.affected) {
-        throw new Error(
-          '멘토 리뷰 체크리스트 삭제 중 알 수 없는 서버에러 발생',
-        );
-      }
+      await this.mentorReviewChecklistService.removeMentorReviewChecklist(
+        entityManager,
+        existReview.id,
+      );
 
       await queryRunner.commitTransaction();
     } catch (error) {
