@@ -6,8 +6,8 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { MentorReview } from './mentor-review.entity';
-import { BooleanTransformer } from './transformers/boolean.transformer';
+import { MentorReview } from '../../entities/mentor-review.entity';
+import { BooleanTransformer } from '../../entities/transformers/boolean.transformer';
 
 @Entity('mentor_review_checklist', { schema: 'ma6_menbosha_db' })
 export class MentorReviewChecklist {

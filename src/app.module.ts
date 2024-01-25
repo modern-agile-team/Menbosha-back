@@ -5,7 +5,7 @@ import { CommentModule } from './comments/comment.module';
 import { UserModule } from './users/user.module';
 import { Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TypeORMconfig } from './config/typeorm.config';
+import { TypeORMconfig } from './config/type-orm/typeorm.config';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ChatModule } from './chat/chat.module';

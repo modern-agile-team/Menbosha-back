@@ -2,9 +2,10 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { MentorsRepository } from '../repositories/mentors.repository';
+import { MentorReviewRepository } from '../repositories/mentor-review.repository';
 import { CreateMentorReviewRequestBodyDto } from '../dtos/create-mentor-review-request-body.dto';
 import { MentorReviewDto } from '../dtos/mentor-review.dto';
 import { MentorBoardPageQueryDto } from '../dtos/mentor-review-page-query-dto';
@@ -12,15 +13,18 @@ import { MentorReviewsItemResponseDto } from '../dtos/mentor-reviews-item-respon
 import { plainToInstance } from 'class-transformer';
 import { MentorReviewsPaginationResponseDto } from '../dtos/mentor-reviews-pagination-response.dto';
 import { UserService } from 'src/users/services/user.service';
-import { FindOneOptions } from 'typeorm';
+import { DataSource, FindOneOptions } from 'typeorm';
 import { MentorReview } from '../entities/mentor-review.entity';
 import { PatchUpdateMentorReviewDto } from '../dtos/patch-update-mentor-review.dto';
 import { isNotEmptyObject } from 'class-validator';
+import { MentorReviewChecklistService } from '../mentor-review-checklist/services/mentor-review-checklist.service';
 
 @Injectable()
 export class MentorsService {
   constructor(
-    private readonly mentorsRepository: MentorsRepository,
+    private readonly dataSource: DataSource,
+    private readonly mentorReviewChecklistService: MentorReviewChecklistService,
+    private readonly mentorReviewRepository: MentorReviewRepository,
     private readonly userService: UserService,
   ) {}
   async createMentorReview(
@@ -28,7 +32,7 @@ export class MentorsService {
     menteeId: number,
     createMentorReviewRequestBodyDto: CreateMentorReviewRequestBodyDto,
   ): Promise<MentorReviewDto> {
-    await this.userService.findOneByOrNotFound({
+    const existMentor = await this.userService.findOneByOrNotFound({
       select: {
         id: true,
       },
@@ -41,18 +45,44 @@ export class MentorsService {
     const { review, createMentorReviewChecklistRequestBodyDto } =
       createMentorReviewRequestBodyDto;
 
-    const { mentorReview, mentorReviewChecklist } =
-      await this.mentorsRepository.createMentorReview(
-        mentorId,
-        menteeId,
-        { ...createMentorReviewChecklistRequestBodyDto },
-        review,
-      );
+    const queryRunner = this.dataSource.createQueryRunner();
 
-    return new MentorReviewDto({
-      ...mentorReview,
-      mentorReviewChecklist,
-    });
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const entityManager = queryRunner.manager;
+
+      const mentorReview = await entityManager
+        .withRepository(this.mentorReviewRepository)
+        .save({
+          id: existMentor.id,
+          menteeId,
+          review,
+        });
+
+      const mentorReviewChecklist =
+        await this.mentorReviewChecklistService.createMentorReviewChecklist(
+          entityManager,
+          mentorReview.id,
+          { ...createMentorReviewChecklistRequestBodyDto },
+        );
+
+      return new MentorReviewDto({
+        ...mentorReview,
+        mentorReviewChecklist,
+      });
+    } catch (error) {
+      console.error(error);
+
+      throw new InternalServerErrorException(
+        '멘토 리뷰 생성 중 알 수 없는 서버에러 발생',
+      );
+    } finally {
+      if (!queryRunner.isReleased) {
+        await queryRunner.release();
+      }
+    }
   }
 
   async findMentorReviews(
@@ -75,7 +105,7 @@ export class MentorsService {
     const skip = (page - 1) * pageSize;
 
     const [mentorReviews, count] =
-      await this.mentorsRepository.findMentorReviews(
+      await this.mentorReviewRepository.findMentorReviews(
         skip,
         pageSize,
         id,
@@ -118,8 +148,7 @@ export class MentorsService {
       },
     });
 
-    const existReview =
-      await this.mentorsRepository.findOneMentorReview(options);
+    const existReview = await this.mentorReviewRepository.findOne(options);
 
     if (!existReview) {
       throw new NotFoundException('해당 멘토에 대한 리뷰를 찾을 수 없습니다.');
@@ -171,21 +200,35 @@ export class MentorsService {
       throw new ForbiddenException('해당 리뷰에 권한이 없습니다.');
     }
 
-    mentorReviewChecklist && review
-      ? await this.mentorsRepository.patchUpdateAllMentorReview(
-          existReview.mentorId,
-          existReview.menteeId,
-          existReview.id,
-          mentorReviewChecklist,
-          review,
-        )
-      : await this.mentorsRepository.patchUpdateOptionalMentorReview(
-          existReview.mentorId,
-          existReview.menteeId,
-          existReview.id,
-          mentorReviewChecklist,
-          review,
-        );
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try{
+      await this.mentorReviewRepository.update({ 
+        id: existReview.id, mentorId, menteeId },
+        {
+        review
+      });
+
+    }
+
+    // mentorReviewChecklist && review
+    //   ? await this.mentorReviewRepository.patchUpdateAllMentorReview(
+    //       existReview.mentorId,
+    //       existReview.menteeId,
+    //       existReview.id,
+    //       mentorReviewChecklist,
+    //       review,
+    //     )
+    //   : await this.mentorsRepository.patchUpdateOptionalMentorReview(
+    //       existReview.mentorId,
+    //       existReview.menteeId,
+    //       existReview.id,
+    //       mentorReviewChecklist,
+    //       review,
+    //     );
 
     const updatedMentorReviewChecklist = Object.assign(
       existReview.mentorReviewChecklist,
@@ -220,10 +263,58 @@ export class MentorsService {
       throw new ForbiddenException('해당 리뷰에 권한이 없습니다.');
     }
 
-    await this.mentorsRepository.removeMentorReview(
-      existReview.id,
-      existReview.mentorId,
-      existReview.menteeId,
-    );
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const entityManager = queryRunner.manager;
+
+      const mentorReviewUpdateResult = await entityManager
+        .withRepository(this.mentorReviewRepository)
+        .update(
+          {
+            id: reviewId,
+            mentorId,
+            menteeId,
+          },
+          {
+            deletedAt: new Date(),
+          },
+        );
+
+      if (!mentorReviewUpdateResult.affected) {
+        throw new Error('멘토 리뷰 삭제 중 알 수 없는 서버에러 발생');
+      }
+
+      const mentorReviewChecklistUpdateResult =
+        await this.mentorReviewChecklistService.removeMentorReviewChecklist(
+          entityManager,
+          existReview.id,
+        );
+
+      if (!mentorReviewChecklistUpdateResult.affected) {
+        throw new Error(
+          '멘토 리뷰 체크리스트 삭제 중 알 수 없는 서버에러 발생',
+        );
+      }
+
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      if (queryRunner.isTransactionActive) {
+        await queryRunner.rollbackTransaction();
+      }
+
+      console.error(error);
+
+      throw new InternalServerErrorException(
+        '멘토 리뷰 삭제 중 알 수 없는 서버에러 발생',
+      );
+    } finally {
+      if (!queryRunner.isReleased) {
+        await queryRunner.release();
+      }
+    }
   }
 }
