@@ -45,7 +45,7 @@ export class AuthController {
       throw new BadRequestException('인가코드가 없습니다.');
     }
 
-    const { userId, socialAccessToken, socialRefreshToken } =
+    const { userId, socialAccessToken, socialRefreshToken, firstLogin } =
       await this.authService.login(code, 'naver');
     const accessToken = await this.tokenService.createAccessToken(userId);
     const refreshToken = await this.tokenService.createRefreshToken(userId);
@@ -66,7 +66,7 @@ export class AuthController {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
     });
 
-    return res.json({ accessToken, refreshToken });
+    return res.json({ accessToken, refreshToken, firstLogin });
   }
 
   @ApiKakaoLogin()
@@ -76,7 +76,7 @@ export class AuthController {
       throw new BadRequestException('인가코드가 없습니다.');
     }
 
-    const { userId, socialAccessToken, socialRefreshToken } =
+    const { userId, socialAccessToken, socialRefreshToken, firstLogin } =
       await this.authService.login(code, 'kakao');
     const accessToken = await this.tokenService.createAccessToken(userId);
     const refreshToken = await this.tokenService.createRefreshToken(userId);
@@ -97,7 +97,7 @@ export class AuthController {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
     });
 
-    return res.json({ accessToken, refreshToken });
+    return res.json({ accessToken, refreshToken, firstLogin });
   }
 
   @ApiGoogleLogin()
@@ -107,7 +107,7 @@ export class AuthController {
       throw new BadRequestException('인가코드가 없습니다.');
     }
 
-    const { userId, socialAccessToken, socialRefreshToken } =
+    const { userId, socialAccessToken, socialRefreshToken, firstLogin } =
       await this.authService.login(code, 'google');
     const accessToken = await this.tokenService.createAccessToken(userId);
     const refreshToken = await this.tokenService.createRefreshToken(userId);
@@ -128,7 +128,7 @@ export class AuthController {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
     });
 
-    return res.json({ accessToken, refreshToken });
+    return res.json({ accessToken, refreshToken, firstLogin });
   }
 
   @ApiNewAccessToken()

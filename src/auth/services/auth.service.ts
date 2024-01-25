@@ -161,6 +161,7 @@ export class AuthService implements AuthServiceInterface {
           userId,
           socialAccessToken,
           socialRefreshToken,
+          firstLogin: false,
         };
       } else {
         // 존재하지 않는 사용자인 경우
@@ -179,6 +180,7 @@ export class AuthService implements AuthServiceInterface {
           userId,
           socialAccessToken,
           socialRefreshToken,
+          firstLogin: true,
         };
       }
     } catch (error) {
