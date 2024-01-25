@@ -13,7 +13,7 @@ import { MentorReviewsItemResponseDto } from '../dtos/mentor-reviews-item-respon
 import { plainToInstance } from 'class-transformer';
 import { MentorReviewsPaginationResponseDto } from '../dtos/mentor-reviews-pagination-response.dto';
 import { UserService } from 'src/users/services/user.service';
-import { DataSource, FindOneOptions } from 'typeorm';
+import { DataSource, EntityManager, FindOneOptions } from 'typeorm';
 import { MentorReview } from '../entities/mentor-review.entity';
 import { PatchUpdateMentorReviewDto } from '../dtos/patch-update-mentor-review.dto';
 import { isNotEmptyObject } from 'class-validator';
@@ -212,16 +212,25 @@ export class MentorsService {
     await queryRunner.startTransaction();
 
     try {
-      await this.mentorReviewRepository.update(
-        {
-          id: existReview.id,
-          mentorId,
-          menteeId,
-        },
-        {
+      const entityManager = queryRunner.manager;
+
+      if (review !== undefined) {
+        await this.updateMentorReview(
+          entityManager,
+          existReview.id,
+          existReview.mentorId,
+          existReview.menteeId,
           review,
-        },
-      );
+        );
+      }
+      if (mentorReviewChecklist !== undefined) {
+        await this.mentorReviewChecklistService.patchUpdateMentorReviewChecklist(
+          entityManager,
+          existReview.id,
+          mentorReviewChecklist,
+        );
+      }
+      await queryRunner.commitTransaction();
 
       const updatedMentorReviewChecklist = Object.assign(
         existReview.mentorReviewChecklist,
@@ -247,23 +256,28 @@ export class MentorsService {
       throw new InternalServerErrorException(
         '멘토 리뷰 업데이트 중 에러가 발생했습니다.',
       );
+    } finally {
+      if (!queryRunner.isReleased) {
+        await queryRunner.release();
+      }
     }
+  }
 
-    // mentorReviewChecklist && review
-    //   ? await this.mentorReviewRepository.patchUpdateAllMentorReview(
-    //       existReview.mentorId,
-    //       existReview.menteeId,
-    //       existReview.id,
-    //       mentorReviewChecklist,
-    //       review,
-    //     )
-    //   : await this.mentorsRepository.patchUpdateOptionalMentorReview(
-    //       existReview.mentorId,
-    //       existReview.menteeId,
-    //       existReview.id,
-    //       mentorReviewChecklist,
-    //       review,
-    //     );
+  private async updateMentorReview(
+    entityManager: EntityManager,
+    reviewId: number,
+    mentorId: number,
+    menteeId: number,
+    review: string,
+  ): Promise<void> {
+    await entityManager.withRepository(this.mentorReviewRepository).update(
+      {
+        id: reviewId,
+        mentorId,
+        menteeId,
+      },
+      { review },
+    );
   }
 
   async removeMentorReview(
