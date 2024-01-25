@@ -12,7 +12,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
-import { ApiBearerAuth, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { ApiGetMyProfile } from '../swagger-decorators/get-my-profile-decorator';
@@ -44,7 +44,6 @@ export class UserController {
     private readonly userBadgeService: UserBadgeService,
   ) {}
 
-  @ApiBearerAuth('access-token')
   @ApiGetMyProfile()
   @UseGuards(JwtAccessTokenGuard)
   @Get('my/profile')
@@ -52,7 +51,6 @@ export class UserController {
     return this.userService.getMyProfile(userId);
   }
 
-  @ApiBearerAuth('access-token')
   @ApiGetMyRank()
   @UseGuards(JwtAccessTokenGuard)
   @Get('my/rank')
@@ -66,7 +64,6 @@ export class UserController {
     return this.userService.getUserInfo(userId);
   }
 
-  @ApiBearerAuth('access-token')
   @UseGuards(JwtAccessTokenGuard)
   @ApiGetMyInfoWithOwner()
   @Get('my-info/:targetId')
@@ -99,7 +96,6 @@ export class UserController {
     return this.userRankingService.getUserRanking();
   }
 
-  @ApiBearerAuth('access-token')
   @UseGuards(JwtAccessTokenGuard)
   @ApiPostUserIntro()
   @Post('/intro')
@@ -110,7 +106,6 @@ export class UserController {
     return this.userIntroService.addUserIntro(userId, userData);
   }
 
-  @ApiBearerAuth('access-token')
   @UseGuards(JwtAccessTokenGuard)
   @ApiUpdateUserIntro()
   @Patch('/my/intro')
