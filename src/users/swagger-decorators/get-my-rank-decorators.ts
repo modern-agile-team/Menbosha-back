@@ -1,5 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 export function ApiGetMyRank() {
   return applyDecorators(
@@ -28,5 +28,6 @@ export function ApiGetMyRank() {
         },
       },
     }),
+    ApiBearerAuth('access-token'),
   );
 }

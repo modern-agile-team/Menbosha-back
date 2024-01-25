@@ -1,5 +1,10 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiHeaders,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 export function ApiNaverLogout() {
   return applyDecorators(
@@ -68,5 +73,6 @@ export function ApiNaverLogout() {
         example: '여기에 액세스 토큰',
       },
     ]),
+    ApiBearerAuth('access-token'),
   );
 }
