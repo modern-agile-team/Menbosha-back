@@ -13,12 +13,7 @@ import { MentorReviewsItemResponseDto } from '../dtos/mentor-reviews-item-respon
 import { plainToInstance } from 'class-transformer';
 import { MentorReviewsPaginationResponseDto } from '../dtos/mentor-reviews-pagination-response.dto';
 import { UserService } from 'src/users/services/user.service';
-import {
-  DataSource,
-  EntityManager,
-  FindOneOptions,
-  UpdateResult,
-} from 'typeorm';
+import { DataSource, FindOneOptions } from 'typeorm';
 import { MentorReview } from '../entities/mentor-review.entity';
 import { PatchUpdateMentorReviewDto } from '../dtos/patch-update-mentor-review.dto';
 import { isNotEmptyObject } from 'class-validator';
@@ -219,12 +214,13 @@ export class MentorReviewsService {
       const entityManager = queryRunner.manager;
 
       if (review !== undefined) {
-        await this.updateMentorReview(
-          entityManager,
-          existReview.id,
-          existReview.mentorId,
-          existReview.menteeId,
-          review,
+        await entityManager.withRepository(this.mentorReviewRepository).update(
+          {
+            id: reviewId,
+            mentorId,
+            menteeId,
+          },
+          { review },
         );
       }
 
@@ -263,23 +259,6 @@ export class MentorReviewsService {
         await queryRunner.release();
       }
     }
-  }
-
-  private updateMentorReview(
-    entityManager: EntityManager,
-    reviewId: number,
-    mentorId: number,
-    menteeId: number,
-    review: string,
-  ): Promise<UpdateResult> {
-    return entityManager.withRepository(this.mentorReviewRepository).update(
-      {
-        id: reviewId,
-        mentorId,
-        menteeId,
-      },
-      { review },
-    );
   }
 
   async removeMentorReview(
