@@ -506,11 +506,8 @@ export class ChatService {
     if (
       !existChatRoom.chats.length ||
       !existChatRoom.chats.find((chat: ChatDto) => {
-        return (
-          chat._id === chatId &&
-          chat.senderId === myId &&
-          chat.deletedAt === null
-        );
+        console.log(chat);
+        return chat._id === chatId && chat.senderId === myId && !chat.deletedAt;
       })
     ) {
       throw new NotFoundException('해당 채팅이 존재하지 않습니다.');

@@ -62,10 +62,6 @@ export class ChatRoomDto implements Omit<ChatRooms, 'unprotectedData'> {
   @Expose()
   updatedAt: Date;
 
-  @ApiProperty({
-    description: '채팅방 삭제 날짜',
-    default: null,
-  })
   @Exclude()
   deletedAt: Date | null;
 
