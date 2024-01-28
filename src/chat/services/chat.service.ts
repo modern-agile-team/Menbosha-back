@@ -199,14 +199,6 @@ export class ChatService {
     const { page, pageSize } = pageQueryDto;
     const skip = (page - 1) * pageSize;
 
-    await this.chatRepository.findOneAndUpdateChatRoom(
-      {
-        _id: roomId,
-      },
-      { $push: { 'chats.$[elem].seenUsers': myId } },
-      { arrayFilters: [{ 'elem.seenUsers': { $ne: myId } }], new: true },
-    );
-
     const aggregatedChatRooms: AggregateChatRoomForChatsDto[] =
       await this.chatRepository.aggregateChatRooms([
         {
@@ -244,6 +236,20 @@ export class ChatService {
           },
         },
       ]);
+
+    aggregatedChatRooms[0].chats.forEach((chat: ChatDto) => {
+      if (!chat.seenUsers.includes(myId)) {
+        chat.seenUsers.push(myId);
+      }
+    });
+
+    await this.chatRepository.findOneAndUpdateChatRoom(
+      {
+        _id: roomId,
+      },
+      { $push: { 'chats.$[elem].seenUsers': myId } },
+      { arrayFilters: [{ 'elem.seenUsers': { $ne: myId } }] },
+    );
 
     if (!aggregatedChatRooms[0].chatMembers.includes(myId)) {
       throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
