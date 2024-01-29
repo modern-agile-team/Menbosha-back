@@ -1,7 +1,7 @@
 export enum Type {
-  CountMentorBoard = 'countMentorBoard',
-  CountHelpYouComment = 'countHelpYouComment',
-  CountMentorBoardLike = 'countMentorBoardLike',
-  CountBadge = 'countBadge',
-  CountReview = 'countReview',
+  MentorBoardCount = 'mentorBoardCount',
+  HelpYouCommentCount = 'helpYouCommentCount',
+  MentorBoardLikeCount = 'mentorBoardLikeCount',
+  BadgeCount = 'badgeCount',
+  ReviewCount = 'reviewCount',
 }
