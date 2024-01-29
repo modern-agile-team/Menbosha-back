@@ -133,21 +133,22 @@ export class TokenService {
 
         if (token !== rrt) {
           throw new HttpException(
-            '토큰을 찾을 수 없습니다.',
-            HttpStatus.NOT_FOUND,
+            'token not found in redis',
+            HttpStatus.UNAUTHORIZED,
           );
         }
       }
       return { message: '유효한 토큰입니다.' };
     } catch (error) {
       if (
-        error.message == 'jwt expired' ||
-        error.message == 'invalid signature'
+        error.message === 'jwt expired' ||
+        error.message === 'invalid signature' ||
+        error.message === 'token not found in redis'
       ) {
         throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
       } else if (
-        error.message == 'invalid token' ||
-        error.message == 'jwt must be provided'
+        error.message === 'invalid token' ||
+        error.message === 'jwt must be provided'
       ) {
         throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
       } else {
