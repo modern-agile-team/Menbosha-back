@@ -14,6 +14,7 @@ export class SearchAllHelpMeBoardDto
       | 'userId'
       | 'helpMeBoardImages'
       | 'pullingUp'
+      | 'helpYouComments'
     >
 {
   @ApiProperty({
