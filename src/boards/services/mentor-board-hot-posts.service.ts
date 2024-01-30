@@ -1,5 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { EntityManager, SelectQueryBuilder } from 'typeorm';
+import { EntityManager } from 'typeorm';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { MentorBoardForHotPostDto } from '../dto/mentorBoard/mentor-board-for-hot-post.dto';
 import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
@@ -7,6 +7,7 @@ import { ResponseMentorBoardHotPostPaginationDto } from '../dto/mentorBoard/resp
 import { HotPostsRepository } from 'src/hot-posts/repositories/hot-posts.repository';
 import { CategoryService } from 'src/category/services/category.service';
 import { MentorBoardDto } from '../dto/mentorBoard/mentor-board.dto';
+import { QueryBuilderHelper } from 'src/helpers/query-builder.helper';
 
 @Injectable()
 export class MentorBoardHotPostsService {
@@ -19,6 +20,7 @@ export class MentorBoardHotPostsService {
     private readonly hotPostsRepository: HotPostsRepository<MentorBoard>,
     private readonly entityManager: EntityManager,
     private readonly categoryService: CategoryService,
+    private readonly queryBuilderHelper: QueryBuilderHelper,
   ) {}
 
   async createMentorBoardHotPost(
@@ -79,7 +81,7 @@ export class MentorBoardHotPostsService {
         'mentorBoardImages.imageUrl',
       ]);
 
-    this.queryBuilderHelper(
+    this.queryBuilderHelper.buildWherePropForBoardFind(
       queryBuilder,
       {
         ...filter,
@@ -109,41 +111,6 @@ export class MentorBoardHotPostsService {
       page,
       pageSize,
     );
-  }
-
-  queryBuilderHelper<E extends Record<string, any>>(
-    queryBuilder: SelectQueryBuilder<E>,
-    filter: Partial<Record<keyof E, E[keyof E]>>,
-    boardAlias: string,
-    fullTextSearchField?: readonly (keyof E)[],
-  ) {
-    for (const key in filter) {
-      if (fullTextSearchField?.includes(key) && filter[key]) {
-        queryBuilder.andWhere(
-          `MATCH(${boardAlias}.${key}) AGAINST (:searchQuery IN BOOLEAN MODE)`,
-          {
-            searchQuery: filter[key],
-          },
-        );
-      } else if (key === 'categoryId' && filter[key] === 1) {
-        continue;
-      } else if (typeof filter[key] === 'boolean') {
-        if (key === 'loadOnlyPopular') {
-          filter[key] &&
-            queryBuilder.andWhere(`${boardAlias}.popularAt IS NOT NULL`);
-
-          continue;
-        }
-
-        queryBuilder.andWhere(`${boardAlias}.${key} = :key`, {
-          key: filter[key],
-        });
-      } else if (filter[key]) {
-        queryBuilder.andWhere(`${boardAlias}.${key} = :key`, {
-          key: filter[key],
-        });
-      }
-    }
   }
 
   async deleteMentorBoardHotPost(

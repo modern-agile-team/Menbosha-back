@@ -24,6 +24,7 @@ import { MentorBoardHotPostsController } from './controllers/mentor-board-hot-po
 import { MentorBoardHotPostsService } from './services/mentor-board-hot-posts.service';
 import { CategoryModule } from 'src/category/category.module';
 import { MentorBoardLikeRepository } from './repository/mentor.board.likes.repository';
+import { QueryBuilderHelper } from 'src/helpers/query-builder.helper';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { MentorBoardLikeRepository } from './repository/mentor.board.likes.repos
     HelpMeBoardRepository,
     MentorBoardRepository,
     MentorBoardLikeRepository,
+    QueryBuilderHelper,
   ],
 })
 @Module({})
