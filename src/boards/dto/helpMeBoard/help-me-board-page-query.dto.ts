@@ -1,15 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-
-import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { SortOrder } from '../../../common/constants/sort-order.enum';
 import { PageQueryDto } from 'src/common/dto/page-query.dto';
 import { IsPositiveInt } from 'src/common/decorators/validators/is-positive-int.decorator';
-import { ParseOptionalBoolean } from 'src/common/transformers/parse-optional-boolean.transformer';
 import { HelpMeBoardOrderField } from 'src/boards/constants/help-me-board-order-field.enum';
 
 export class HelpMeBoardPageQueryDto extends PageQueryDto {
   @ApiPropertyOptional({
-    description: '멘토 게시글 고유 ID 필터링',
+    description: '도와주세요 게시글 고유 ID 필터링',
     format: 'integer',
   })
   @IsOptional()
@@ -47,15 +45,6 @@ export class HelpMeBoardPageQueryDto extends PageQueryDto {
   @IsOptional()
   @IsPositiveInt()
   categoryId: number = 1;
-
-  @ApiProperty({
-    description: '인기 게시글만 불러올 지, 인기 멘토 게시판을 불러올 지 여부',
-    default: false,
-  })
-  @IsOptional()
-  @IsBoolean()
-  @ParseOptionalBoolean()
-  loadOnlyPopular: boolean = false;
 
   @ApiProperty({
     description: '정렬의 기준으로 잡을 필드',

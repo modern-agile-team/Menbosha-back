@@ -2,22 +2,28 @@ import {
   EntityManager,
   FindOneOptions,
   FindOptionsWhere,
-  Repository,
   UpdateResult,
 } from 'typeorm';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { CreateMentorBoardDto } from '../dto/mentorBoard/create.mentor.board.dto';
 import { Injectable } from '@nestjs/common';
 import { UpdateMentorBoardDto } from '../dto/mentorBoard/update.mentor.board.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { QueryBuilderHelper } from 'src/helpers/query-builder.helper';
+import { SortOrder } from 'src/common/constants/sort-order.enum';
+import { MentorBoardOrderField } from '../constants/mentor-board-order-field.enum';
+import { MentorBoardDto } from '../dto/mentorBoard/mentor-board.dto';
 
 @Injectable()
 export class MentorBoardRepository {
+  private readonly FULL_TEXT_SEARCH_FIELD: readonly (keyof Pick<
+    MentorBoardDto,
+    'head' | 'body'
+  >)[] = ['head', 'body'];
+
   constructor(
     private readonly entityManager: EntityManager,
-    @InjectRepository(MentorBoard)
-    private readonly mentorBoardRepository: Repository<MentorBoard>,
+    private readonly queryBuilderHelper: QueryBuilderHelper,
   ) {}
 
   async createBoard(
@@ -89,6 +95,62 @@ export class MentorBoardRepository {
     });
   }
 
+  findAllMentorBoardsByQueryBuilder(
+    skip: number,
+    pageSize: number,
+    orderField: MentorBoardOrderField,
+    sortOrder: SortOrder,
+    filter: {
+      id?: number;
+      userId?: number;
+      head?: string;
+      body?: string;
+      categoryId: number;
+      loadOnlyPopular: boolean;
+    },
+  ) {
+    const queryBuilder = this.entityManager
+      .getRepository(MentorBoard)
+      .createQueryBuilder('mentorBoard')
+      .leftJoin(
+        'mentorBoard.mentorBoardImages',
+        'mentorBoardImages',
+        'mentorBoardImages.id = (SELECT id FROM mentor_board_image WHERE mentor_board_id = mentorBoard.id ORDER BY id DESC LIMIT 1)',
+      )
+      .leftJoin('mentorBoard.mentorBoardLikes', 'mentorBoardLikes')
+      .innerJoin('mentorBoard.user', 'user')
+      .innerJoin('user.userImage', 'userImage')
+      .select([
+        'mentorBoard.id',
+        'mentorBoard.userId',
+        'mentorBoard.head',
+        'mentorBoard.body',
+        'mentorBoard.categoryId',
+        'mentorBoard.createdAt',
+        'mentorBoard.updatedAt',
+        'mentorBoard.popularAt',
+        'user.name',
+        'userImage.imageUrl',
+        'mentorBoardLikes.id',
+        'mentorBoardLikes.userId',
+        'mentorBoardImages.id',
+        'mentorBoardImages.imageUrl',
+      ]);
+
+    this.queryBuilderHelper.buildWherePropForBoardFind(
+      queryBuilder,
+      filter,
+      'mentorBoard',
+      this.FULL_TEXT_SEARCH_FIELD,
+    );
+
+    return queryBuilder
+      .orderBy(`mentorBoard.${orderField}`, sortOrder)
+      .skip(skip)
+      .take(pageSize)
+      .getMany();
+  }
+
   async findPagedBoards(skip: number, limit: number): Promise<MentorBoard[]> {
     return await this.entityManager.find(MentorBoard, {
       relations: [
@@ -125,7 +187,7 @@ export class MentorBoardRepository {
     partialEntity: QueryDeepPartialEntity<MentorBoard>,
   ): Promise<UpdateResult> {
     return entityManager
-      .withRepository(this.mentorBoardRepository)
+      .getRepository(MentorBoard)
       .update(criteria, partialEntity);
   }
 

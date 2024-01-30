@@ -35,6 +35,7 @@ import { ApiGetPageNumberByHelpMeBoard } from '../swagger-decorators/helpMeBoard
 import { PullingUpHelpMeBoardResponseDTO } from '../dto/helpMeBoard/pulling.up.response.dto';
 import { ApiGetPullingUpHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-pulling-up-help-me-board-decorator';
 import { ApiPullingUpHelpMeBoard } from '../swagger-decorators/helpMeBoard/pulling-up-help-me-board.decorator';
+import { HelpMeBoardPageQueryDto } from '../dto/helpMeBoard/help-me-board-page-query.dto';
 
 @Controller('help-me-board')
 @ApiTags('Help-me-board API')
@@ -84,6 +85,13 @@ export class HelpMeBoardController {
   @ApiGetPageNumberByHelpMeBoard()
   countPageBoards(@Query('categoryId') categoryId: number) {
     return this.helpMeBoardService.countPagedHelpMeBoards(categoryId);
+  }
+
+  @Get()
+  findAllHelpMeBoard(
+    @Query() helpMeBoardPageQueryDto: HelpMeBoardPageQueryDto,
+  ) {
+    return this.helpMeBoardService.findAllHelpMeBoard(helpMeBoardPageQueryDto);
   }
 
   @Get('/pulling-up') //끌어올린 게시물 보여주기

@@ -6,21 +6,14 @@ import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-qu
 import { ResponseMentorBoardHotPostPaginationDto } from '../dto/mentorBoard/response-mentor-board-hot-post-pagination.dto';
 import { HotPostsRepository } from 'src/hot-posts/repositories/hot-posts.repository';
 import { CategoryService } from 'src/category/services/category.service';
-import { MentorBoardDto } from '../dto/mentorBoard/mentor-board.dto';
-import { QueryBuilderHelper } from 'src/helpers/query-builder.helper';
+import { MentorBoardRepository } from '../repository/mentor.boards.repository';
 
 @Injectable()
 export class MentorBoardHotPostsService {
-  private readonly FULL_TEXT_SEARCH_FIELD: readonly (keyof Pick<
-    MentorBoardDto,
-    'head' | 'body'
-  >)[] = ['head', 'body'];
-
   constructor(
     private readonly hotPostsRepository: HotPostsRepository<MentorBoard>,
-    private readonly entityManager: EntityManager,
     private readonly categoryService: CategoryService,
-    private readonly queryBuilderHelper: QueryBuilderHelper,
+    private readonly mentorBoardRepository: MentorBoardRepository,
   ) {}
 
   async createMentorBoardHotPost(
@@ -41,6 +34,9 @@ export class MentorBoardHotPostsService {
     return;
   }
 
+  /**
+   * @todo 멘토 보드 api로 통합되면 메서드 명 및 변수명 수정
+   */
   async findAllMentorBoardHotPostsWithLimitQuery(
     mentorBoardPageQueryDto: MentorBoardPageQueryDto,
   ): Promise<ResponseMentorBoardHotPostPaginationDto> {
@@ -51,53 +47,18 @@ export class MentorBoardHotPostsService {
       filter.categoryId,
     );
 
+    filter.categoryId = category.id;
+
     const skip = (page - 1) * pageSize;
 
-    const queryBuilder = this.entityManager
-      .getRepository(MentorBoard)
-      .createQueryBuilder('mentorBoard')
-      .leftJoin(
-        'mentorBoard.mentorBoardImages',
-        'mentorBoardImages',
-        'mentorBoardImages.id = (SELECT id FROM mentor_board_image WHERE mentor_board_id = mentorBoard.id ORDER BY id DESC LIMIT 1)',
-      )
-      .leftJoin('mentorBoard.mentorBoardLikes', 'mentorBoardLikes')
-      .innerJoin('mentorBoard.user', 'user')
-      .innerJoin('user.userImage', 'userImage')
-      .select([
-        'mentorBoard.id',
-        'mentorBoard.userId',
-        'mentorBoard.head',
-        'mentorBoard.body',
-        'mentorBoard.categoryId',
-        'mentorBoard.createdAt',
-        'mentorBoard.updatedAt',
-        'mentorBoard.popularAt',
-        'user.name',
-        'userImage.imageUrl',
-        'mentorBoardLikes.id',
-        'mentorBoardLikes.userId',
-        'mentorBoardImages.id',
-        'mentorBoardImages.imageUrl',
-      ]);
-
-    this.queryBuilderHelper.buildWherePropForBoardFind(
-      queryBuilder,
-      {
-        ...filter,
-        categoryId: category.id,
-      },
-      'mentorBoard',
-      this.FULL_TEXT_SEARCH_FIELD,
-    );
-
-    queryBuilder
-      .orderBy(`mentorBoard.${orderField}`, sortOrder)
-      .skip(skip)
-      .take(pageSize);
-
     const mentorBoardHotPosts =
-      await this.hotPostsRepository.findAllHotPostsByQueryBuilder(queryBuilder);
+      await this.mentorBoardRepository.findAllMentorBoardsByQueryBuilder(
+        skip,
+        pageSize,
+        orderField,
+        sortOrder,
+        filter,
+      );
 
     const mentorBoardForHotPostDto = mentorBoardHotPosts.map(
       (mentorBoardHotPost) => {

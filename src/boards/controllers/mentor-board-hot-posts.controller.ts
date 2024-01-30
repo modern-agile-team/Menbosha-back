@@ -14,6 +14,12 @@ import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-qu
 import { ResponseMentorBoardHotPostPaginationDto } from '../dto/mentorBoard/response-mentor-board-hot-post-pagination.dto';
 import { ApiFindAllHotPostsWithPagination } from '../swagger-decorators/mentorBoard/find-all-hot-posts-with-pagination.decorator';
 
+/**
+ * @todo 멘토 보드 기능으로 통합되면 수정
+ * 1. api path
+ * 2. folder route
+ * 3. method name
+ */
 @ApiTags('mentor-board-hot-posts')
 @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
 @UsePipes(

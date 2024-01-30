@@ -11,6 +11,7 @@ import { PageByHelpMeBoardResponseDTO } from '../dto/helpMeBoard/response.help.m
 import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dto';
 import { HelpMeBoardResponseDTO } from '../dto/helpMeBoard/update.help.me.board.response.dto';
 import { PullingUpHelpMeBoardResponseDTO } from '../dto/helpMeBoard/pulling.up.response.dto';
+import { HelpMeBoardPageQueryDto } from '../dto/helpMeBoard/help-me-board-page-query.dto';
 
 @Injectable()
 export class HelpMeBoardService {
@@ -73,6 +74,19 @@ export class HelpMeBoardService {
     );
 
     return { data: boardResponse };
+  }
+
+  findAllHelpMeBoard(helpMeBoardPageQueryDto: HelpMeBoardPageQueryDto) {
+    const { page, pageSize, orderField, sortOrder, ...filter } =
+      helpMeBoardPageQueryDto;
+
+    const category = await this.categoryService.findOneCategoryOrNotFound(
+      filter.categoryId,
+    );
+
+    filter.categoryId = category.id;
+
+    const skip = (page - 1) * pageSize;
   }
 
   async findOneHelpMeBoard(

@@ -6,6 +6,9 @@ import { MentorBoardImage } from 'src/boards/entities/mentor-board-image.entity'
 import { MentorBoardLikeDto } from './mentor-board-like.dto';
 import { Exclude } from 'class-transformer';
 
+/**
+ * @todo 멘토 보드로 통합되면 dto명 수정 및 Property description 수정
+ */
 class MentorBoardHotPostUserImageDto implements Pick<UserImage, 'imageUrl'> {
   @ApiProperty({
     description: '이미지의 url',
@@ -13,6 +16,9 @@ class MentorBoardHotPostUserImageDto implements Pick<UserImage, 'imageUrl'> {
   imageUrl: string;
 }
 
+/**
+ * @todo 멘토 보드로 통합되면 dto명 수정 및 Property description 수정
+ */
 class MentorBoardHotPostUserDto implements Pick<User, 'name'> {
   @ApiProperty({
     description: '유저 이름',
@@ -24,6 +30,10 @@ class MentorBoardHotPostUserDto implements Pick<User, 'name'> {
   })
   userImage: MentorBoardHotPostUserImageDto;
 }
+
+/**
+ * @todo 멘토 보드로 통합되면 dto명 수정 및 Property description 수정
+ */
 
 export class MentorBoardForHotPostDto extends PickType(MentorBoardDto, [
   'id',
