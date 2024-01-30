@@ -11,7 +11,6 @@ export class LoggerMiddleware implements NestMiddleware {
     const startTime = new Date().getTime();
 
     response.on('finish', () => {
-      console.log(response);
       const { statusCode } = response;
       const contentLength = response.get('content-length');
       const endTime = new Date().getTime();
