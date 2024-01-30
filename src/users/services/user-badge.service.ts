@@ -8,25 +8,19 @@ export class UserBadgeService {
     private readonly userBadgeRepository: UserBadgeRepository,
     private readonly totalCountRepository: TotalCountRepository,
   ) {}
-  async countBadge(
-    userId: number,
-    mentorId: number,
-    category: string,
-  ): Promise<string> {
+  async countBadge(userId: number, category: string): Promise<string> {
     try {
-      let badgeMessage = '뱃지 획득에 실패했습니다.';
-
       switch (category) {
         case 'mentorBoard':
           const mentorBoardBadge = await this.checkAndAwardBoardBadge(userId);
           if (mentorBoardBadge) {
-            badgeMessage = `게시글 뱃지 획득에 성공했습니다. (${mentorBoardBadge.name})`;
+            badgeMessage = `새로운 뱃지가 있습니다! (${mentorBoardBadge.name})`;
           }
           break;
         case 'helpMeBoard':
           const helpMeBoardBadge = await this.checkAndAwardBoardBadge(userId);
           if (helpMeBoardBadge) {
-            badgeMessage = `게시글 뱃지 획득에 성공했습니다. (${helpMeBoardBadge.name})`;
+            badgeMessage = `새로운 뱃지가 있습니다! (${helpMeBoardBadge.name})`;
           }
           break;
         case 'comment':
@@ -55,7 +49,7 @@ export class UserBadgeService {
   async checkAndAwardBoardBadge(userId: number) {
     // 게시글 뱃지 여부 확인
     const mentorBoardBadges = [1, 2, 3];
-    const hasBoardBadge = await this.userBadgeRepository.myBoardBadge(
+    const hasBoardBadge = await this.userBadgeRepository.myMentorBoardBadge(
       userId,
       mentorBoardBadges,
     );
