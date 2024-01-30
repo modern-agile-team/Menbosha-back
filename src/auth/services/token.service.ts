@@ -148,7 +148,8 @@ export class TokenService {
         throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
       } else if (
         error.message === 'invalid token' ||
-        error.message === 'jwt must be provided'
+        error.message === 'jwt must be provided' ||
+        error.message === 'jwt malformed'
       ) {
         throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
       } else {
