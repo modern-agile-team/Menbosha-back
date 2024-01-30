@@ -11,7 +11,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
 import { MentorBoardHotPostsService } from '../services/mentor-board-hot-posts.service';
 import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
-import { MentorBoardHotPostPaginationResponseDto } from '../dto/mentorBoard/response-mentor-board-hot-post-pagination.dto';
+import { MentorBoardHotPostPaginationResponseDto } from '../dto/mentorBoard/mentor-board-hot-post-pagination-response.dto';
 import { ApiFindAllHotPostsWithPagination } from '../swagger-decorators/mentorBoard/find-all-hot-posts-with-pagination.decorator';
 
 /**

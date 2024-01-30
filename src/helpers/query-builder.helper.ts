@@ -13,13 +13,15 @@ export class QueryBuilderHelper {
     fullTextSearchField?: readonly (keyof E)[],
   ) {
     for (const key in filter) {
+      const parameterName = key;
       if (fullTextSearchField?.includes(key) && filter[key]) {
-        queryBuilder.andWhere(
-          `MATCH(${boardAlias}.${key}) AGAINST (:searchQuery IN BOOLEAN MODE)`,
-          {
-            searchQuery: filter[key],
-          },
-        );
+        queryBuilder
+          .andWhere(
+            `MATCH(${boardAlias}.${key}) AGAINST (:` +
+              parameterName +
+              ' IN BOOLEAN MODE)',
+          )
+          .setParameter(parameterName, filter[key]);
       } else if (key === 'categoryId' && filter[key] === 1) {
         continue;
       } else if (typeof filter[key] === 'boolean') {
@@ -31,15 +33,17 @@ export class QueryBuilderHelper {
         } else if (key === 'loadOnlyPullingUp') {
           filter[key] &&
             queryBuilder.andWhere(`${boardAlias}.pullingUp IS NOT NULL`);
+
+          continue;
         }
 
-        queryBuilder.andWhere(`${boardAlias}.${key} = :key`, {
-          key: filter[key],
-        });
+        queryBuilder
+          .andWhere(`${boardAlias}.${key} = :` + parameterName)
+          .setParameter(parameterName, filter[key]);
       } else if (filter[key]) {
-        queryBuilder.andWhere(`${boardAlias}.${key} = :key`, {
-          key: filter[key],
-        });
+        queryBuilder
+          .andWhere(`${boardAlias}.${key} = :` + parameterName)
+          .setParameter(parameterName, filter[key]);
       }
     }
   }

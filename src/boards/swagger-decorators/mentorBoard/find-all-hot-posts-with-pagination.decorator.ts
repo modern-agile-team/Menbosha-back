@@ -5,7 +5,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ResponseMentorBoardHotPostPaginationDto } from 'src/boards/dto/mentorBoard/response-mentor-board-hot-post-pagination.dto';
+import { MentorBoardHotPostPaginationResponseDto } from 'src/boards/dto/mentorBoard/mentor-board-hot-post-pagination-response.dto';
 
 export function ApiFindAllHotPostsWithPagination() {
   return applyDecorators(
@@ -21,7 +21,7 @@ export function ApiFindAllHotPostsWithPagination() {
         properties: {
           content: {
             type: 'object',
-            $ref: getSchemaPath(ResponseMentorBoardHotPostPaginationDto),
+            $ref: getSchemaPath(MentorBoardHotPostPaginationResponseDto),
           },
         },
       },
@@ -59,6 +59,6 @@ export function ApiFindAllHotPostsWithPagination() {
         },
       },
     }),
-    ApiExtraModels(ResponseMentorBoardHotPostPaginationDto),
+    ApiExtraModels(MentorBoardHotPostPaginationResponseDto),
   );
 }

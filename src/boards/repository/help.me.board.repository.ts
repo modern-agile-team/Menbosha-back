@@ -104,6 +104,7 @@ export class HelpMeBoardRepository {
       head?: string;
       body?: string;
       categoryId: number;
+      loadOnlyPullingUp: boolean;
     },
   ) {
     const queryBuilder = this.entityManager
@@ -112,7 +113,7 @@ export class HelpMeBoardRepository {
       .leftJoin(
         'helpMeBoard.helpMeBoardImages',
         'helpMeBoardImages',
-        'helpMeBoardImages.id = (SELECT id FROM help_me_board_image WHERE mentor_board_id = mentorBoard.id ORDER BY id DESC LIMIT 1)',
+        'helpMeBoardImages.id = (SELECT id FROM help_me_board_image WHERE help_me_board_id = helpMeBoard.id ORDER BY id DESC LIMIT 1)',
       )
       .innerJoin('helpMeBoard.user', 'user')
       .innerJoin('user.userImage', 'userImage')

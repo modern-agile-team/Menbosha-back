@@ -9,6 +9,8 @@ import {
   Query,
   UploadedFiles,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { HelpMeBoardService } from '../services/help.me.board.service';
 import { BoardImagesService } from '../services/BoardImage.service';
@@ -38,6 +40,16 @@ import { ApiPullingUpHelpMeBoard } from '../swagger-decorators/helpMeBoard/pulli
 import { HelpMeBoardPageQueryDto } from '../dto/helpMeBoard/help-me-board-page-query.dto';
 import { HelpMeBoardPaginationResponseDto } from '../dto/helpMeBoard/help-me-board-pagination-response.dto';
 
+/**
+ * 팀원과 상의되면 주석처리된 옵션도 걸어줌.
+ */
+@UsePipes(
+  new ValidationPipe({
+    transform: true,
+    // whitelist: true,
+    // forbidNonWhitelisted: true,
+  }),
+)
 @Controller('help-me-board')
 @ApiTags('Help-me-board API')
 export class HelpMeBoardController {

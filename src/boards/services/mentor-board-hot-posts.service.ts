@@ -3,7 +3,7 @@ import { EntityManager } from 'typeorm';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { MentorBoardForHotPostDto } from '../dto/mentorBoard/mentor-board-for-hot-post.dto';
 import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
-import { MentorBoardHotPostPaginationResponseDto } from '../dto/mentorBoard/response-mentor-board-hot-post-pagination.dto';
+import { MentorBoardHotPostPaginationResponseDto } from '../dto/mentorBoard/mentor-board-hot-post-pagination-response.dto';
 import { HotPostsRepository } from 'src/hot-posts/repositories/hot-posts.repository';
 import { CategoryService } from 'src/category/services/category.service';
 import { MentorBoardRepository } from '../repository/mentor.boards.repository';
