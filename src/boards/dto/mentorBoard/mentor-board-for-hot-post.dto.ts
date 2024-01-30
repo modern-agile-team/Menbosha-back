@@ -61,7 +61,7 @@ export class MentorBoardForHotPostDto extends PickType(MentorBoardDto, [
   likeCount: number;
 
   constructor(mentorBoardForHotPostDto: Partial<MentorBoardForHotPostDto>) {
-    const mentorBoardImages = mentorBoardForHotPostDto.mentorBoardImages;
+    const { mentorBoardImages } = mentorBoardForHotPostDto;
 
     super();
     Object.assign(this, mentorBoardForHotPostDto);
