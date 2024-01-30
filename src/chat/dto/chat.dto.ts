@@ -51,13 +51,8 @@ export class ChatDto implements Chat {
   @Expose()
   createdAt: Date;
 
-  @ApiProperty({
-    description: '채팅 삭제 날짜',
-    type: 'string',
-    format: 'date-time',
-  })
-  @Exclude()
-  deletedAt: Date;
+  @Exclude({ toPlainOnly: true })
+  deletedAt: Date | null;
 
   constructor(chatDto: Partial<ChatDto> = {}) {
     this._id = chatDto._id;
@@ -66,5 +61,6 @@ export class ChatDto implements Chat {
     this.senderId = chatDto.senderId;
     this.seenUsers = chatDto.seenUsers;
     this.createdAt = chatDto.createdAt;
+    this.deletedAt = chatDto.deletedAt;
   }
 }

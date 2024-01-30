@@ -3,6 +3,7 @@ import { Chat } from './chats.schemas';
 import mongoose from 'mongoose';
 import { ChatRoomType } from '../constants/chat-rooms-enum';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
 
 const options: SchemaOptions = {
