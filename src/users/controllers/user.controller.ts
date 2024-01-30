@@ -12,7 +12,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { ApiGetMyProfile } from '../swagger-decorators/get-my-profile-decorator';
@@ -30,7 +30,6 @@ import { ApiUpdateUserIntro } from '../swagger-decorators/patch-user-intro-decor
 import { ApiGetMyRank } from '../swagger-decorators/get-my-rank-decorators';
 import { ApiGetUserInfo } from '../swagger-decorators/get-user-info.decorators';
 import { UserRankingService } from '../services/user-ranking.service';
-import { UserBadgeService } from '../services/user-badge.service';
 import { ApiGetTotalRanking } from '../swagger-decorators/get-total-ranking.decorator';
 
 @Controller('user')
@@ -41,7 +40,6 @@ export class UserController {
     private readonly userService: UserService,
     private readonly userIntroService: UserIntroService,
     private readonly userRankingService: UserRankingService,
-    private readonly userBadgeService: UserBadgeService,
   ) {}
 
   @ApiGetMyProfile()
@@ -114,12 +112,5 @@ export class UserController {
     @Body() userData: UpdateUserIntroDTO,
   ): Promise<ResponseUserIntroDto> {
     return this.userIntroService.updateMyIntro(userId, userData);
-  }
-
-  @ApiBearerAuth('access-token')
-  @UseGuards(JwtAccessTokenGuard)
-  @Get('/badge')
-  getBadge(@GetUserId() userId: number) {
-    return this.userBadgeService.userBadge(userId);
   }
 }
