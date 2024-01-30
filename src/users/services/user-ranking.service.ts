@@ -69,7 +69,7 @@ export class UserRankingService {
         await this.userRankingRepository.saveUserInfo(userId);
       }
 
-      return { message: '랭킹 업데이트 성공' };
+      console.log('랭킹 업데이트 성공');
     } catch (error) {
       console.log(error);
       throw new HttpException(
@@ -92,14 +92,14 @@ export class UserRankingService {
       await this.userRankingRepository.saveUserInfo(userId);
     }
 
-    return { message: '랭킹 정보 업데이트 성공' };
+    console.log('랭킹 정보 업데이트 성공');
   }
 
   @Cron('0 58 8 * * 1') // 매주 월요일 오전 8시 58분에 실행 (유저 랭킹 저장 전에 실행)
   async clearUserRanking() {
     try {
       await this.userRankingRepository.clearUserRanking();
-      return { message: '랭킹 초기화 성공' };
+      console.log('랭킹 초기화 성공');
     } catch (error) {
       console.log(error);
       throw new HttpException(
