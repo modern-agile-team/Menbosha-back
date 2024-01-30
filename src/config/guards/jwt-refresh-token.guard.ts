@@ -13,7 +13,7 @@ export class JwtRefreshTokenGuard {
     }
 
     const [type, refreshToken] = authorization.split(' ');
-    if (type !== 'Bearer') {
+    if (type !== 'Bearer' || !refreshToken) {
       return false;
     }
 
