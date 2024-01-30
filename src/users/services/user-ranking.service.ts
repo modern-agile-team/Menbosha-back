@@ -81,9 +81,9 @@ export class UserRankingService {
 
   @Cron('0 0 * * * *') // 1시간마다 실행
   async updateUserRankingInfo() {
-    const getUserIds =
-      await this.userRankingRepository.getUserIdsByUserRanking();
-    const userIdsArray = getUserIds.map((res) => res.userRanking_user_id);
+    const userIdsArray = (
+      await this.userRankingRepository.findUserIdsByUserRanking()
+    ).map((user) => user.userId);
 
     for (const userId of userIdsArray) {
       if (userId === null) {
@@ -91,6 +91,7 @@ export class UserRankingService {
       }
       await this.userRankingRepository.saveUserInfo(userId);
     }
+
     return { message: '랭킹 정보 업데이트 성공' };
   }
 

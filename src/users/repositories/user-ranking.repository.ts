@@ -95,12 +95,12 @@ export class UserRankingRepository {
       .execute();
   }
 
-  async getUserIdsByUserRanking() {
+  async findUserIdsByUserRanking() {
     return await this.entityManager
       .createQueryBuilder(UserRanking, 'userRanking')
       .select('userRanking.userId')
       .orderBy('userRanking.rank', 'DESC')
-      .getRawMany();
+      .getMany();
   }
 
   async clearUserRanking() {
