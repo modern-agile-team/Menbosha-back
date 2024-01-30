@@ -1,13 +1,50 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-import { IsBooleanString, IsEnum, IsOptional } from 'class-validator';
+import {
+  IsBoolean,
+  IsBooleanString,
+  IsEnum,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { MentorBoardOrderField } from 'src/boards/constants/mentor-board-order-field.enum';
 import { SortOrder } from '../../../common/constants/sort-order.enum';
 import { PageQueryDto } from 'src/common/dto/page-query.dto';
 import { IsPositiveInt } from 'src/common/decorators/validators/is-positive-int.decorator';
 import { Type } from 'class-transformer';
+import { ParseOptionalBoolean } from 'src/common/transformers/parse-optional-boolean.transformer';
 
 export class MentorBoardPageQueryDto extends PageQueryDto {
+  @ApiPropertyOptional({
+    description: '멘토 게시글 고유 ID 필터링',
+    format: 'integer',
+  })
+  @IsOptional()
+  @IsPositiveInt()
+  id?: number;
+
+  @ApiPropertyOptional({
+    description: '유저 고유 ID 필터링',
+    format: 'integer',
+  })
+  @IsOptional()
+  @IsPositiveInt()
+  userId?: number;
+
+  @ApiPropertyOptional({
+    description: '제목 필터링',
+  })
+  @IsOptional()
+  @IsString()
+  head?: string;
+
+  @ApiPropertyOptional({
+    description: '본문 필터링',
+  })
+  @IsOptional()
+  @IsString()
+  body?: string;
+
   @ApiProperty({
     description: '조회할 category의 id',
     format: 'integer',
@@ -23,8 +60,8 @@ export class MentorBoardPageQueryDto extends PageQueryDto {
     default: false,
   })
   @IsOptional()
-  @IsBooleanString()
-  @Type(() => Boolean)
+  @IsBoolean()
+  @ParseOptionalBoolean()
   loadOnlyPopular: boolean = false;
 
   @ApiProperty({
