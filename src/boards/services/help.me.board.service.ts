@@ -12,10 +12,14 @@ import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dt
 import { HelpMeBoardResponseDTO } from '../dto/helpMeBoard/update.help.me.board.response.dto';
 import { PullingUpHelpMeBoardResponseDTO } from '../dto/helpMeBoard/pulling.up.response.dto';
 import { HelpMeBoardPageQueryDto } from '../dto/helpMeBoard/help-me-board-page-query.dto';
+import { CategoryService } from 'src/category/services/category.service';
 
 @Injectable()
 export class HelpMeBoardService {
-  constructor(private helpMeBoardRepository: HelpMeBoardRepository) {}
+  constructor(
+    private readonly helpMeBoardRepository: HelpMeBoardRepository,
+    private readonly categoryService: CategoryService,
+  ) {}
   async create(
     boardData: CreateHelpMeBoardDto,
     userId: number,
@@ -76,7 +80,7 @@ export class HelpMeBoardService {
     return { data: boardResponse };
   }
 
-  findAllHelpMeBoard(helpMeBoardPageQueryDto: HelpMeBoardPageQueryDto) {
+  async findAllHelpMeBoard(helpMeBoardPageQueryDto: HelpMeBoardPageQueryDto) {
     const { page, pageSize, orderField, sortOrder, ...filter } =
       helpMeBoardPageQueryDto;
 
@@ -87,6 +91,15 @@ export class HelpMeBoardService {
     filter.categoryId = category.id;
 
     const skip = (page - 1) * pageSize;
+
+    const helpMeBoards =
+      await this.helpMeBoardRepository.findAllHelpMeBoardsByQueryBuilder(
+        skip,
+        pageSize,
+        orderField,
+        sortOrder,
+        filter,
+      );
   }
 
   async findOneHelpMeBoard(

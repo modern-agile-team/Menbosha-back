@@ -3,10 +3,16 @@ import { Injectable } from '@nestjs/common';
 import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/create.help.me.board.dto';
 import { HelpMeBoard } from '../entities/help-me-board.entity';
 import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dto';
+import { HelpMeBoardOrderField } from '../constants/help-me-board-order-field.enum';
+import { SortOrder } from 'src/common/constants/sort-order.enum';
+import { QueryBuilderHelper } from 'src/helpers/query-builder.helper';
 
 @Injectable()
 export class HelpMeBoardRepository {
-  constructor(private readonly entityManager: EntityManager) {}
+  constructor(
+    private readonly entityManager: EntityManager,
+    private readonly queryBuilderHelper: QueryBuilderHelper,
+  ) {}
 
   async createBoard(
     boardData: CreateHelpMeBoardDto,
@@ -79,6 +85,47 @@ export class HelpMeBoardRepository {
       order: { pullingUp: 'DESC' },
       take: limit,
     });
+  }
+
+  findAllHelpMeBoardsByQueryBuilder(
+    skip: number,
+    pageSize: number,
+    orderField: HelpMeBoardOrderField,
+    sortOrder: SortOrder,
+    filter: {
+      id?: number;
+      userId?: number;
+      head?: string;
+      body?: string;
+      categoryId: number;
+    },
+  ) {
+    const queryBuilder = this.entityManager
+      .getRepository(HelpMeBoard)
+      .createQueryBuilder('helpMeBoard')
+      .leftJoin(
+        'helpMeBoard.helpMeBoardImages',
+        'helpMeBoardImages',
+        'helpMeBoardImages.id = (SELECT id FROM help_me_board_image WHERE mentor_board_id = mentorBoard.id ORDER BY id DESC LIMIT 1)',
+      )
+      .innerJoin('helpMeBoard.user', 'user')
+      .innerJoin('user.userImage', 'userImage')
+      .select([
+        'helpMeBoard.id',
+        'helpMeBoard.userId',
+        'helpMeBoard.head',
+        'helpMeBoard.body',
+        'helpMeBoard.categoryId',
+        'helpMeBoard.createdAt',
+        'helpMeBoard.updatedAt',
+        'helpMeBoard.pullingUp',
+        'user.name',
+        'userImage.imageUrl',
+        'helpMeBoardImages.id',
+        'helpMeBoardImages.imageUrl',
+      ]);
+
+    this.queryBuilder;
   }
 
   async pullingUpHelpMeBoard(board: HelpMeBoard): Promise<void> {

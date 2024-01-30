@@ -1,9 +1,10 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator';
 import { SortOrder } from '../../../common/constants/sort-order.enum';
 import { PageQueryDto } from 'src/common/dto/page-query.dto';
 import { IsPositiveInt } from 'src/common/decorators/validators/is-positive-int.decorator';
 import { HelpMeBoardOrderField } from 'src/boards/constants/help-me-board-order-field.enum';
+import { ParseOptionalBoolean } from 'src/common/transformers/parse-optional-boolean.transformer';
 
 export class HelpMeBoardPageQueryDto extends PageQueryDto {
   @ApiPropertyOptional({
@@ -45,6 +46,16 @@ export class HelpMeBoardPageQueryDto extends PageQueryDto {
   @IsOptional()
   @IsPositiveInt()
   categoryId: number = 1;
+
+  @ApiProperty({
+    description:
+      '끌올된 도와주세요 게시글만 불러올지 모든 글을 불러올지 결정 여부',
+    default: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  @ParseOptionalBoolean()
+  loadOnlyPullingUp: boolean = false;
 
   @ApiProperty({
     description: '정렬의 기준으로 잡을 필드',

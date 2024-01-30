@@ -49,7 +49,7 @@ export class MentorBoardPageQueryDto extends PageQueryDto {
   categoryId: number = 1;
 
   @ApiProperty({
-    description: '인기 게시글만 불러올 지, 인기 멘토 게시판을 불러올 지 여부',
+    description: '인기 게시글만 불러올 지, 모든 글을 불러올 지 여부',
     default: false,
   })
   @IsOptional()

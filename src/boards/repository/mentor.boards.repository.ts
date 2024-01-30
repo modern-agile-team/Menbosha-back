@@ -144,11 +144,14 @@ export class MentorBoardRepository {
       this.FULL_TEXT_SEARCH_FIELD,
     );
 
-    return queryBuilder
-      .orderBy(`mentorBoard.${orderField}`, sortOrder)
-      .skip(skip)
-      .take(pageSize)
-      .getMany();
+    this.queryBuilderHelper.buildOrderByPropForBoardFind(
+      queryBuilder,
+      'mentorBoard',
+      orderField,
+      sortOrder,
+    );
+
+    return queryBuilder.skip(skip).take(pageSize).getMany();
   }
 
   async findPagedBoards(skip: number, limit: number): Promise<MentorBoard[]> {

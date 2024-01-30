@@ -87,7 +87,7 @@ export class HelpMeBoardController {
     return this.helpMeBoardService.countPagedHelpMeBoards(categoryId);
   }
 
-  @Get()
+  @Get('test')
   findAllHelpMeBoard(
     @Query() helpMeBoardPageQueryDto: HelpMeBoardPageQueryDto,
   ) {
