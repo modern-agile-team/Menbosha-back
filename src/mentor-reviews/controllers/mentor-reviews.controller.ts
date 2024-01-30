@@ -24,7 +24,7 @@ import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { MentorReviewDto } from '../dtos/mentor-review.dto';
 import { ApiCreateMentorReview } from '../swagger-decorators/create-mentor-review.decorator';
 import { ApiTags } from '@nestjs/swagger';
-import { MentorBoardPageQueryDto } from '../dtos/mentor-review-page-query-dto';
+import { MentorReviewPageQueryDto } from '../dtos/mentor-review-page-query-dto';
 import { ApiFindMentorReviews } from '../swagger-decorators/find-mentor-reviews.decorator';
 import { ApiFindOneMentorReview } from '../swagger-decorators/find-one-mentor-review.decorator';
 import { ApiRemoveMentorReview } from '../swagger-decorators/remove-mentor-review.decorator';
@@ -63,11 +63,11 @@ export class MentorReviewsController {
   @Get()
   findMentorReviews(
     @Param('mentorId', ParsePositiveIntPipe) mentorId: number,
-    @Query() mentorBoardPageQueryDto: MentorBoardPageQueryDto,
+    @Query() mentorReviewPageQueryDto: MentorReviewPageQueryDto,
   ) {
     return this.mentorsService.findMentorReviews(
       mentorId,
-      mentorBoardPageQueryDto,
+      mentorReviewPageQueryDto,
     );
   }
 

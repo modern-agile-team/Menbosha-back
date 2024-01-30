@@ -8,7 +8,7 @@ import {
 import { MentorReviewRepository } from '../repositories/mentor-review.repository';
 import { CreateMentorReviewRequestBodyDto } from '../dtos/create-mentor-review-request-body.dto';
 import { MentorReviewDto } from '../dtos/mentor-review.dto';
-import { MentorBoardPageQueryDto } from '../dtos/mentor-review-page-query-dto';
+import { MentorReviewPageQueryDto } from '../dtos/mentor-review-page-query-dto';
 import { MentorReviewsItemResponseDto } from '../dtos/mentor-reviews-item-response.dto';
 import { plainToInstance } from 'class-transformer';
 import { MentorReviewsPaginationResponseDto } from '../dtos/mentor-reviews-pagination-response.dto';
@@ -92,7 +92,7 @@ export class MentorReviewsService {
 
   async findMentorReviews(
     mentorId: number,
-    mentorBoardPageQueryDto: MentorBoardPageQueryDto,
+    mentorReviewPageQueryDto: MentorReviewPageQueryDto,
   ): Promise<MentorReviewsPaginationResponseDto> {
     const existMentor = await this.userService.findOneByOrNotFound({
       select: {
@@ -105,7 +105,7 @@ export class MentorReviewsService {
     });
 
     const { page, pageSize, id, menteeId, review, orderField, sortOrder } =
-      mentorBoardPageQueryDto;
+      mentorReviewPageQueryDto;
 
     const skip = (page - 1) * pageSize;
 
