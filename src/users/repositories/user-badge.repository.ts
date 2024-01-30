@@ -10,9 +10,27 @@ export class UserBadgeRepository {
     return await this.entityManager.find(UserBadge, { where: { userId } });
   }
 
-  async myBoardBadge(userId: number, boardBadges: number[]) {
+  async myMentorBoardBadge(userId: number, boardBadges: number[]) {
     return await this.entityManager.find(UserBadge, {
       where: { userId, badgeId: In(boardBadges) },
+    });
+  }
+
+  async myCommentBadge(userId: number, commentBadges: number[]) {
+    return await this.entityManager.find(UserBadge, {
+      where: { userId, badgeId: In(commentBadges) },
+    });
+  }
+
+  async myLikeBadge(userId: number, likeBadges: number[]) {
+    return await this.entityManager.find(UserBadge, {
+      where: { userId, badgeId: In(likeBadges) },
+    });
+  }
+
+  async myReviewBadge(userId: number, reviewBadges: number[]) {
+    return await this.entityManager.find(UserBadge, {
+      where: { userId, badgeId: In(reviewBadges) },
     });
   }
 

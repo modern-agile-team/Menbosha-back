@@ -17,10 +17,16 @@ export class UserBadgeService {
       let badgeMessage = '뱃지 획득에 실패했습니다.';
 
       switch (category) {
-        case 'board':
-          const boardBadge = await this.checkAndAwardBoardBadge(userId);
-          if (boardBadge) {
-            badgeMessage = `게시글 뱃지 획득에 성공했습니다. (${boardBadge.name})`;
+        case 'mentorBoard':
+          const mentorBoardBadge = await this.checkAndAwardBoardBadge(userId);
+          if (mentorBoardBadge) {
+            badgeMessage = `게시글 뱃지 획득에 성공했습니다. (${mentorBoardBadge.name})`;
+          }
+          break;
+        case 'helpMeBoard':
+          const helpMeBoardBadge = await this.checkAndAwardBoardBadge(userId);
+          if (helpMeBoardBadge) {
+            badgeMessage = `게시글 뱃지 획득에 성공했습니다. (${helpMeBoardBadge.name})`;
           }
           break;
         case 'comment':
@@ -48,17 +54,19 @@ export class UserBadgeService {
 
   async checkAndAwardBoardBadge(userId: number) {
     // 게시글 뱃지 여부 확인
-    const boardBadges = [1, 2, 3];
+    const mentorBoardBadges = [1, 2, 3];
     const hasBoardBadge = await this.userBadgeRepository.myBoardBadge(
       userId,
-      boardBadges,
+      mentorBoardBadges,
     );
     // 게시글 뱃지 획득 로직
     const boardCount = await this.totalCountRepository.countBoards(userId);
     if (boardCount >= 10 && !hasBoardBadge) {
-      const boardBadge =
-        await this.userBadgeRepository.getBadgeByName('게시글 뱃지');
-      await this.userBadgeRepository.createBadge(userId, boardBadge.id);
+      //이거 한번에 같이 예외처리 하지말고 나눠서 할까 고민중
+      const boardBadge = await this.userBadgeRepository.createBadge(
+        userId,
+        boardBadge.id,
+      );
       // 필요시 추가적인 뱃지 확인 및 획득 로직 추가
       return boardBadge;
     }
