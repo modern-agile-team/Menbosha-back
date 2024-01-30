@@ -46,19 +46,32 @@ export class TotalCountRepository {
     );
   }
 
+  // 이부분들 리펙토링 기간에 다시 손봐야함 - 간결하게 정리하기.
   async countBoards(userId: number) {
-    return await this.entityManager.countBy(TotalCount, { userId });
+    const totalCount = await this.entityManager.findOne(TotalCount, {
+      where: { userId },
+    });
+    return totalCount ? totalCount.mentorBoardCount : 0;
   }
 
   async countComments(userId: number) {
-    return await this.entityManager.countBy(TotalCount, { userId });
+    const totalCount = await this.entityManager.findOne(TotalCount, {
+      where: { userId },
+    });
+    return totalCount ? totalCount.helpYouCommentCount : 0;
   }
 
   async countLikes(userId: number) {
-    return await this.entityManager.countBy(TotalCount, { userId });
+    const totalCount = await this.entityManager.findOne(TotalCount, {
+      where: { userId },
+    });
+    return totalCount ? totalCount.mentorBoardLikeCount : 0;
   }
 
   async countReviews(userId: number) {
-    return await this.entityManager.countBy(TotalCount, { userId });
+    const totalCount = await this.entityManager.findOne(TotalCount, {
+      where: { userId },
+    });
+    return totalCount ? totalCount.reviewCount : 0;
   }
 }
