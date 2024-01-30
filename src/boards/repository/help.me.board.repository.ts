@@ -6,9 +6,15 @@ import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dt
 import { HelpMeBoardOrderField } from '../constants/help-me-board-order-field.enum';
 import { SortOrder } from 'src/common/constants/sort-order.enum';
 import { QueryBuilderHelper } from 'src/helpers/query-builder.helper';
+import { HelpMeBoardDto } from '../dto/helpMeBoard/help-me-board.dto';
 
 @Injectable()
 export class HelpMeBoardRepository {
+  private readonly FULL_TEXT_SEARCH_FIELD: readonly (keyof Pick<
+    HelpMeBoardDto,
+    'head' | 'body'
+  >)[] = ['head', 'body'];
+
   constructor(
     private readonly entityManager: EntityManager,
     private readonly queryBuilderHelper: QueryBuilderHelper,
@@ -125,7 +131,21 @@ export class HelpMeBoardRepository {
         'helpMeBoardImages.imageUrl',
       ]);
 
-    this.queryBuilder;
+    this.queryBuilderHelper.buildWherePropForBoardFind(
+      queryBuilder,
+      filter,
+      'helpMeBoard',
+      this.FULL_TEXT_SEARCH_FIELD,
+    );
+
+    this.queryBuilderHelper.buildOrderByPropForBoardFind(
+      queryBuilder,
+      'helpMeBoard',
+      orderField,
+      sortOrder,
+    );
+
+    return queryBuilder.skip(skip).take(pageSize).getMany();
   }
 
   async pullingUpHelpMeBoard(board: HelpMeBoard): Promise<void> {

@@ -13,6 +13,8 @@ import { HelpMeBoardResponseDTO } from '../dto/helpMeBoard/update.help.me.board.
 import { PullingUpHelpMeBoardResponseDTO } from '../dto/helpMeBoard/pulling.up.response.dto';
 import { HelpMeBoardPageQueryDto } from '../dto/helpMeBoard/help-me-board-page-query.dto';
 import { CategoryService } from 'src/category/services/category.service';
+import { HelpMeBoardWithUserAndImagesDto } from '../dto/helpMeBoard/help-me-board-with-user-and-images.dto';
+import { HelpMeBoardPaginationResponseDto } from '../dto/helpMeBoard/help-me-board-pagination-response.dto';
 
 @Injectable()
 export class HelpMeBoardService {
@@ -80,7 +82,9 @@ export class HelpMeBoardService {
     return { data: boardResponse };
   }
 
-  async findAllHelpMeBoard(helpMeBoardPageQueryDto: HelpMeBoardPageQueryDto) {
+  async findAllHelpMeBoard(
+    helpMeBoardPageQueryDto: HelpMeBoardPageQueryDto,
+  ): Promise<HelpMeBoardPaginationResponseDto> {
     const { page, pageSize, orderField, sortOrder, ...filter } =
       helpMeBoardPageQueryDto;
 
@@ -100,6 +104,17 @@ export class HelpMeBoardService {
         sortOrder,
         filter,
       );
+
+    const helpMeBoardWithUserAndImagesDtos = helpMeBoards.map((helpMeBoard) => {
+      return new HelpMeBoardWithUserAndImagesDto(helpMeBoard);
+    });
+
+    return new HelpMeBoardPaginationResponseDto(
+      helpMeBoardWithUserAndImagesDtos,
+      helpMeBoards.length,
+      page,
+      pageSize,
+    );
   }
 
   async findOneHelpMeBoard(

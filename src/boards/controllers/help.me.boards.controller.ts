@@ -36,6 +36,7 @@ import { PullingUpHelpMeBoardResponseDTO } from '../dto/helpMeBoard/pulling.up.r
 import { ApiGetPullingUpHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-pulling-up-help-me-board-decorator';
 import { ApiPullingUpHelpMeBoard } from '../swagger-decorators/helpMeBoard/pulling-up-help-me-board.decorator';
 import { HelpMeBoardPageQueryDto } from '../dto/helpMeBoard/help-me-board-page-query.dto';
+import { HelpMeBoardPaginationResponseDto } from '../dto/helpMeBoard/help-me-board-pagination-response.dto';
 
 @Controller('help-me-board')
 @ApiTags('Help-me-board API')
@@ -90,7 +91,7 @@ export class HelpMeBoardController {
   @Get('test')
   findAllHelpMeBoard(
     @Query() helpMeBoardPageQueryDto: HelpMeBoardPageQueryDto,
-  ) {
+  ): Promise<HelpMeBoardPaginationResponseDto> {
     return this.helpMeBoardService.findAllHelpMeBoard(helpMeBoardPageQueryDto);
   }
 
