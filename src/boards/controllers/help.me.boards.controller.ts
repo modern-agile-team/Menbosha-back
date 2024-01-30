@@ -39,6 +39,7 @@ import { ApiGetPullingUpHelpMeBoard } from '../swagger-decorators/helpMeBoard/ge
 import { ApiPullingUpHelpMeBoard } from '../swagger-decorators/helpMeBoard/pulling-up-help-me-board.decorator';
 import { HelpMeBoardPageQueryDto } from '../dto/helpMeBoard/help-me-board-page-query.dto';
 import { HelpMeBoardPaginationResponseDto } from '../dto/helpMeBoard/help-me-board-pagination-response.dto';
+import { ApiFindAllMentorBoardsWithPagination } from '../swagger-decorators/helpMeBoard/find-all-help-me-board-with-pagination.decorator';
 
 /**
  * 팀원과 상의되면 주석처리된 옵션도 걸어줌.
@@ -100,7 +101,8 @@ export class HelpMeBoardController {
     return this.helpMeBoardService.countPagedHelpMeBoards(categoryId);
   }
 
-  @Get('test')
+  @Get('v2')
+  @ApiFindAllMentorBoardsWithPagination()
   findAllHelpMeBoard(
     @Query() helpMeBoardPageQueryDto: HelpMeBoardPageQueryDto,
   ): Promise<HelpMeBoardPaginationResponseDto> {
