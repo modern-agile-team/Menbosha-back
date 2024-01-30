@@ -13,7 +13,7 @@ export class JwtAccessTokenGuard {
     }
 
     const [type, accessToken] = authorization.split(' ');
-    if (type !== 'Bearer') {
+    if (type !== 'Bearer' || !accessToken) {
       return false;
     }
 
