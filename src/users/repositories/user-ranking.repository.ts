@@ -86,13 +86,21 @@ export class UserRankingRepository {
         activityCategoryId: user.activityCategoryId,
         name: user.name,
         rank: user.rank,
-        countReview: totalCount.reviewCount,
+        reviewCount: totalCount.reviewCount,
         customCategory: userIntro.customCategory,
         career: userIntro.career,
         shortIntro: userIntro.shortIntro,
       })
       .where('userId = :userId', { userId })
       .execute();
+  }
+
+  async getUserIdsByUserRanking() {
+    return await this.entityManager
+      .createQueryBuilder(UserRanking, 'userRanking')
+      .select('userRanking.userId')
+      .orderBy('userRanking.rank', 'DESC')
+      .getRawMany();
   }
 
   async clearUserRanking() {

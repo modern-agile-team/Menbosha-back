@@ -79,6 +79,21 @@ export class UserRankingService {
     }
   }
 
+  @Cron('0 0 * * * *') // 1시간마다 실행
+  async updateUserRankingInfo() {
+    const getUserIds =
+      await this.userRankingRepository.getUserIdsByUserRanking();
+    const userIdsArray = getUserIds.map((res) => res.userRanking_user_id);
+
+    for (const userId of userIdsArray) {
+      if (userId === null) {
+        break;
+      }
+      await this.userRankingRepository.saveUserInfo(userId);
+    }
+    return { message: '랭킹 정보 업데이트 성공' };
+  }
+
   @Cron('0 58 8 * * 1') // 매주 월요일 오전 8시 58분에 실행 (유저 랭킹 저장 전에 실행)
   async clearUserRanking() {
     try {
