@@ -505,7 +505,7 @@ export class ChatService {
 
     if (
       !existChatRoom.chats.length ||
-      !existChatRoom.chats.find(
+      !existChatRoom.chats.some(
         (chat: ChatDto) =>
           chat._id === chatId && chat.senderId === myId && !chat.deletedAt,
       )
