@@ -71,7 +71,7 @@ export function ApiFindAllMentorBoardsWithPagination() {
                 error: 'Not Found',
                 statusCode: 404,
               },
-              description: '유효성 검사 실패',
+              description: '카테고리 id 못찾음',
             },
           },
         },
