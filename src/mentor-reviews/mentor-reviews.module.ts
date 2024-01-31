@@ -7,13 +7,16 @@ import { MentorReviewChecklistModule } from './mentor-review-checklist/mentor-re
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MentorReview } from './entities/mentor-review.entity';
 import { MentorReviewRepository } from './repositories/mentor-review.repository';
+import { MentorReviewChecklistCount } from 'src/total-count/entities/mentor-review-checklist-count.entity';
+import { TotalCountModule } from 'src/total-count/total-count.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([MentorReview]),
+    TypeOrmModule.forFeature([MentorReview, MentorReviewChecklistCount]),
     AuthModule,
     UserModule,
     MentorReviewChecklistModule,
+    TotalCountModule,
   ],
   controllers: [MentorReviewsController],
   providers: [MentorReviewsService, MentorReviewRepository],
