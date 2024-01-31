@@ -18,6 +18,7 @@ import { UserRanking } from 'src/users/entities/user-ranking.entity';
 import { TotalCount } from 'src/total-count/entities/total-count.entity';
 import { DataSource } from 'typeorm';
 import { MentorReviewChecklist } from 'src/mentor-reviews/mentor-review-checklist/entities/mentor-review-checklist.entity';
+import { MentorReviewChecklistCount } from 'src/total-count/entities/mentor-review-checklist-count.entity';
 
 // .env 파일 로드
 dotenv.config();
@@ -47,6 +48,7 @@ export default new DataSource({
     UserRanking,
     TotalCount,
     MentorBoardLike,
+    MentorReviewChecklistCount,
   ], // 여기에 엔티티들을 추가해야 합니다.
   migrationsTableName: 'migrations', // migration 이력을 저장하는 테이블
   migrations: ['src/migrations/*.ts'], // migration 할 파일들이 있는 directory
@@ -77,6 +79,7 @@ export const TypeORMconfig: TypeOrmModuleOptions = {
     UserRanking,
     TotalCount,
     MentorBoardLike,
+    MentorReviewChecklistCount,
   ], // 여기에 엔티티들을 추가해야 합니다.
   migrationsTableName: 'migrations', // migration 이력을 저장하는 테이블
   migrations: ['src/migrations/*.ts'], // migration 할 파일들이 있는 directory
