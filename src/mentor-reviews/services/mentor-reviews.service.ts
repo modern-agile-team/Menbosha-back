@@ -37,7 +37,6 @@ export class MentorReviewsService {
       },
       where: {
         id: mentorId,
-        isMentor: true,
       },
     });
 
@@ -100,7 +99,6 @@ export class MentorReviewsService {
       },
       where: {
         id: mentorId,
-        isMentor: true,
       },
     });
 
@@ -149,7 +147,6 @@ export class MentorReviewsService {
       },
       where: {
         id: mentorId,
-        isMentor: true,
       },
     });
 

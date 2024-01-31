@@ -56,7 +56,7 @@ export class MentorReviewChecklistCount {
     default: 0,
     comment: '정확해요',
   })
-  isAccurate: number;
+  isAccurateCount: number;
 
   @Column('int', {
     name: 'is_kindness_count',
