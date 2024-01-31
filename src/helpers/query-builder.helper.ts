@@ -8,7 +8,7 @@ export class QueryBuilderHelper {
   buildWherePropForFind<E extends Record<string, any>>(
     queryBuilder: SelectQueryBuilder<E>,
     filter: Partial<Record<keyof E, E[keyof E]>>,
-    boardAlias: string,
+    alias: string,
     fullTextSearchField?: readonly (keyof E)[],
   ) {
     for (const key in filter) {
@@ -16,7 +16,7 @@ export class QueryBuilderHelper {
       if (fullTextSearchField?.includes(key) && filter[key]) {
         queryBuilder
           .andWhere(
-            `MATCH(${boardAlias}.${key}) AGAINST (:` +
+            `MATCH(${alias}.${key}) AGAINST (:` +
               parameterName +
               ' IN BOOLEAN MODE)',
           )
@@ -26,22 +26,22 @@ export class QueryBuilderHelper {
       } else if (typeof filter[key] === 'boolean') {
         if (key === 'loadOnlyPopular') {
           filter[key] &&
-            queryBuilder.andWhere(`${boardAlias}.popularAt IS NOT NULL`);
+            queryBuilder.andWhere(`${alias}.popularAt IS NOT NULL`);
 
           continue;
         } else if (key === 'loadOnlyPullingUp') {
           filter[key] &&
-            queryBuilder.andWhere(`${boardAlias}.pullingUp IS NOT NULL`);
+            queryBuilder.andWhere(`${alias}.pullingUp IS NOT NULL`);
 
           continue;
         }
 
         queryBuilder
-          .andWhere(`${boardAlias}.${key} = :` + parameterName)
+          .andWhere(`${alias}.${key} = :` + parameterName)
           .setParameter(parameterName, filter[key]);
       } else if (filter[key]) {
         queryBuilder
-          .andWhere(`${boardAlias}.${key} = :` + parameterName)
+          .andWhere(`${alias}.${key} = :` + parameterName)
           .setParameter(parameterName, filter[key]);
       }
     }
@@ -49,12 +49,12 @@ export class QueryBuilderHelper {
 
   buildOrderByPropForFind<E extends Record<string, any>>(
     queryBuilder: SelectQueryBuilder<E>,
-    boardAlias: string,
+    alias: string,
     orderField: OrderFieldForHelper,
     sortOrder: SortOrder,
   ) {
     orderField !== 'RAND()'
-      ? queryBuilder.orderBy(`${boardAlias}.${orderField}`, sortOrder)
+      ? queryBuilder.orderBy(`${alias}.${orderField}`, sortOrder)
       : queryBuilder.orderBy(orderField);
   }
 }
