@@ -65,3 +65,17 @@ export const generateDeletedAtColumn = (
     comment,
   };
 };
+
+export const generateCountColumn = (
+  name: string = 'count',
+  comment: string = '카운트',
+): TableColumnOptions => {
+  return {
+    name,
+    type: 'int',
+    unsigned: true,
+    isNullable: false,
+    default: 0,
+    comment,
+  };
+};
