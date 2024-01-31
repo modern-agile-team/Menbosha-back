@@ -14,14 +14,11 @@ export class MentorReviewChecklistService {
     mentorReviewId: number,
     createMentorReviewChecklistRequestBodyDto: CreateMentorReviewChecklistRequestBodyDto,
   ) {
-    return entityManager
-      .withRepository(this.mentorReviewChecklistRepository)
-      .save({
-        mentorReviewId,
-        ...new CreateMentorReviewChecklistRequestBodyDto(
-          createMentorReviewChecklistRequestBodyDto,
-        ),
-      });
+    return this.mentorReviewChecklistRepository.createMentorReviewChecklist(
+      entityManager,
+      mentorReviewId,
+      { ...createMentorReviewChecklistRequestBodyDto },
+    );
   }
 
   patchUpdateMentorReviewChecklist(
@@ -29,14 +26,11 @@ export class MentorReviewChecklistService {
     mentorReviewId: number,
     patchUpdateMentorReviewChecklist: CreateMentorReviewChecklistRequestBodyDto,
   ) {
-    return entityManager
-      .withRepository(this.mentorReviewChecklistRepository)
-      .update(
-        {
-          mentorReviewId,
-        },
-        { ...patchUpdateMentorReviewChecklist },
-      );
+    return this.mentorReviewChecklistRepository.patchUpdateMentorReviewChecklist(
+      entityManager,
+      mentorReviewId,
+      { ...patchUpdateMentorReviewChecklist },
+    );
   }
 
   removeMentorReviewChecklist(

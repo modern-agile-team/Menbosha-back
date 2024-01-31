@@ -1,6 +1,35 @@
-import { CustomRepository } from 'src/config/type-orm/decorators/custom-repository.decorator';
+import { Injectable } from '@nestjs/common';
+import { CreateMentorReviewChecklistRequestBodyDto } from 'src/mentor-reviews/dtos/create-mentor-review-checklist-request-body.dto';
+import { EntityManager } from 'typeorm';
 import { MentorReviewChecklist } from '../entities/mentor-review-checklist.entity';
-import { Repository } from 'typeorm';
 
-@CustomRepository(MentorReviewChecklist)
-export class MentorReviewChecklistRepository extends Repository<MentorReviewChecklist> {}
+@Injectable()
+export class MentorReviewChecklistRepository {
+  constructor() {}
+
+  createMentorReviewChecklist(
+    entityManager: EntityManager,
+    mentorReviewId: number,
+    createMentorReviewChecklistRequestBodyDto: CreateMentorReviewChecklistRequestBodyDto,
+  ) {
+    return entityManager.getRepository(MentorReviewChecklist).save({
+      mentorReviewId,
+      ...new CreateMentorReviewChecklistRequestBodyDto(
+        createMentorReviewChecklistRequestBodyDto,
+      ),
+    });
+  }
+
+  patchUpdateMentorReviewChecklist(
+    entityManager: EntityManager,
+    mentorReviewId: number,
+    patchUpdateMentorReviewChecklist: CreateMentorReviewChecklistRequestBodyDto,
+  ) {
+    return entityManager.getRepository(MentorReviewChecklist).update(
+      {
+        mentorReviewId,
+      },
+      { ...patchUpdateMentorReviewChecklist },
+    );
+  }
+}
