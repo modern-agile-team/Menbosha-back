@@ -6,7 +6,7 @@ import { SortOrder } from 'src/common/constants/sort-order.enum';
 import { MentorReviewOrderField } from '../constants/mentor-review-order-field.enum';
 import { IsPositiveInt } from 'src/common/decorators/validators/is-positive-int.decorator';
 
-export class MentorBoardPageQueryDto extends PageQueryDto {
+export class MentorReviewPageQueryDto extends PageQueryDto {
   @ApiPropertyOptional({
     description: '리뷰 고유 ID 필터링',
     format: 'integer',

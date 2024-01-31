@@ -76,4 +76,10 @@ export class CreateMentorReviewChecklistRequestBodyDto
   @IsOptional()
   @IsBoolean()
   isStuffy?: boolean;
+
+  constructor(
+    createMentorReviewChecklistRequestBodyDto: CreateMentorReviewChecklistRequestBodyDto,
+  ) {
+    Object.assign(this, createMentorReviewChecklistRequestBodyDto);
+  }
 }

@@ -18,13 +18,13 @@ import {
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
 import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
-import { MentorsService } from '../services/mentors.service';
+import { MentorReviewsService } from '../services/mentor-reviews.service';
 import { CreateMentorReviewRequestBodyDto } from '../dtos/create-mentor-review-request-body.dto';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { MentorReviewDto } from '../dtos/mentor-review.dto';
 import { ApiCreateMentorReview } from '../swagger-decorators/create-mentor-review.decorator';
 import { ApiTags } from '@nestjs/swagger';
-import { MentorBoardPageQueryDto } from '../dtos/mentor-review-page-query-dto';
+import { MentorReviewPageQueryDto } from '../dtos/mentor-review-page-query-dto';
 import { ApiFindMentorReviews } from '../swagger-decorators/find-mentor-reviews.decorator';
 import { ApiFindOneMentorReview } from '../swagger-decorators/find-one-mentor-review.decorator';
 import { ApiRemoveMentorReview } from '../swagger-decorators/remove-mentor-review.decorator';
@@ -41,8 +41,8 @@ import { ApiPatchUpdateMentorReview } from '../swagger-decorators/patch-update-m
 @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
 @ApiTags('mentors-reviews')
 @Controller('mentors/:mentorId/reviews')
-export class MentorsController {
-  constructor(private readonly mentorsService: MentorsService) {}
+export class MentorReviewsController {
+  constructor(private readonly mentorsService: MentorReviewsService) {}
 
   @UseGuards(JwtAccessTokenGuard)
   @ApiCreateMentorReview()
@@ -63,11 +63,11 @@ export class MentorsController {
   @Get()
   findMentorReviews(
     @Param('mentorId', ParsePositiveIntPipe) mentorId: number,
-    @Query() mentorBoardPageQueryDto: MentorBoardPageQueryDto,
+    @Query() mentorReviewPageQueryDto: MentorReviewPageQueryDto,
   ) {
     return this.mentorsService.findMentorReviews(
       mentorId,
-      mentorBoardPageQueryDto,
+      mentorReviewPageQueryDto,
     );
   }
 

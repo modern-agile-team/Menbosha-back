@@ -5,7 +5,7 @@ import { CommentModule } from './comments/comment.module';
 import { UserModule } from './users/user.module';
 import { Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TypeORMconfig } from './config/typeorm.config';
+import { TypeORMconfig } from './config/type-orm/typeorm.config';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ChatModule } from './chat/chat.module';
@@ -18,7 +18,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { SearchModule } from './search/search.module';
 import { ExceptionsModule } from './http-exceptions/exceptions.module';
 import { CategoryModule } from './category/category.module';
-import { MentorsModule } from './mentors/mentors.module';
+import { MentorReviewsModule } from './mentor-reviews/mentor-reviews.module';
 
 @Module({
   imports: [
@@ -43,7 +43,7 @@ import { MentorsModule } from './mentors/mentors.module';
     SearchModule,
     ExceptionsModule,
     CategoryModule,
-    MentorsModule,
+    MentorReviewsModule,
   ], //
   providers: [UserImageService, UserImageRepository, S3Service],
 })
