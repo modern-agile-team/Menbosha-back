@@ -15,6 +15,7 @@ import { HelpMeBoardPageQueryDto } from '../dto/helpMeBoard/help-me-board-page-q
 import { CategoryService } from 'src/category/services/category.service';
 import { HelpMeBoardWithUserAndImagesDto } from '../dto/helpMeBoard/help-me-board-with-user-and-images.dto';
 import { HelpMeBoardPaginationResponseDto } from '../dto/helpMeBoard/help-me-board-pagination-response.dto';
+import { HelpYouCommentPageQueryDto } from 'src/comments/dto/help-you-comment-page-query.dto';
 
 @Injectable()
 export class HelpMeBoardService {
@@ -115,6 +116,34 @@ export class HelpMeBoardService {
       page,
       pageSize,
     );
+  }
+
+  async findAllHelpYouComments(
+    helpMeBoardId: number,
+    helpYouCommentPageQueryDto: HelpYouCommentPageQueryDto,
+  ) {
+    const helpMeBoard =
+      await this.helpMeBoardRepository.findOneHelpMeBoardBy(helpMeBoardId);
+
+    if (!helpMeBoard) {
+      throw new NotFoundException(
+        '도와주세요 게시판의 해당 글이 존재하지 않습니다.',
+      );
+    }
+
+    const { page, pageSize, orderField, sortOrder, ...filter } =
+      helpYouCommentPageQueryDto;
+
+    const skip = (page - 1) * pageSize;
+
+    const helpYouComments =
+      await this.helpMeBoardRepository.findAllHelpYouCommentsByQueryBuilder(
+        skip,
+        pageSize,
+        orderField,
+        sortOrder,
+        filter,
+      );
   }
 
   async findOneHelpMeBoard(

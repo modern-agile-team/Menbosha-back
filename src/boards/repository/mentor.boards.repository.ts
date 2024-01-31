@@ -137,14 +137,14 @@ export class MentorBoardRepository {
         'mentorBoardImages.imageUrl',
       ]);
 
-    this.queryBuilderHelper.buildWherePropForBoardFind(
+    this.queryBuilderHelper.buildWherePropForFind(
       queryBuilder,
       filter,
       'mentorBoard',
       this.FULL_TEXT_SEARCH_FIELD,
     );
 
-    this.queryBuilderHelper.buildOrderByPropForBoardFind(
+    this.queryBuilderHelper.buildOrderByPropForFind(
       queryBuilder,
       'mentorBoard',
       orderField,

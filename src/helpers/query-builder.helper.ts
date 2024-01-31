@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { HelpMeBoardOrderField } from 'src/boards/constants/help-me-board-order-field.enum';
-import { MentorBoardOrderField } from 'src/boards/constants/mentor-board-order-field.enum';
 import { SortOrder } from 'src/common/constants/sort-order.enum';
+import { OrderFieldForHelper } from 'src/common/types/order-field-for-helper.type';
 import { SelectQueryBuilder } from 'typeorm';
 
 @Injectable()
 export class QueryBuilderHelper {
-  buildWherePropForBoardFind<E extends Record<string, any>>(
+  buildWherePropForFind<E extends Record<string, any>>(
     queryBuilder: SelectQueryBuilder<E>,
     filter: Partial<Record<keyof E, E[keyof E]>>,
     boardAlias: string,
@@ -48,10 +47,10 @@ export class QueryBuilderHelper {
     }
   }
 
-  buildOrderByPropForBoardFind<E extends Record<string, any>>(
+  buildOrderByPropForFind<E extends Record<string, any>>(
     queryBuilder: SelectQueryBuilder<E>,
     boardAlias: string,
-    orderField: MentorBoardOrderField | HelpMeBoardOrderField,
+    orderField: OrderFieldForHelper,
     sortOrder: SortOrder,
   ) {
     orderField !== 'RAND()'
