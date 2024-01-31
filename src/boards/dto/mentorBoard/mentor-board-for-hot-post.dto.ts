@@ -1,35 +1,9 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { MentorBoardDto } from './mentor-board.dto';
-import { User } from 'src/users/entities/user.entity';
-import { UserImage } from 'src/users/entities/user-image.entity';
 import { MentorBoardImage } from 'src/boards/entities/mentor-board-image.entity';
 import { MentorBoardLikeDto } from './mentor-board-like.dto';
 import { Exclude } from 'class-transformer';
-
-/**
- * @todo 멘토 보드로 통합되면 dto명 수정 및 Property description 수정
- */
-class MentorBoardHotPostUserImageDto implements Pick<UserImage, 'imageUrl'> {
-  @ApiProperty({
-    description: '이미지의 url',
-  })
-  imageUrl: string;
-}
-
-/**
- * @todo 멘토 보드로 통합되면 dto명 수정 및 Property description 수정
- */
-class MentorBoardHotPostUserDto implements Pick<User, 'name'> {
-  @ApiProperty({
-    description: '유저 이름',
-  })
-  name: string;
-
-  @ApiProperty({
-    description: 'userImage 객체',
-  })
-  userImage: MentorBoardHotPostUserImageDto;
-}
+import { UserForJoinDto } from 'src/users/dtos/user-for-join.dto';
 
 /**
  * @todo 멘토 보드로 통합되면 dto명 수정 및 Property description 수정
@@ -46,10 +20,10 @@ export class MentorBoardForHotPostDto extends PickType(MentorBoardDto, [
   'popularAt',
 ]) {
   @ApiProperty({
-    description: '멘토 게시판 인기 게시글 유저 정보 객체',
-    type: MentorBoardHotPostUserDto,
+    description: '멘토 게시판 글 유저 정보 객체',
+    type: UserForJoinDto,
   })
-  user: MentorBoardHotPostUserDto;
+  user: UserForJoinDto;
 
   @Exclude()
   mentorBoardImages: MentorBoardImage[];
@@ -66,7 +40,6 @@ export class MentorBoardForHotPostDto extends PickType(MentorBoardDto, [
 
   @ApiProperty({
     description: '좋아요 갯수',
-    minimum: 10,
   })
   likeCount: number;
 

@@ -44,6 +44,13 @@ export class CommentsController {
     return this.commentsService.findAllComments(boardId, userId);
   }
 
+  // @Get('v2')
+  // findAllComments(
+  //   @Query()
+  // ) {
+  //   return this.commentsService.
+  // }
+
   @Delete('')
   @UseGuards(JwtAccessTokenGuard)
   @ApiDeleteComment()
