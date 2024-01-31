@@ -19,6 +19,7 @@ import { UserIntro } from './user-intro.entity';
 import { TotalCount } from 'src/total-count/entities/total-count.entity';
 import { MentorBoardLike } from 'src/boards/entities/mentor-board-like.entity';
 import { UserRanking } from './user-ranking.entity';
+import { MentorReviewChecklistCount } from 'src/total-count/entities/mentor-review-checklist-count.entity';
 
 @Entity({
   name: 'user',
@@ -29,6 +30,12 @@ export class User {
 
   @OneToOne(() => UserImage, (userImage) => userImage.user)
   userImage: UserImage;
+
+  @OneToOne(
+    () => MentorReviewChecklistCount,
+    (mentorReviewChecklistCount) => mentorReviewChecklistCount.user,
+  )
+  mentorReviewChecklistCount: MentorReviewChecklistCount;
 
   @OneToOne(() => UserIntro, (userIntro) => userIntro.user)
   userIntro: UserIntro;
