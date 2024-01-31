@@ -11,7 +11,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ChatModule } from './chat/chat.module';
 import { S3Module } from './common/s3/s3.module';
 import { S3Service } from './common/s3/s3.service';
-import { BoardsModule } from './boards/swagger-decorators/mentorBoard/boards.module';
 import * as mongoose from 'mongoose';
 import { UserImageRepository } from './users/repositories/user-image.repository';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -19,6 +18,7 @@ import { SearchModule } from './search/search.module';
 import { ExceptionsModule } from './http-exceptions/exceptions.module';
 import { CategoryModule } from './category/category.module';
 import { MentorsModule } from './mentors/mentors.module';
+import { BoardsModule } from './boards/boards.module';
 
 @Module({
   imports: [

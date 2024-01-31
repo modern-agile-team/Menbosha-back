@@ -7,7 +7,7 @@ import { HelpYouCommentOrderField } from '../constants/help-you-comment-order-fi
 
 export class HelpYouCommentPageQueryDto extends PageQueryDto {
   @ApiPropertyOptional({
-    description: '도와주세요 게시글 고유 ID 필터링',
+    description: '도와줄게요 댓글 고유 ID 필터링',
     format: 'integer',
   })
   @IsOptional()

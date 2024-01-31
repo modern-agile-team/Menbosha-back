@@ -44,6 +44,7 @@ import { ApiFindAllHelpMeBoards } from '../swagger-decorators/helpMeBoard/find-a
 import { HelpYouCommentPageQueryDto } from 'src/comments/dto/help-you-comment-page-query.dto';
 import { HelpYouCommentPaginationResponseDto } from 'src/comments/dto/help-you-comment-pagination-response.dto';
 import { ApiFindAllHelpYouComments } from 'src/comments/swagger-decorators/find-all-help-you-comments.decorator';
+import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
 
 /**
  * 팀원과 상의되면 주석처리된 옵션도 걸어줌.
@@ -123,7 +124,7 @@ export class HelpMeBoardController {
   @Get(':helpMeBoardId/help-you-comments')
   @ApiFindAllHelpYouComments()
   findAllHelpYouComments(
-    @Param('helpMeBoardId') helpMeBoardId: number,
+    @Param('helpMeBoardId', ParsePositiveIntPipe) helpMeBoardId: number,
     @Query() helpYouCommentPageQueryDto: HelpYouCommentPageQueryDto,
   ): Promise<HelpYouCommentPaginationResponseDto> {
     return this.helpMeBoardService.findAllHelpYouComments(
