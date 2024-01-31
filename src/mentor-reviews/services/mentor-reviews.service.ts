@@ -18,6 +18,8 @@ import { MentorReview } from '../entities/mentor-review.entity';
 import { PatchUpdateMentorReviewDto } from '../dtos/patch-update-mentor-review.dto';
 import { isNotEmptyObject } from 'class-validator';
 import { MentorReviewChecklistService } from '../mentor-review-checklist/services/mentor-review-checklist.service';
+import { MentorReviewChecklistCount } from 'src/total-count/entities/mentor-review-checklist-count.entity';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 @Injectable()
 export class MentorReviewsService {
   constructor(
@@ -65,6 +67,21 @@ export class MentorReviewsService {
           mentorReview.id,
           { ...createMentorReviewChecklistRequestBodyDto },
         );
+
+      const incrementColumns = Object.keys(mentorReviewChecklist)
+        .filter((key) => mentorReviewChecklist[key] === true)
+        .map((key) => {
+          return { [`${key}_count`]: () => `${key}_count + :incrementValue` };
+        }) as QueryDeepPartialEntity<MentorReviewChecklistCount>;
+
+      await entityManager
+        .getRepository(MentorReviewChecklistCount)
+        .createQueryBuilder('mentorReviewChecklistCount')
+        .update(MentorReviewChecklistCount)
+        .where({ userId: mentorId })
+        .set({ ...incrementColumns })
+        .setParameter('incrementValue', 1)
+        .execute();
 
       await queryRunner.commitTransaction();
 
