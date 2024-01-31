@@ -53,6 +53,8 @@ export class UserBadgeService {
   }
 
   async checkAndAwardBoardBadge(userId: number) {
+    console.log(2);
+
     // 게시글 뱃지 여부 확인
     const mentorBoardBadges = [1, 2, 3]; //enum 으로 관리. (명시적으로 변경)
     const hasBoardBadge = await this.userBadgeRepository.myMentorBoardBadge(
@@ -63,6 +65,8 @@ export class UserBadgeService {
     );
     // 게시글 뱃지 획득 로직
     const boardCount = await this.totalCountRepository.countBoards(userId);
+    console.log(boardCount, hasBoardBadge);
+
     switch (boardCount) {
       case 10:
         if (hasBoardBadge.length === 0) {

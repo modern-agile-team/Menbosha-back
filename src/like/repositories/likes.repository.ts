@@ -18,7 +18,7 @@ export class LikesRepository<E extends RequiredLikeColumn> {
   ) {}
 
   isExistLike(parentId: number, userId: number) {
-    return this.LikeRepository.exists({
+    return this.LikeRepository.exist({
       parentId,
       userId,
     } as FindManyOptions<E>);
