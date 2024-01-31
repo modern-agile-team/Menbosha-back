@@ -32,4 +32,13 @@ export class MentorReviewChecklistRepository {
       { ...patchUpdateMentorReviewChecklist },
     );
   }
+
+  removeMentorReviewChecklist(
+    entityManager: EntityManager,
+    mentorReviewId: number,
+  ) {
+    return entityManager
+      .getRepository(MentorReviewChecklist)
+      .update({ mentorReviewId }, { deletedAt: new Date() });
+  }
 }

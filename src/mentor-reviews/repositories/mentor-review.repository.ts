@@ -1,12 +1,11 @@
-import { Like, Repository } from 'typeorm';
+import { EntityManager, FindOneOptions, Like } from 'typeorm';
 import { MentorReview } from '../entities/mentor-review.entity';
 import { MentorReviewOrderField } from '../constants/mentor-review-order-field.enum';
 import { SortOrder } from 'src/common/constants/sort-order.enum';
 import { MentorReviewsItemResponseDto } from '../dtos/mentor-reviews-item-response.dto';
-import { CustomRepository } from 'src/config/type-orm/decorators/custom-repository.decorator';
 
-@CustomRepository(MentorReview)
-export class MentorReviewRepository extends Repository<MentorReview> {
+export class MentorReviewRepository {
+  constructor(private readonly entityManager: EntityManager) {}
   findMentorReviews(
     skip: number,
     pageSize: number,
@@ -17,7 +16,7 @@ export class MentorReviewRepository extends Repository<MentorReview> {
     orderField: MentorReviewOrderField,
     sortOrder: SortOrder,
   ): Promise<[MentorReviewsItemResponseDto[], number]> {
-    return this.findAndCount({
+    return this.entityManager.getRepository(MentorReview).findAndCount({
       select: {
         id: true,
         mentee: {
@@ -68,5 +67,9 @@ export class MentorReviewRepository extends Repository<MentorReview> {
       skip,
       take: pageSize,
     });
+  }
+
+  findOne(options: FindOneOptions<MentorReview>) {
+    return this.entityManager.getRepository(MentorReview).findOne(options);
   }
 }

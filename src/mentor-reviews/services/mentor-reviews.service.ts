@@ -53,7 +53,7 @@ export class MentorReviewsService {
       const entityManager = queryRunner.manager;
 
       const mentorReview = await entityManager
-        .withRepository(this.mentorReviewRepository)
+        .getRepository(MentorReview)
         .save({
           mentorId: existMentor.id,
           menteeId,
@@ -214,7 +214,7 @@ export class MentorReviewsService {
       const entityManager = queryRunner.manager;
 
       if (review !== undefined) {
-        await entityManager.withRepository(this.mentorReviewRepository).update(
+        await entityManager.getRepository(MentorReview).update(
           {
             id: reviewId,
             mentorId,
@@ -286,7 +286,7 @@ export class MentorReviewsService {
     try {
       const entityManager = queryRunner.manager;
 
-      await entityManager.withRepository(this.mentorReviewRepository).update(
+      await entityManager.getRepository(MentorReview).update(
         {
           id: existReview.id,
           mentorId: existReview.mentorId,

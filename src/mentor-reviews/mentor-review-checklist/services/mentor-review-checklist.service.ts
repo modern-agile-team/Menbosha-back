@@ -37,8 +37,9 @@ export class MentorReviewChecklistService {
     entityManager: EntityManager,
     mentorReviewId: number,
   ) {
-    return entityManager
-      .withRepository(this.mentorReviewChecklistRepository)
-      .update({ mentorReviewId }, { deletedAt: new Date() });
+    return this.mentorReviewChecklistRepository.removeMentorReviewChecklist(
+      entityManager,
+      mentorReviewId,
+    );
   }
 }
