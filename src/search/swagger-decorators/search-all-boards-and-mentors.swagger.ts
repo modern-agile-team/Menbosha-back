@@ -51,6 +51,7 @@ export function ApiSearchAllBoardsAndMentors() {
           example: {
             message: [
               'page must not be less than 1',
+              'pageSize must not be less than 1',
               'searchQuery must be longer than or equal to 2 characters',
             ],
             error: 'Bad Request',

@@ -47,7 +47,7 @@ export function ApiFindAllHotPosts() {
                   'sortOrder must be one of the following values: DESC, ASC',
                   'page must be an integer number',
                   'page must not be less than 1',
-                  'pageSize must not be less than 5',
+                  'pageSize must not be less than 1',
                   'pageSize must be an integer number',
                   'property [허용하지 않은 데이터] should not exist',
                 ],
