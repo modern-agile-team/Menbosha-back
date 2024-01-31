@@ -3,13 +3,13 @@ import { MentorReviewsController } from './controllers/mentor-reviews.controller
 import { MentorReviewsService } from './services/mentor-reviews.service';
 import { AuthModule } from 'src/auth/auth.module';
 import { UserModule } from 'src/users/user.module';
-import { TypeOrmExModule } from 'src/config/type-orm/type-orm-ex.module';
-import { MentorReviewRepository } from './repositories/mentor-review.repository';
 import { MentorReviewChecklistModule } from './mentor-review-checklist/mentor-review-checklist.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { MentorReview } from './entities/mentor-review.entity';
 
 @Module({
   imports: [
-    TypeOrmExModule.forCustomRepository([MentorReviewRepository]),
+    TypeOrmModule.forFeature([MentorReview]),
     AuthModule,
     UserModule,
     MentorReviewChecklistModule,

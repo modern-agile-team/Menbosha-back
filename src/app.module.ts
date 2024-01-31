@@ -3,7 +3,7 @@ import { UserImageService } from './users/services/user-image.service';
 import { AuthModule } from './auth/auth.module';
 import { CommentModule } from './comments/comment.module';
 import { UserModule } from './users/user.module';
-import { Module, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeORMconfig } from './config/type-orm/typeorm.config';
 import { ConfigModule } from '@nestjs/config';
@@ -19,6 +19,7 @@ import { SearchModule } from './search/search.module';
 import { ExceptionsModule } from './http-exceptions/exceptions.module';
 import { CategoryModule } from './category/category.module';
 import { MentorReviewsModule } from './mentor-reviews/mentor-reviews.module';
+import { LoggerMiddleware } from './middlewares/logger.middleware';
 
 @Module({
   imports: [
@@ -50,7 +51,8 @@ import { MentorReviewsModule } from './mentor-reviews/mentor-reviews.module';
 export class AppModule implements NestModule {
   private readonly isDev: boolean =
     process.env.NODE_ENV === 'dev' ? true : false;
-  configure() {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
     mongoose.set('debug', this.isDev);
   }
 }

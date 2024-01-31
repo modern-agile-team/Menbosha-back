@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmExModule } from 'src/config/type-orm/type-orm-ex.module';
-import { MentorReviewChecklistRepository } from './repositories/mentor-review-checklists.repository';
 import { MentorReviewChecklistService } from './services/mentor-review-checklist.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { MentorReviewChecklist } from './entities/mentor-review-checklist.entity';
 
 @Module({
-  imports: [
-    TypeOrmExModule.forCustomRepository([MentorReviewChecklistRepository]),
-  ],
+  imports: [TypeOrmModule.forFeature([MentorReviewChecklist])],
   controllers: [],
   providers: [MentorReviewChecklistService],
   exports: [MentorReviewChecklistService],
