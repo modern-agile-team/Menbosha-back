@@ -1,6 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsInt, IsOptional, Min } from 'class-validator';
+import { IsOptional } from 'class-validator';
 import { IsPositiveInt } from '../decorators/validators/is-positive-int.decorator';
 
 export class PageQueryDto {
@@ -16,12 +15,10 @@ export class PageQueryDto {
 
   @ApiPropertyOptional({
     description: '검색할 페이지 size',
-    minimum: 5,
+    minimum: 1,
     default: 5,
   })
   @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  @Min(5)
+  @IsPositiveInt()
   pageSize: number = 5;
 }

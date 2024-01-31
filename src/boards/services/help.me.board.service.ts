@@ -16,6 +16,8 @@ import { CategoryService } from 'src/category/services/category.service';
 import { HelpMeBoardWithUserAndImagesDto } from '../dto/helpMeBoard/help-me-board-with-user-and-images.dto';
 import { HelpMeBoardPaginationResponseDto } from '../dto/helpMeBoard/help-me-board-pagination-response.dto';
 import { HelpYouCommentPageQueryDto } from 'src/comments/dto/help-you-comment-page-query.dto';
+import { HelpYouCommentWithUserAndUserImageDto } from 'src/comments/dto/help-you-comment-with-user-and-user-image.dto';
+import { HelpYouCommentPaginationResponseDto } from 'src/comments/dto/help-you-comment-pagination-response.dto';
 
 @Injectable()
 export class HelpMeBoardService {
@@ -121,7 +123,7 @@ export class HelpMeBoardService {
   async findAllHelpYouComments(
     helpMeBoardId: number,
     helpYouCommentPageQueryDto: HelpYouCommentPageQueryDto,
-  ) {
+  ): Promise<HelpYouCommentPaginationResponseDto> {
     const helpMeBoard =
       await this.helpMeBoardRepository.findOneHelpMeBoardBy(helpMeBoardId);
 
@@ -144,6 +146,18 @@ export class HelpMeBoardService {
         sortOrder,
         filter,
       );
+
+    const helpYouCommentsWithUserAndUserImageDto = helpYouComments.map(
+      (helpYouComment) =>
+        new HelpYouCommentWithUserAndUserImageDto(helpYouComment),
+    );
+
+    return new HelpYouCommentPaginationResponseDto(
+      helpYouCommentsWithUserAndUserImageDto,
+      helpYouComments.length,
+      page,
+      pageSize,
+    );
   }
 
   async findOneHelpMeBoard(

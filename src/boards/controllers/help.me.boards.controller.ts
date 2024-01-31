@@ -40,8 +40,9 @@ import { ApiGetPullingUpHelpMeBoard } from '../swagger-decorators/helpMeBoard/ge
 import { ApiPullingUpHelpMeBoard } from '../swagger-decorators/helpMeBoard/pulling-up-help-me-board.decorator';
 import { HelpMeBoardPageQueryDto } from '../dto/helpMeBoard/help-me-board-page-query.dto';
 import { HelpMeBoardPaginationResponseDto } from '../dto/helpMeBoard/help-me-board-pagination-response.dto';
-import { ApiFindAllMentorBoardsWithPagination } from '../swagger-decorators/helpMeBoard/find-all-help-me-board-with-pagination.decorator';
+import { ApiFindAllHelpMeBoards } from '../swagger-decorators/helpMeBoard/find-all-help-me-boards.decorator';
 import { HelpYouCommentPageQueryDto } from 'src/comments/dto/help-you-comment-page-query.dto';
+import { HelpYouCommentPaginationResponseDto } from 'src/comments/dto/help-you-comment-pagination-response.dto';
 
 /**
  * 팀원과 상의되면 주석처리된 옵션도 걸어줌.
@@ -103,8 +104,11 @@ export class HelpMeBoardController {
     return this.helpMeBoardService.countPagedHelpMeBoards(categoryId);
   }
 
+  /**
+   * @todo 추후 통합 예정
+   */
   @Get('v2')
-  @ApiFindAllMentorBoardsWithPagination()
+  @ApiFindAllHelpMeBoards()
   findAllHelpMeBoard(
     @Query() helpMeBoardPageQueryDto: HelpMeBoardPageQueryDto,
   ): Promise<HelpMeBoardPaginationResponseDto> {
@@ -112,14 +116,14 @@ export class HelpMeBoardController {
   }
 
   /**
-   * 도와줄게요 댓글 컨트롤러의 prefix가 이상해서 restful하게 api를 짤 수가 없음.
+   * @todo 도와줄게요 댓글 컨트롤러의 prefix때문에 restful하게 api path를 짤 수가 없음.
    * 추후 prefix 수정 후 comment 컨트롤러 쪽으로 분리
    */
   @Get(':helpMeBoardId/help-you-comments')
   findAllHelpYouComments(
     @Param('helpMeBoardId') helpMeBoardId: number,
     @Query() helpYouCommentPageQueryDto: HelpYouCommentPageQueryDto,
-  ) {
+  ): Promise<HelpYouCommentPaginationResponseDto> {
     return this.helpMeBoardService.findAllHelpYouComments(
       helpMeBoardId,
       helpYouCommentPageQueryDto,

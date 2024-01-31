@@ -17,7 +17,6 @@ import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 import { ApiAddHelpComment } from '../swagger-decorators/post-help-you-comment-decorator';
-import { HelpYouCommentPageQueryDto } from '../dto/help-you-comment-page-query.dto';
 
 @Controller('help-you-comments')
 @ApiTags('help-you-comment API')

@@ -12,7 +12,7 @@ import { SuccessResponseInterceptor } from 'src/common/interceptors/success-resp
 import { MentorBoardHotPostsService } from '../services/mentor-board-hot-posts.service';
 import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
 import { MentorBoardHotPostPaginationResponseDto } from '../dto/mentorBoard/mentor-board-hot-post-pagination-response.dto';
-import { ApiFindAllHotPostsWithPagination } from '../swagger-decorators/mentorBoard/find-all-hot-posts-with-pagination.decorator';
+import { ApiFindAllHotPosts } from '../swagger-decorators/mentorBoard/find-all-hot-posts.decorator';
 
 /**
  * @todo 멘토 보드 기능으로 통합되면 수정
@@ -35,7 +35,7 @@ export class MentorBoardHotPostsController {
     private readonly mentorBoardHotPostsService: MentorBoardHotPostsService,
   ) {}
 
-  @ApiFindAllHotPostsWithPagination()
+  @ApiFindAllHotPosts()
   @Get()
   findAllHotPostsWithPagination(
     @Query() mentorBoardPageQueryDto: MentorBoardPageQueryDto,
