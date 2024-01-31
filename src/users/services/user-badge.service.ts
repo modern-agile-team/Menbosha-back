@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { UserBadgeRepository } from '../repositories/user-badge.repository';
 import { TotalCountRepository } from 'src/total-count/repositories/total-count.repository';
 
@@ -16,38 +16,41 @@ export class UserBadgeService {
         case 'mentorBoard':
           const mentorBoardBadge = await this.checkAndAwardBoardBadge(userId);
           if (mentorBoardBadge) {
-            // console.log(`새로운 뱃지가 있습니다! (${mentorBoardBadge.name})`);
+            return `새로운 뱃지가 있습니다! (${mentorBoardBadge.badgeId})`;
           }
           break;
         case 'helpMeBoard':
           const helpMeBoardBadge = await this.checkAndAwardBoardBadge(userId);
           if (helpMeBoardBadge) {
-            // console.log(`새로운 뱃지가 있습니다! (${helpMeBoardBadge.name})`);
+            return `새로운 뱃지가 있습니다! (${helpMeBoardBadge.badgeId})`;
           }
           break;
-        // case 'comment':
-        //   const commentBadge = await this.checkAndAwardCommentBadge(userId);
-        //   if (commentBadge) {
-        //     console.log(`새로운 뱃지가 있습니다! (${commentBadge.name})`);
-        //   }
-        //   break;
-        // case 'like':
-        //   const likeBadge = await this.checkAndAwardLikeBadge(userId);
-        //   if (likeBadge) {
-        //     console.log(`새로운 뱃지가 있습니다! (${likeBadge.name})`);
-        //   }
-        //   break;
-        // case 'review':
-        //   const reviewBadge = await this.checkAndAwardReviewBadge(userId);
-        //   if (reviewBadge) {
-        //     console.log(`새로운 뱃지가 있습니다! (${reviewBadge.name})`);
-        //   }
-        //   break;
+        case 'comment':
+          const commentBadge = await this.checkAndAwardCommentBadge(userId);
+          if (commentBadge) {
+            return `새로운 뱃지가 있습니다! (${commentBadge.badgeId})`;
+          }
+          break;
+        case 'like':
+          const likeBadge = await this.checkAndAwardLikeBadge(userId);
+          if (likeBadge) {
+            return `새로운 뱃지가 있습니다! (${likeBadge.badgeId})`;
+          }
+          break;
+        case 'review':
+          const reviewBadge = await this.checkAndAwardReviewBadge(userId);
+          if (reviewBadge) {
+            return `새로운 뱃지가 있습니다! (${reviewBadge.badgeId})`;
+          }
+          break;
         default:
-          throw new Error('유효하지 않은 카테고리');
+          throw new HttpException('유효하지 않은 카테고리', 404);
       }
     } catch (error) {
-      throw new Error(`뱃지 획득에 실패했습니다. ${error.message}`);
+      throw new HttpException(
+        `뱃지 획득에 실패했습니다. ${error.message}`,
+        404,
+      );
     }
     return undefined;
   }
@@ -102,48 +105,128 @@ export class UserBadgeService {
         break;
 
       default:
-        throw new Error('에러');
+        throw new HttpException('아직 도달하지 못한 뱃지입니다', 404);
     }
     return undefined;
   }
 
-  // async checkAndAwardCommentBadge(userId: number) {
-  //   // 댓글 뱃지 여부 확인
-  //   const commentBadges = [10, 11, 12];
-  //   const hasCommentBadge = await this.userBadgeRepository.myCommentBadge(
-  //     userId,
-  //     commentBadges,
-  //   );
+  async checkAndAwardCommentBadge(userId: number) {
+    // 댓글 뱃지 여부 확인
+    const commentBadges = [10, 11, 12];
+    const hasCommentBadge = await this.userBadgeRepository.myCommentBadge(
+      userId,
+      commentBadges,
+    );
 
-  //   const commentCount = await this.totalCountRepository.countComments(userId);
-  //   switch (commentCount) {
-  //     case 10:
-  //       if (hasCommentBadge.length === 0) {
-  //         const badgeId = 10;
-  //         const commentBadge = await this.userBadgeRepository.addCommentBadge(
-  //           userId,
-  //           badgeId,
-  //         );
-  //         return commentBadge;
-  //       }
-  //     case 20:
-  //       if (hasCommentBadge.filter((badge) => badge.id === 2).length === 0) {
-  //         const badgeId = 20;
-  //         const commentBadge = await this.userBadgeRepository.addCommentBadge(
-  //           userId,
-  //           badgeId,
-  //         );
-  //         return commentBadge;
-  //       }
-  //     case 30:
-  //       if (hasCommentBadge.filter((badge) => badge.id === 2).length === 0) {
-  //         const badgeId = 30;
-  //         const commentBadge = await this.userBadgeRepository.addCommentBadge(
-  //           userId,
-  //           badgeId,
-  //         );
-  //         return commentBadge;
-  //       }
-  //   }
-  // }
+    const commentCount = await this.totalCountRepository.countComments(userId);
+    switch (commentCount) {
+      case 10:
+        if (hasCommentBadge.length === 0) {
+          const badgeId = 10;
+          const commentBadge = await this.userBadgeRepository.addCommentBadge(
+            userId,
+            badgeId,
+          );
+          return commentBadge;
+        }
+      case 20:
+        if (hasCommentBadge.filter((badge) => badge.id === 2).length === 0) {
+          const badgeId = 20;
+          const commentBadge = await this.userBadgeRepository.addCommentBadge(
+            userId,
+            badgeId,
+          );
+          return commentBadge;
+        }
+      case 30:
+        if (hasCommentBadge.filter((badge) => badge.id === 2).length === 0) {
+          const badgeId = 30;
+          const commentBadge = await this.userBadgeRepository.addCommentBadge(
+            userId,
+            badgeId,
+          );
+          return commentBadge;
+        }
+    }
+  }
+
+  async checkAndAwardLikeBadge(userId: number) {
+    // 댓글 뱃지 여부 확인
+    const likeBadges = [10, 11, 12];
+    const hasLikeBadge = await this.userBadgeRepository.myLikeBadge(
+      userId,
+      likeBadges,
+    );
+
+    const likeCount = await this.totalCountRepository.countLikes(userId);
+    switch (likeCount) {
+      case 7:
+        if (hasLikeBadge.length === 0) {
+          const badgeId = 7;
+          const likeBadge = await this.userBadgeRepository.addLikeBadge(
+            userId,
+            badgeId,
+          );
+          return likeBadge;
+        }
+      case 8:
+        if (hasLikeBadge.filter((badge) => badge.id === 2).length === 0) {
+          const badgeId = 8;
+          const likeBadge = await this.userBadgeRepository.addLikeBadge(
+            userId,
+            badgeId,
+          );
+          return likeBadge;
+        }
+      case 9:
+        if (hasLikeBadge.filter((badge) => badge.id === 2).length === 0) {
+          const badgeId = 9;
+          const likeBadge = await this.userBadgeRepository.addLikeBadge(
+            userId,
+            badgeId,
+          );
+          return likeBadge;
+        }
+    }
+  }
+
+  async checkAndAwardReviewBadge(userId: number) {
+    // 댓글 뱃지 여부 확인
+    const reviewBadges = [10, 11, 12];
+    const hasReviewBadge = await this.userBadgeRepository.myReviewBadge(
+      userId,
+      reviewBadges,
+    );
+
+    const reviewCount = await this.totalCountRepository.countReviews(userId);
+    switch (reviewCount) {
+      case 10:
+        if (hasReviewBadge.length === 0) {
+          const badgeId = 10;
+          const reviewBadge = await this.userBadgeRepository.addReviewBadge(
+            userId,
+            badgeId,
+          );
+          return reviewBadge;
+        }
+      case 20:
+        if (hasReviewBadge.filter((badge) => badge.id === 2).length === 0) {
+          const badgeId = 20;
+          const reviewBadge = await this.userBadgeRepository.addReviewBadge(
+            userId,
+            badgeId,
+          );
+          return reviewBadge;
+        }
+      case 30:
+        if (hasReviewBadge.filter((badge) => badge.id === 2).length === 0) {
+          const badgeId = 30;
+          const reviewBadge = await this.userBadgeRepository.addReviewBadge(
+            userId,
+            badgeId,
+          );
+          return reviewBadge;
+        }
+    }
+  }
 }
