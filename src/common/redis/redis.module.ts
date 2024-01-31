@@ -5,8 +5,8 @@ import { RedisOptions } from 'src/config/redis-options.constants';
 
 @Module({
   imports: [
-    CacheModule.register({ isGlobal: true }),
-    CacheModule.registerAsync(RedisOptions),
+    CacheModule.register({ isGlobal: true, RedisOptions }),
+    // CacheModule.registerAsync(RedisOptions),
   ],
   controllers: [],
   providers: [RedisService],
