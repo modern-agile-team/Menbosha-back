@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { MentorReviewChecklist } from './mentor-review-checklist.entity';
+import { MentorReviewChecklist } from '../mentor-review-checklist/entities/mentor-review-checklist.entity';
 
 @Entity({ name: 'mentor_review' })
 export class MentorReview {
