@@ -11,10 +11,14 @@ import { MentorBoardResponseDTO } from '../dto/mentorBoard/update.mentor.board.r
 import { UpdateMentorBoardDto } from '../dto/mentorBoard/update.mentor.board.dto';
 import { oneMentorBoardResponseDTO } from '../dto/mentorBoard/one.response.mentor.boards.dto';
 import { FindOneOptions } from 'typeorm';
+import { MentorBoardLikeRepository } from '../repository/mentor.board.likes.repository';
 
 @Injectable()
 export class MentorBoardService {
-  constructor(private mentorBoardRepository: MentorBoardRepository) {}
+  constructor(
+    private mentorBoardRepository: MentorBoardRepository,
+    private readonly mentorBoardLikeRepository: MentorBoardLikeRepository,
+  ) {}
   async create(
     boardData: CreateMentorBoardDto,
     userId: number,
@@ -26,10 +30,14 @@ export class MentorBoardService {
     }
   }
 
-  async randomMentorBoards() {
+  async randomMentorBoards(categoryId: number) {
     const limit = 3;
-    const boards =
-      await this.mentorBoardRepository.findRandomMentorBoard(limit);
+    const boards = categoryId
+      ? await this.mentorBoardRepository.findRandomMentorBoardByCategoryId(
+          limit,
+          categoryId,
+        )
+      : await this.mentorBoardRepository.findRandomMentorBoard(limit);
     const randomBoardResponse: PageByMentorBoardResponseDTO[] =
       await Promise.all(
         boards.map(async (board) => {
@@ -49,6 +57,7 @@ export class MentorBoardService {
               id: image.id,
               imageUrl: image.imageUrl,
             })),
+            mentorBoardLikes: board.mentorBoardLikes.length,
           };
         }),
       );
@@ -98,6 +107,7 @@ export class MentorBoardService {
             id: image.id,
             imageUrl: image.imageUrl,
           })),
+          mentorBoardLikes: board.mentorBoardLikes.length,
         };
       }),
     );
@@ -124,7 +134,13 @@ export class MentorBoardService {
   ): Promise<oneMentorBoardResponseDTO> {
     const mentorBoard =
       await this.mentorBoardRepository.findMentorBoardById(mentorBoardId);
+    const mentorBoardLike =
+      await this.mentorBoardLikeRepository.countMentorBoardLike(mentorBoardId);
     const unitOwner = mentorBoard.userId === userId;
+    const isLike = await this.mentorBoardLikeRepository.isLike(
+      userId,
+      mentorBoardId,
+    );
 
     if (!mentorBoard) {
       throw new NotFoundException('게시물을 찾을 수 없습니다.');
@@ -145,6 +161,8 @@ export class MentorBoardService {
         imageUrl: image.imageUrl,
       })),
       unitOwner: unitOwner,
+      mentorBoardLikes: mentorBoardLike,
+      isLike: isLike,
     };
   }
 

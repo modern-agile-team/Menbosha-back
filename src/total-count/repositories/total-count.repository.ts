@@ -18,7 +18,7 @@ export class TotalCountRepository {
       await this.entityManager.increment(
         TotalCount,
         { userId },
-        `${type}7days`,
+        `${type}InSevenDays`,
         1,
       );
     } else {
@@ -26,7 +26,7 @@ export class TotalCountRepository {
       await this.entityManager.decrement(
         TotalCount,
         { userId },
-        `${type}7days`,
+        `${type}InSevenDays`,
         1,
       );
     }
@@ -37,11 +37,11 @@ export class TotalCountRepository {
       TotalCount,
       {},
       {
-        mentorBoardCount7days: 0,
-        helpYouCommentCount7days: 0,
-        mentorBoardLikeCount7days: 0,
-        badgeCount7days: 0,
-        reviewCount7days: 0,
+        mentorBoardCountInSevenDays: 0,
+        helpYouCommentCountInSevenDays: 0,
+        mentorBoardLikeCountInSevenDays: 0,
+        badgeCountInSevenDays: 0,
+        reviewCountInSevenDays: 0,
       },
     );
   }

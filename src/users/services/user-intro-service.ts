@@ -16,7 +16,7 @@ export class UserIntroService {
     return await this.userIntroRepository.createUserIntro(userId, userData);
   }
 
-  async updateUserIntro(
+  async updateMyIntro(
     userId: number,
     userData: UpdateUserIntroDTO,
   ): Promise<ResponseUserIntroDto> {
@@ -27,14 +27,18 @@ export class UserIntroService {
         existingUserIntro[key] = userData[key];
       }
     }
-    const updateUserIntro =
-      await this.userIntroRepository.updateUserIntro(existingUserIntro);
+    await this.userIntroRepository.updateUserIntro(existingUserIntro);
+
+    await this.userIntroRepository.updateUser(userId, {
+      hopeCategoryId: userData.hopeCategoryId,
+      activityCategoryId: userData.activityCategoryId,
+      isMentor: userData.isMentor,
+    });
     return {
-      id: updateUserIntro.id,
-      mainFiled: updateUserIntro.mainField,
-      introduce: updateUserIntro.introduce,
-      career: updateUserIntro.career,
-      userId: updateUserIntro.userId,
+      ...existingUserIntro,
+      hopeCategoryId: userData.hopeCategoryId,
+      activityCategoryId: userData.activityCategoryId,
+      isMentor: userData.isMentor,
     };
   }
 }

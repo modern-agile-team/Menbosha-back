@@ -1,9 +1,9 @@
 import { UserIntroRepository } from './../repositories/user-intro.repository';
 import { UserBadgeRepository } from './../repositories/user-badge.repository';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { UserImageRepository } from '../repositories/user-image.repository';
-import { FindManyOptions } from 'typeorm';
+import { FindManyOptions, FindOneOptions } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { PageByMentorListResponseDTO } from '../dtos/page-by-mentor-list-response-dto';
 import { UserBadgeResponseDTO } from '../dtos/get-user-badge.dto';
@@ -22,6 +22,16 @@ export class UserService {
 
   findAll(options: FindManyOptions<User>) {
     return this.userRepository.findAll(options);
+  }
+
+  async findOneByOrNotFound(options: FindOneOptions<User>) {
+    const existUser = await this.userRepository.findOne(options);
+
+    if (!existUser) {
+      throw new NotFoundException('해당 유저를 찾지 못했습니다.');
+    }
+
+    return existUser;
   }
 
   async getMyProfile(userId: number) {
@@ -68,28 +78,6 @@ export class UserService {
 
     return { ...userInfo, image, intro, badge };
   }
-
-  // async getMyInfo(userId: number) {
-  //   if (!userId) {
-  //     throw new HttpException(
-  //       '토큰이 제공되지 않았습니다.',
-  //       HttpStatus.LENGTH_REQUIRED,
-  //     );
-  //   }
-
-  //   const userInfo = plainToInstance(
-  //     MyProfileResponseDTO,
-  //     await this.userRepository.getUserInfo(userId),
-  //   );
-  //   const image = (await this.userImageRepository.checkUserImage(userId))
-  //     .imageUrl;
-  //   const badge = plainToInstance(
-  //     UserBadgeResponseDTO,
-  //     await this.userBadgeRepository.getUserBadge(userId),
-  //   );
-
-  //   return { ...userInfo, image, badge };
-  // }
 
   async getMyInfoWithOwner(userId: number, targetId: number) {
     const { name, email, admin, provider } =
@@ -138,14 +126,15 @@ export class UserService {
           return {
             id: user.id,
             name: user.name,
+            rank: user.rank,
             categoryId: user.activityCategoryId,
             userImage: {
               imageId: user.userImage.id,
               imageUrl: user.userImage.imageUrl,
             },
             userIntro: {
-              introduce: user.userIntro.introduce.substring(0, 30),
-              mainField: user.userIntro.mainField.substring(0, 30),
+              shortIntro: user.userIntro.shortIntro.substring(0, 30),
+              career: user.userIntro.career.substring(0, 30),
             },
             reviewCount: user.totalCount.reviewCount,
             boardCount: user.totalCount.mentorBoardCount,

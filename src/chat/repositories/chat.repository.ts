@@ -78,11 +78,19 @@ export class ChatRepository {
     return this.chatRoomsModel.create(doc);
   }
 
+  async findOneAndUpdateChatRoom(
+    filter: mongoose.FilterQuery<ChatRooms>,
+    update: mongoose.UpdateQuery<ChatRooms>,
+    options?: mongoose.QueryOptions<ChatRooms>,
+  ): Promise<ChatRoomDto> {
+    return this.chatRoomsModel.findOneAndUpdate(filter, update, options);
+  }
+
   async updateOneChatRoom(
     filter: mongoose.FilterQuery<ChatRooms>,
     update: mongoose.UpdateQuery<ChatRooms>,
     options?: mongoose.QueryOptions<ChatRooms>,
-  ): Promise<void> {
+  ) {
     await this.chatRoomsModel.updateOne(filter, update, options);
   }
 

@@ -1,18 +1,19 @@
 import { applyDecorators } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiExtraModels,
-  ApiHeaders,
   ApiOperation,
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
 import { ChatRoomDto } from '../dto/chat-room.dto';
 
-export function ApiGetOneChatRoomByUserId() {
+export function ApiFindOneChatRoomByUserId() {
   return applyDecorators(
     ApiOperation({
       summary: '유저 id로 채팅룸 단일 조회',
       description: 'Param - roomId',
+      deprecated: true,
     }),
     ApiResponse({
       status: 200,
@@ -70,14 +71,7 @@ export function ApiGetOneChatRoomByUserId() {
         },
       },
     }),
-    ApiHeaders([
-      {
-        name: 'access_token',
-        description: '액세스 토큰',
-        required: true,
-        example: '여기에 액세스 토큰',
-      },
-    ]),
+    ApiBearerAuth('access-token'),
     ApiExtraModels(ChatRoomDto),
   );
 }

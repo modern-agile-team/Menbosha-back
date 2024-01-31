@@ -1,5 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiHeaders,
   ApiOperation,
   ApiParam,
@@ -47,10 +48,10 @@ export function ApiGetMyInfoWithOwner() {
       {
         name: 'access_token',
         description: '액세스 토큰',
-        required: true,
         example: '여기에 액세스 토큰',
       },
     ]),
     ApiParam({ name: 'targetId', example: 1, required: true }),
+    ApiBearerAuth('access-token'),
   );
 }

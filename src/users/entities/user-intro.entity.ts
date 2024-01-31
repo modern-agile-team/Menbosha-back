@@ -15,14 +15,23 @@ export class UserIntro {
   @Column({ name: 'user_id' })
   userId: number;
 
-  @Column({ name: 'main_field' })
-  mainField: string;
-
-  @Column({ name: 'introduce' })
-  introduce: string;
+  @Column({ name: 'short_intro' })
+  shortIntro: string;
 
   @Column({ name: 'career' })
   career: string;
+
+  @Column({ name: 'custom_category' })
+  customCategory: string;
+
+  @Column({ name: 'detail' })
+  detail: string;
+
+  @Column({ name: 'portfolio' })
+  portfolio: string;
+
+  @Column({ name: 'sns' })
+  sns: string;
 
   @OneToOne(() => User, (user: User) => user.userIntro, {
     onDelete: 'CASCADE',

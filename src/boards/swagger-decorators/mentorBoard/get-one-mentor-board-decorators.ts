@@ -1,5 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 export function ApiGetOneMentorBoard() {
   return applyDecorators(
@@ -27,7 +27,10 @@ export function ApiGetOneMentorBoard() {
                 imageUrl: '이미지 url(string)',
               },
             },
-            unitowner: 'bollean값',
+            mentorBoardImages: ['imageUrl이 들어옵니다'],
+            unitOwner: 'boolean값',
+            mentorBoardLikes: 'number',
+            isLike: 'boolean값',
           },
         },
       },
@@ -80,13 +83,6 @@ export function ApiGetOneMentorBoard() {
         },
       },
     }),
-    ApiHeaders([
-      {
-        name: 'access_token',
-        description: '액세스 토큰',
-        required: true,
-        example: '여기에 액세스 토큰',
-      },
-    ]),
+    ApiBearerAuth('access-token'),
   );
 }

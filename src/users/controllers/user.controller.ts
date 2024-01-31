@@ -108,12 +108,12 @@ export class UserController {
 
   @UseGuards(JwtAccessTokenGuard)
   @ApiUpdateUserIntro()
-  @Patch('/intro')
-  patchUserIntro(
+  @Patch('/my/intro')
+  patchMyIntro(
     @GetUserId() userId: number,
     @Body() userData: UpdateUserIntroDTO,
   ): Promise<ResponseUserIntroDto> {
-    return this.userIntroService.updateUserIntro(userId, userData);
+    return this.userIntroService.updateMyIntro(userId, userData);
   }
 
   @UseGuards(JwtAccessTokenGuard)

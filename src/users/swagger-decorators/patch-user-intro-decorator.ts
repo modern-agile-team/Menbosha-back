@@ -1,40 +1,76 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiHeaders,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 export function ApiUpdateUserIntro() {
   return applyDecorators(
     ApiOperation({
-      summary: '유저 프로필을 수정하는 API',
-      description: '유저 프로필을 수정하는 API',
+      summary: '내 소개를 수정하는 API',
+      description: '내 소개를 수정하는 API',
     }),
     ApiResponse({
       status: 200,
-      description: '유저 프로필의 내용을 성공적으로 수정한 경우',
+      description: '내 소개를 성공적으로 수정한 경우',
       content: {
         JSON: {
           example: {
-            mainField: '내이름은 코난 탐정이죠~를 수정해보겠습니다',
-            introduce: '백엔드 공부하고있습니다~ 를 수정해보겠습니다',
-            career: '모던 애자일 6기~를 수정해보겠어',
+            id: 4,
+            userId: 24,
+            shortIntro: '안녕하세요',
+            career: '숨쉬기 경력 20년',
+            customCategory: '코로 숨쉬기, 입으로 숨쉬기',
+            detail:
+              '안녕하세요. 저는 트위치에서 방송을 하고 있는 스트리머 케인입니다.',
+            portfolio: 'https://www.naver.com',
+            sns: 'https://www.naver.com',
+            hopeCategoryId: 4,
+            activityCategoryId: 4,
+            isMentor: true,
+          },
+        },
+      },
+    }),
+    ApiResponse({
+      status: 400,
+      description: '400 error',
+      content: {
+        JSON: {
+          examples: {
+            'invalid token': {
+              value: { statusCode: 400, message: 'invalid token' },
+              description: '유효하지 않은 토큰인 경우',
+            },
+            'jwt must be provided': {
+              value: { statusCode: 400, message: 'jwt must be provided' },
+              description: '토큰이 제공되지 않은 경우',
+            },
+            'jwt error': {
+              value: { statusCode: 400, message: 'jwt error' },
+              description: '그 외 에러 (백엔드에 도움 요청하기)',
+            },
           },
         },
       },
     }),
     ApiResponse({
       status: 401,
-      description: '우리 서비스의 액세스 토큰이 아닌 경우',
+      description: '401 error',
       content: {
         JSON: {
-          example: { statusCode: 401, message: '유효하지 않은 토큰입니다.' },
-        },
-      },
-    }),
-    ApiResponse({
-      status: 403,
-      description: '만료된 액세스 토큰인 경우',
-      content: {
-        JSON: {
-          example: { statusCode: 403, message: '만료된 토큰입니다.' },
+          examples: {
+            'invalid signature': {
+              value: { statusCode: 401, message: 'invalid signature' },
+              description: '우리 서비스의 토큰이 아닌 경우',
+            },
+            'jwt expired': {
+              value: { statusCode: 401, message: 'jwt expired' },
+              description: '만료된 토큰인 경우',
+            },
+          },
         },
       },
     }),
@@ -48,22 +84,13 @@ export function ApiUpdateUserIntro() {
       },
     }),
     ApiResponse({
-      status: 411,
-      description: '액세스 토큰이 제공되지 않은 경우',
-      content: {
-        JSON: {
-          example: { statusCode: 411, message: '토큰이 제공되지 않았습니다.' },
-        },
-      },
-    }),
-    ApiResponse({
       status: 500,
-      description: '프로필 수정중 오류가 발생했습니다',
+      description: '소개 수정중 오류가 발생했습니다',
       content: {
         JSON: {
           example: {
             statusCode: 500,
-            message: '프로필 수정 중 오류가 발생했습니다.',
+            message: '소개 수정 중 오류가 발생했습니다.',
           },
         },
       },
@@ -72,9 +99,9 @@ export function ApiUpdateUserIntro() {
       {
         name: 'access_token',
         description: '액세스 토큰',
-        required: true,
         example: '여기에 액세스 토큰',
       },
     ]),
+    ApiBearerAuth('access-token'),
   );
 }

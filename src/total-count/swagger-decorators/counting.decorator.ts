@@ -1,6 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import {
   ApiBody,
+  ApiCookieAuth,
   ApiHeader,
   ApiHeaders,
   ApiOperation,
@@ -53,7 +54,6 @@ export function ApiCounting() {
       {
         name: 'access_token',
         description: '액세스 토큰',
-        required: true,
         example: '여기에 액세스 토큰',
       },
     ]),
@@ -76,5 +76,6 @@ export function ApiCounting() {
         },
       },
     }),
+    ApiCookieAuth('refresh-token'),
   );
 }

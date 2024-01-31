@@ -1,5 +1,10 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiHeaders, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiHeaders,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 export function ApiGetMyProfile() {
   return applyDecorators(
@@ -13,16 +18,24 @@ export function ApiGetMyProfile() {
       content: {
         JSON: {
           example: {
-            name: '홍길동',
-            email: 'abcd@naver.com',
-            isMentor: false,
+            id: 24,
+            name: '박준혁',
+            email: 'pjh_2004@naver.com',
+            isMentor: true,
+            hopeCategoryId: 4,
             activityCategoryId: 3,
-            phone: 'true',
-            image: 'http://img.jpg',
+            rank: 10,
+            phone: '',
+            image:
+              'https://menbosha-s3.s3.ap-northeast-2.amazonaws.com/UserImages/24_1704421233846.jpeg',
             intro: {
-              mainField: '응애',
-              introduce: '발로란트 1대1 코칭해드려요',
-              career: '발로란트 최대 티어 불멸',
+              shortIntro: '안녕하세요',
+              career: '숨쉬기 경력 20년',
+              customCategory: '코로 숨쉬기, 입으로 숨쉬기',
+              detail:
+                '안녕하세요. 저는 트위치에서 방송을 하고 있는 스트리머 케인입니다.',
+              portfolio: 'https://www.naver.com',
+              sns: 'https://www.naver.com',
             },
           },
         },
@@ -45,9 +58,9 @@ export function ApiGetMyProfile() {
       {
         name: 'access_token',
         description: '액세스 토큰',
-        required: true,
         example: '여기에 액세스 토큰',
       },
     ]),
+    ApiBearerAuth('access-token'),
   );
 }

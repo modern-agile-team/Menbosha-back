@@ -1,4 +1,3 @@
-import { TotalCountService } from './../../total-count/services/total-count.service';
 import { AuthService } from '../services/auth.service';
 import {
   BadRequestException,
@@ -12,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { S3Service } from 'src/common/s3/s3.service';
 import { TokenService } from '../services/token.service';
-import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { ApiNaverLogin } from '../swagger-decorators/naver-login.decorator';
 import { ApiKakaoLogin } from '../swagger-decorators/kakao-login.decorator';
 import { ApiNewAccessToken } from '../swagger-decorators/new-access-token.decorator';
@@ -46,7 +45,7 @@ export class AuthController {
       throw new BadRequestException('인가코드가 없습니다.');
     }
 
-    const { userId, socialAccessToken, socialRefreshToken } =
+    const { userId, socialAccessToken, socialRefreshToken, firstLogin } =
       await this.authService.login(code, 'naver');
     const accessToken = await this.tokenService.createAccessToken(userId);
     const refreshToken = await this.tokenService.createRefreshToken(userId);
@@ -67,7 +66,7 @@ export class AuthController {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
     });
 
-    return res.json({ accessToken, refreshToken });
+    return res.json({ accessToken, refreshToken, firstLogin });
   }
 
   @ApiKakaoLogin()
@@ -77,7 +76,7 @@ export class AuthController {
       throw new BadRequestException('인가코드가 없습니다.');
     }
 
-    const { userId, socialAccessToken, socialRefreshToken } =
+    const { userId, socialAccessToken, socialRefreshToken, firstLogin } =
       await this.authService.login(code, 'kakao');
     const accessToken = await this.tokenService.createAccessToken(userId);
     const refreshToken = await this.tokenService.createRefreshToken(userId);
@@ -98,7 +97,7 @@ export class AuthController {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
     });
 
-    return res.json({ accessToken, refreshToken });
+    return res.json({ accessToken, refreshToken, firstLogin });
   }
 
   @ApiGoogleLogin()
@@ -108,7 +107,7 @@ export class AuthController {
       throw new BadRequestException('인가코드가 없습니다.');
     }
 
-    const { userId, socialAccessToken, socialRefreshToken } =
+    const { userId, socialAccessToken, socialRefreshToken, firstLogin } =
       await this.authService.login(code, 'google');
     const accessToken = await this.tokenService.createAccessToken(userId);
     const refreshToken = await this.tokenService.createRefreshToken(userId);
@@ -129,10 +128,9 @@ export class AuthController {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
     });
 
-    return res.json({ accessToken, refreshToken });
+    return res.json({ accessToken, refreshToken, firstLogin });
   }
 
-  @ApiCookieAuth('refresh-token')
   @ApiNewAccessToken()
   @UseGuards(JwtRefreshTokenGuard)
   @Get('new-access-token')

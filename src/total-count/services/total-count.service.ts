@@ -14,7 +14,7 @@ export class TotalCountService {
 
   async counting(userId: number, mentorId: number, type: Type, action: Action) {
     try {
-      if (type === Type.CountMentorBoardLike || type === Type.CountReview) {
+      if (type === Type.MentorBoardLikeCount || type === Type.ReviewCount) {
         if (!mentorId) {
           throw new HttpException(
             'mentorId가 필요한 요청입니다.',

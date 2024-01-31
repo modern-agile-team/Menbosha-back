@@ -47,6 +47,7 @@ export function ApiGetPageMentorBoards() {
               },
             ],
             total: '카테고리 id에 맞는 보드의 총 개수가 number로 넘어옵니다',
+            mentorBoardLikes: 'number',
           },
         },
       },

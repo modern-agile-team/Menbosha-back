@@ -15,6 +15,7 @@ export function ApiGoogleLogin() {
           example: {
             accessToken: '여기에 액세스 토큰',
             refreshToken: '여기에 리프레시 토큰',
+            firstLogin: true,
           },
         },
       },
