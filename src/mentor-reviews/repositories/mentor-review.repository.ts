@@ -3,7 +3,9 @@ import { MentorReview } from '../entities/mentor-review.entity';
 import { MentorReviewOrderField } from '../constants/mentor-review-order-field.enum';
 import { SortOrder } from 'src/common/constants/sort-order.enum';
 import { MentorReviewsItemResponseDto } from '../dtos/mentor-reviews-item-response.dto';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class MentorReviewRepository {
   constructor(private readonly entityManager: EntityManager) {}
   findMentorReviews(
