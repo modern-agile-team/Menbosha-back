@@ -18,6 +18,7 @@ export class UserInfoDto
       | 'totalCount'
       | 'mentorBoardLikes'
       | 'userRanking'
+      | 'mentorReviewChecklistCount'
     >
 {
   @ApiProperty({
