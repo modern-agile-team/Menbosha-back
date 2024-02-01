@@ -49,6 +49,6 @@ export class TotalCountService {
       );
     }
 
-    return { message: '7일 카운트 초기화 성공' };
+    console.log('7일 카운트 초기화 성공');
   }
 }
