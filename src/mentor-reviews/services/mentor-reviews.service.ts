@@ -18,6 +18,9 @@ import { MentorReview } from '../entities/mentor-review.entity';
 import { PatchUpdateMentorReviewDto } from '../dtos/patch-update-mentor-review.dto';
 import { isNotEmptyObject } from 'class-validator';
 import { MentorReviewChecklistService } from '../mentor-review-checklist/services/mentor-review-checklist.service';
+import { MentorReviewChecklistCount } from 'src/total-count/entities/mentor-review-checklist-count.entity';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { MentorReviewChecklistCountsService } from 'src/total-count/services/mentor-review-checklist-counts.service';
 @Injectable()
 export class MentorReviewsService {
   constructor(
@@ -25,6 +28,7 @@ export class MentorReviewsService {
     private readonly mentorReviewChecklistService: MentorReviewChecklistService,
     private readonly mentorReviewRepository: MentorReviewRepository,
     private readonly userService: UserService,
+    private readonly mentorReviewChecklistCountsService: MentorReviewChecklistCountsService,
   ) {}
   async createMentorReview(
     mentorId: number,
@@ -37,7 +41,6 @@ export class MentorReviewsService {
       },
       where: {
         id: mentorId,
-        isMentor: true,
       },
     });
 
@@ -66,6 +69,19 @@ export class MentorReviewsService {
           mentorReview.id,
           { ...createMentorReviewChecklistRequestBodyDto },
         );
+
+      const incrementColumns = Object.keys(mentorReviewChecklist)
+        .filter((key) => mentorReviewChecklist[key] === true)
+        .reduce((result, key) => {
+          result[`${key}Count`] = () => `${key}Count + :incrementValue`;
+          return result;
+        }, {}) as QueryDeepPartialEntity<MentorReviewChecklistCount>;
+
+      await this.mentorReviewChecklistCountsService.incrementMentorReviewChecklistCounts(
+        entityManager,
+        mentorId,
+        incrementColumns,
+      );
 
       await queryRunner.commitTransaction();
 
@@ -100,7 +116,6 @@ export class MentorReviewsService {
       },
       where: {
         id: mentorId,
-        isMentor: true,
       },
     });
 
@@ -149,7 +164,6 @@ export class MentorReviewsService {
       },
       where: {
         id: mentorId,
-        isMentor: true,
       },
     });
 
