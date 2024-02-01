@@ -7,10 +7,8 @@ import { HelpMeBoardRepository } from '../repository/help.me.board.repository';
 import { oneHelpMeBoardResponseDTO } from '../dto/helpMeBoard/one.response.help.me.board.dto';
 import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/create.help.me.board.dto';
 import { HelpMeBoard } from '../entities/help-me-board.entity';
-import { PageByHelpMeBoardResponseDTO } from '../dto/helpMeBoard/response.help.me.board.dto';
 import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dto';
 import { HelpMeBoardResponseDTO } from '../dto/helpMeBoard/update.help.me.board.response.dto';
-import { PullingUpHelpMeBoardResponseDTO } from '../dto/helpMeBoard/pulling.up.response.dto';
 import { HelpMeBoardPageQueryDto } from '../dto/helpMeBoard/help-me-board-page-query.dto';
 import { CategoryService } from 'src/category/services/category.service';
 import { HelpMeBoardWithUserAndImagesDto } from '../dto/helpMeBoard/help-me-board-with-user-and-images.dto';
@@ -44,45 +42,6 @@ export class HelpMeBoardService {
     const page = total / limit;
     const totalPage = Math.ceil(page);
     return { total, totalPage };
-  }
-
-  // -----이 기능은 프론트와 상의중인 기능입니다 -----
-  async findPagedHelpMeBoards(
-    page: number,
-    categoryId: number,
-  ): Promise<{ data: PageByHelpMeBoardResponseDTO[] }> {
-    const limit = 10;
-    const skip = (page - 1) * limit;
-    const boards = categoryId // 예외처리 - categoryId가 들어올 경우
-      ? await this.helpMeBoardRepository.findPagedBoardsByCategoryId(
-          skip,
-          limit,
-          categoryId,
-        )
-      : await this.helpMeBoardRepository.findPageByHelpMeBoards(skip, limit);
-
-    const boardResponse: PageByHelpMeBoardResponseDTO[] = await Promise.all(
-      boards.map(async (board) => {
-        return {
-          id: board.id,
-          head: board.head,
-          body: board.body.substring(0, 30),
-          createdAt: board.createdAt,
-          updatedAt: board.updatedAt,
-          category: board.categoryId,
-          user: {
-            name: board.user.name,
-            userImage: board.user.userImage ? board.user.userImage : [],
-          },
-          helpMeBoardImages: (board.helpMeBoardImages || []).map((image) => ({
-            id: image.id,
-            imageUrl: image.imageUrl,
-          })),
-        };
-      }),
-    );
-
-    return { data: boardResponse };
   }
 
   async findAllHelpMeBoard(
@@ -187,41 +146,6 @@ export class HelpMeBoardService {
       })),
       unitOwner: unitOwner,
     };
-  }
-
-  async latestHelpMeBoards(categoryId: number) {
-    const limit = 8;
-    const boards = categoryId
-      ? await this.helpMeBoardRepository.findLatestBoardsByCategoryId(
-          limit,
-          categoryId,
-        )
-      : await this.helpMeBoardRepository.findLatestBoards(limit);
-    if (!boards) {
-      throw new NotFoundException('게시물을 찾을 수 없습니다');
-    }
-    const pullingUpBoardsResponse: PullingUpHelpMeBoardResponseDTO[] =
-      await Promise.all(
-        boards.map(async (board) => {
-          return {
-            id: board.id,
-            head: board.head,
-            body: board.body.substring(0, 30),
-            pullingUp: board.pullingUp,
-            category: board.categoryId,
-            user: {
-              name: board.user.name,
-              userImage: board.user.userImage ? board.user.userImage : [],
-            },
-            helpMeBoardImages: (board.helpMeBoardImages || []).map((image) => ({
-              id: image.id,
-              imageUrl: image.imageUrl,
-            })),
-          };
-        }),
-      );
-
-    return { data: pullingUpBoardsResponse };
   }
 
   async updateBoard(

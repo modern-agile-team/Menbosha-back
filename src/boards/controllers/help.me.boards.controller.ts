@@ -25,18 +25,14 @@ import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { ApiAddHelpMeBoard } from '../swagger-decorators/helpMeBoard/add-help-me-board-decorator';
 import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/create.help.me.board.dto';
 import { HelpMeBoard } from '../entities/help-me-board.entity';
-import { PageByHelpMeBoardResponseDTO } from '../dto/helpMeBoard/response.help.me.board.dto';
 import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 import { oneHelpMeBoardResponseDTO } from '../dto/helpMeBoard/one.response.help.me.board.dto';
 import { ApiGetOneHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-one-help-me-board.dto';
 import { ApiUpdateHelpMeBoard } from '../swagger-decorators/helpMeBoard/patch-help-me-board.decorator';
-import { ApiGetPageHelpMeBoards } from '../swagger-decorators/helpMeBoard/get-page-help-me-board.decorator';
 import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dto';
 import { HelpMeBoardResponseDTO } from '../dto/helpMeBoard/update.help.me.board.response.dto';
 import { ApiDeleteHelpMeBoard } from '../swagger-decorators/helpMeBoard/delete-help-me-board-decorator';
 import { ApiGetPageNumberByHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-board-page-number.decorator';
-import { PullingUpHelpMeBoardResponseDTO } from '../dto/helpMeBoard/pulling.up.response.dto';
-import { ApiGetPullingUpHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-pulling-up-help-me-board-decorator';
 import { ApiPullingUpHelpMeBoard } from '../swagger-decorators/helpMeBoard/pulling-up-help-me-board.decorator';
 import { HelpMeBoardPageQueryDto } from '../dto/helpMeBoard/help-me-board-page-query.dto';
 import { HelpMeBoardPaginationResponseDto } from '../dto/helpMeBoard/help-me-board-pagination-response.dto';
@@ -90,26 +86,13 @@ export class HelpMeBoardController {
     );
   }
 
-  // --- 이 기능은 아직 프론트와 상의중인 기능입니다 ---
-  @Get('')
-  @ApiGetPageHelpMeBoards()
-  findPageBoards(
-    @Query('page') page = 1,
-    @Query('categoryId') categoryId: number,
-  ): Promise<{ data: PageByHelpMeBoardResponseDTO[] }> {
-    return this.helpMeBoardService.findPagedHelpMeBoards(page, categoryId);
-  }
-
   @Get('/page')
   @ApiGetPageNumberByHelpMeBoard()
   countPageBoards(@Query('categoryId') categoryId: number) {
     return this.helpMeBoardService.countPagedHelpMeBoards(categoryId);
   }
 
-  /**
-   * @todo 추후 통합 예정
-   */
-  @Get('v2')
+  @Get()
   @ApiFindAllHelpMeBoards()
   findAllHelpMeBoard(
     @Query() helpMeBoardPageQueryDto: HelpMeBoardPageQueryDto,
@@ -129,19 +112,12 @@ export class HelpMeBoardController {
     @Param('helpMeBoardId', ParsePositiveIntPipe) helpMeBoardId: number,
     @Query() helpYouCommentPageQueryDto: HelpYouCommentPageQueryDto,
   ): Promise<HelpYouCommentPaginationResponseDto> {
+    console.log(userId);
     return this.helpMeBoardService.findAllHelpYouComments(
       userId,
       helpMeBoardId,
       helpYouCommentPageQueryDto,
     );
-  }
-
-  @Get('/pulling-up') //끌어올린 게시물 보여주기
-  @ApiGetPullingUpHelpMeBoard()
-  latestHelpMeBoard(
-    @Query('categoryId') categoryId: number,
-  ): Promise<{ data: PullingUpHelpMeBoardResponseDTO[] }> {
-    return this.helpMeBoardService.latestHelpMeBoards(categoryId);
   }
 
   @Get('/unit') //하나의 게시판 불러오기

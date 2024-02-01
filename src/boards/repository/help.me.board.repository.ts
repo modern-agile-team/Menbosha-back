@@ -44,60 +44,16 @@ export class HelpMeBoardRepository {
     return this.entityManager.count(HelpMeBoard);
   }
 
-  async findPagedBoardsByCategoryId(
-    skip: number,
-    limit: number,
-    categoryId: number,
-  ): Promise<HelpMeBoard[]> {
-    return await this.entityManager.find(HelpMeBoard, {
-      relations: ['user', 'user.userImage', 'helpMeBoardImages'],
-      where: { categoryId },
-      skip: skip,
-      take: limit,
-    });
-  }
-
   findOneHelpMeBoardBy(helpMeBoardId: number) {
     return this.entityManager
       .getRepository(HelpMeBoard)
       .findOneBy({ id: helpMeBoardId });
   }
 
-  async findPageByHelpMeBoards(
-    skip: number,
-    limit: number,
-  ): Promise<HelpMeBoard[]> {
-    return await this.entityManager.find(HelpMeBoard, {
-      relations: ['user', 'user.userImage', 'helpMeBoardImages'],
-      skip: skip,
-      take: limit,
-    });
-  }
-
   async findHelpMeBoardById(id: number): Promise<HelpMeBoard> {
     return await this.entityManager.findOne(HelpMeBoard, {
       relations: ['user', 'user.userImage', 'helpMeBoardImages'],
       where: { id },
-    });
-  }
-
-  async findLatestBoardsByCategoryId(
-    limit: number,
-    categoryId: number,
-  ): Promise<HelpMeBoard[]> {
-    return await this.entityManager.find(HelpMeBoard, {
-      relations: ['user', 'user.userImage', 'helpMeBoardImages'],
-      where: { categoryId: categoryId },
-      order: { pullingUp: 'DESC' },
-      take: limit,
-    });
-  }
-
-  async findLatestBoards(limit: number): Promise<HelpMeBoard[]> {
-    return await this.entityManager.find(HelpMeBoard, {
-      relations: ['user', 'user.userImage', 'helpMeBoardImages'],
-      order: { pullingUp: 'DESC' },
-      take: limit,
     });
   }
 

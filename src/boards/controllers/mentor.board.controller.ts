@@ -31,7 +31,7 @@ import { ApiUploadMentorBoardImages } from '../swagger-decorators/mentorBoard/ad
 import { ApiGetPageNumberByMentorBoard } from '../swagger-decorators/mentorBoard/get-page-number-mentor-board-decorator';
 import { MentorBoardPaginationResponseDto } from '../dto/mentorBoard/mentor-board-pagination-response.dto';
 import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
-import { ApiFindAllHotPosts } from '../swagger-decorators/mentorBoard/find-all-mentor-boards.decorator';
+import { ApiFindAllMentorBoards } from '../swagger-decorators/mentorBoard/find-all-mentor-boards.decorator';
 
 /**
  * 추후 리팩토링때
@@ -70,7 +70,7 @@ export class MentorBoardController {
     );
   }
 
-  @ApiFindAllHotPosts()
+  @ApiFindAllMentorBoards()
   @Get()
   findAllMentorBoards(
     @Query() mentorBoardPageQueryDto: MentorBoardPageQueryDto,
