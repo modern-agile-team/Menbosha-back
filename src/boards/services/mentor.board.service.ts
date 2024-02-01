@@ -12,7 +12,7 @@ import { oneMentorBoardResponseDTO } from '../dto/mentorBoard/one.response.mento
 import { FindOneOptions } from 'typeorm';
 import { MentorBoardLikeRepository } from '../repository/mentor.board.likes.repository';
 import { MentorBoardForHotPostDto } from '../dto/mentorBoard/mentor-board-for-hot-post.dto';
-import { MentorBoardHotPostPaginationResponseDto } from '../dto/mentorBoard/mentor-board-hot-post-pagination-response.dto';
+import { MentorBoardPaginationResponseDto } from '../dto/mentorBoard/mentor-board-hot-post-pagination-response.dto';
 import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
 import { CategoryService } from 'src/category/services/category.service';
 
@@ -44,9 +44,9 @@ export class MentorBoardService {
     return { total, totalPage };
   }
 
-  async findAllMentorBoardHotPostsWithLimitQuery(
+  async findAllMentorBoards(
     mentorBoardPageQueryDto: MentorBoardPageQueryDto,
-  ): Promise<MentorBoardHotPostPaginationResponseDto> {
+  ): Promise<MentorBoardPaginationResponseDto> {
     const { page, pageSize, orderField, sortOrder, ...filter } =
       mentorBoardPageQueryDto;
 
@@ -73,7 +73,7 @@ export class MentorBoardService {
       },
     );
 
-    return new MentorBoardHotPostPaginationResponseDto(
+    return new MentorBoardPaginationResponseDto(
       mentorBoardForHotPostDtos,
       mentorBoardHotPosts.length,
       page,

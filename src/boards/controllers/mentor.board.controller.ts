@@ -13,9 +13,7 @@ import {
 import { MentorBoardService } from '../services/mentor.board.service';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { CreateMentorBoardDto } from '../dto/mentorBoard/create.mentor.board.dto';
-import { PageByMentorBoardResponseDTO } from '../dto/mentorBoard/response.mentor.boards.dto';
 import { ApiAddMentorBoard } from '../swagger-decorators/mentorBoard/add-mentor-board-decorators';
-import { ApiGetPageMentorBoards } from '../swagger-decorators/mentorBoard/get-page-mentor-boards-decorators';
 import { ApiGetOneMentorBoard } from '../swagger-decorators/mentorBoard/get-one-mentor-board-decorators';
 import { ApiUpdateMentorBoard } from '../swagger-decorators/mentorBoard/patch-mentor-board-decorators';
 import { ApiTags } from '@nestjs/swagger';
@@ -31,8 +29,9 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateMentorBoardImageDto } from '../dto/mentorBoard/create.mentor.board.image.dto';
 import { ApiUploadMentorBoardImages } from '../swagger-decorators/mentorBoard/add-mentor-board-images-decorator';
 import { ApiGetPageNumberByMentorBoard } from '../swagger-decorators/mentorBoard/get-page-number-mentor-board-decorator';
-import { MentorBoardHotPostPaginationResponseDto } from '../dto/mentorBoard/mentor-board-hot-post-pagination-response.dto';
+import { MentorBoardPaginationResponseDto } from '../dto/mentorBoard/mentor-board-hot-post-pagination-response.dto';
 import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
+import { ApiFindAllHotPosts } from '../swagger-decorators/mentorBoard/find-all-hot-posts.decorator';
 
 /**
  * 추후 리팩토링때
@@ -71,22 +70,12 @@ export class MentorBoardController {
     );
   }
 
-  findAllHotPostsWithPagination(
+  @ApiFindAllHotPosts()
+  @Get()
+  findAllMentorBoards(
     @Query() mentorBoardPageQueryDto: MentorBoardPageQueryDto,
-  ): Promise<MentorBoardHotPostPaginationResponseDto> {
-    return this.mentorBoardHotPostsService.findAllMentorBoardHotPostsWithLimitQuery(
-      mentorBoardPageQueryDto,
-    );
-  }
-
-  @Get('') // 이부분은 아직 프론트랑 상의중입니다
-  //categoryId별 유저 가져오기 추가해야함.
-  @ApiGetPageMentorBoards()
-  findPageMentorBoards(
-    @Query('page') page = 1,
-    @Query('categoryId') categoryId: number,
-  ): Promise<{ data: PageByMentorBoardResponseDTO[] }> {
-    return this.mentorBoardService.findPagedMentorBoards(page, categoryId);
+  ): Promise<MentorBoardPaginationResponseDto> {
+    return this.mentorBoardService.findAllMentorBoards(mentorBoardPageQueryDto);
   }
 
   @Get('/page')

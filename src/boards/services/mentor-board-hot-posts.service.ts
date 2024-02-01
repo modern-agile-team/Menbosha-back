@@ -2,15 +2,11 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { HotPostsRepository } from 'src/hot-posts/repositories/hot-posts.repository';
-import { CategoryService } from 'src/category/services/category.service';
-import { MentorBoardRepository } from '../repository/mentor.boards.repository';
 
 @Injectable()
 export class MentorBoardHotPostsService {
   constructor(
     private readonly hotPostsRepository: HotPostsRepository<MentorBoard>,
-    private readonly categoryService: CategoryService,
-    private readonly mentorBoardRepository: MentorBoardRepository,
   ) {}
 
   async createMentorBoardHotPost(

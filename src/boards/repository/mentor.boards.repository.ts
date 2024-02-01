@@ -39,34 +39,6 @@ export class MentorBoardRepository {
     //이 부분 return은 dto로 수정하기
   }
 
-  async findRandomMentorBoardByCategoryId(
-    limit: number,
-    categoryId: number,
-  ): Promise<MentorBoard[]> {
-    return this.entityManager
-      .createQueryBuilder(MentorBoard, 'board')
-      .leftJoinAndSelect('board.user', 'user')
-      .leftJoinAndSelect('user.userImage', 'userImage')
-      .leftJoinAndSelect('board.mentorBoardImages', 'mentorBoardImages')
-      .leftJoinAndSelect('board.mentorBoardLikes', 'mentorBoardLikes')
-      .orderBy('RAND()')
-      .where({ categoryId })
-      .take(limit)
-      .getMany();
-  }
-
-  async findRandomMentorBoard(limit: number): Promise<MentorBoard[]> {
-    return this.entityManager
-      .createQueryBuilder(MentorBoard, 'board')
-      .leftJoinAndSelect('board.user', 'user')
-      .leftJoinAndSelect('user.userImage', 'userImage')
-      .leftJoinAndSelect('board.mentorBoardImages', 'mentorBoardImages')
-      .leftJoinAndSelect('board.mentorBoardLikes', 'mentorBoardLikes')
-      .orderBy('RAND()')
-      .take(limit)
-      .getMany();
-  }
-
   async findTotalBoardsByCategoryId(categoryId: number): Promise<number> {
     return this.entityManager.count(MentorBoard, {
       where: { categoryId: categoryId },
@@ -75,24 +47,6 @@ export class MentorBoardRepository {
 
   async findTotalBoards(): Promise<number> {
     return this.entityManager.count(MentorBoard);
-  }
-
-  async findPagedBoardsByCategoryId(
-    skip: number,
-    limit: number,
-    categoryId: number,
-  ): Promise<MentorBoard[]> {
-    return await this.entityManager.find(MentorBoard, {
-      relations: [
-        'user',
-        'user.userImage',
-        'mentorBoardImages',
-        'mentorBoardLikes',
-      ],
-      where: { categoryId },
-      skip: skip,
-      take: limit,
-    });
   }
 
   findAllMentorBoardsByQueryBuilder(
@@ -152,19 +106,6 @@ export class MentorBoardRepository {
     );
 
     return queryBuilder.skip(skip).take(pageSize).getMany();
-  }
-
-  async findPagedBoards(skip: number, limit: number): Promise<MentorBoard[]> {
-    return await this.entityManager.find(MentorBoard, {
-      relations: [
-        'user',
-        'user.userImage',
-        'mentorBoardImages',
-        'mentorBoardLikes',
-      ],
-      skip: skip,
-      take: limit,
-    });
   }
 
   findOneMentorBoard(options: FindOneOptions<MentorBoard>) {
