@@ -1,5 +1,5 @@
 import { PaginationResponseDto } from 'src/common/dto/pagination-response.dto';
-import { MentorBoardForHotPostDto } from './mentor-board-for-hot-post.dto';
+import { MentorBoardWithUserAndImageDto } from './mentor-board-with-user-and-image.dto';
 import { ApiProperty } from '@nestjs/swagger';
 
 /**
@@ -7,13 +7,13 @@ import { ApiProperty } from '@nestjs/swagger';
  */
 export class MentorBoardPaginationResponseDto extends PaginationResponseDto {
   @ApiProperty({
-    type: [MentorBoardForHotPostDto],
+    type: [MentorBoardWithUserAndImageDto],
     description: '멘토 게시판 인기 글 item',
   })
-  mentorBoardForHotPostsItemDto: MentorBoardForHotPostDto[];
+  mentorBoardForHotPostsItemDto: MentorBoardWithUserAndImageDto[];
 
   constructor(
-    mentorBoardForHotPostDto: MentorBoardForHotPostDto[],
+    mentorBoardForHotPostDto: MentorBoardWithUserAndImageDto[],
     totalCount: number,
     page: number,
     pageSize: number,

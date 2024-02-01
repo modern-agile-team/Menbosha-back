@@ -6,9 +6,9 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { MentorBoardHotPostPaginationResponseDto } from 'src/boards/dto/mentorBoard/mentor-board-hot-post-pagination-response.dto';
+import { MentorBoardPaginationResponseDto } from 'src/boards/dto/mentorBoard/mentor-board-pagination-response.dto';
 
-export function ApiFindAllHotPosts() {
+export function ApiFindAllMentorBoards() {
   return applyDecorators(
     ApiOperation({
       summary: '멘토 게시판 글 pagination',
@@ -22,7 +22,7 @@ export function ApiFindAllHotPosts() {
         properties: {
           content: {
             type: 'object',
-            $ref: getSchemaPath(MentorBoardHotPostPaginationResponseDto),
+            $ref: getSchemaPath(MentorBoardPaginationResponseDto),
           },
         },
       },
@@ -77,6 +77,6 @@ export function ApiFindAllHotPosts() {
         },
       },
     }),
-    ApiExtraModels(MentorBoardHotPostPaginationResponseDto),
+    ApiExtraModels(MentorBoardPaginationResponseDto),
   );
 }

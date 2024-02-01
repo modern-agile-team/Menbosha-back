@@ -29,9 +29,9 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateMentorBoardImageDto } from '../dto/mentorBoard/create.mentor.board.image.dto';
 import { ApiUploadMentorBoardImages } from '../swagger-decorators/mentorBoard/add-mentor-board-images-decorator';
 import { ApiGetPageNumberByMentorBoard } from '../swagger-decorators/mentorBoard/get-page-number-mentor-board-decorator';
-import { MentorBoardPaginationResponseDto } from '../dto/mentorBoard/mentor-board-hot-post-pagination-response.dto';
+import { MentorBoardPaginationResponseDto } from '../dto/mentorBoard/mentor-board-pagination-response.dto';
 import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
-import { ApiFindAllHotPosts } from '../swagger-decorators/mentorBoard/find-all-hot-posts.decorator';
+import { ApiFindAllHotPosts } from '../swagger-decorators/mentorBoard/find-all-mentor-boards.decorator';
 
 /**
  * 추후 리팩토링때

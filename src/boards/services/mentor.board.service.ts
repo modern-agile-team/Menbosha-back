@@ -11,8 +11,8 @@ import { UpdateMentorBoardDto } from '../dto/mentorBoard/update.mentor.board.dto
 import { oneMentorBoardResponseDTO } from '../dto/mentorBoard/one.response.mentor.boards.dto';
 import { FindOneOptions } from 'typeorm';
 import { MentorBoardLikeRepository } from '../repository/mentor.board.likes.repository';
-import { MentorBoardForHotPostDto } from '../dto/mentorBoard/mentor-board-for-hot-post.dto';
-import { MentorBoardPaginationResponseDto } from '../dto/mentorBoard/mentor-board-hot-post-pagination-response.dto';
+import { MentorBoardWithUserAndImageDto } from '../dto/mentorBoard/mentor-board-with-user-and-image.dto';
+import { MentorBoardPaginationResponseDto } from '../dto/mentorBoard/mentor-board-pagination-response.dto';
 import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
 import { CategoryService } from 'src/category/services/category.service';
 
@@ -69,7 +69,7 @@ export class MentorBoardService {
 
     const mentorBoardForHotPostDtos = mentorBoardHotPosts.map(
       (mentorBoardHotPost) => {
-        return new MentorBoardForHotPostDto(mentorBoardHotPost);
+        return new MentorBoardWithUserAndImageDto(mentorBoardHotPost);
       },
     );
 

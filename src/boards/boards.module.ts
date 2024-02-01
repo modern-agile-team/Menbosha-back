@@ -20,7 +20,6 @@ import { MentorBoardLike } from './entities/mentor-board-like.entity';
 import { MentorBoardLikeController } from './controllers/mentor-board-likes.controller';
 import { MentorBoardLikeService } from './services/mentor-board-likes.service';
 import { HotPostsModule } from 'src/hot-posts/hot-posts.module';
-import { MentorBoardHotPostsController } from './controllers/mentor-board-hot-posts.controller';
 import { MentorBoardHotPostsService } from './services/mentor-board-hot-posts.service';
 import { CategoryModule } from 'src/category/category.module';
 import { MentorBoardLikeRepository } from './repository/mentor.board.likes.repository';
@@ -44,7 +43,6 @@ import { QueryBuilderHelper } from 'src/helpers/query-builder.helper';
     MentorBoardController,
     HelpMeBoardController,
     MentorBoardLikeController,
-    MentorBoardHotPostsController,
   ],
   providers: [
     HelpMeBoardService,

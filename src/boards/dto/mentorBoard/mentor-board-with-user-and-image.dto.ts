@@ -5,11 +5,7 @@ import { MentorBoardLikeDto } from './mentor-board-like.dto';
 import { Exclude } from 'class-transformer';
 import { UserForJoinDto } from 'src/users/dtos/user-for-join.dto';
 
-/**
- * @todo 멘토 보드로 통합되면 dto명 수정 및 Property description 수정
- */
-
-export class MentorBoardForHotPostDto extends PickType(MentorBoardDto, [
+export class MentorBoardWithUserAndImageDto extends PickType(MentorBoardDto, [
   'id',
   'userId',
   'head',
@@ -43,14 +39,16 @@ export class MentorBoardForHotPostDto extends PickType(MentorBoardDto, [
   })
   likeCount: number;
 
-  constructor(mentorBoardForHotPostDto: Partial<MentorBoardForHotPostDto>) {
-    const { mentorBoardImages } = mentorBoardForHotPostDto;
+  constructor(
+    mentorBoardWithUserAndImageDto: Partial<MentorBoardWithUserAndImageDto>,
+  ) {
+    const { mentorBoardImages } = mentorBoardWithUserAndImageDto;
 
     super();
-    Object.assign(this, mentorBoardForHotPostDto);
+    Object.assign(this, mentorBoardWithUserAndImageDto);
 
-    this.body = mentorBoardForHotPostDto.body.substring(0, 30);
-    this.likeCount = mentorBoardForHotPostDto.mentorBoardLikes.length;
+    this.body = mentorBoardWithUserAndImageDto.body.substring(0, 30);
+    this.likeCount = mentorBoardWithUserAndImageDto.mentorBoardLikes.length;
     mentorBoardImages.length
       ? (this.imageUrl = mentorBoardImages[0].imageUrl)
       : (this.imageUrl = null);
