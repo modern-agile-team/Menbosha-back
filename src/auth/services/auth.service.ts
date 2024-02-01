@@ -171,27 +171,47 @@ export class AuthService implements AuthServiceInterface {
         await queryRunner.connect();
         await queryRunner.startTransaction();
 
-        const newUser = await this.userRepository.createUser(userInfo);
-        const userId = newUser.id;
-        if (!profileImage) {
-          await this.userImageRepository.uploadUserImage(
+        try {
+          const newUser = await this.userRepository.createUser(userInfo);
+          const userId = newUser.id;
+          if (!profileImage) {
+            await this.userImageRepository.uploadUserImage(
+              userId,
+              process.env.DEFAULT_USER_IMAGE,
+            );
+          } else {
+            await this.userImageRepository.uploadUserImage(
+              userId,
+              profileImage,
+            );
+          }
+          await this.totalCountService.createTotalCount(userId);
+          await this.totalCountService.createMentorReviewChecklistCount(userId);
+
+          await queryRunner.commitTransaction();
+
+          return {
             userId,
-            process.env.DEFAULT_USER_IMAGE,
+            socialAccessToken,
+            socialRefreshToken,
+            firstLogin: true,
+          };
+        } catch (error) {
+          if (queryRunner.isTransactionActive) {
+            await queryRunner.rollbackTransaction();
+          }
+
+          console.error(error);
+
+          throw new HttpException(
+            '사용자 생성 중 오류가 발생했습니다.',
+            HttpStatus.INTERNAL_SERVER_ERROR,
           );
-        } else {
-          await this.userImageRepository.uploadUserImage(userId, profileImage);
+        } finally {
+          if (!queryRunner.isReleased) {
+            await queryRunner.release();
+          }
         }
-        await this.totalCountService.createTotalCount(userId);
-        await this.totalCountService.createMentorReviewChecklistCount(userId);
-
-        await queryRunner.commitTransaction();
-
-        return {
-          userId,
-          socialAccessToken,
-          socialRefreshToken,
-          firstLogin: true,
-        };
       }
     } catch (error) {
       console.log(error);
