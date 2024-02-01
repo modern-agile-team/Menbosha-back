@@ -6,6 +6,7 @@ import { UserImageRepository } from 'src/users/repositories/user-image.repositor
 import axios from 'axios';
 import { AuthServiceInterface } from '../interfaces/auth-service.interface';
 import { TotalCountService } from 'src/total-count/services/total-count.service';
+import { DataSource } from 'typeorm';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ export class AuthService implements AuthServiceInterface {
     private readonly userImageRepository: UserImageRepository,
     private readonly tokenService: TokenService,
     private readonly totalCountService: TotalCountService,
+    private readonly dataSource: DataSource,
   ) {}
 
   async login(authorizeCode: string, provider: string) {
@@ -165,6 +167,10 @@ export class AuthService implements AuthServiceInterface {
         };
       } else {
         // 존재하지 않는 사용자인 경우
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+
         const newUser = await this.userRepository.createUser(userInfo);
         const userId = newUser.id;
         if (!profileImage) {
@@ -177,6 +183,9 @@ export class AuthService implements AuthServiceInterface {
         }
         await this.totalCountService.createTotalCount(userId);
         await this.totalCountService.createMentorReviewChecklistCount(userId);
+
+        await queryRunner.commitTransaction();
+
         return {
           userId,
           socialAccessToken,
