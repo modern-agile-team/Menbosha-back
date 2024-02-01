@@ -172,21 +172,31 @@ export class AuthService implements AuthServiceInterface {
         await queryRunner.startTransaction();
 
         try {
-          const newUser = await this.userRepository.createUser(userInfo);
+          const entityManager = queryRunner.manager;
+
+          const newUser = await this.userRepository.createUser(
+            entityManager,
+            userInfo,
+          );
           const userId = newUser.id;
           if (!profileImage) {
             await this.userImageRepository.uploadUserImage(
+              entityManager,
               userId,
               process.env.DEFAULT_USER_IMAGE,
             );
           } else {
             await this.userImageRepository.uploadUserImage(
+              entityManager,
               userId,
               profileImage,
             );
           }
-          await this.totalCountService.createTotalCount(userId);
-          await this.totalCountService.createMentorReviewChecklistCount(userId);
+          await this.totalCountService.createTotalCount(entityManager, userId);
+          await this.totalCountService.createMentorReviewChecklistCount(
+            entityManager,
+            userId,
+          );
 
           await queryRunner.commitTransaction();
 
