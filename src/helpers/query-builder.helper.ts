@@ -13,6 +13,7 @@ export class QueryBuilderHelper {
   ) {
     for (const key in filter) {
       const parameterName = key;
+
       if (fullTextSearchField?.includes(key) && filter[key]) {
         queryBuilder
           .andWhere(

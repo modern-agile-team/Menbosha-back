@@ -9,6 +9,9 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFiles,
+  UsePipes,
+  ValidationPipe,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { MentorBoardService } from '../services/mentor.board.service';
 import { MentorBoard } from '../entities/mentor-board.entity';
@@ -32,10 +35,19 @@ import { ApiGetPageNumberByMentorBoard } from '../swagger-decorators/mentorBoard
 import { MentorBoardPaginationResponseDto } from '../dto/mentorBoard/mentor-board-pagination-response.dto';
 import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
 import { ApiFindAllMentorBoards } from '../swagger-decorators/mentorBoard/find-all-mentor-boards.decorator';
+import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
 
 /**
  * 추후 리팩토링때
  */
+@UsePipes(
+  new ValidationPipe({
+    transform: true,
+    whitelist: true,
+    forbidNonWhitelisted: true,
+  }),
+)
+@UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
 @Controller('mentor-boards')
 @ApiTags('mentor-board API')
 export class MentorBoardController {
