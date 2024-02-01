@@ -121,6 +121,7 @@ export class HelpMeBoardService {
   }
 
   async findAllHelpYouComments(
+    myId: number,
     helpMeBoardId: number,
     helpYouCommentPageQueryDto: HelpYouCommentPageQueryDto,
   ): Promise<HelpYouCommentPaginationResponseDto> {
@@ -149,7 +150,7 @@ export class HelpMeBoardService {
 
     const helpYouCommentsWithUserAndUserImageDto = helpYouComments.map(
       (helpYouComment) =>
-        new HelpYouCommentWithUserAndUserImageDto(helpYouComment),
+        new HelpYouCommentWithUserAndUserImageDto(helpYouComment, myId),
     );
 
     return new HelpYouCommentPaginationResponseDto(

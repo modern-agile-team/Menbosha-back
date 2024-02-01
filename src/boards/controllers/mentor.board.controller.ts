@@ -31,9 +31,13 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateMentorBoardImageDto } from '../dto/mentorBoard/create.mentor.board.image.dto';
 import { ApiUploadMentorBoardImages } from '../swagger-decorators/mentorBoard/add-mentor-board-images-decorator';
 import { ApiGetPageNumberByMentorBoard } from '../swagger-decorators/mentorBoard/get-page-number-mentor-board-decorator';
-import { ApiGetRandomMentorBoards } from '../swagger-decorators/mentorBoard/get-random-mentor-boards-decorator';
+import { MentorBoardHotPostPaginationResponseDto } from '../dto/mentorBoard/mentor-board-hot-post-pagination-response.dto';
+import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
 
-@Controller('mentor-board')
+/**
+ * 추후 리팩토링때
+ */
+@Controller('mentor-boards')
 @ApiTags('mentor-board API')
 export class MentorBoardController {
   constructor(
@@ -67,6 +71,14 @@ export class MentorBoardController {
     );
   }
 
+  findAllHotPostsWithPagination(
+    @Query() mentorBoardPageQueryDto: MentorBoardPageQueryDto,
+  ): Promise<MentorBoardHotPostPaginationResponseDto> {
+    return this.mentorBoardHotPostsService.findAllMentorBoardHotPostsWithLimitQuery(
+      mentorBoardPageQueryDto,
+    );
+  }
+
   @Get('') // 이부분은 아직 프론트랑 상의중입니다
   //categoryId별 유저 가져오기 추가해야함.
   @ApiGetPageMentorBoards()
@@ -75,12 +87,6 @@ export class MentorBoardController {
     @Query('categoryId') categoryId: number,
   ): Promise<{ data: PageByMentorBoardResponseDTO[] }> {
     return this.mentorBoardService.findPagedMentorBoards(page, categoryId);
-  }
-
-  @Get('/random') //랜덤한 멘토게시글 3개만 뽑아오기
-  @ApiGetRandomMentorBoards()
-  randomMentorBoards(@Query('categoryId') categoryId: number) {
-    return this.mentorBoardService.randomMentorBoards(categoryId);
   }
 
   @Get('/page')

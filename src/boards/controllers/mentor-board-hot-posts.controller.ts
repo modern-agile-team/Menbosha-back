@@ -20,7 +20,7 @@ import { ApiFindAllHotPosts } from '../swagger-decorators/mentorBoard/find-all-h
  * 2. folder route
  * 3. method name
  */
-@ApiTags('mentor-board-hot-posts')
+@ApiTags('mentor-board')
 @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
 @UsePipes(
   new ValidationPipe({
@@ -29,7 +29,7 @@ import { ApiFindAllHotPosts } from '../swagger-decorators/mentorBoard/find-all-h
     forbidNonWhitelisted: true,
   }),
 )
-@Controller('mentor-board/hot-posts')
+@Controller('mentor-boards')
 export class MentorBoardHotPostsController {
   constructor(
     private readonly mentorBoardHotPostsService: MentorBoardHotPostsService,

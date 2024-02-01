@@ -122,12 +122,15 @@ export class HelpMeBoardController {
    * 추후 prefix 수정 후 comment 컨트롤러 쪽으로 분리
    */
   @Get(':helpMeBoardId/help-you-comments')
+  @UseGuards(JwtOptionalGuard)
   @ApiFindAllHelpYouComments()
   findAllHelpYouComments(
+    @GetUserId() userId: number,
     @Param('helpMeBoardId', ParsePositiveIntPipe) helpMeBoardId: number,
     @Query() helpYouCommentPageQueryDto: HelpYouCommentPageQueryDto,
   ): Promise<HelpYouCommentPaginationResponseDto> {
     return this.helpMeBoardService.findAllHelpYouComments(
+      userId,
       helpMeBoardId,
       helpYouCommentPageQueryDto,
     );

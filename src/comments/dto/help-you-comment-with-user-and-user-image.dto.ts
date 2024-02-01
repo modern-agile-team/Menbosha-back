@@ -46,16 +46,23 @@ export class HelpYouCommentWithUserAndUserImageDto extends PickType(
   ['id', 'userId', 'helpMeBoardId', 'createdAt'],
 ) {
   @ApiProperty({
+    description: '작성자 여부',
+  })
+  isAuthor: boolean;
+
+  @ApiProperty({
     description: '도와주세요 댓글 유저 정보 객체',
     type: HelpYouCommentUserDto,
   })
   user: HelpYouCommentUserDto;
 
   constructor(
-    helpYouCommentWithUserAndUserImageDto: HelpYouCommentWithUserAndUserImageDto,
+    helpYouCommentWithUserAndUserImageDto: Partial<HelpYouCommentWithUserAndUserImageDto>,
+    userId: number,
   ) {
     super();
 
     Object.assign(this, helpYouCommentWithUserAndUserImageDto);
+    this.isAuthor = userId === helpYouCommentWithUserAndUserImageDto.userId;
   }
 }
