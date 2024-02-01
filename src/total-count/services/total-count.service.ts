@@ -12,6 +12,10 @@ export class TotalCountService {
     await this.totalCountRepository.createTotalCount(userId);
   }
 
+  async createMentorReviewChecklistCount(userId: number) {
+    await this.totalCountRepository.createMentorReviewChecklistCount(userId);
+  }
+
   async counting(userId: number, mentorId: number, type: Type, action: Action) {
     try {
       if (type === Type.MentorBoardLikeCount || type === Type.ReviewCount) {

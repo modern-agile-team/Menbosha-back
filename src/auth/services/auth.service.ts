@@ -176,6 +176,7 @@ export class AuthService implements AuthServiceInterface {
           await this.userImageRepository.uploadUserImage(userId, profileImage);
         }
         await this.totalCountService.createTotalCount(userId);
+        await this.totalCountService.createMentorReviewChecklistCount(userId);
         return {
           userId,
           socialAccessToken,

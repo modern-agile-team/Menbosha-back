@@ -12,6 +12,12 @@ export class TotalCountRepository {
     await this.entityManager.insert('total_count', { userId });
   }
 
+  async createMentorReviewChecklistCount(userId: number) {
+    await this.entityManager.insert('mentor_review_checklist_count', {
+      userId,
+    });
+  }
+
   async counting(userId: number, type: Type, action: Action) {
     if (action === Action.Increment) {
       await this.entityManager.increment(TotalCount, { userId }, type, 1);
