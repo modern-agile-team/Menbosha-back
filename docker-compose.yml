@@ -8,7 +8,10 @@ services:
       - .env
     restart: always
     environment:
-      - TZ=Asia/Seoul
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_BINDING_PORT: ${REDIS_BINDING_PORT}
+      REDIS_PORT: ${REDIS_PORT}
+      TZ: Asia/Seoul
 
   redis:
     image: 2swo/redis
