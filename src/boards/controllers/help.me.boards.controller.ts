@@ -112,7 +112,6 @@ export class HelpMeBoardController {
     @Param('helpMeBoardId', ParsePositiveIntPipe) helpMeBoardId: number,
     @Query() helpYouCommentPageQueryDto: HelpYouCommentPageQueryDto,
   ): Promise<HelpYouCommentPaginationResponseDto> {
-    console.log(userId);
     return this.helpMeBoardService.findAllHelpYouComments(
       userId,
       helpMeBoardId,

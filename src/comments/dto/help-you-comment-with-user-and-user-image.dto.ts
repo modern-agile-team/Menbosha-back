@@ -62,8 +62,6 @@ export class HelpYouCommentWithUserAndUserImageDto extends PickType(
   ) {
     super();
 
-    console.log(userId, helpYouCommentWithUserAndUserImageDto.userId);
-
     Object.assign(this, helpYouCommentWithUserAndUserImageDto);
     this.isAuthor = userId === helpYouCommentWithUserAndUserImageDto.userId;
   }
