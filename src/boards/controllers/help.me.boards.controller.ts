@@ -48,8 +48,8 @@ import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
 @UsePipes(
   new ValidationPipe({
     transform: true,
-    // whitelist: true,
-    // forbidNonWhitelisted: true,
+    whitelist: true,
+    forbidNonWhitelisted: true,
   }),
 )
 @Controller('help-me-boards')
