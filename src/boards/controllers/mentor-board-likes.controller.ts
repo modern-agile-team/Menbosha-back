@@ -49,14 +49,12 @@ export class MentorBoardLikeController {
 
   @ApiDeleteMentorBoardLike()
   @UseGuards(JwtAccessTokenGuard)
-  @Delete('likes/:mentorBoardLikeId')
+  @Delete('likes')
   deleteMentorBoardLike(
     @GetUserId() userId: number,
     @Param('mentorBoardId', ParsePositiveIntPipe) mentorBoardId: number,
-    @Param('mentorBoardLikeId', ParsePositiveIntPipe) mentorBoardLikeId: number,
   ): Promise<{ isLike: false }> {
     return this.mentorBoardSLikeService.deleteMentorBoardLike(
-      mentorBoardLikeId,
       mentorBoardId,
       userId,
     );

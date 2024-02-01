@@ -20,8 +20,10 @@ export class LikesRepository<E extends RequiredLikeColumn> {
 
   isExistLike(parentId: number, userId: number): Promise<boolean> {
     return this.LikeRepository.exists({
-      parentId,
-      userId,
+      where: {
+        parentId,
+        userId,
+      },
     } as FindManyOptions<E>);
   }
 

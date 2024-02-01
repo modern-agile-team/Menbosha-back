@@ -104,6 +104,7 @@ export class HelpMeBoardController {
    * @todo 도와줄게요 댓글 컨트롤러의 prefix때문에 restful하게 api path를 짤 수가 없음.
    * 추후 prefix 수정 후 comment 컨트롤러 쪽으로 분리
    */
+  @ApiTags('help-you-comment API')
   @Get(':helpMeBoardId/help-you-comments')
   @UseGuards(JwtOptionalGuard)
   @ApiFindAllHelpYouComments()

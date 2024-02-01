@@ -2,7 +2,6 @@ import { applyDecorators } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiConflictResponse,
-  ApiForbiddenResponse,
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger';
@@ -73,22 +72,6 @@ export function ApiDeleteMentorBoardLike() {
             'jwt expired': {
               value: { statusCode: 401, message: 'jwt expired' },
               description: '만료된 토큰인 경우',
-            },
-          },
-        },
-      },
-    }),
-    ApiForbiddenResponse({
-      description: '403 error',
-      content: {
-        JSON: {
-          examples: {
-            forbidden: {
-              value: {
-                statusCode: 403,
-                message: '해당 좋아요에 권한이 없습니다.',
-              },
-              description: '좋아요 못누름',
             },
           },
         },
