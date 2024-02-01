@@ -1,8 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiBody,
-  ApiCookieAuth,
-  ApiHeader,
   ApiHeaders,
   ApiOperation,
   ApiResponse,
@@ -76,6 +75,6 @@ export function ApiCounting() {
         },
       },
     }),
-    ApiCookieAuth('refresh-token'),
+    ApiBearerAuth('access-token'),
   );
 }
