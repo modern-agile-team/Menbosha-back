@@ -52,7 +52,7 @@ import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
     // forbidNonWhitelisted: true,
   }),
 )
-@Controller('help-me-board')
+@Controller('help-me-boards')
 @ApiTags('Help-me-board API')
 export class HelpMeBoardController {
   constructor(

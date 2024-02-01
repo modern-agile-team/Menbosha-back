@@ -18,7 +18,7 @@ import { ApiCreateMentorBoardLike } from '../swagger-decorators/mentorBoard/crea
 import { ApiDeleteMentorBoardLike } from '../swagger-decorators/mentorBoard/delete-mentor-board-like.decorator';
 import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
 
-@ApiTags('mentor-board-likes')
+@ApiTags('mentor-board-like')
 @UsePipes(
   new ValidationPipe({
     transform: true,
@@ -27,7 +27,7 @@ import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
   }),
 )
 @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
-@Controller('mentor-board')
+@Controller('mentor-boards/:mentorBoardId')
 export class MentorBoardLikeController {
   constructor(
     private readonly mentorBoardSLikeService: MentorBoardLikeService,
@@ -35,7 +35,7 @@ export class MentorBoardLikeController {
 
   @ApiCreateMentorBoardLike()
   @UseGuards(JwtAccessTokenGuard)
-  @Post(':mentorBoardId/like')
+  @Post('likes')
   async createMentorBoardLike(
     @GetUserId() userId: number,
     @Param('mentorBoardId', ParsePositiveIntPipe) mentorBoardId: number,
@@ -49,12 +49,14 @@ export class MentorBoardLikeController {
 
   @ApiDeleteMentorBoardLike()
   @UseGuards(JwtAccessTokenGuard)
-  @Delete(':mentorBoardId/like')
+  @Delete('likes/:mentorBoardLikeId')
   deleteMentorBoardLike(
     @GetUserId() userId: number,
     @Param('mentorBoardId', ParsePositiveIntPipe) mentorBoardId: number,
+    @Param('mentorBoardLikeId', ParsePositiveIntPipe) mentorBoardLikeId: number,
   ): Promise<{ isLike: false }> {
     return this.mentorBoardSLikeService.deleteMentorBoardLike(
+      mentorBoardLikeId,
       mentorBoardId,
       userId,
     );

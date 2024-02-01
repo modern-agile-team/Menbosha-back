@@ -94,6 +94,7 @@ export class MentorBoardLikeService {
   }
 
   async deleteMentorBoardLike(
+    mentorBoardLikeId: number,
     mentorBoardId: number,
     userId: number,
   ): Promise<{ isLike: false }> {
@@ -102,7 +103,6 @@ export class MentorBoardLikeService {
         id: true,
         mentorBoardLikes: {
           id: true,
-          userId: true,
         },
         popularAt: true,
       },
@@ -110,12 +110,20 @@ export class MentorBoardLikeService {
       relations: ['mentorBoardLikes'],
     });
 
-    if (
-      !existBoard.mentorBoardLikes.find(
-        (mentorBoardLike) => mentorBoardLike.userId === userId,
-      )
-    ) {
-      throw new ConflictException('아직 좋아요가 없습니다.');
+    const existLike = await this.likesService.findOneLike({
+      select: ['id', 'userId'],
+      where: {
+        id: mentorBoardLikeId,
+        parentId: existBoard.id,
+      },
+    });
+
+    if (!existLike) {
+      throw new ConflictException('아직 좋아요가 존재하지 않습니다.');
+    }
+
+    if (existLike.userId !== userId) {
+      throw new ForbiddenException('해당 좋아요에 권한이 없습니다.');
     }
 
     const queryRunner = this.dataSource.createQueryRunner();

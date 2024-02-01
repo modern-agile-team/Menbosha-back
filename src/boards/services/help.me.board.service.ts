@@ -88,9 +88,7 @@ export class HelpMeBoardService {
       await this.helpMeBoardRepository.findOneHelpMeBoardBy(helpMeBoardId);
 
     if (!helpMeBoard) {
-      throw new NotFoundException(
-        '도와주세요 게시판의 해당 글이 존재하지 않습니다.',
-      );
+      throw new NotFoundException('해당 글이 존재하지 않습니다.');
     }
 
     const { page, pageSize, orderField, sortOrder, ...filter } =

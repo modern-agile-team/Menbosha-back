@@ -63,13 +63,13 @@ export function ApiFindAllHelpYouComments() {
       content: {
         JSON: {
           examples: {
-            'Not Found category Id': {
+            'Not Found help me board': {
               value: {
-                message: ['해당 category id가 존재하지 않습니다.'],
+                message: ['해당 게시글이 존재하지 않습니다.'],
                 error: 'Not Found',
                 statusCode: 404,
               },
-              description: '카테고리 id 못찾음',
+              description: '도와주세요 게시글 찾지 못함',
             },
           },
         },
