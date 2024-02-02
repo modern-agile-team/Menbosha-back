@@ -109,6 +109,57 @@ export class UserBadgeService {
     }
     return undefined;
   }
+  async checkAndAwardHelpMeBoardBadge(userId: number) {
+    const helpMeBoardBadges = [1, 2, 3]; //enum 으로 관리. (명시적으로 변경)
+    const hasBoardBadge = await this.userBadgeRepository.myHelpMeBoardBadge(
+      //hasBoardBadge 가 3개임 시발 - > boardCount가 10이고, hasBoardBadge.id 가 1이 없을 때.
+      // 이것또한 switch case로 해본다?
+      userId,
+      helpMeBoardBadges,
+    );
+    // 게시글 뱃지 획득 로직
+    const boardCount = await this.totalCountRepository.countBoards(userId);
+    console.log(boardCount, hasBoardBadge);
+
+    switch (boardCount) {
+      case 10:
+        if (hasBoardBadge.length === 0) {
+          const badgeId = 1;
+          const boardBadge = await this.userBadgeRepository.addHelpMeBoardBadge(
+            userId,
+            badgeId,
+          );
+          return boardBadge;
+        }
+        break;
+
+      case 20:
+        if (hasBoardBadge.filter((badge) => badge.id === 2).length === 0) {
+          const badgeId = 2;
+          const boardBadge = await this.userBadgeRepository.addHelpMeBoardBadge(
+            userId,
+            badgeId,
+          );
+          return boardBadge;
+        }
+        break;
+
+      case 30:
+        if (hasBoardBadge.filter((badge) => badge.id === 3).length === 0) {
+          const badgeId = 3;
+          const boardBadge = await this.userBadgeRepository.addHelpMeBoardBadge(
+            userId,
+            badgeId,
+          );
+          return boardBadge;
+        }
+        break;
+
+      default:
+        throw new HttpException('아직 도달하지 못한 뱃지입니다', 404);
+    }
+    return undefined;
+  }
 
   async checkAndAwardCommentBadge(userId: number) {
     // 댓글 뱃지 여부 확인
