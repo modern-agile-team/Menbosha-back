@@ -58,7 +58,7 @@ export class MentorBoardService {
 
     const skip = (page - 1) * pageSize;
 
-    const mentorBoardHotPosts =
+    const mentorBoards =
       await this.mentorBoardRepository.findAllMentorBoardsByQueryBuilder(
         skip,
         pageSize,
@@ -67,15 +67,13 @@ export class MentorBoardService {
         filter,
       );
 
-    const mentorBoardForHotPostDtos = mentorBoardHotPosts.map(
-      (mentorBoardHotPost) => {
-        return new MentorBoardWithUserAndImageDto(mentorBoardHotPost);
-      },
-    );
+    const mentorBoardWithUserAndImageDtos = mentorBoards.map((mentorBoard) => {
+      return new MentorBoardWithUserAndImageDto(mentorBoard);
+    });
 
     return new MentorBoardPaginationResponseDto(
-      mentorBoardForHotPostDtos,
-      mentorBoardHotPosts.length,
+      mentorBoardWithUserAndImageDtos,
+      mentorBoardWithUserAndImageDtos.length,
       page,
       pageSize,
     );
