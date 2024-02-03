@@ -6,11 +6,7 @@ export class MentorBoardDto
   implements
     Omit<
       MentorBoard,
-      | 'user'
-      | 'categoryList'
-      | 'mentorBoardHotPost'
-      | 'mentorBoardImages'
-      | 'mentorBoardLikes'
+      'user' | 'categoryList' | 'mentorBoardImages' | 'mentorBoardLikes'
     >
 {
   @ApiProperty({ description: '멘토 게시판 글 고유 id', format: 'integer' })

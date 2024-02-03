@@ -9,13 +9,14 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFiles,
+  UsePipes,
+  ValidationPipe,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { MentorBoardService } from '../services/mentor.board.service';
 import { MentorBoard } from '../entities/mentor-board.entity';
 import { CreateMentorBoardDto } from '../dto/mentorBoard/create.mentor.board.dto';
-import { PageByMentorBoardResponseDTO } from '../dto/mentorBoard/response.mentor.boards.dto';
 import { ApiAddMentorBoard } from '../swagger-decorators/mentorBoard/add-mentor-board-decorators';
-import { ApiGetPageMentorBoards } from '../swagger-decorators/mentorBoard/get-page-mentor-boards-decorators';
 import { ApiGetOneMentorBoard } from '../swagger-decorators/mentorBoard/get-one-mentor-board-decorators';
 import { ApiUpdateMentorBoard } from '../swagger-decorators/mentorBoard/patch-mentor-board-decorators';
 import { ApiTags } from '@nestjs/swagger';
@@ -31,9 +32,23 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateMentorBoardImageDto } from '../dto/mentorBoard/create.mentor.board.image.dto';
 import { ApiUploadMentorBoardImages } from '../swagger-decorators/mentorBoard/add-mentor-board-images-decorator';
 import { ApiGetPageNumberByMentorBoard } from '../swagger-decorators/mentorBoard/get-page-number-mentor-board-decorator';
-import { ApiGetRandomMentorBoards } from '../swagger-decorators/mentorBoard/get-random-mentor-boards-decorator';
+import { MentorBoardPaginationResponseDto } from '../dto/mentorBoard/mentor-board-pagination-response.dto';
+import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
+import { ApiFindAllMentorBoards } from '../swagger-decorators/mentorBoard/find-all-mentor-boards.decorator';
+import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
 
-@Controller('mentor-board')
+/**
+ * 추후 리팩토링때
+ */
+@UsePipes(
+  new ValidationPipe({
+    transform: true,
+    whitelist: true,
+    forbidNonWhitelisted: true,
+  }),
+)
+@UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
+@Controller('mentor-boards')
 @ApiTags('mentor-board API')
 export class MentorBoardController {
   constructor(
@@ -67,20 +82,12 @@ export class MentorBoardController {
     );
   }
 
-  @Get('') // 이부분은 아직 프론트랑 상의중입니다
-  //categoryId별 유저 가져오기 추가해야함.
-  @ApiGetPageMentorBoards()
-  findPageMentorBoards(
-    @Query('page') page = 1,
-    @Query('categoryId') categoryId: number,
-  ): Promise<{ data: PageByMentorBoardResponseDTO[] }> {
-    return this.mentorBoardService.findPagedMentorBoards(page, categoryId);
-  }
-
-  @Get('/random') //랜덤한 멘토게시글 3개만 뽑아오기
-  @ApiGetRandomMentorBoards()
-  randomMentorBoards(@Query('categoryId') categoryId: number) {
-    return this.mentorBoardService.randomMentorBoards(categoryId);
+  @ApiFindAllMentorBoards()
+  @Get()
+  findAllMentorBoards(
+    @Query() mentorBoardPageQueryDto: MentorBoardPageQueryDto,
+  ): Promise<MentorBoardPaginationResponseDto> {
+    return this.mentorBoardService.findAllMentorBoards(mentorBoardPageQueryDto);
   }
 
   @Get('/page')

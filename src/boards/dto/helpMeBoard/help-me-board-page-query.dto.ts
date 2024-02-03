@@ -1,15 +1,14 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-
 import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator';
-import { MentorBoardOrderField } from 'src/boards/constants/mentor-board-order-field.enum';
 import { SortOrder } from '../../../common/constants/sort-order.enum';
 import { PageQueryDto } from 'src/common/dto/page-query.dto';
 import { IsPositiveInt } from 'src/common/decorators/validators/is-positive-int.decorator';
+import { HelpMeBoardOrderField } from 'src/boards/constants/help-me-board-order-field.enum';
 import { ParseOptionalBoolean } from 'src/common/transformers/parse-optional-boolean.transformer';
 
-export class MentorBoardPageQueryDto extends PageQueryDto {
+export class HelpMeBoardPageQueryDto extends PageQueryDto {
   @ApiPropertyOptional({
-    description: '멘토 게시글 고유 ID 필터링',
+    description: '도와주세요 게시글 고유 ID 필터링',
     format: 'integer',
   })
   @IsOptional()
@@ -49,22 +48,23 @@ export class MentorBoardPageQueryDto extends PageQueryDto {
   categoryId: number = 1;
 
   @ApiProperty({
-    description: '인기 게시글만 불러올 지, 모든 글을 불러올 지 여부',
+    description:
+      '끌올된 도와주세요 게시글만 불러올지 모든 글을 불러올지 결정 여부',
     default: false,
   })
   @IsOptional()
   @IsBoolean()
   @ParseOptionalBoolean()
-  loadOnlyPopular: boolean = false;
+  loadOnlyPullingUp: boolean = false;
 
   @ApiProperty({
     description: '정렬의 기준으로 잡을 필드',
-    enum: MentorBoardOrderField,
-    default: MentorBoardOrderField.id,
+    enum: HelpMeBoardOrderField,
+    default: HelpMeBoardOrderField.id,
   })
   @IsOptional()
-  @IsEnum(MentorBoardOrderField)
-  orderField: MentorBoardOrderField = MentorBoardOrderField.id;
+  @IsEnum(HelpMeBoardOrderField)
+  orderField: HelpMeBoardOrderField = HelpMeBoardOrderField.id;
 
   @ApiProperty({
     description: '오름차순 혹은 내림차순',

@@ -1,4 +1,4 @@
-export enum MentorBoardOrderField {
+export enum HelpMeBoardOrderField {
   id = 'id',
   userId = 'userId',
   head = 'head',
@@ -6,6 +6,5 @@ export enum MentorBoardOrderField {
   createdAt = 'createdAt',
   updatedAt = 'updatedAt',
   categoryListId = 'categoryId',
-  popularAt = 'popularAt',
-  random = 'RAND()',
+  pullingUp = 'pullingUp',
 }

@@ -102,7 +102,6 @@ export class MentorBoardLikeService {
         id: true,
         mentorBoardLikes: {
           id: true,
-          userId: true,
         },
         popularAt: true,
       },
@@ -110,12 +109,13 @@ export class MentorBoardLikeService {
       relations: ['mentorBoardLikes'],
     });
 
-    if (
-      !existBoard.mentorBoardLikes.find(
-        (mentorBoardLike) => mentorBoardLike.userId === userId,
-      )
-    ) {
-      throw new ConflictException('아직 좋아요가 없습니다.');
+    const existLike = await this.likesService.isExistLike(
+      existBoard.id,
+      userId,
+    );
+
+    if (!existLike) {
+      throw new ConflictException('아직 좋아요가 존재하지 않습니다.');
     }
 
     const queryRunner = this.dataSource.createQueryRunner();
