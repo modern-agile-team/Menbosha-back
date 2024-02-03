@@ -283,5 +283,6 @@ export class UserBadgeService {
 
   async countBadge(mentorId: number): Promise<void> {
     const myBadge = await this.userBadgeRepository.getUserBadge(mentorId);
+    console.log(myBadge);
   }
 }
