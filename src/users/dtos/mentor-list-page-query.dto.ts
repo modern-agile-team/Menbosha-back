@@ -1,6 +1,10 @@
 import { PageQueryDto } from 'src/common/dto/page-query.dto';
 import { User } from '../entities/user.entity';
+import { SortOrder } from 'src/common/constants/sort-order.enum';
 
+/**
+ * @todo create provider enum, mentorOrderField
+ */
 export class MentorListPageQueryDto
   extends PageQueryDto
   implements Partial<Pick<User, 'id'>>
@@ -19,5 +23,5 @@ export class MentorListPageQueryDto
 
   orderField;
 
-  sortOrder;
+  sortOrder: SortOrder = SortOrder.Asc;
 }
