@@ -31,6 +31,7 @@ import { ApiGetMyRank } from '../swagger-decorators/get-my-rank-decorators';
 import { ApiGetUserInfo } from '../swagger-decorators/get-user-info.decorators';
 import { UserRankingService } from '../services/user-ranking.service';
 import { ApiGetTotalRanking } from '../swagger-decorators/get-total-ranking.decorator';
+import { MentorListPageQueryDto } from '../dtos/mentor-list-page-query.dto';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -85,8 +86,7 @@ export class UserController {
   @Get('mentor-list')
   @ApiGetMentorList()
   getMentorList(
-    @Query('page') page: 1,
-    @Query('categoryId') categoryId: number,
+    @Query() mentorListPageQueryDto: MentorListPageQueryDto,
   ): Promise<{ data: PageByMentorListResponseDTO[] }> {
     return this.userService.getMentorList(page, categoryId);
   }
