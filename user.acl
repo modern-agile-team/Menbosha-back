@@ -1,0 +1,10 @@
+# users.acl
+
+# 기본 사용자에게 모든 권한 부여
+user default on nopass ~* +@all -@admin
+
+# 관리자 사용자 추가
+user admin on * +@all -@dangerous_commands
+
+# 특정 주소에서 접근 차단
+rule #deny 10.0.0.1/32
