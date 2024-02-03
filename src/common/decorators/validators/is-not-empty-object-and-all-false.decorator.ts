@@ -12,7 +12,7 @@ export function IsNotEmptyObjectAndAllFalse(
   options?: { nullable: boolean },
   validationOptions?: ValidationOptions,
 ) {
-  return function (object: any, propertyName: string) {
+  return function (object: { key: boolean }, propertyName: string) {
     IsNotEmptyObject(options, validationOptions)(object, propertyName);
     registerDecorator({
       name: 'isNotEmptyObjectAndAllFalse',
