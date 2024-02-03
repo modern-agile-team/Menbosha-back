@@ -12,7 +12,7 @@ export function IsNotEmptyObjectAndAllFalse(
   options?: { nullable: boolean },
   validationOptions?: ValidationOptions,
 ) {
-  return function (object: { key: boolean }, propertyName: string) {
+  return function (object: Record<string, any>, propertyName: string) {
     IsNotEmptyObject(options, validationOptions)(object, propertyName);
     registerDecorator({
       name: 'isNotEmptyObjectAndAllFalse',
@@ -22,16 +22,10 @@ export function IsNotEmptyObjectAndAllFalse(
       options: validationOptions,
       validator: {
         validate(value: any, args: ValidationArguments) {
-          for (const key in value) {
-            if (value[key]) {
-              return true;
-            }
-          }
-
-          return false;
+          return Object.values(value).some((value) => value);
         },
         defaultMessage(args: ValidationArguments) {
-          return 'At least one property in createMentorReviewChecklistRequestBodyDto should be true.';
+          return 'At least one property in $property should be true.';
         },
       },
     });
