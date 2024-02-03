@@ -116,9 +116,16 @@ export class UserController {
     return this.userIntroService.updateMyIntro(userId, userData);
   }
 
+  // @UseGuards(JwtAccessTokenGuard)
+  // @Post('/my-badge')
+  // addBadge(@GetUserId() userId: number, @Query('category') category: string) {
+  //   return this.userBadgeService.countBadge(userId, category);
+  // }
+
+  // mentorId 하나만 받음, get요청으로 변경
   @UseGuards(JwtAccessTokenGuard)
-  @Post('/my-badge')
-  addBadge(@GetUserId() userId: number, @Query('category') category: string) {
-    return this.userBadgeService.countBadge(userId, category);
+  @Get('/my-badge')
+  addBadge(@GetUserId() mentorId: number) {
+    return this.userBadgeService.countBadge(mentorId);
   }
 }
