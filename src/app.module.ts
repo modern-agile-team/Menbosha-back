@@ -18,8 +18,8 @@ import { SearchModule } from './search/search.module';
 import { ExceptionsModule } from './http-exceptions/exceptions.module';
 import { CategoryModule } from './category/category.module';
 import { BoardsModule } from './boards/boards.module';
-import { MentorReviewsModule } from './mentor-reviews/mentor-reviews.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
+import { MentorsModule } from './mentors/mentors.module';
 
 @Module({
   imports: [
@@ -44,7 +44,7 @@ import { LoggerMiddleware } from './middlewares/logger.middleware';
     SearchModule,
     ExceptionsModule,
     CategoryModule,
-    MentorReviewsModule,
+    MentorsModule,
   ], //
   providers: [UserImageService, UserImageRepository, S3Service],
 })

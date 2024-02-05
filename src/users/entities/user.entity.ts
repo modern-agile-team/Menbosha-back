@@ -12,7 +12,7 @@ import { UserImage } from './user-image.entity';
 import { Token } from 'src/auth/entities/token.entity';
 import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
 import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
-import { MentorReview } from '../../mentor-reviews/entities/mentor-review.entity';
+import { MentorReview } from '../../mentors/mentor-reviews/entities/mentor-review.entity';
 import { UserBadge } from './user-badge.entity';
 import { CategoryList } from '../../category/entity/category-list.entity';
 import { UserIntro } from './user-intro.entity';

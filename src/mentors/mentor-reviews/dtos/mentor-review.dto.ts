@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { MentorReview } from 'src/mentor-reviews/entities/mentor-review.entity';
+import { MentorReview } from 'src/mentors/mentor-reviews/entities/mentor-review.entity';
 import { MentorReviewChecklistDto } from './mentor-review-checklist.dto';
 import { Exclude } from 'class-transformer';
 
