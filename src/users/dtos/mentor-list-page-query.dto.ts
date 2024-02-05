@@ -17,7 +17,7 @@ export class MentorListPageQueryDto
     description: '멘토 고유 ID 필터링',
     format: 'integer',
   })
-  @IsString()
+  @IsOptional()
   @IsPositiveInt()
   id?: number;
 

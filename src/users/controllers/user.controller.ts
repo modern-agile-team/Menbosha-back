@@ -17,9 +17,7 @@ import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { ApiGetMyProfile } from '../swagger-decorators/get-my-profile-decorator';
 import { ApiGetMyInfoWithOwner } from '../swagger-decorators/get-my-info-with-owner-decorator';
-import { PageByMentorListResponseDTO } from '../dtos/page-by-mentor-list-response-dto';
 import { ApiGetPageNumberByMentor } from '../swagger-decorators/get-mentor-page-decorator';
-import { ApiGetMentorList } from '../swagger-decorators/get-mentor-list-decorator';
 import { UserIntroService } from '../services/user-intro-service';
 import { UserIntro } from '../entities/user-intro.entity';
 import { CreateUserIntroDto } from '../dtos/create-user-intro-dto';
@@ -31,7 +29,6 @@ import { ApiGetMyRank } from '../swagger-decorators/get-my-rank-decorators';
 import { ApiGetUserInfo } from '../swagger-decorators/get-user-info.decorators';
 import { UserRankingService } from '../services/user-ranking.service';
 import { ApiGetTotalRanking } from '../swagger-decorators/get-total-ranking.decorator';
-import { MentorListPageQueryDto } from '../dtos/mentor-list-page-query.dto';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -80,17 +77,6 @@ export class UserController {
   @ApiGetPageNumberByMentor()
   countPageMentor(@Query('categoryId') categoryId: number) {
     return this.userService.countPageMentors(categoryId);
-  }
-
-  // 카테고리 id별 멘토 리스트 불러오기(페이지네이션) 추가
-  @Get('mentors')
-  getMentorList(
-    @Query() mentorListPageQueryDto: MentorListPageQueryDto,
-  ): Promise<{ data: PageByMentorListResponseDTO[] }> {
-    return this.userService.getMentorList(
-      mentorListPageQueryDto.page,
-      mentorListPageQueryDto.activityCategoryId,
-    );
   }
 
   @ApiGetTotalRanking()
