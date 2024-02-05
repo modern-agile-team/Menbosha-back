@@ -9,6 +9,7 @@ import { MentorListPageQueryDto } from 'src/mentors/dtos/mentor-list-page-query.
 import { MentorsService } from '../services/mentors.service';
 import { MentorPaginationResponseDto } from '../dtos/mentors-pagination-response.dto';
 import { ApiFindAllMentorsAndCount } from '../swagger-decorators/find-all-mentors-and-count.decorator';
+import { ApiTags } from '@nestjs/swagger';
 
 @UsePipes(
   new ValidationPipe({
@@ -17,6 +18,7 @@ import { ApiFindAllMentorsAndCount } from '../swagger-decorators/find-all-mentor
     forbidNonWhitelisted: true,
   }),
 )
+@ApiTags('mentor')
 @Controller('mentors')
 export class MentorsController {
   constructor(private readonly mentorsService: MentorsService) {}
