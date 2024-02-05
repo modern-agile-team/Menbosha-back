@@ -1,9 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { UserForJoinDto } from 'src/users/dtos/user-for-join.dto';
 import { UserIntroResponseDto } from './user-intro-response.dto';
 
-export class UserWithImageAndIntroDto extends UserForJoinDto {
+export class UserWithImageAndIntroDto extends PickType(UserForJoinDto, [
+  'userImage',
+]) {
   @ApiProperty({
     minimum: 1,
     format: 'integer',

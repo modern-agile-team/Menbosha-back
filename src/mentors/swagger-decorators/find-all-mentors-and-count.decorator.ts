@@ -64,13 +64,13 @@ export function ApiFindAllMentorsAndCount() {
       content: {
         JSON: {
           examples: {
-            'Not Found help me board': {
+            'Not Found category Id': {
               value: {
-                message: ['해당 게시글이 존재하지 않습니다.'],
+                message: ['해당 category id가 존재하지 않습니다.'],
                 error: 'Not Found',
                 statusCode: 404,
               },
-              description: '도와주세요 게시글 찾지 못함',
+              description: '카테고리 id 못찾음',
             },
           },
         },
