@@ -86,6 +86,9 @@ export class HelpMeBoardController {
     );
   }
 
+  /**
+   * @deprecated 추후 클라이언트 로직이 변경됨에 따라 사라질 api
+   */
   @Get('/page')
   @ApiGetPageNumberByHelpMeBoard()
   countPageBoards(@Query('categoryId') categoryId: number) {

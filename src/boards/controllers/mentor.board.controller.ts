@@ -90,6 +90,9 @@ export class MentorBoardController {
     return this.mentorBoardService.findAllMentorBoards(mentorBoardPageQueryDto);
   }
 
+  /**
+   * @deprecated 추후 클라이언트 로직이 변경됨에 따라 사라질 api
+   */
   @Get('/page')
   @ApiGetPageNumberByMentorBoard()
   countPageMentorBoards(@Query('categoryId') categoryId: number) {

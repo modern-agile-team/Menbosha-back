@@ -6,6 +6,7 @@ export function ApiGetPageNumberByMentorBoard() {
     ApiOperation({
       summary: '멘토 보드의 페이지 개수 가져오는 API',
       description: '페이지 개수, 총 게시글 수',
+      deprecated: true,
     }),
     ApiResponse({
       status: 200,
