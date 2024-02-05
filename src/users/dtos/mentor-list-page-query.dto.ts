@@ -11,7 +11,7 @@ import { MentorOrderField } from '../constants/mentor-order-field.enum';
  */
 export class MentorListPageQueryDto
   extends PageQueryDto
-  implements Partial<Pick<User, 'id'>>
+  implements Partial<Pick<User, 'id' | 'name' | 'activityCategoryId'>>
 {
   @ApiPropertyOptional({
     description: '멘토 고유 ID 필터링',
