@@ -1,4 +1,4 @@
-export enum MentorOrderFieldEnum {
+export enum MentorOrderField {
   id = 'id',
   name = 'name',
   rank = 'rank',

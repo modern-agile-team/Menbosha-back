@@ -88,7 +88,10 @@ export class UserController {
   getMentorList(
     @Query() mentorListPageQueryDto: MentorListPageQueryDto,
   ): Promise<{ data: PageByMentorListResponseDTO[] }> {
-    return this.userService.getMentorList(page, categoryId);
+    return this.userService.getMentorList(
+      mentorListPageQueryDto.page,
+      mentorListPageQueryDto.activityCategoryId,
+    );
   }
 
   @ApiGetTotalRanking()
