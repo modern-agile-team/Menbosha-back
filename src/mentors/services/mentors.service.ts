@@ -14,6 +14,8 @@ export class MentorsService {
     const { page, pageSize, orderField, sortOrder, ...filter } =
       mentorListPageQueryDto;
 
+    console.log(orderField);
+
     const category = await this.categoryService.findOneCategoryOrNotFound(
       filter.activityCategoryId,
     );
@@ -22,7 +24,7 @@ export class MentorsService {
 
     const skip = (page - 1) * pageSize;
 
-    return await this.mentorRepository.findAllMentorsAndCount(
+    return this.mentorRepository.findAllMentorsAndCount(
       skip,
       pageSize,
       orderField,

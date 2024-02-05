@@ -53,8 +53,6 @@ export class MentorRepository {
       this.FULL_TEXT_SEARCH_FIELD,
     );
 
-    const totalCount = await queryBuilder.getCount();
-
     this.queryBuilderHelper.buildOrderByPropForFind(
       queryBuilder,
       'user',
@@ -62,7 +60,9 @@ export class MentorRepository {
       sortOrder,
     );
 
-    //   .groupBy('id')
-    //   .getRawMany();
+    return Promise.all([
+      queryBuilder.getCount(),
+      queryBuilder.skip(skip).take(pageSize).groupBy('id').getRawMany(),
+    ]);
   }
 }
