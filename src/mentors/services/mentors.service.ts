@@ -2,6 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { CategoryService } from 'src/category/services/category.service';
 import { MentorListPageQueryDto } from 'src/users/dtos/mentor-list-page-query.dto';
 import { MentorRepository } from '../repositories/mentor.repository';
+import { plainToInstance } from 'class-transformer';
+import { UserWithImageAndIntroDto } from '../dtos/user-with-image-and-intro.dto';
+import { MentorPaginationResponseDto } from '../dtos/mentors-pagination-response.dto';
 
 @Injectable()
 export class MentorsService {
@@ -24,12 +27,24 @@ export class MentorsService {
 
     const skip = (page - 1) * pageSize;
 
-    return this.mentorRepository.findAllMentorsAndCount(
-      skip,
+    const [totalCount, mentors] =
+      await this.mentorRepository.findAllMentorsAndCount(
+        skip,
+        pageSize,
+        orderField,
+        sortOrder,
+        filter,
+      );
+
+    const userWithImageAndIntroDtos = mentors.map(
+      (mentor) => new UserWithImageAndIntroDto(mentor),
+    );
+
+    return new MentorPaginationResponseDto(
+      userWithImageAndIntroDtos,
+      totalCount,
+      page,
       pageSize,
-      orderField,
-      sortOrder,
-      filter,
     );
   }
 }
