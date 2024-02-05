@@ -12,7 +12,9 @@ export class MentorsService {
     private readonly mentorRepository: MentorRepository,
   ) {}
 
-  async findAllMentorsAndCount(mentorListPageQueryDto: MentorListPageQueryDto) {
+  async findAllMentorsAndCount(
+    mentorListPageQueryDto: MentorListPageQueryDto,
+  ): Promise<MentorPaginationResponseDto> {
     const { page, pageSize, orderField, sortOrder, ...filter } =
       mentorListPageQueryDto;
 
