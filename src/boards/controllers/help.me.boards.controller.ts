@@ -12,6 +12,7 @@ import {
   UsePipes,
   ValidationPipe,
   Param,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { HelpMeBoardService } from '../services/help.me.board.service';
 import { BoardImagesService } from '../services/BoardImage.service';
@@ -41,6 +42,7 @@ import { HelpYouCommentPageQueryDto } from 'src/comments/dto/help-you-comment-pa
 import { HelpYouCommentPaginationResponseDto } from 'src/comments/dto/help-you-comment-pagination-response.dto';
 import { ApiFindAllHelpYouComments } from 'src/comments/swagger-decorators/find-all-help-you-comments.decorator';
 import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
+import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
 
 /**
  * 팀원과 상의되면 주석처리된 옵션도 걸어줌.
@@ -52,6 +54,7 @@ import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
     forbidNonWhitelisted: true,
   }),
 )
+@UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
 @Controller('help-me-boards')
 @ApiTags('Help-me-board API')
 export class HelpMeBoardController {
