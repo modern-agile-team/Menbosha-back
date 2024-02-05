@@ -5,7 +5,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { MentorListPageQueryDto } from 'src/users/dtos/mentor-list-page-query.dto';
+import { MentorListPageQueryDto } from 'src/mentors/dtos/mentor-list-page-query.dto';
 import { MentorsService } from '../services/mentors.service';
 import { MentorPaginationResponseDto } from '../dtos/mentors-pagination-response.dto';
 
