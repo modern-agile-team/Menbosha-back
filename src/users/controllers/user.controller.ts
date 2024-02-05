@@ -83,7 +83,7 @@ export class UserController {
   }
 
   // 카테고리 id별 멘토 리스트 불러오기(페이지네이션) 추가
-  @Get('mentor-list')
+  @Get('mentors')
   getMentorList(
     @Query() mentorListPageQueryDto: MentorListPageQueryDto,
   ): Promise<{ data: PageByMentorListResponseDTO[] }> {
