@@ -1,7 +1,9 @@
 import {
+  ClassSerializerInterceptor,
   Controller,
   Get,
   Query,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -10,6 +12,7 @@ import { MentorsService } from '../services/mentors.service';
 import { MentorPaginationResponseDto } from '../dtos/mentors-pagination-response.dto';
 import { ApiFindAllMentorsAndCount } from '../swagger-decorators/find-all-mentors-and-count.decorator';
 import { ApiTags } from '@nestjs/swagger';
+import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
 
 @UsePipes(
   new ValidationPipe({
@@ -18,6 +21,7 @@ import { ApiTags } from '@nestjs/swagger';
     forbidNonWhitelisted: true,
   }),
 )
+@UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
 @ApiTags('mentor')
 @Controller('mentors')
 export class MentorsController {

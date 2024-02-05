@@ -45,12 +45,7 @@ export class UserWithImageAndIntroDto extends PickType(UserForJoinDto, [
   ) {
     super();
 
-    this.id = userWithImageAndIntroDto.id;
-    this.name = userWithImageAndIntroDto.name;
+    Object.assign(this, userWithImageAndIntroDto);
     this.rank = userWithImageAndIntroDto.user_rank;
-    this.userImage = userWithImageAndIntroDto.userImage;
-    this.userIntro = userWithImageAndIntroDto.userIntro;
-    this.mentorReviewCount = userWithImageAndIntroDto.mentorReviewCount;
-    this.mentorBoardCount = userWithImageAndIntroDto.mentorBoardCount;
   }
 }
