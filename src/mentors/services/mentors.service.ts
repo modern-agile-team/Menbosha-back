@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { CategoryService } from 'src/category/services/category.service';
 import { MentorListPageQueryDto } from 'src/users/dtos/mentor-list-page-query.dto';
 import { MentorRepository } from '../repositories/mentor.repository';
-import { plainToInstance } from 'class-transformer';
 import { UserWithImageAndIntroDto } from '../dtos/user-with-image-and-intro.dto';
 import { MentorPaginationResponseDto } from '../dtos/mentors-pagination-response.dto';
 
