@@ -105,7 +105,7 @@ export class MentorBoardRepository {
       sortOrder,
     );
 
-    return queryBuilder.skip(skip).take(pageSize).getMany();
+    return queryBuilder.skip(skip).take(pageSize).getManyAndCount();
   }
 
   findOneMentorBoard(options: FindOneOptions<MentorBoard>) {

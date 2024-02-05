@@ -58,7 +58,7 @@ export class HelpMeBoardService {
 
     const skip = (page - 1) * pageSize;
 
-    const helpMeBoards =
+    const [helpMeBoards, totalCount] =
       await this.helpMeBoardRepository.findAllHelpMeBoardsByQueryBuilder(
         skip,
         pageSize,
@@ -73,7 +73,7 @@ export class HelpMeBoardService {
 
     return new HelpMeBoardPaginationResponseDto(
       helpMeBoardWithUserAndImagesDtos,
-      helpMeBoards.length,
+      totalCount,
       page,
       pageSize,
     );
@@ -96,7 +96,7 @@ export class HelpMeBoardService {
 
     const skip = (page - 1) * pageSize;
 
-    const helpYouComments =
+    const [helpYouComments, totalCount] =
       await this.helpMeBoardRepository.findAllHelpYouCommentsByQueryBuilder(
         skip,
         pageSize,
@@ -112,7 +112,7 @@ export class HelpMeBoardService {
 
     return new HelpYouCommentPaginationResponseDto(
       helpYouCommentsWithUserAndUserImageDto,
-      helpYouComments.length,
+      totalCount,
       page,
       pageSize,
     );

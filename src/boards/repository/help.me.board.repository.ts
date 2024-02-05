@@ -110,7 +110,7 @@ export class HelpMeBoardRepository {
       sortOrder,
     );
 
-    return queryBuilder.skip(skip).take(pageSize).getMany();
+    return queryBuilder.skip(skip).take(pageSize).getManyAndCount();
   }
 
   findAllHelpYouCommentsByQueryBuilder(
@@ -155,7 +155,7 @@ export class HelpMeBoardRepository {
       sortOrder,
     );
 
-    return queryBuilder.skip(skip).take(pageSize).getMany();
+    return queryBuilder.skip(skip).take(pageSize).getManyAndCount();
   }
 
   async pullingUpHelpMeBoard(board: HelpMeBoard): Promise<void> {

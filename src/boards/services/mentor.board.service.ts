@@ -58,7 +58,7 @@ export class MentorBoardService {
 
     const skip = (page - 1) * pageSize;
 
-    const mentorBoards =
+    const [mentorBoards, totalCount] =
       await this.mentorBoardRepository.findAllMentorBoardsByQueryBuilder(
         skip,
         pageSize,
@@ -73,7 +73,7 @@ export class MentorBoardService {
 
     return new MentorBoardPaginationResponseDto(
       mentorBoardWithUserAndImageDtos,
-      mentorBoardWithUserAndImageDtos.length,
+      totalCount,
       page,
       pageSize,
     );
