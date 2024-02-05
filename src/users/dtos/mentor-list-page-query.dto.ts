@@ -4,6 +4,7 @@ import { SortOrder } from 'src/common/constants/sort-order.enum';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { IsPositiveInt } from 'src/common/decorators/validators/is-positive-int.decorator';
+import { MentorOrderFieldEnum } from '../constants/mentor-order-field.enum';
 
 /**
  * @todo create provider enum, mentorOrderField
@@ -37,7 +38,8 @@ export class MentorListPageQueryDto
   activityCategoryId: number = 1;
 
   @IsOptional()
-  orderField;
+  @IsEnum()
+  orderField: MentorOrderFieldEnum = MentorOrderFieldEnum.id;
 
   @ApiPropertyOptional({
     description: '오름차순 혹은 내림차순',
