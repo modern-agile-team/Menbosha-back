@@ -57,8 +57,6 @@ export class QueryBuilderHelper {
     orderField: OrderFieldForHelper,
     sortOrder: SortOrder,
   ) {
-    console.log(orderField);
-
     orderField !== 'RAND()'
       ? queryBuilder.orderBy(`${alias}.${orderField}`, sortOrder)
       : queryBuilder.orderBy(orderField);
