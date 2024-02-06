@@ -18,8 +18,6 @@ export class MentorsService {
     const { page, pageSize, orderField, sortOrder, ...filter } =
       mentorListPageQueryDto;
 
-    console.log(orderField);
-
     const category = await this.categoryService.findOneCategoryOrNotFound(
       filter.activityCategoryId,
     );
