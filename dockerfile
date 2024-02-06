@@ -28,6 +28,9 @@ EXPOSE 3000
 # # redis.conf 파일을 이미지에 복사
 # COPY redis.conf /usr/local/etc/redis/redis.conf
 
+# # redis.conf에서 쓰는 외부 acl파일(접근허용관련) 컨테이너 내부에 추가
+# COPY users.acl /usr/local/etc/redis/users.acl
+
 # # redis 실행
 # CMD [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
 
