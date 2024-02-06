@@ -15,8 +15,14 @@ services:
   redis:
     image: 2swo/redis
     command: redis-server --port ${REDIS_PORT}
+    volumes:
+      - redis.conf:/usr/local/etc/redis/redis.conf
     env_file:
       - .env
     ports:
       - ${REDIS_BINDING_PORT}:${REDIS_PORT}
     restart: always
+
+volumes:
+  redis.conf:
+    external: true
