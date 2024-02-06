@@ -48,10 +48,10 @@ export class MentorListPageQueryDto
 
   @ApiPropertyOptional({
     description: '오름차순 혹은 내림차순',
-    default: SortOrder.ASC,
+    default: SortOrder.Asc,
     enum: SortOrder,
   })
   @IsOptional()
   @IsEnum(SortOrder)
-  sortOrder: SortOrder = SortOrder.ASC;
+  sortOrder: SortOrder = SortOrder.Asc;
 }

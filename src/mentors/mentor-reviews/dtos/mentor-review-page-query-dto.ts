@@ -42,9 +42,9 @@ export class MentorReviewPageQueryDto extends PageQueryDto {
   @ApiPropertyOptional({
     description: '오름차순 혹은 내림차순',
     enum: SortOrder,
-    default: SortOrder.ASC,
+    default: SortOrder.Asc,
   })
   @IsOptional()
   @IsEnum(SortOrder)
-  sortOrder: SortOrder = SortOrder.ASC;
+  sortOrder: SortOrder = SortOrder.Asc;
 }
