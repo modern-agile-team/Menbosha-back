@@ -14,7 +14,12 @@ services:
 
   redis:
     image: 2swo/redis
-    command: redis-server --port ${REDIS_PORT}
+    command:
+      - redis-server --port ${REDIS_PORT}
+      - /redis.conf
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:rw
+      - ./users.acl:/usr/local/etc/redis/users.acl:rw
     env_file:
       - .env
     ports:
