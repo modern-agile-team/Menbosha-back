@@ -12,7 +12,7 @@ services:
 
   redis:
     image: 2swo/redis
-    command: redis-server --port ${REDIS_PORT} --include /usr/local/etc/redis/redis.conf
+    command: redis-server --port ${REDIS_PORT} --include redis.conf
     env_file:
       - .env
     ports:
