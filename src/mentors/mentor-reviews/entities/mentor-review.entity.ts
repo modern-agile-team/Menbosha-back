@@ -7,7 +7,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
+import { User } from '../../../users/entities/user.entity';
 import { MentorReviewChecklist } from '../mentor-review-checklist/entities/mentor-review-checklist.entity';
 
 @Entity({ name: 'mentor_review' })

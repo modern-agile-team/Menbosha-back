@@ -71,27 +71,6 @@ export class UserRepository {
     return await this.entityManager.delete(User, { id: userId });
   }
 
-  async findCategoryIdByMentors(
-    skip: number,
-    limit: number,
-    activityCategoryId: number,
-  ): Promise<User[]> {
-    return await this.entityManager.find(User, {
-      relations: ['userImage', 'userIntro', 'totalCount'],
-      where: { activityCategoryId },
-      skip: skip,
-      take: limit,
-    });
-  }
-
-  async findPageByMentors(skip: number, limit: number): Promise<User[]> {
-    return await this.entityManager.find(User, {
-      relations: ['userImage', 'userIntro', 'totalCount'],
-      skip: skip,
-      take: limit,
-    });
-  }
-
   async findCategoryIdByIsMentors(categoryId: number): Promise<number> {
     return await this.entityManager.count(User, {
       where: { isMentor: true, activityCategoryId: categoryId },

@@ -22,7 +22,10 @@ export class QueryBuilderHelper {
               ' IN BOOLEAN MODE)',
           )
           .setParameter(parameterName, filter[key]);
-      } else if (key === 'categoryId' && filter[key] === 1) {
+      } else if (
+        (key === 'categoryId' && filter[key] === 1) ||
+        (key === 'activityCategoryId' && filter[key] === 1)
+      ) {
         continue;
       } else if (typeof filter[key] === 'boolean') {
         if (key === 'loadOnlyPopular') {

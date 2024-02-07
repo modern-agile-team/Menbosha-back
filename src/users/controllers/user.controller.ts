@@ -17,9 +17,7 @@ import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { ApiGetMyProfile } from '../swagger-decorators/get-my-profile-decorator';
 import { ApiGetMyInfoWithOwner } from '../swagger-decorators/get-my-info-with-owner-decorator';
-import { PageByMentorListResponseDTO } from '../dtos/page-by-mentor-list-response-dto';
 import { ApiGetPageNumberByMentor } from '../swagger-decorators/get-mentor-page-decorator';
-import { ApiGetMentorList } from '../swagger-decorators/get-mentor-list-decorator';
 import { UserIntroService } from '../services/user-intro-service';
 import { UserIntro } from '../entities/user-intro.entity';
 import { CreateUserIntroDto } from '../dtos/create-user-intro-dto';
@@ -72,20 +70,13 @@ export class UserController {
     return this.userService.getMyInfoWithOwner(userId, targetId);
   }
 
+  /**
+   * @deprecated 추후 클라이언트 로직이 변경됨에 따라 사라질 api
+   */
   @Get('/page')
   @ApiGetPageNumberByMentor()
   countPageMentor(@Query('categoryId') categoryId: number) {
     return this.userService.countPageMentors(categoryId);
-  }
-
-  // 카테고리 id별 멘토 리스트 불러오기(페이지네이션) 추가
-  @Get('mentor-list')
-  @ApiGetMentorList()
-  getMentorList(
-    @Query('page') page: 1,
-    @Query('categoryId') categoryId: number,
-  ): Promise<{ data: PageByMentorListResponseDTO[] }> {
-    return this.userService.getMentorList(page, categoryId);
   }
 
   @ApiGetTotalRanking()

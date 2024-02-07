@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { MentorReviewChecklist } from 'src/mentor-reviews/mentor-review-checklist/entities/mentor-review-checklist.entity';
+import { MentorReviewChecklist } from 'src/mentors/mentor-reviews/mentor-review-checklist/entities/mentor-review-checklist.entity';
 
 export class MentorReviewChecklistDto
   implements Omit<MentorReviewChecklist, 'mentorReview'>

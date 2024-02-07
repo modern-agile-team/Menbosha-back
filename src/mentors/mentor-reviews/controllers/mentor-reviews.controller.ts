@@ -39,7 +39,7 @@ import { ApiPatchUpdateMentorReview } from '../swagger-decorators/patch-update-m
   }),
 )
 @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
-@ApiTags('mentors-reviews')
+@ApiTags('mentor')
 @Controller('mentors/:mentorId/reviews')
 export class MentorReviewsController {
   constructor(private readonly mentorsService: MentorReviewsService) {}
