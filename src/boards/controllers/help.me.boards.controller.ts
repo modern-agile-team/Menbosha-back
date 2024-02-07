@@ -54,7 +54,6 @@ import { SuccessResponseInterceptor } from 'src/common/interceptors/success-resp
     forbidNonWhitelisted: true,
   }),
 )
-@UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
 @Controller('help-me-boards')
 @ApiTags('Help-me-board API')
 export class HelpMeBoardController {
@@ -98,6 +97,7 @@ export class HelpMeBoardController {
     return this.helpMeBoardService.countPagedHelpMeBoards(categoryId);
   }
 
+  @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
   @Get()
   @ApiFindAllHelpMeBoards()
   findAllHelpMeBoard(
@@ -112,6 +112,7 @@ export class HelpMeBoardController {
    */
   @ApiTags('help-you-comment API')
   @Get(':helpMeBoardId/help-you-comments')
+  @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
   @UseGuards(JwtOptionalGuard)
   @ApiFindAllHelpYouComments()
   findAllHelpYouComments(
