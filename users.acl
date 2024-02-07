@@ -1,8 +1,3 @@
-# 기본 사용자
 user default on #5efc25ec437cb03a8eb6604750a705087ab82d470abc58303e2058cfbb3ed07d ~* +@all
-
-# 관리자 사용자
 user admin on #c74647cf787131fb99504e4cf3e868cab9a1cc554800c129c64071abdb6b28a1 ~* +@all
-
-# 읽기 전용 사용자
 user readonly on #4ed9aebc48139c7276b2d6035c8594bef554de1553adb949978d53f309a2dfbd ~* -@all +@read
