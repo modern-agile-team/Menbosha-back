@@ -17,12 +17,16 @@ export class UserImageRepository {
     return userImage;
   }
 
-  async uploadUserImage(userId: number, imageUrl: string): Promise<UserImage> {
+  async uploadUserImage(
+    entityManager: EntityManager,
+    userId: number,
+    imageUrl: string,
+  ): Promise<UserImage> {
     const userImage = new UserImage();
     userImage.userId = userId;
     userImage.imageUrl = imageUrl;
 
-    return await this.entityManager.save(userImage);
+    return entityManager.save(userImage);
   }
 
   async updateUserImage(

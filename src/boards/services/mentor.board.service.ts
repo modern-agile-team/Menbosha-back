@@ -6,18 +6,22 @@ import {
 import { MentorBoardRepository } from '../repository/mentor.boards.repository';
 import { CreateMentorBoardDto } from '../dto/mentorBoard/create.mentor.board.dto';
 import { MentorBoard } from '../entities/mentor-board.entity';
-import { PageByMentorBoardResponseDTO } from '../dto/mentorBoard/response.mentor.boards.dto';
 import { MentorBoardResponseDTO } from '../dto/mentorBoard/update.mentor.board.response.dto';
 import { UpdateMentorBoardDto } from '../dto/mentorBoard/update.mentor.board.dto';
 import { oneMentorBoardResponseDTO } from '../dto/mentorBoard/one.response.mentor.boards.dto';
 import { FindOneOptions } from 'typeorm';
 import { MentorBoardLikeRepository } from '../repository/mentor.board.likes.repository';
+import { MentorBoardWithUserAndImageDto } from '../dto/mentorBoard/mentor-board-with-user-and-image.dto';
+import { MentorBoardPaginationResponseDto } from '../dto/mentorBoard/mentor-board-pagination-response.dto';
+import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
+import { CategoryService } from 'src/category/services/category.service';
 
 @Injectable()
 export class MentorBoardService {
   constructor(
     private mentorBoardRepository: MentorBoardRepository,
     private readonly mentorBoardLikeRepository: MentorBoardLikeRepository,
+    private readonly categoryService: CategoryService,
   ) {}
   async create(
     boardData: CreateMentorBoardDto,
@@ -30,41 +34,6 @@ export class MentorBoardService {
     }
   }
 
-  async randomMentorBoards(categoryId: number) {
-    const limit = 3;
-    const boards = categoryId
-      ? await this.mentorBoardRepository.findRandomMentorBoardByCategoryId(
-          limit,
-          categoryId,
-        )
-      : await this.mentorBoardRepository.findRandomMentorBoard(limit);
-    const randomBoardResponse: PageByMentorBoardResponseDTO[] =
-      await Promise.all(
-        boards.map(async (board) => {
-          return {
-            id: board.id,
-            head: board.head,
-            body: board.body.substring(0, 30),
-            createdAt: board.createdAt,
-            updatedAt: board.updatedAt,
-            categoryId: board.categoryId,
-            user: {
-              name: board.user.name,
-              userImage: board.user.userImage ? board.user.userImage : [],
-            },
-            mentorBoardImages: (board.mentorBoardImages || []).map((image) => ({
-              // 예외처리 - 이미지 없을경우 빈배열
-              id: image.id,
-              imageUrl: image.imageUrl,
-            })),
-            mentorBoardLikes: board.mentorBoardLikes.length,
-          };
-        }),
-      );
-
-    return { data: randomBoardResponse };
-  }
-
   async countPagedMentorBoards(categoryId) {
     const limit = 10;
     const total = categoryId // 예외처리 - categoryId가 들어올 경우
@@ -75,44 +44,39 @@ export class MentorBoardService {
     return { total, totalPage };
   }
 
-  async findPagedMentorBoards(
-    page: number,
-    categoryId: number,
-  ): Promise<{ data: PageByMentorBoardResponseDTO[] }> {
-    const limit = 10;
-    const skip = (page - 1) * limit;
-    const boards = categoryId // 예외처리 - categoryId가 들어올 경우
-      ? await this.mentorBoardRepository.findPagedBoardsByCategoryId(
-          skip,
-          limit,
-          categoryId,
-        )
-      : await this.mentorBoardRepository.findPagedBoards(skip, limit);
+  async findAllMentorBoards(
+    mentorBoardPageQueryDto: MentorBoardPageQueryDto,
+  ): Promise<MentorBoardPaginationResponseDto> {
+    const { page, pageSize, orderField, sortOrder, ...filter } =
+      mentorBoardPageQueryDto;
 
-    const boardResponse: PageByMentorBoardResponseDTO[] = await Promise.all(
-      boards.map(async (board) => {
-        return {
-          id: board.id,
-          head: board.head,
-          body: board.body.substring(0, 30),
-          createdAt: board.createdAt,
-          updatedAt: board.updatedAt,
-          categoryId: board.categoryId,
-          user: {
-            name: board.user.name,
-            userImage: board.user.userImage ? board.user.userImage : [],
-          },
-          mentorBoardImages: (board.mentorBoardImages || []).map((image) => ({
-            // 예외처리 - 이미지 없을경우 빈배열
-            id: image.id,
-            imageUrl: image.imageUrl,
-          })),
-          mentorBoardLikes: board.mentorBoardLikes.length,
-        };
-      }),
+    const category = await this.categoryService.findOneCategoryOrNotFound(
+      filter.categoryId,
     );
 
-    return { data: boardResponse };
+    filter.categoryId = category.id;
+
+    const skip = (page - 1) * pageSize;
+
+    const [mentorBoards, totalCount] =
+      await this.mentorBoardRepository.findAllMentorBoardsByQueryBuilder(
+        skip,
+        pageSize,
+        orderField,
+        sortOrder,
+        filter,
+      );
+
+    const mentorBoardWithUserAndImageDtos = mentorBoards.map((mentorBoard) => {
+      return new MentorBoardWithUserAndImageDto(mentorBoard);
+    });
+
+    return new MentorBoardPaginationResponseDto(
+      mentorBoardWithUserAndImageDtos,
+      totalCount,
+      page,
+      pageSize,
+    );
   }
 
   async findOneByOrNotFound(

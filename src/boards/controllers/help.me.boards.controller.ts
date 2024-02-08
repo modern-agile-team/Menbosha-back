@@ -9,6 +9,10 @@ import {
   Query,
   UploadedFiles,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
+  Param,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { HelpMeBoardService } from '../services/help.me.board.service';
 import { BoardImagesService } from '../services/BoardImage.service';
@@ -22,21 +26,35 @@ import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { ApiAddHelpMeBoard } from '../swagger-decorators/helpMeBoard/add-help-me-board-decorator';
 import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/create.help.me.board.dto';
 import { HelpMeBoard } from '../entities/help-me-board.entity';
-import { PageByHelpMeBoardResponseDTO } from '../dto/helpMeBoard/response.help.me.board.dto';
 import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 import { oneHelpMeBoardResponseDTO } from '../dto/helpMeBoard/one.response.help.me.board.dto';
 import { ApiGetOneHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-one-help-me-board.dto';
 import { ApiUpdateHelpMeBoard } from '../swagger-decorators/helpMeBoard/patch-help-me-board.decorator';
-import { ApiGetPageHelpMeBoards } from '../swagger-decorators/helpMeBoard/get-page-help-me-board.decorator';
 import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dto';
 import { HelpMeBoardResponseDTO } from '../dto/helpMeBoard/update.help.me.board.response.dto';
 import { ApiDeleteHelpMeBoard } from '../swagger-decorators/helpMeBoard/delete-help-me-board-decorator';
 import { ApiGetPageNumberByHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-board-page-number.decorator';
-import { PullingUpHelpMeBoardResponseDTO } from '../dto/helpMeBoard/pulling.up.response.dto';
-import { ApiGetPullingUpHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-pulling-up-help-me-board-decorator';
 import { ApiPullingUpHelpMeBoard } from '../swagger-decorators/helpMeBoard/pulling-up-help-me-board.decorator';
+import { HelpMeBoardPageQueryDto } from '../dto/helpMeBoard/help-me-board-page-query.dto';
+import { HelpMeBoardPaginationResponseDto } from '../dto/helpMeBoard/help-me-board-pagination-response.dto';
+import { ApiFindAllHelpMeBoards } from '../swagger-decorators/helpMeBoard/find-all-help-me-boards.decorator';
+import { HelpYouCommentPageQueryDto } from 'src/comments/dto/help-you-comment-page-query.dto';
+import { HelpYouCommentPaginationResponseDto } from 'src/comments/dto/help-you-comment-pagination-response.dto';
+import { ApiFindAllHelpYouComments } from 'src/comments/swagger-decorators/find-all-help-you-comments.decorator';
+import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
+import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
 
-@Controller('help-me-board')
+/**
+ * 팀원과 상의되면 주석처리된 옵션도 걸어줌.
+ */
+@UsePipes(
+  new ValidationPipe({
+    transform: true,
+    whitelist: true,
+    forbidNonWhitelisted: true,
+  }),
+)
+@Controller('help-me-boards')
 @ApiTags('Help-me-board API')
 export class HelpMeBoardController {
   constructor(
@@ -70,28 +88,43 @@ export class HelpMeBoardController {
     );
   }
 
-  // --- 이 기능은 아직 프론트와 상의중인 기능입니다 ---
-  @Get('')
-  @ApiGetPageHelpMeBoards()
-  findPageBoards(
-    @Query('page') page = 1,
-    @Query('categoryId') categoryId: number,
-  ): Promise<{ data: PageByHelpMeBoardResponseDTO[] }> {
-    return this.helpMeBoardService.findPagedHelpMeBoards(page, categoryId);
-  }
-
+  /**
+   * @deprecated 추후 클라이언트 로직이 변경됨에 따라 사라질 api
+   */
   @Get('/page')
   @ApiGetPageNumberByHelpMeBoard()
   countPageBoards(@Query('categoryId') categoryId: number) {
     return this.helpMeBoardService.countPagedHelpMeBoards(categoryId);
   }
 
-  @Get('/pulling-up') //끌어올린 게시물 보여주기
-  @ApiGetPullingUpHelpMeBoard()
-  latestHelpMeBoard(
-    @Query('categoryId') categoryId: number,
-  ): Promise<{ data: PullingUpHelpMeBoardResponseDTO[] }> {
-    return this.helpMeBoardService.latestHelpMeBoards(categoryId);
+  @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
+  @Get()
+  @ApiFindAllHelpMeBoards()
+  findAllHelpMeBoard(
+    @Query() helpMeBoardPageQueryDto: HelpMeBoardPageQueryDto,
+  ): Promise<HelpMeBoardPaginationResponseDto> {
+    return this.helpMeBoardService.findAllHelpMeBoard(helpMeBoardPageQueryDto);
+  }
+
+  /**
+   * @todo 도와줄게요 댓글 컨트롤러의 prefix때문에 restful하게 api path를 짤 수가 없음.
+   * 추후 prefix 수정 후 comment 컨트롤러 쪽으로 분리
+   */
+  @ApiTags('help-you-comment API')
+  @Get(':helpMeBoardId/help-you-comments')
+  @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
+  @UseGuards(JwtOptionalGuard)
+  @ApiFindAllHelpYouComments()
+  findAllHelpYouComments(
+    @GetUserId() userId: number,
+    @Param('helpMeBoardId', ParsePositiveIntPipe) helpMeBoardId: number,
+    @Query() helpYouCommentPageQueryDto: HelpYouCommentPageQueryDto,
+  ): Promise<HelpYouCommentPaginationResponseDto> {
+    return this.helpMeBoardService.findAllHelpYouComments(
+      userId,
+      helpMeBoardId,
+      helpYouCommentPageQueryDto,
+    );
   }
 
   @Get('/unit') //하나의 게시판 불러오기

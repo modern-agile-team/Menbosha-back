@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { CommentsRepository } from '../repository/comments.repository';
 import { CreateCommentDto } from '../dto/create-comment-dto';
-import { CommentResponseDTO } from '../dto/get-all-comment-dto';
 // import { UpdateCommentDto } from '../dto/update-comment-dto';
 
 @Injectable()
@@ -31,32 +30,6 @@ export class CommentsService {
       userId,
       boardId,
     );
-  }
-
-  async findAllComments(
-    boardId: number,
-    userId: number,
-  ): Promise<{ data: CommentResponseDTO[] }> {
-    const comments =
-      await this.commentRepository.findCommentsByBoardId(boardId);
-    const commentsResponse: CommentResponseDTO[] = await Promise.all(
-      comments.map(async (comment) => {
-        return {
-          id: comment.id,
-          content: comment.content,
-          commentOwner: comment.userId === userId,
-          user: {
-            name: comment.user.name,
-            userId: comment.user.id,
-            rank: comment.user.rank,
-            categoryId: comment.user.activityCategoryId,
-            imageUrl: comment.user.userImage.imageUrl,
-          },
-        };
-      }),
-    );
-
-    return { data: commentsResponse };
   }
 
   async deleteComment(commentId: number, userId: number): Promise<void> {

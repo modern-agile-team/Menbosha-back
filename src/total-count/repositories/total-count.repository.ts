@@ -8,8 +8,17 @@ import { Action } from '../enums/action.enum';
 export class TotalCountRepository {
   constructor(private readonly entityManager: EntityManager) {}
 
-  async createTotalCount(userId: number) {
-    await this.entityManager.insert('total_count', { userId });
+  async createTotalCount(entityManager: EntityManager, userId: number) {
+    await entityManager.insert('total_count', { userId });
+  }
+
+  async createMentorReviewChecklistCount(
+    entityManager: EntityManager,
+    userId: number,
+  ) {
+    await entityManager.insert('mentor_review_checklist_count', {
+      userId,
+    });
   }
 
   async counting(userId: number, type: Type, action: Action) {

@@ -17,6 +17,7 @@ import { AsyncApiDocumentBuilder, AsyncApiModule } from 'nestjs-asyncapi';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const logger = new Logger();
+  app.useLogger(logger);
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({
     origin: true, // 또는 특정 도메인을 설정

@@ -3,13 +3,24 @@ import { TotalCountRepository } from '../repositories/total-count.repository';
 import { Type } from '../enums/type.enum';
 import { Action } from '../enums/action.enum';
 import { Cron } from '@nestjs/schedule';
+import { EntityManager } from 'typeorm';
 
 @Injectable()
 export class TotalCountService {
   constructor(private readonly totalCountRepository: TotalCountRepository) {}
 
-  async createTotalCount(userId: number) {
-    await this.totalCountRepository.createTotalCount(userId);
+  async createTotalCount(entityManager: EntityManager, userId: number) {
+    await this.totalCountRepository.createTotalCount(entityManager, userId);
+  }
+
+  async createMentorReviewChecklistCount(
+    entityManager: EntityManager,
+    userId: number,
+  ) {
+    await this.totalCountRepository.createMentorReviewChecklistCount(
+      entityManager,
+      userId,
+    );
   }
 
   async counting(userId: number, mentorId: number, type: Type, action: Action) {
@@ -49,6 +60,6 @@ export class TotalCountService {
       );
     }
 
-    return { message: '7일 카운트 초기화 성공' };
+    console.log('7일 카운트 초기화 성공');
   }
 }

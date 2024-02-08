@@ -3,19 +3,15 @@ import {
   Post,
   Body,
   Query,
-  Get,
   Delete,
   UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CommentsService } from '../services/comments.services';
 import { CreateCommentDto } from '../dto/create-comment-dto';
-import { ApiGetAllComment } from '../swagger-decorators/get-all-comment-decorators';
-import { CommentResponseDTO } from '../dto/get-all-comment-dto';
 import { ApiDeleteComment } from '../swagger-decorators/delete-comment-decorator';
 import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
-import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 import { ApiAddHelpComment } from '../swagger-decorators/post-help-you-comment-decorator';
 
 @Controller('help-you-comments')
@@ -32,16 +28,6 @@ export class CommentsController {
     @Body() createCommentDto: CreateCommentDto,
   ): Promise<CreateCommentDto> {
     return await this.commentsService.create(createCommentDto, userId, boardId);
-  }
-
-  @Get('')
-  @UseGuards(JwtOptionalGuard)
-  @ApiGetAllComment()
-  async getComment(
-    @GetUserId() userId: number,
-    @Query('helpMeBoardId') boardId: number,
-  ): Promise<{ data: CommentResponseDTO[] }> {
-    return this.commentsService.findAllComments(boardId, userId);
   }
 
   @Delete('')

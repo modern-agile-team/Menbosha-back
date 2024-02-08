@@ -5,7 +5,6 @@ import { UserRepository } from '../repositories/user.repository';
 import { UserImageRepository } from '../repositories/user-image.repository';
 import { FindManyOptions, FindOneOptions } from 'typeorm';
 import { User } from '../entities/user.entity';
-import { PageByMentorListResponseDTO } from '../dtos/page-by-mentor-list-response-dto';
 import { UserBadgeResponseDTO } from '../dtos/get-user-badge.dto';
 import { plainToInstance } from 'class-transformer';
 import { MyProfileResponseDTO } from '../dtos/get-my-profile.dto';
@@ -103,44 +102,5 @@ export class UserService {
     const page = total / limit;
     const totalPage = Math.ceil(page);
     return { total, totalPage };
-  }
-
-  async getMentorList(
-    page: number,
-    categoryId: number,
-  ): Promise<{ data: PageByMentorListResponseDTO[] }> {
-    const limit = 10;
-    const skip = (page - 1) * limit;
-    const take = limit;
-    const mentors = categoryId
-      ? await this.userRepository.findCategoryIdByMentors(
-          skip,
-          take,
-          categoryId,
-        )
-      : await this.userRepository.findPageByMentors(skip, limit);
-    const mentorResponse: PageByMentorListResponseDTO[] = await Promise.all(
-      mentors
-        .filter((user) => user.isMentor === true) //filter로 user.isMentor = true인 경우만 불러오기
-        .map(async (user) => {
-          return {
-            id: user.id,
-            name: user.name,
-            rank: user.rank,
-            categoryId: user.activityCategoryId,
-            userImage: {
-              imageId: user.userImage.id,
-              imageUrl: user.userImage.imageUrl,
-            },
-            userIntro: {
-              shortIntro: user.userIntro.shortIntro.substring(0, 30),
-              career: user.userIntro.career.substring(0, 30),
-            },
-            reviewCount: user.totalCount.reviewCount,
-            boardCount: user.totalCount.mentorBoardCount,
-          };
-        }),
-    );
-    return { data: mentorResponse };
   }
 }

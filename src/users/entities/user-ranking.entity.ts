@@ -21,14 +21,14 @@ export class UserRanking {
   @Column({ name: 'name', nullable: true })
   name: string | null;
 
-  @Column({ name: 'main_field', nullable: true })
-  mainField: string | null;
-
-  @Column({ name: 'introduce', nullable: true })
-  introduce: string | null;
+  @Column({ name: 'short_intro', nullable: true })
+  shortIntro: string | null;
 
   @Column({ name: 'career', nullable: true })
   career: string | null;
+
+  @Column({ name: 'custom_category', nullable: true })
+  customCategory: string | null;
 
   @Column({ name: 'rank', nullable: true })
   rank: number | null;

@@ -6,6 +6,7 @@ import { UserImageRepository } from 'src/users/repositories/user-image.repositor
 import axios from 'axios';
 import { AuthServiceInterface } from '../interfaces/auth-service.interface';
 import { TotalCountService } from 'src/total-count/services/total-count.service';
+import { DataSource } from 'typeorm';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ export class AuthService implements AuthServiceInterface {
     private readonly userImageRepository: UserImageRepository,
     private readonly tokenService: TokenService,
     private readonly totalCountService: TotalCountService,
+    private readonly dataSource: DataSource,
   ) {}
 
   async login(authorizeCode: string, provider: string) {
@@ -165,23 +167,61 @@ export class AuthService implements AuthServiceInterface {
         };
       } else {
         // 존재하지 않는 사용자인 경우
-        const newUser = await this.userRepository.createUser(userInfo);
-        const userId = newUser.id;
-        if (!profileImage) {
-          await this.userImageRepository.uploadUserImage(
-            userId,
-            process.env.DEFAULT_USER_IMAGE,
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+
+        try {
+          const entityManager = queryRunner.manager;
+
+          const newUser = await this.userRepository.createUser(
+            entityManager,
+            userInfo,
           );
-        } else {
-          await this.userImageRepository.uploadUserImage(userId, profileImage);
+          const userId = newUser.id;
+          if (!profileImage) {
+            await this.userImageRepository.uploadUserImage(
+              entityManager,
+              userId,
+              process.env.DEFAULT_USER_IMAGE,
+            );
+          } else {
+            await this.userImageRepository.uploadUserImage(
+              entityManager,
+              userId,
+              profileImage,
+            );
+          }
+          await this.totalCountService.createTotalCount(entityManager, userId);
+          await this.totalCountService.createMentorReviewChecklistCount(
+            entityManager,
+            userId,
+          );
+
+          await queryRunner.commitTransaction();
+
+          return {
+            userId,
+            socialAccessToken,
+            socialRefreshToken,
+            firstLogin: true,
+          };
+        } catch (error) {
+          if (queryRunner.isTransactionActive) {
+            await queryRunner.rollbackTransaction();
+          }
+
+          console.error(error);
+
+          throw new HttpException(
+            '사용자 생성 중 오류가 발생했습니다.',
+            HttpStatus.INTERNAL_SERVER_ERROR,
+          );
+        } finally {
+          if (!queryRunner.isReleased) {
+            await queryRunner.release();
+          }
         }
-        await this.totalCountService.createTotalCount(userId);
-        return {
-          userId,
-          socialAccessToken,
-          socialRefreshToken,
-          firstLogin: true,
-        };
       }
     } catch (error) {
       console.log(error);

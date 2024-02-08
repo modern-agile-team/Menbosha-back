@@ -40,7 +40,7 @@ export class UserRepository {
     return this.entityManager.findOne(User, { where: { email, provider } });
   }
 
-  async createUser(userInfo: any): Promise<User> {
+  async createUser(entityManager: EntityManager, userInfo: any): Promise<User> {
     const user = new User();
     user.provider = userInfo.provider;
     user.name = userInfo.nickname;
@@ -49,7 +49,7 @@ export class UserRepository {
     user.activityCategoryId = 1;
     user.isMentor = false;
 
-    return this.entityManager.save(user);
+    return entityManager.save(user);
   }
 
   async updateUserName(userId: number, name: string): Promise<User> {
@@ -69,27 +69,6 @@ export class UserRepository {
   async deleteUser(userId: number): Promise<DeleteResult | undefined> {
     await this.entityManager.findOne(User, { where: { id: userId } });
     return await this.entityManager.delete(User, { id: userId });
-  }
-
-  async findCategoryIdByMentors(
-    skip: number,
-    limit: number,
-    activityCategoryId: number,
-  ): Promise<User[]> {
-    return await this.entityManager.find(User, {
-      relations: ['userImage', 'userIntro', 'totalCount'],
-      where: { activityCategoryId },
-      skip: skip,
-      take: limit,
-    });
-  }
-
-  async findPageByMentors(skip: number, limit: number): Promise<User[]> {
-    return await this.entityManager.find(User, {
-      relations: ['userImage', 'userIntro', 'totalCount'],
-      skip: skip,
-      take: limit,
-    });
   }
 
   async findCategoryIdByIsMentors(categoryId: number): Promise<number> {

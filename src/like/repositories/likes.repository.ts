@@ -6,6 +6,7 @@ import {
   DeleteResult,
   EntityManager,
   FindManyOptions,
+  FindOneOptions,
   FindOptionsWhere,
   Repository,
 } from 'typeorm';
@@ -17,11 +18,19 @@ export class LikesRepository<E extends RequiredLikeColumn> {
     private readonly LikeRepository: Repository<E>,
   ) {}
 
-  isExistLike(parentId: number, userId: number) {
-    return this.LikeRepository.exist({
-      parentId,
-      userId,
+  isExistLike(parentId: number, userId: number): Promise<boolean> {
+    return this.LikeRepository.exists({
+      where: {
+        parentId,
+        userId,
+      },
     } as FindManyOptions<E>);
+  }
+
+  isExistLikeBy(id: number): Promise<boolean> {
+    return this.LikeRepository.existsBy({
+      id,
+    } as FindOptionsWhere<E>);
   }
 
   createLike(parentId: number, userId: number): Promise<E> {
@@ -44,6 +53,10 @@ export class LikesRepository<E extends RequiredLikeColumn> {
 
   findLikes(options: FindManyOptions<E>): Promise<E[]> {
     return this.LikeRepository.find({ options } as FindManyOptions<E>);
+  }
+
+  findOneLike(options: FindOneOptions<E>): Promise<E> {
+    return this.LikeRepository.findOne(options);
   }
 
   async deleteLike(parentId: number, userId: number): Promise<void> {

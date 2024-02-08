@@ -49,8 +49,8 @@ export class HelpMeBoard {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @Column({ name: 'pulling_up' })
-  pullingUp: Date;
+  @Column({ name: 'pulling_up', nullable: true, comment: '끌어올리기 된 일자' })
+  pullingUp: Date | null;
 
   @Column({ name: 'category_list_id' })
   categoryId: number;

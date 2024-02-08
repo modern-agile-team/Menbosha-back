@@ -12,13 +12,14 @@ import { UserImage } from './user-image.entity';
 import { Token } from 'src/auth/entities/token.entity';
 import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
 import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
-import { MentorReview } from '../../mentors/entities/mentor-review.entity';
+import { MentorReview } from '../../mentors/mentor-reviews/entities/mentor-review.entity';
 import { UserBadge } from './user-badge.entity';
 import { CategoryList } from '../../category/entity/category-list.entity';
 import { UserIntro } from './user-intro.entity';
 import { TotalCount } from 'src/total-count/entities/total-count.entity';
 import { MentorBoardLike } from 'src/boards/entities/mentor-board-like.entity';
 import { UserRanking } from './user-ranking.entity';
+import { MentorReviewChecklistCount } from 'src/total-count/entities/mentor-review-checklist-count.entity';
 
 @Entity({
   name: 'user',
@@ -29,6 +30,12 @@ export class User {
 
   @OneToOne(() => UserImage, (userImage) => userImage.user)
   userImage: UserImage;
+
+  @OneToOne(
+    () => MentorReviewChecklistCount,
+    (mentorReviewChecklistCount) => mentorReviewChecklistCount.user,
+  )
+  mentorReviewChecklistCount: MentorReviewChecklistCount;
 
   @OneToOne(() => UserIntro, (userIntro) => userIntro.user)
   userIntro: UserIntro;
