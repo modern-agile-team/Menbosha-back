@@ -103,7 +103,7 @@ export class MentorReviewChecklistCount {
   })
   isStuffyCount: number;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at', comment: '생성일자' })
   createdAt: Date;
 
   @OneToOne(() => User, (user) => user.mentorReviewChecklistCount, {
