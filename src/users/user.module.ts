@@ -16,7 +16,6 @@ import { UserRankingService } from './services/user-ranking.service';
 import { UserRankingRepository } from './repositories/user-ranking.repository';
 import { TotalCountModule } from 'src/total-count/total-count.module';
 import { UserBadgeService } from './services/user-badge.service';
-import { MentorReviewCountRepository } from 'src/mentors/repositories/mentor-review-count.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]), AuthModule, TotalCountModule],
@@ -33,7 +32,6 @@ import { MentorReviewCountRepository } from 'src/mentors/repositories/mentor-rev
     UserRankingService,
     UserRankingRepository,
     UserBadgeService,
-    MentorReviewCountRepository,
   ],
   exports: [UserService, UserRepository],
 })

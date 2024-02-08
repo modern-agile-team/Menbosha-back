@@ -1,14 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { UserBadgeRepository } from '../repositories/user-badge.repository';
-// import { TotalCountRepository } from 'src/total-count/repositories/total-count.repository';
-import { MentorReviewCountRepository } from 'src/mentors/repositories/mentor-review-count.repository';
+import { MentorReviewChecklistCountRepository } from 'src/total-count/repositories/mentor-review-checklist-count.repository';
 
 @Injectable()
 export class UserBadgeService {
   constructor(
     private readonly userBadgeRepository: UserBadgeRepository,
-    // private readonly totalCountRepository: TotalCountRepository,
-    private readonly mentorReviewCountRepository: MentorReviewCountRepository,
+    private readonly mentorReviewCountRepository: MentorReviewChecklistCountRepository,
   ) {}
   // async countBadge(userId: number, category: string): Promise<string> {
   //   console.log(category);
@@ -295,8 +293,7 @@ export class UserBadgeService {
     console.log(myBadge, 1);
 
     // 2. 멘토의 리뷰 개수 가져오기
-    const reviewCount =
-      await this.mentorReviewCountRepository.getReviewCount(mentorId);
+    const reviewCount = await this.reviewCountRepository.countReview(mentorId);
     console.log(reviewCount, 2);
 
     // // 3. 뱃지 부여 조건 확인 및 새로운 뱃지 부여

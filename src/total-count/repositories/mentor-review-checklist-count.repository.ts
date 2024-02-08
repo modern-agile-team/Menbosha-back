@@ -29,4 +29,10 @@ export class MentorReviewChecklistCountRepository {
       .getRepository(MentorReviewChecklistCount)
       .findOne({ where: { userId } });
   }
+
+  checkReviewCount(userId: number) {
+    return this.entityManager.find(MentorReviewChecklistCount, {
+      where: { userId },
+    });
+  }
 }
