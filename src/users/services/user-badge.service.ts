@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { UserBadgeRepository } from '../repositories/user-badge.repository';
 import { TotalCountRepository } from 'src/total-count/repositories/total-count.repository';
+import { MentorReviewCountRepository } from 'src/mentors/repositories/mentor-review-count.repository';
 
 @Injectable()
 export class UserBadgeService {
   constructor(
     private readonly userBadgeRepository: UserBadgeRepository,
     private readonly totalCountRepository: TotalCountRepository,
+    private readonly mentorReviewCountRepository: MentorReviewCountRepository,
   ) {}
   // async countBadge(userId: number, category: string): Promise<string> {
   //   console.log(category);
@@ -281,9 +283,12 @@ export class UserBadgeService {
   //   }
   // }
 
+  //
+
   async countBadge(mentorId: number): Promise<void> {
     const myBadge = await this.userBadgeRepository.getUserBadge(mentorId);
-    const checkBadge = await this.userBadgeRepository.getUserBadge(mentorId);
-    console.log(myBadge, checkBadge);
+    const mentorReviewCheck =
+      await this.mentorReviewCountRepository.checkAndAwardReviews(mentorId);
+    console.log(myBadge, mentorReviewCheck);
   }
 }
