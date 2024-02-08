@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { UserBadgeRepository } from '../repositories/user-badge.repository';
-import { TotalCountRepository } from 'src/total-count/repositories/total-count.repository';
+// import { TotalCountRepository } from 'src/total-count/repositories/total-count.repository';
 import { MentorReviewCountRepository } from 'src/mentors/repositories/mentor-review-count.repository';
 
 @Injectable()
 export class UserBadgeService {
   constructor(
     private readonly userBadgeRepository: UserBadgeRepository,
-    private readonly totalCountRepository: TotalCountRepository,
+    // private readonly totalCountRepository: TotalCountRepository,
     private readonly mentorReviewCountRepository: MentorReviewCountRepository,
   ) {}
   // async countBadge(userId: number, category: string): Promise<string> {
@@ -287,41 +287,40 @@ export class UserBadgeService {
   // 2차적으로, mentorReviewCountRepository에서 check된 개수 가져오기
   // 3차적으로, check된 개수가 5개이상,10개이상,25개이상,50개이상,100개이상일때 확인하기
   // 4차적으로, 한번 획득한 배지는 사라지지 않으며, 개수가 내려갔다가 올라가더라도 1차적인 조건에서 걸러져야함
-
-  // const mentorReviewCheck =
-  //   await this.mentorReviewCountRepository.checkAndAwardReviews(mentorId);
   async countBadge(mentorId: number): Promise<any> {
     console.log(mentorId);
 
     // 1. 사용자의 현재 뱃지 가져오기
     const myBadge = await this.userBadgeRepository.getUserBadge(mentorId);
+    console.log(myBadge, 1);
 
     // 2. 멘토의 리뷰 개수 가져오기
     const reviewCount =
       await this.mentorReviewCountRepository.getReviewCount(mentorId);
+    console.log(reviewCount, 2);
 
-    // 3. 뱃지 부여 조건 확인 및 새로운 뱃지 부여
-    let newBadge: string | null = null;
+    // // 3. 뱃지 부여 조건 확인 및 새로운 뱃지 부여
+    // let newBadge: string | null = null;
 
-    // 조건에 따라 새로운 뱃지 부여
-    if (reviewCount >= 100 && !myBadge.includes('Platinum')) {
-      newBadge = 'Platinum';
-    } else if (reviewCount >= 50 && !myBadge.includes('Gold')) {
-      newBadge = 'Gold';
-    } else if (reviewCount >= 25 && !myBadge.includes('Silver')) {
-      newBadge = 'Silver';
-    } else if (reviewCount >= 10 && !myBadge.includes('Bronze')) {
-      newBadge = 'Bronze';
-    } else if (reviewCount >= 5 && !myBadge.includes('Beginner')) {
-      newBadge = 'Beginner';
-    }
+    // // 조건에 따라 새로운 뱃지 부여
+    // if (reviewCount >= 100 && !myBadge.includes('Platinum')) {
+    //   newBadge = 'Platinum';
+    // } else if (reviewCount >= 50 && !myBadge.includes('Gold')) {
+    //   newBadge = 'Gold';
+    // } else if (reviewCount >= 25 && !myBadge.includes('Silver')) {
+    //   newBadge = 'Silver';
+    // } else if (reviewCount >= 10 && !myBadge.includes('Bronze')) {
+    //   newBadge = 'Bronze';
+    // } else if (reviewCount >= 5 && !myBadge.includes('Beginner')) {
+    //   newBadge = 'Beginner';
+    // }
 
-    // 새로운 뱃지가 있다면 사용자 뱃지에 추가
-    if (newBadge) {
-      myBadge.push(newBadge);
-    }
+    // // 새로운 뱃지가 있다면 사용자 뱃지에 추가
+    // if (newBadge) {
+    //   myBadge.push(newBadge);
+    // }
 
     // 사용자 뱃지 반환
-    return myBadge;
+    return reviewCount;
   }
 }

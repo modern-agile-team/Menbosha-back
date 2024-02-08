@@ -7,6 +7,7 @@ import { MentorReviewChecklist } from 'src/mentors/entities/mentor-review-checkl
 import { MentorsRepository } from './repositories/mentors.repository';
 import { AuthModule } from 'src/auth/auth.module';
 import { UserModule } from 'src/users/user.module';
+import { MentorReviewCountRepository } from './repositories/mentor-review-count.repository';
 
 @Module({
   imports: [
@@ -15,6 +16,6 @@ import { UserModule } from 'src/users/user.module';
     UserModule,
   ],
   controllers: [MentorsController],
-  providers: [MentorsService, MentorsRepository],
+  providers: [MentorsService, MentorsRepository, MentorReviewCountRepository],
 })
 export class MentorsModule {}
