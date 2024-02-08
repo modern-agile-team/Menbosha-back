@@ -12,9 +12,14 @@ services:
 
   redis:
     image: 2swo/redis
+    volumes:
+      - redis_data:/usr/local/etc/redis
     command: sh -c "redis-server /usr/local/etc/redis/redis.conf"
     env_file:
       - .env
     ports:
       - ${REDIS_BINDING_PORT}:${REDIS_PORT}
     restart: always
+
+volumes:
+  redis_data:
