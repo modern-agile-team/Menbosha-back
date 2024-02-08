@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner, TableColumn } from 'typeorm';
 
-export class ModifyMentorReviewChecklistCountSchema1707368183530
+export class ModifyMentorReviewChecklistCountSchema1707370531264
   implements MigrationInterface
 {
   public async up(queryRunner: QueryRunner): Promise<void> {
