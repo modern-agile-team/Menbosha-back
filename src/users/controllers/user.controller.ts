@@ -123,9 +123,8 @@ export class UserController {
   // }
 
   // mentorId 하나만 받음, get요청으로 변경
-  @UseGuards(JwtAccessTokenGuard)
-  @Get('/my-badge')
-  addBadge(@GetUserId() mentorId: number) {
+  @Get('/badge')
+  addBadge(@Query('mentorId') mentorId: number) {
     return this.userBadgeService.countBadge(mentorId);
   }
 }

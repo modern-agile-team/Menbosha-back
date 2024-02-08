@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { UserBadgeRepository } from '../repositories/user-badge.repository';
 import { TotalCountRepository } from 'src/total-count/repositories/total-count.repository';
-import { MentorReviewCountRepository } from 'src/mentors/repositories/mentor-review-count.repository';
+
+// import { MentorReviewCountRepository } from 'src/mentors/repositories/mentor-review-count.repository';
 
 @Injectable()
 export class UserBadgeService {
   constructor(
     private readonly userBadgeRepository: UserBadgeRepository,
     private readonly totalCountRepository: TotalCountRepository,
-    private readonly mentorReviewCountRepository: MentorReviewCountRepository,
+    // private readonly mentorReviewCountRepository: MentorReviewCountRepository,
   ) {}
   // async countBadge(userId: number, category: string): Promise<string> {
   //   console.log(category);
@@ -285,10 +286,13 @@ export class UserBadgeService {
 
   //
 
-  async countBadge(mentorId: number): Promise<void> {
+  async countBadge(mentorId: number): Promise<any> {
+    console.log(mentorId);
+
     const myBadge = await this.userBadgeRepository.getUserBadge(mentorId);
-    const mentorReviewCheck =
-      await this.mentorReviewCountRepository.checkAndAwardReviews(mentorId);
-    console.log(myBadge, mentorReviewCheck);
+    // 1차적으로, UserBadge에 이미 획득한 뱃지 확인하기
+    // const mentorReviewCheck =
+    //   await this.mentorReviewCountRepository.checkAndAwardReviews(mentorId);
+    console.log(myBadge, 3);
   }
 }

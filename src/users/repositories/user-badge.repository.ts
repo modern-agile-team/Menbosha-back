@@ -7,6 +7,8 @@ export class UserBadgeRepository {
   constructor(private readonly entityManager: EntityManager) {}
 
   async getUserBadge(userId: number) {
+    console.log(userId);
+
     return await this.entityManager.find(UserBadge, { where: { userId } });
   }
 
