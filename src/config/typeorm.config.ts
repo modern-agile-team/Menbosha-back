@@ -19,6 +19,7 @@ import { TotalCount } from 'src/total-count/entities/total-count.entity';
 import { DataSource } from 'typeorm';
 import { MentorReviewChecklist } from 'src/mentors/mentor-reviews/mentor-review-checklist/entities/mentor-review-checklist.entity';
 import { MentorReviewChecklistCount } from 'src/total-count/entities/mentor-review-checklist-count.entity';
+import { MentorReviewChecklistCountSubscriber } from 'src/total-count/entities/subscribers/mentor-review-checklist-count.subscriber';
 
 // .env 파일 로드
 dotenv.config();
@@ -81,6 +82,7 @@ export const TypeORMconfig: TypeOrmModuleOptions = {
     MentorBoardLike,
     MentorReviewChecklistCount,
   ], // 여기에 엔티티들을 추가해야 합니다.
+  subscribers: [MentorReviewChecklistCountSubscriber],
   migrationsTableName: 'migrations', // migration 이력을 저장하는 테이블
   migrations: ['src/migrations/*.ts'], // migration 할 파일들이 있는 directory
   synchronize: process.env.NODE_ENV === 'true',
