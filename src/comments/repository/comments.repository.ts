@@ -36,13 +36,6 @@ export class CommentsRepository {
     });
   }
 
-  // async commentCount(boardId: number): Promise<number> {
-  //   return await this.entityManager.findAndCount(HelpYouComment, {
-  //     relations: ['user', 'user.userImage'],
-  //     where: { helpMeBoardId: boardId },
-  //   });
-  // }
-
   async findCommentByUserId(
     userId: number,
     boardId: number,

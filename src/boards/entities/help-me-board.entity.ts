@@ -12,7 +12,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { CategoryList } from 'src/category/entity/category-list.entity';
-import { HelpYouComment } from 'src/comments/entities/help-you-comment.entity';
 
 @Entity({
   name: 'help_me_board',
@@ -36,12 +35,6 @@ export class HelpMeBoard {
   )
   helpMeBoardImages: HelpMeBoardImage[];
 
-  @OneToMany(
-    () => HelpYouComment,
-    (helpYouComments) => helpYouComments.helpMeBoard,
-  )
-  helpYouComments: HelpYouComment;
-
   @Index({ fulltext: true })
   @Column('varchar')
   head: string;
@@ -56,8 +49,8 @@ export class HelpMeBoard {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @Column({ name: 'pulling_up' })
-  pullingUp: Date;
+  @Column({ name: 'pulling_up', nullable: true, comment: '끌어올리기 된 일자' })
+  pullingUp: Date | null;
 
   @Column({ name: 'category_list_id' })
   categoryId: number;
