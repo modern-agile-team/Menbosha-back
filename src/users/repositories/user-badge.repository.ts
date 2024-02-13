@@ -6,7 +6,7 @@ import { UserBadge } from '../entities/user-badge.entity';
 export class UserBadgeRepository {
   constructor(private readonly entityManager: EntityManager) {}
 
-  async getUserBadge(userId: number) {
+  async findUserBadges(userId: number) {
     return await this.entityManager.find(UserBadge, { where: { userId } });
   }
 

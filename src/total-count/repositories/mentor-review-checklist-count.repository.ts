@@ -29,4 +29,10 @@ export class MentorReviewChecklistCountRepository {
       .getRepository(MentorReviewChecklistCount)
       .findOne({ where: { userId } });
   }
+
+  async findOneByUserId(userId: number): Promise<MentorReviewChecklistCount> {
+    return await this.entityManager.findOne(MentorReviewChecklistCount, {
+      where: { userId },
+    });
+  }
 }
