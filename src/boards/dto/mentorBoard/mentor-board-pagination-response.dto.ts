@@ -10,7 +10,7 @@ export class MentorBoardPaginationResponseDto extends PaginationResponseDto {
     type: [MentorBoardWithUserAndImageDto],
     description: '멘토 게시판 인기 글 item',
   })
-  mentorBoardForHotPostsItemDto: MentorBoardWithUserAndImageDto[];
+  mentorBoardWithUserAndImageDtos: MentorBoardWithUserAndImageDto[];
 
   constructor(
     mentorBoardForHotPostDto: MentorBoardWithUserAndImageDto[],
@@ -20,6 +20,6 @@ export class MentorBoardPaginationResponseDto extends PaginationResponseDto {
   ) {
     super(totalCount, page, pageSize);
 
-    this.mentorBoardForHotPostsItemDto = mentorBoardForHotPostDto;
+    this.mentorBoardWithUserAndImageDtos = mentorBoardForHotPostDto;
   }
 }
