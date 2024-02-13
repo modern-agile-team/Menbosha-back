@@ -8,6 +8,20 @@ import { MentorReviewsItemResponseDto } from '../dtos/mentor-reviews-item-respon
 @Injectable()
 export class MentorReviewRepository {
   constructor(private readonly entityManager: EntityManager) {}
+
+  createMentorReviewWithEntityManager(
+    entityManager: EntityManager,
+    mentorId: number,
+    menteeId: number,
+    mentorReview: MentorReview,
+  ) {
+    return entityManager.getRepository(MentorReview).save({
+      mentorId,
+      menteeId,
+      ...mentorReview,
+    });
+  }
+
   findMentorReviews(
     skip: number,
     pageSize: number,
@@ -77,6 +91,18 @@ export class MentorReviewRepository {
     mentorReview: MentorReview,
   ): Promise<UpdateResult> {
     return this.entityManager
+      .getRepository(MentorReview)
+      .update({ id: reviewId, mentorId, menteeId }, { ...mentorReview });
+  }
+
+  updateMentorReviewWithEntityManager(
+    entityManager: EntityManager,
+    reviewId: number,
+    mentorId: number,
+    menteeId: number,
+    mentorReview: MentorReview,
+  ): Promise<UpdateResult> {
+    return entityManager
       .getRepository(MentorReview)
       .update({ id: reviewId, mentorId, menteeId }, { ...mentorReview });
   }

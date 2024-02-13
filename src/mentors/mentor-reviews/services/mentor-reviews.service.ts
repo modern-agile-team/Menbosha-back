@@ -37,6 +37,9 @@ export class MentorReviewsService {
       throw new ForbiddenException('자기 자신에게 리뷰를 쓸 수 없습니다.');
     }
 
+    const { review, createMentorReviewChecklistRequestBodyDto } =
+      createMentorReviewRequestBodyDto;
+
     const existMentor = await this.userService.findOneByOrNotFound({
       select: {
         id: true,
@@ -54,18 +57,21 @@ export class MentorReviewsService {
     try {
       const entityManager = queryRunner.manager;
 
-      const mentorReview = await entityManager
-        .getRepository(MentorReview)
-        .save({
-          mentorId: existMentor.id,
+      const mentorReview =
+        await this.mentorReviewRepository.createMentorReviewWithEntityManager(
+          entityManager,
+          existMentor.id,
           menteeId,
-          ...createMentorReviewRequestBodyDto,
-        });
+          {
+            review,
+            ...createMentorReviewChecklistRequestBodyDto,
+          } as MentorReview,
+        );
 
       const incrementColumns = Object.keys(mentorReview)
         .filter((key) => mentorReview[key] === true)
         .reduce((result, key) => {
-          result[`${key}Count`] = () => `${key}Count + :incrementValue`;
+          result[`${key}Count`] = () => `${key}Count + 1`;
           return result;
         }, {}) as QueryDeepPartialEntity<MentorReviewChecklistCount>;
 
@@ -187,6 +193,8 @@ export class MentorReviewsService {
     reviewId: number,
     patchUpdateMentorReviewDto: PatchUpdateMentorReviewDto,
   ): Promise<MentorReviewDto> {
+    const { review, mentorReviewChecklist } = patchUpdateMentorReviewDto;
+
     if (!isNotEmptyObject(patchUpdateMentorReviewDto)) {
       throw new BadRequestException('At least one update field must exist.');
     }
@@ -202,23 +210,66 @@ export class MentorReviewsService {
       throw new ForbiddenException('해당 리뷰에 권한이 없습니다.');
     }
 
-    const updateResult = await this.mentorReviewRepository.updateMentorReview(
-      reviewId,
-      mentorId,
-      menteeId,
-      { ...existReview, ...patchUpdateMentorReviewDto },
-    );
+    const queryRunner = this.dataSource.createQueryRunner();
 
-    if (!updateResult.affected) {
-      throw new InternalServerErrorException(
-        '멘토 리뷰 업데이트 중 알 수 없는 서버 에러 발생',
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const entityManager = queryRunner.manager;
+
+      await this.mentorReviewRepository.updateMentorReviewWithEntityManager(
+        entityManager,
+        reviewId,
+        mentorId,
+        menteeId,
+        { ...existReview, review, ...mentorReviewChecklist },
       );
-    }
 
-    return new MentorReviewDto({
-      ...existReview,
-      ...patchUpdateMentorReviewDto,
-    });
+      const incrementColumns = Object.entries(mentorReviewChecklist).reduce(
+        (result, [key, value]) => {
+          if (
+            key.startsWith('is') &&
+            existReview[key] !== mentorReviewChecklist[key]
+          ) {
+            const incrementValue = value ? 1 : -1;
+
+            result[`${key}Count`] = () => `${key}Count + ${incrementValue}`;
+          }
+          return result;
+        },
+        {},
+      ) as QueryDeepPartialEntity<MentorReviewChecklistCount>;
+
+      if (isNotEmptyObject(incrementColumns)) {
+        await this.mentorReviewChecklistCountsService.incrementMentorReviewChecklistCounts(
+          entityManager,
+          mentorId,
+          incrementColumns,
+        );
+      }
+
+      await queryRunner.commitTransaction();
+
+      return new MentorReviewDto({
+        ...existReview,
+        ...mentorReviewChecklist,
+      });
+    } catch (error) {
+      if (queryRunner.isTransactionActive) {
+        await queryRunner.rollbackTransaction();
+      }
+
+      console.error(error);
+
+      throw new InternalServerErrorException(
+        '멘토 리뷰 업데이트 중 알 수 없는 서버에러 발생',
+      );
+    } finally {
+      if (!queryRunner.isReleased) {
+        await queryRunner.release();
+      }
+    }
   }
 
   async removeMentorReview(
@@ -227,7 +278,6 @@ export class MentorReviewsService {
     reviewId: number,
   ): Promise<UpdateResult> {
     const existReview = await this.findOneMentorReviewOrFail(mentorId, {
-      select: ['id', 'menteeId', 'mentorId'],
       where: {
         mentorId,
         id: reviewId,
@@ -238,13 +288,58 @@ export class MentorReviewsService {
       throw new ForbiddenException('해당 리뷰에 권한이 없습니다.');
     }
 
-    return this.mentorReviewRepository.updateMentorReview(
-      existReview.id,
-      existReview.mentorId,
-      existReview.menteeId,
-      {
-        deletedAt: new Date(),
-      } as MentorReview,
-    );
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const entityManager = queryRunner.manager;
+
+      const updateResult =
+        await this.mentorReviewRepository.updateMentorReviewWithEntityManager(
+          entityManager,
+          existReview.id,
+          existReview.mentorId,
+          existReview.menteeId,
+          {
+            deletedAt: new Date(),
+          } as MentorReview,
+        );
+
+      const incrementColumns = Object.entries(existReview).reduce(
+        (result, [key, value]) => {
+          if (value === true) {
+            result[`${key}Count`] = () => `${key}Count - 1`;
+          }
+          return result;
+        },
+        {},
+      ) as QueryDeepPartialEntity<MentorReviewChecklistCount>;
+
+      await this.mentorReviewChecklistCountsService.incrementMentorReviewChecklistCounts(
+        entityManager,
+        mentorId,
+        incrementColumns,
+      );
+
+      await queryRunner.commitTransaction();
+
+      return updateResult;
+    } catch (error) {
+      if (queryRunner.isTransactionActive) {
+        await queryRunner.rollbackTransaction();
+      }
+
+      console.error(error);
+
+      throw new InternalServerErrorException(
+        '멘토 리뷰 업데이트 중 알 수 없는 서버에러 발생',
+      );
+    } finally {
+      if (!queryRunner.isReleased) {
+        await queryRunner.release();
+      }
+    }
   }
 }
