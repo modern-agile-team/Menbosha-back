@@ -142,8 +142,13 @@ export class MentorReviewsItemResponseDto
   })
   createdAt: Date;
 
+  @ApiProperty({
+    description: '수정 일자',
+  })
+  updatedAt: Date;
+
   @Exclude()
-  deletedAt: Date;
+  deletedAt: Date | null;
 
   constructor(
     responseMentorReviewsPaginationResponseDto: MentorReviewsItemResponseDto,
