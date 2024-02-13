@@ -20,6 +20,7 @@ import { CategoryModule } from './category/category.module';
 import { BoardsModule } from './boards/boards.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { MentorsModule } from './mentors/mentors.module';
+import { MentorBoardSubscriber } from './subscribers/mentor-board.subscriber';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { MentorsModule } from './mentors/mentors.module';
       ...TypeORMconfig, // TypeORM 설정 객체 확장
       synchronize: false, // DB 동기화 여부 설정
       logging: false, //DB 로깅 여부 설정
+      subscribers: [MentorBoardSubscriber], // subscriber 설정
     }),
     ConfigModule.forRoot({
       isGlobal: true,

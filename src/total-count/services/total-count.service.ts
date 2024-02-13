@@ -23,7 +23,12 @@ export class TotalCountService {
     );
   }
 
-  async counting(userId: number, mentorId: number, type: Type, action: Action) {
+  async counting(
+    userId: number,
+    type: Type,
+    action: Action,
+    mentorId?: number,
+  ) {
     try {
       if (type === Type.MentorBoardLikeCount || type === Type.ReviewCount) {
         if (!mentorId) {
