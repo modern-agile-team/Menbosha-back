@@ -59,6 +59,7 @@ export class MentorReviewRepository {
         isBad: true,
         isStuffy: true,
         createdAt: true,
+        updatedAt: true,
       },
       where: {
         mentorId,
