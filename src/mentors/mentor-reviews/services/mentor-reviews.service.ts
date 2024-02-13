@@ -334,7 +334,7 @@ export class MentorReviewsService {
       console.error(error);
 
       throw new InternalServerErrorException(
-        '멘토 리뷰 업데이트 중 알 수 없는 서버에러 발생',
+        '멘토 리뷰 삭제 중 알 수 없는 서버에러 발생',
       );
     } finally {
       if (!queryRunner.isReleased) {
