@@ -18,6 +18,31 @@ export class UserBadgeService {
       await this.mentorReviewCountRepository.findOneByUserId(userId);
 
     // 리뷰 카운트에 따라 새로운 뱃지를 부여하고 userBadge에 추가
+    const newBadges = [];
+    if (mentorReviewCount) {
+      const reviewCount = Object.values(mentorReviewCount).reduce(
+        (total, count) => total + count,
+        0,
+      );
+      if (reviewCount >= 100 && !userBadges.includes('다이아뱃지')) {
+        newBadges.push('다이아뱃지');
+      }
+      if (reviewCount >= 50 && !userBadges.includes('플레티넘뱃지')) {
+        newBadges.push('플레티넘뱃지');
+      }
+      if (reviewCount >= 25 && !userBadges.includes('골드뱃지')) {
+        newBadges.push('골드뱃지');
+      }
+      if (reviewCount >= 10 && !userBadges.includes('실버뱃지')) {
+        newBadges.push('실버뱃지');
+      }
+      if (reviewCount >= 5 && !userBadges.includes('브론즈뱃지')) {
+        newBadges.push('브론즈뱃지');
+      }
+    }
+
+    // 새로운 뱃지를 userBadge에 추가
+    await this.userBadgeRepository.addUserBadges(userId, newBadges);
 
     // 마무리 후 userId로 검사해서 뱃지 배열로 리턴
     const updatedBadges = await this.userBadgeRepository.findUserBadges(userId);
