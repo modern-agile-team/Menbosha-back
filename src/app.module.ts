@@ -21,6 +21,8 @@ import { BoardsModule } from './boards/boards.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { MentorsModule } from './mentors/mentors.module';
 import { MentorBoardSubscriber } from './subscribers/mentor-board.subscriber';
+import { HelpYouCommentSubscriber } from './subscribers/help-you-comment.subscriber';
+import { MentorBoardLikeSubscriber } from './subscribers/mentor-board-like.subscriber';
 
 @Module({
   imports: [
@@ -32,7 +34,11 @@ import { MentorBoardSubscriber } from './subscribers/mentor-board.subscriber';
       ...TypeORMconfig, // TypeORM 설정 객체 확장
       synchronize: false, // DB 동기화 여부 설정
       logging: false, //DB 로깅 여부 설정
-      subscribers: [MentorBoardSubscriber], // subscriber 설정
+      subscribers: [
+        MentorBoardSubscriber,
+        HelpYouCommentSubscriber,
+        MentorBoardLikeSubscriber,
+      ], // subscriber 설정
     }),
     ConfigModule.forRoot({
       isGlobal: true,
