@@ -17,6 +17,7 @@ export class HelpYouCommentSubscriber
 
   afterInsert(event: InsertEvent<HelpYouComment>): void | Promise<any> {
     const { userId } = event.entity;
+
     event.connection.manager.increment(
       TotalCount,
       { userId },
@@ -33,6 +34,7 @@ export class HelpYouCommentSubscriber
 
   afterRemove(event: RemoveEvent<HelpYouComment>): void | Promise<any> {
     const { userId } = event.entity;
+
     event.connection.manager.decrement(
       TotalCount,
       { userId },

@@ -2,7 +2,7 @@ import { applyDecorators } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
-  ApiParam,
+  ApiQuery,
   ApiResponse,
 } from '@nestjs/swagger';
 
@@ -79,7 +79,7 @@ export function ApiDeleteComment() {
       },
     }),
     ApiBearerAuth('access-token'),
-    ApiParam({
+    ApiQuery({
       name: 'commentId',
       description: '삭제할 댓글의 ID',
     }),
