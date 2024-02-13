@@ -125,6 +125,13 @@ export class MentorReview {
   })
   createdAt: Date;
 
+  @Column('timestamp', {
+    name: 'updated_at',
+    comment: '수정 일자',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  updatedAt: Date;
+
   @DeleteDateColumn({
     name: 'deleted_at',
     nullable: true,
