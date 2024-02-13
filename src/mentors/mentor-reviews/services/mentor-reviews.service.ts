@@ -33,6 +33,10 @@ export class MentorReviewsService {
     menteeId: number,
     createMentorReviewRequestBodyDto: CreateMentorReviewRequestBodyDto,
   ): Promise<MentorReviewDto> {
+    if (mentorId === menteeId) {
+      throw new ForbiddenException('자기 자신에게 리뷰를 쓸 수 없습니다.');
+    }
+
     const existMentor = await this.userService.findOneByOrNotFound({
       select: {
         id: true,
