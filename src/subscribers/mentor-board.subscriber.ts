@@ -1,4 +1,3 @@
-import { Injectable } from '@nestjs/common';
 import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
 import { TotalCount } from 'src/total-count/entities/total-count.entity';
 import {
@@ -9,7 +8,6 @@ import {
 } from 'typeorm';
 
 @EventSubscriber()
-@Injectable()
 export class MentorBoardSubscriber
   implements EntitySubscriberInterface<MentorBoard>
 {

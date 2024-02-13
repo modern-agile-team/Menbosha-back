@@ -23,6 +23,10 @@ export class TotalCountService {
     );
   }
 
+  // TODO : helpYouCommentCount subscriber로 구현
+  // TODO : mentorBoardLikeCount subscriber로 구현
+  // TODO : badgeCount subscriber로 구현
+  // TODO : reviewCount subscriber로 구현
   async counting(
     userId: number,
     type: Type,
