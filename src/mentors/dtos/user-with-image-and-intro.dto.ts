@@ -46,6 +46,8 @@ export class UserWithImageAndIntroDto extends PickType(UserForJoinDto, [
     super();
 
     Object.assign(this, userWithImageAndIntroDto);
+    this.mentorReviewCount = Number(userWithImageAndIntroDto.mentorReviewCount);
+    this.mentorBoardCount = Number(userWithImageAndIntroDto.mentorBoardCount);
     this.rank = userWithImageAndIntroDto.user_rank;
   }
 }
