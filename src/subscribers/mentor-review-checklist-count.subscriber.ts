@@ -1,3 +1,4 @@
+import { isNotEmptyObject } from 'class-validator';
 import { MentorReview } from 'src/mentors/mentor-reviews/entities/mentor-review.entity';
 import { MentorReviewChecklistCount } from 'src/total-count/entities/mentor-review-checklist-count.entity';
 import {
@@ -13,6 +14,8 @@ import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity
 export class MentorReviewChecklistCountSubscriber
   implements EntitySubscriberInterface<MentorReview>
 {
+  private loadedEntity: MentorReview;
+
   listenTo() {
     return MentorReview;
   }
@@ -35,12 +38,37 @@ export class MentorReviewChecklistCountSubscriber
 
   afterLoad(
     entity: MentorReview,
-    event?: LoadEvent<MentorReview>,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _event?: LoadEvent<MentorReview>,
   ): void | Promise<any> {
-    console.log(entity);
+    this.loadedEntity = entity;
   }
 
   async afterUpdate(event: UpdateEvent<MentorReview>): Promise<void> {
-    console.log(event.entity);
+    const incrementColumns = Object.entries(event.entity).reduce(
+      (result, [key, value]) => {
+        if (
+          key.startsWith('is') &&
+          event.entity[key] !== this.loadedEntity[key]
+        ) {
+          const incrementValue = value ? 1 : -1;
+
+          result[`${key}Count`] = () => `${key}Count + ${incrementValue}`;
+        }
+
+        return result;
+      },
+      {},
+    ) as QueryDeepPartialEntity<MentorReviewChecklistCount>;
+
+    if (isNotEmptyObject(incrementColumns)) {
+      await event.manager
+        .getRepository(MentorReviewChecklistCount)
+        .createQueryBuilder('mentorReviewChecklistCount')
+        .update(incrementColumns)
+        .where({ userId: event.entity.mentorId })
+        .execute();
+    }
+    throw new Error();
   }
 }

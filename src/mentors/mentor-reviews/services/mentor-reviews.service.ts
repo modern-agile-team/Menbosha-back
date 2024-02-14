@@ -213,29 +213,6 @@ export class MentorReviewsService {
         { ...existReview, review, ...mentorReviewChecklist },
       );
 
-      const incrementColumns = Object.entries(mentorReviewChecklist).reduce(
-        (result, [key, value]) => {
-          if (
-            key.startsWith('is') &&
-            existReview[key] !== mentorReviewChecklist[key]
-          ) {
-            const incrementValue = value ? 1 : -1;
-
-            result[`${key}Count`] = () => `${key}Count + ${incrementValue}`;
-          }
-          return result;
-        },
-        {},
-      ) as QueryDeepPartialEntity<MentorReviewChecklistCount>;
-
-      if (isNotEmptyObject(incrementColumns)) {
-        await this.mentorReviewChecklistCountsService.incrementMentorReviewChecklistCounts(
-          entityManager,
-          mentorId,
-          incrementColumns,
-        );
-      }
-
       await queryRunner.commitTransaction();
 
       return new MentorReviewDto({
