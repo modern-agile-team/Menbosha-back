@@ -107,20 +107,20 @@ export class UserBadgeService {
           case 25: // 정확해요 100
             acquisition = mentorReviewCount.isAccurateCount >= 100;
             break;
-          case 26: // 이해가 빨라요 5 -아직
-            acquisition = mentorReviewCount.isInformativeCount >= 5;
+          case 26: // 이해가 잘돼요 5 -아직
+            acquisition = mentorReviewCount.isUnderstandWell >= 5;
             break;
-          case 27: // 이해가 빨라요 10
-            acquisition = mentorReviewCount.isInformativeCount >= 10;
+          case 27: // 이해가 잘돼요 10
+            acquisition = mentorReviewCount.isUnderstandWell >= 10;
             break;
-          case 28: // 이해가 빨라요 25
-            acquisition = mentorReviewCount.isInformativeCount >= 25;
+          case 28: // 이해가 잘돼요 25
+            acquisition = mentorReviewCount.isUnderstandWell >= 25;
             break;
-          case 29: // 이해가 빨라요 50
-            acquisition = mentorReviewCount.isInformativeCount >= 50;
+          case 29: // 이해가 잘돼요 50
+            acquisition = mentorReviewCount.isUnderstandWell >= 50;
             break;
-          case 30: // 이해가 빨라요 100
-            acquisition = mentorReviewCount.isInformativeCount >= 100;
+          case 30: // 이해가 잘돼요 100
+            acquisition = mentorReviewCount.isUnderstandWell >= 100;
             break;
           case 31: // 재밌어요 5
             acquisition = mentorReviewCount.isFunCount >= 5;
