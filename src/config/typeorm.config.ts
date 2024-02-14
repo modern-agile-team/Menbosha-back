@@ -17,7 +17,6 @@ import { MentorBoardImage } from 'src/boards/entities/mentor-board-image.entity'
 import { UserRanking } from 'src/users/entities/user-ranking.entity';
 import { TotalCount } from 'src/total-count/entities/total-count.entity';
 import { DataSource } from 'typeorm';
-import { MentorReviewChecklist } from 'src/mentors/mentor-reviews/mentor-review-checklist/entities/mentor-review-checklist.entity';
 import { MentorReviewChecklistCount } from 'src/total-count/entities/mentor-review-checklist-count.entity';
 
 // .env 파일 로드
@@ -43,7 +42,6 @@ export default new DataSource({
     BadgeList,
     UserBadge,
     MentorReview,
-    MentorReviewChecklist,
     UserIntro,
     UserRanking,
     TotalCount,
@@ -74,7 +72,6 @@ export const TypeORMconfig: TypeOrmModuleOptions = {
     BadgeList,
     UserBadge,
     MentorReview,
-    MentorReviewChecklist,
     UserIntro,
     UserRanking,
     TotalCount,

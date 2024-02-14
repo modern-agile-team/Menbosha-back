@@ -1,13 +1,27 @@
-import { EntityManager, FindOneOptions, Like } from 'typeorm';
+import { EntityManager, FindOneOptions, Like, UpdateResult } from 'typeorm';
 import { MentorReview } from '../entities/mentor-review.entity';
 import { MentorReviewOrderField } from '../constants/mentor-review-order-field.enum';
 import { SortOrder } from 'src/common/constants/sort-order.enum';
-import { MentorReviewsItemResponseDto } from '../dtos/mentor-reviews-item-response.dto';
 import { Injectable } from '@nestjs/common';
+import { MentorReviewsItemResponseDto } from '../dtos/mentor-reviews-item-response.dto';
 
 @Injectable()
 export class MentorReviewRepository {
   constructor(private readonly entityManager: EntityManager) {}
+
+  createMentorReviewWithEntityManager(
+    entityManager: EntityManager,
+    mentorId: number,
+    menteeId: number,
+    mentorReview: MentorReview,
+  ) {
+    return entityManager.getRepository(MentorReview).save({
+      mentorId,
+      menteeId,
+      ...mentorReview,
+    });
+  }
+
   findMentorReviews(
     skip: number,
     pageSize: number,
@@ -34,21 +48,18 @@ export class MentorReviewRepository {
             shortIntro: true,
           },
         },
-        mentorReviewChecklist: {
-          id: true,
-          mentorReviewId: true,
-          isGoodWork: true,
-          isClear: true,
-          isQuick: true,
-          isAccurate: true,
-          isKindness: true,
-          isFun: true,
-          isInformative: true,
-          isBad: true,
-          isStuffy: true,
-        },
         review: true,
+        isGoodWork: true,
+        isClear: true,
+        isQuick: true,
+        isAccurate: true,
+        isKindness: true,
+        isFun: true,
+        isInformative: true,
+        isBad: true,
+        isStuffy: true,
         createdAt: true,
+        updatedAt: true,
       },
       where: {
         mentorId,
@@ -61,7 +72,6 @@ export class MentorReviewRepository {
           userImage: true,
           userIntro: true,
         },
-        mentorReviewChecklist: true,
       },
       order: {
         [orderField]: sortOrder,
@@ -73,5 +83,28 @@ export class MentorReviewRepository {
 
   findOne(options: FindOneOptions<MentorReview>) {
     return this.entityManager.getRepository(MentorReview).findOne(options);
+  }
+
+  updateMentorReview(
+    reviewId: number,
+    mentorId: number,
+    menteeId: number,
+    mentorReview: MentorReview,
+  ): Promise<UpdateResult> {
+    return this.entityManager
+      .getRepository(MentorReview)
+      .update({ id: reviewId, mentorId, menteeId }, { ...mentorReview });
+  }
+
+  updateMentorReviewWithEntityManager(
+    entityManager: EntityManager,
+    reviewId: number,
+    mentorId: number,
+    menteeId: number,
+    mentorReview: MentorReview,
+  ): Promise<UpdateResult> {
+    return entityManager
+      .getRepository(MentorReview)
+      .update({ id: reviewId, mentorId, menteeId }, { ...mentorReview });
   }
 }

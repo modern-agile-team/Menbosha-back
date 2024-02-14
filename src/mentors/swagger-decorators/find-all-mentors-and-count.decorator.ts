@@ -1,6 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
 import {
-  ApiBearerAuth,
   ApiExtraModels,
   ApiNotFoundResponse,
   ApiOperation,
@@ -15,7 +14,6 @@ export function ApiFindAllMentorsAndCount() {
       summary: '멘토 리스트 pagination',
       description: `page및 limit, 정렬할 필드, 오름차순 내림차순, 필터링할 필드를 클라이언트에게서 받습니다.`,
     }),
-    ApiBearerAuth('access-token'),
     ApiResponse({
       status: 200,
       description: '멘토 리스트 성공적으로 불러옴.',
