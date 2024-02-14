@@ -68,6 +68,19 @@ export class MentorReviewsService {
           } as MentorReview,
         );
 
+      const incrementColumns = Object.keys(mentorReview)
+        .filter((key) => mentorReview[key] === true)
+        .reduce((result, key) => {
+          result[`${key}Count`] = () => `${key}Count + 1`;
+          return result;
+        }, {}) as QueryDeepPartialEntity<MentorReviewChecklistCount>;
+
+      await this.mentorReviewChecklistCountsService.incrementMentorReviewChecklistCounts(
+        entityManager,
+        mentorId,
+        incrementColumns,
+      );
+
       await queryRunner.commitTransaction();
 
       return new MentorReviewDto({
