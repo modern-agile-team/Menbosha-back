@@ -103,6 +103,15 @@ export class MentorReviewChecklistCount {
   })
   isStuffyCount: number;
 
+  @Column('int', {
+    name: 'is_understand_well_count',
+    unsigned: true,
+    nullable: false,
+    default: 0,
+    comment: '답답해요',
+  })
+  isUnderstandWellCount: number;
+
   @CreateDateColumn({ name: 'created_at', comment: '생성일자' })
   createdAt: Date;
 

@@ -88,6 +88,12 @@ export class MentorReviewDto
   isStuffy: boolean;
 
   @ApiProperty({
+    description: '이해가 잘돼요',
+    default: false,
+  })
+  isUnderstandWell: boolean;
+
+  @ApiProperty({
     description: '생성일자',
   })
   createdAt: Date;
