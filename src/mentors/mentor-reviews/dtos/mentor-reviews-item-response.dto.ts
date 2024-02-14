@@ -1,5 +1,4 @@
 import { MentorReviewDto } from './mentor-review.dto';
-import { MentorReviewChecklistDto } from './mentor-review-checklist.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserInfoDto } from 'src/users/dtos/user-info.dto';
 import { UserImage } from 'src/users/entities/user-image.entity';
@@ -85,18 +84,77 @@ export class MentorReviewsItemResponseDto
   review: string | null;
 
   @ApiProperty({
-    description: '멘티가 작성한 리뷰 체크리스트',
-    type: MentorReviewChecklistDto,
+    description: '잘가르쳐요',
+    default: false,
   })
-  mentorReviewChecklist: MentorReviewChecklistDto;
+  isGoodWork: boolean;
+
+  @ApiProperty({
+    description: '깔끔해요',
+    default: false,
+  })
+  isClear: boolean;
+
+  @ApiProperty({
+    description: '답변이 빨라요',
+    default: false,
+  })
+  isQuick: boolean;
+
+  @ApiProperty({
+    description: '정확해요',
+    default: false,
+  })
+  isAccurate: boolean;
+
+  @ApiProperty({
+    description: '친절해요',
+    default: false,
+  })
+  isKindness: boolean;
+
+  @ApiProperty({
+    description: '재밌어요',
+    default: false,
+  })
+  isFun: boolean;
+
+  @ApiProperty({
+    description: '알차요',
+    default: false,
+  })
+  isInformative: boolean;
+
+  @ApiProperty({
+    description: '아쉬워요',
+    default: false,
+  })
+  isBad: boolean;
+
+  @ApiProperty({
+    description: '답답해요',
+    default: false,
+  })
+  isStuffy: boolean;
+
+  @ApiProperty({
+    description: '이해가 잘돼요',
+    default: false,
+  })
+  isUnderstandWell: boolean;
 
   @ApiProperty({
     description: '생성일자',
   })
   createdAt: Date;
 
+  @ApiProperty({
+    description: '수정 일자',
+  })
+  updatedAt: Date;
+
   @Exclude()
-  deletedAt: Date;
+  deletedAt: Date | null;
 
   constructor(
     responseMentorReviewsPaginationResponseDto: MentorReviewsItemResponseDto,

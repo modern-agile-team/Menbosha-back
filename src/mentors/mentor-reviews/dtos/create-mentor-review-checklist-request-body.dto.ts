@@ -1,9 +1,9 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { MentorReviewChecklistDto } from './mentor-review-checklist.dto';
 import { IsBoolean, IsOptional } from 'class-validator';
+import { MentorReview } from '../entities/mentor-review.entity';
 
 export class CreateMentorReviewChecklistRequestBodyDto
-  implements Partial<MentorReviewChecklistDto>
+  implements Partial<MentorReview>
 {
   @ApiPropertyOptional({
     description: '잘가르쳐요',
@@ -77,9 +77,11 @@ export class CreateMentorReviewChecklistRequestBodyDto
   @IsBoolean()
   isStuffy?: boolean;
 
-  constructor(
-    createMentorReviewChecklistRequestBodyDto: CreateMentorReviewChecklistRequestBodyDto,
-  ) {
-    Object.assign(this, createMentorReviewChecklistRequestBodyDto);
-  }
+  @ApiPropertyOptional({
+    description: '이해가 잘돼요',
+    default: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  isUnderstandWell?: boolean;
 }
