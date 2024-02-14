@@ -13,16 +13,15 @@ export class UserBadgeService {
     // 내 뱃지 확인하고 내 리뷰 카운트 정보 불러오기.
     // 카운트가 5,10,25,50,100이상일때의 로직 수행하기.
 
-    // 2. 유저의 리뷰 카운트
+    // 1. 내 뱃지 확인
+    const userBadges = await this.userBadgeRepository.findUserBadges(userId);
+
+    // 2. 유저의 리뷰 카운트 불러오기
     const mentorReviewCount =
       await this.mentorReviewCountRepository.findOneByUserId(userId);
     console.log(mentorReviewCount);
 
-    // 1. 내 뱃지 확인
-    const userBadges = await this.userBadgeRepository.findUserBadges(userId);
-    // console.log(userBadges);
-
-    // 3.뱃지 리스트 정보 불러오기?
+    // 3.뱃지 리스트 DB 정보 불러오기
     const badgeList = await this.userBadgeRepository.getBadgeList();
     const newBadges = [];
 
@@ -107,21 +106,21 @@ export class UserBadgeService {
           case 25: // 정확해요 100
             acquisition = mentorReviewCount.isAccurateCount >= 100;
             break;
-          case 26: // 이해가 잘돼요 5 -아직
-            acquisition = mentorReviewCount.isUnderstandWell >= 5;
-            break;
-          case 27: // 이해가 잘돼요 10
-            acquisition = mentorReviewCount.isUnderstandWell >= 10;
-            break;
-          case 28: // 이해가 잘돼요 25
-            acquisition = mentorReviewCount.isUnderstandWell >= 25;
-            break;
-          case 29: // 이해가 잘돼요 50
-            acquisition = mentorReviewCount.isUnderstandWell >= 50;
-            break;
-          case 30: // 이해가 잘돼요 100
-            acquisition = mentorReviewCount.isUnderstandWell >= 100;
-            break;
+          // case 26: // 이해가 잘돼요 5 -아직
+          //   acquisition = mentorReviewCount.isUnderstandWell >= 5;
+          //   break;
+          // case 27: // 이해가 잘돼요 10
+          //   acquisition = mentorReviewCount.isUnderstandWell >= 10;
+          //   break;
+          // case 28: // 이해가 잘돼요 25
+          //   acquisition = mentorReviewCount.isUnderstandWell >= 25;
+          //   break;
+          // case 29: // 이해가 잘돼요 50
+          //   acquisition = mentorReviewCount.isUnderstandWell >= 50;
+          //   break;
+          // case 30: // 이해가 잘돼요 100
+          //   acquisition = mentorReviewCount.isUnderstandWell >= 100;
+          //   break;
           case 31: // 재밌어요 5
             acquisition = mentorReviewCount.isFunCount >= 5;
             break;
@@ -162,9 +161,9 @@ export class UserBadgeService {
 
     console.log(newBadges);
 
-    // if (newBadges.length > 0) {
-    //   await this.userBadgeRepository.createNewBadges(newBadges);
-    // }
+    if (newBadges.length > 0) {
+      await this.userBadgeRepository.createNewBadges(newBadges);
+    }
 
     // 부여된 뱃지 목록을 반환합니다.
     const updatedUserBadges =
