@@ -108,7 +108,7 @@ export class MentorReviewChecklistCount {
     unsigned: true,
     nullable: false,
     default: 0,
-    comment: '답답해요',
+    comment: '이해가 잘돼요',
   })
   isUnderstandWellCount: number;
 
