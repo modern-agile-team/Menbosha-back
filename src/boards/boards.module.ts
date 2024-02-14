@@ -24,6 +24,7 @@ import { MentorBoardHotPostsService } from './services/mentor-board-hot-posts.se
 import { CategoryModule } from 'src/category/category.module';
 import { MentorBoardLikeRepository } from './repository/mentor.board.likes.repository';
 import { QueryBuilderHelper } from 'src/helpers/query-builder.helper';
+import { TotalCountModule } from 'src/total-count/total-count.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { QueryBuilderHelper } from 'src/helpers/query-builder.helper';
     LikesModule.forFeature(MentorBoardLike),
     HotPostsModule.forFeature(MentorBoard),
     CategoryModule,
+    TotalCountModule,
   ],
   controllers: [
     MentorBoardController,

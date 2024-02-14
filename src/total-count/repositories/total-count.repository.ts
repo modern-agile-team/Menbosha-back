@@ -21,18 +21,23 @@ export class TotalCountRepository {
     });
   }
 
-  async counting(userId: number, type: Type, action: Action) {
+  async counting(
+    entityManager: EntityManager,
+    userId: number,
+    type: Type,
+    action: Action,
+  ) {
     if (action === Action.Increment) {
-      await this.entityManager.increment(TotalCount, { userId }, type, 1);
-      await this.entityManager.increment(
+      await entityManager.increment(TotalCount, { userId }, type, 1);
+      await entityManager.increment(
         TotalCount,
         { userId },
         `${type}InSevenDays`,
         1,
       );
     } else {
-      await this.entityManager.decrement(TotalCount, { userId }, type, 1);
-      await this.entityManager.decrement(
+      await entityManager.decrement(TotalCount, { userId }, type, 1);
+      await entityManager.decrement(
         TotalCount,
         { userId },
         `${type}InSevenDays`,

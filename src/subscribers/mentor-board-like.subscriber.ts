@@ -38,9 +38,12 @@ export class MentorBoardLikeSubscriber
     );
   }
 
-  async afterRemove(event: RemoveEvent<MentorBoardLike>): Promise<any> {
-    console.log('afterRemove', event.entity); // FIXME : 이거 undefined 나와서 아래 로직 실행 안됨
+  // afterQuery(event: AfterQueryEvent<MentorBoardLike>): void | Promise<any> {
+  //   console.log('afterQuery', event);
+  // }
 
+  async beforeRemove(event: RemoveEvent<MentorBoardLike>): Promise<any> {
+    // console.log('beforeRemove', event); // FIXME : 이거 undefined 나와서 아래 로직 실행 안됨
     // const { parentId } = event.entity;
     // const { userId } = await event.connection
     //   .createQueryBuilder()
@@ -48,7 +51,6 @@ export class MentorBoardLikeSubscriber
     //   .from('mentor_board', 'mentorBoard')
     //   .where('mentorBoard.id = :parentId', { parentId })
     //   .getRawOne();
-
     // event.connection.manager.decrement(
     //   TotalCount,
     //   { userId },

@@ -27,6 +27,7 @@ export class TotalCountService {
   // TODO : badgeCount subscriber로 구현 (뱃지가 완성되면 작업 시작)
   // TODO : reviewCount subscriber로 구현 (얘 소프트 딜리트인데 afterUpdate로 체크하면 entity값에 deletedAt만 있어서 트랜잭션으로 처리해야함)
   async counting(
+    entityManager: EntityManager,
     userId: number,
     type: Type,
     action: Action,
@@ -40,9 +41,19 @@ export class TotalCountService {
             HttpStatus.BAD_REQUEST,
           );
         }
-        await this.totalCountRepository.counting(mentorId, type, action);
+        await this.totalCountRepository.counting(
+          entityManager,
+          mentorId,
+          type,
+          action,
+        );
       } else {
-        await this.totalCountRepository.counting(userId, type, action);
+        await this.totalCountRepository.counting(
+          entityManager,
+          userId,
+          type,
+          action,
+        );
       }
       return { message: '카운팅 성공' };
     } catch (error) {

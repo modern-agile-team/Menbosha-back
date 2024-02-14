@@ -20,11 +20,11 @@ export class TotalCountController {
     @GetUserId() userId: number,
     @Body() countingDto: UpdateCountingDto,
   ) {
-    return await this.totalCountService.counting(
-      userId,
-      countingDto.type as Type,
-      countingDto.action as Action,
-      countingDto.mentorId as number,
-    );
+    // return await this.totalCountService.counting(
+    //   userId,
+    //   countingDto.type as Type,
+    //   countingDto.action as Action,
+    //   countingDto.mentorId as number,
+    // );
   }
 }

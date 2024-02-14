@@ -10,6 +10,9 @@ import { LikesService } from 'src/like/services/likes.service';
 import { MentorBoardLikeDto } from '../dto/mentorBoard/mentor-board-like.dto';
 import { DataSource } from 'typeorm';
 import { MentorBoardHotPostsService } from './mentor-board-hot-posts.service';
+import { TotalCountService } from 'src/total-count/services/total-count.service';
+import { Type } from 'src/total-count/enums/type.enum';
+import { Action } from 'src/total-count/enums/action.enum';
 
 @Injectable()
 export class MentorBoardLikeService {
@@ -18,6 +21,7 @@ export class MentorBoardLikeService {
     private readonly dataSource: DataSource,
     private readonly mentorBoardService: MentorBoardService,
     private readonly mentorBoardHotPostService: MentorBoardHotPostsService,
+    private readonly totalCountService: TotalCountService,
   ) {}
 
   async createMentorBoardLikeAndHotPost(
@@ -100,6 +104,7 @@ export class MentorBoardLikeService {
     const existBoard = await this.mentorBoardService.findOneByOrNotFound({
       select: {
         id: true,
+        userId: true,
         mentorBoardLikes: {
           id: true,
         },
@@ -140,6 +145,14 @@ export class MentorBoardLikeService {
           existBoard.id,
         );
       }
+
+      await this.totalCountService.counting(
+        entityManager,
+        0,
+        Type.MentorBoardLikeCount,
+        Action.Decrement,
+        existBoard.userId,
+      );
 
       await queryRunner.commitTransaction();
 
