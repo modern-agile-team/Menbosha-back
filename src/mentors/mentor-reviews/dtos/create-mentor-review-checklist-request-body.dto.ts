@@ -76,4 +76,12 @@ export class CreateMentorReviewChecklistRequestBodyDto
   @IsOptional()
   @IsBoolean()
   isStuffy?: boolean;
+
+  @ApiPropertyOptional({
+    description: '이해가 잘돼요',
+    default: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  isUnderstandWell?: boolean;
 }
