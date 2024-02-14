@@ -23,7 +23,6 @@ export class TotalCountService {
     );
   }
 
-  // TODO : mentorBoardLikeCount subscriber로 구현 (아직 미완성) -> 좋아요 삭제할 때 얘가 감지를 못해서 트랜잭션으로 처리해야함
   // TODO : badgeCount subscriber로 구현 (뱃지가 완성되면 작업 시작)
   // TODO : reviewCount subscriber로 구현 (얘 소프트 딜리트인데 afterUpdate로 체크하면 entity값에 deletedAt만 있어서 트랜잭션으로 처리해야함)
   async counting(
