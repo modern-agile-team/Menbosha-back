@@ -82,6 +82,13 @@ export class MentorReviewChecklistCountDto
   isStuffyCount: number;
 
   @ApiProperty({
+    description: '이해가 잘돼요 카운트',
+    format: 'integer',
+    default: 0,
+  })
+  isUnderstandWellCount: number;
+
+  @ApiProperty({
     description: '생성일자',
   })
   createdAt: Date;

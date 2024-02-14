@@ -115,6 +115,15 @@ export class MentorReview {
   })
   isStuffy: boolean;
 
+  @Column('tinyint', {
+    name: 'is_understand_well',
+    comment: '이해가 잘돼요',
+    unsigned: true,
+    default: () => "'0'",
+    transformer: new BooleanTransformer(),
+  })
+  isUnderstandWell: boolean;
+
   @Column('varchar', { name: 'review', length: 255, nullable: true })
   review: string | null;
 
