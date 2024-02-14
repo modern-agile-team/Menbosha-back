@@ -15,7 +15,7 @@ export class AddColumnAtMentorReviewTable1707897149688
     await queryRunner.addColumn(
       'mentor_review_checklist_count',
       new TableColumn(
-        generateCountColumn('is_understand_well', '이해가 잘돼요'),
+        generateCountColumn('is_understand_well_count', '이해가 잘돼요'),
       ),
     );
   }
@@ -24,7 +24,7 @@ export class AddColumnAtMentorReviewTable1707897149688
     await queryRunner.dropColumn('mentor_review', 'is_understand_well');
     await queryRunner.dropColumn(
       'mentor_review_checklist_count',
-      'is_understand_well',
+      'is_understand_well_count',
     );
   }
 }
