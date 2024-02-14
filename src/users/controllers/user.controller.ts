@@ -30,6 +30,7 @@ import { ApiGetUserInfo } from '../swagger-decorators/get-user-info.decorators';
 import { UserRankingService } from '../services/user-ranking.service';
 import { ApiGetTotalRanking } from '../swagger-decorators/get-total-ranking.decorator';
 import { UserBadgeService } from '../services/user-badge.service';
+import { ApiGetUserBadges } from '../swagger-decorators/get-user-badges-decorator';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -107,7 +108,7 @@ export class UserController {
     return this.userIntroService.updateMyIntro(userId, userData);
   }
 
-  //get요청을 하게 될 경우,
+  @ApiGetUserBadges()
   @Get(':userId/badge')
   getUserBadge(@Param('userId') userId: number) {
     return this.userBadgeService.checkUserBadge(userId);

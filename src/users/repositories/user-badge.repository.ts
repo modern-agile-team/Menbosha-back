@@ -13,7 +13,7 @@ export class UserBadgeRepository {
 
   async findUserBadges(userId: number) {
     return await this.entityManager.find(UserBadge, {
-      where: { userId }, // 해당 userId에 해당하는 뱃지만 가져오도록 필터링
+      where: { userId },
     });
   }
 
