@@ -175,6 +175,7 @@ export class MentorBoardService {
       throw new ForbiddenException('작성한 게시물이 아닙니다.');
     }
 
-    await this.mentorBoardRepository.deleteBoard(board);
+    const oldBoard = await this.mentorBoardRepository.deleteBoard(board);
+    console.log(oldBoard);
   }
 }

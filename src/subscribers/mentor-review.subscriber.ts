@@ -16,20 +16,18 @@ export class MentorReviewSubscriber
 
   afterInsert(event: InsertEvent<MentorReview>): void | Promise<any> {
     const { mentorId } = event.entity;
-    console.log('event.entity', event.entity);
-    console.log('mentorId', mentorId);
 
-    // event.connection.manager.increment(
-    //   TotalCount,
-    //   { mentorId },
-    //   'reviewCount',
-    //   1,
-    // );
-    // event.connection.manager.increment(
-    //   TotalCount,
-    //   { mentorId },
-    //   'reviewCountInSevenDays',
-    //   1,
-    // );
+    event.connection.manager.increment(
+      TotalCount,
+      { userId: mentorId },
+      'reviewCount',
+      1,
+    );
+    event.connection.manager.increment(
+      TotalCount,
+      { userId: mentorId },
+      'reviewCountInSevenDays',
+      1,
+    );
   }
 }
