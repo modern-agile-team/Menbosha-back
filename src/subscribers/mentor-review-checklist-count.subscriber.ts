@@ -4,6 +4,7 @@ import {
   EntitySubscriberInterface,
   EventSubscriber,
   InsertEvent,
+  LoadEvent,
   UpdateEvent,
 } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
@@ -30,6 +31,13 @@ export class MentorReviewChecklistCountSubscriber
       .update(incrementColumns)
       .where({ userId: event.entity.mentorId })
       .execute();
+  }
+
+  afterLoad(
+    entity: MentorReview,
+    event?: LoadEvent<MentorReview>,
+  ): void | Promise<any> {
+    console.log(entity);
   }
 
   async afterUpdate(event: UpdateEvent<MentorReview>): Promise<void> {
