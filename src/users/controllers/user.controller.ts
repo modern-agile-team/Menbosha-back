@@ -107,6 +107,7 @@ export class UserController {
     return this.userIntroService.updateMyIntro(userId, userData);
   }
 
+  //get요청을 하게 될 경우,
   @Get(':userId/badge')
   getUserBadge(@Param('userId') userId: number) {
     return this.userBadgeService.checkUserBadge(userId);
