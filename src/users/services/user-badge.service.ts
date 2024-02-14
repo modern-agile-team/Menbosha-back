@@ -152,9 +152,6 @@ export class UserBadgeService {
           case 40: // 알차요 100
             acquisition = mentorReviewCount.isInformativeCount >= 100;
             break;
-          // 나머지 뱃지들의 부여 조건을 추가합니다.
-          default:
-            break;
         }
 
         if (acquisition) {
