@@ -3,7 +3,6 @@ import { MentorReviewsController } from './controllers/mentor-reviews.controller
 import { MentorReviewsService } from './services/mentor-reviews.service';
 import { AuthModule } from 'src/auth/auth.module';
 import { UserModule } from 'src/users/user.module';
-import { MentorReviewChecklistModule } from './mentor-review-checklist/mentor-review-checklist.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MentorReview } from './entities/mentor-review.entity';
 import { MentorReviewRepository } from './repositories/mentor-review.repository';
@@ -15,7 +14,6 @@ import { TotalCountModule } from 'src/total-count/total-count.module';
     TypeOrmModule.forFeature([MentorReview, MentorReviewChecklistCount]),
     AuthModule,
     UserModule,
-    MentorReviewChecklistModule,
     TotalCountModule,
   ],
   controllers: [MentorReviewsController],

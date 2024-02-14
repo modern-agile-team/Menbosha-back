@@ -13,11 +13,10 @@ import { MentorReviewsItemResponseDto } from '../dtos/mentor-reviews-item-respon
 import { plainToInstance } from 'class-transformer';
 import { MentorReviewsPaginationResponseDto } from '../dtos/mentor-reviews-pagination-response.dto';
 import { UserService } from 'src/users/services/user.service';
-import { DataSource, FindOneOptions } from 'typeorm';
+import { DataSource, FindOneOptions, UpdateResult } from 'typeorm';
 import { MentorReview } from '../entities/mentor-review.entity';
 import { PatchUpdateMentorReviewDto } from '../dtos/patch-update-mentor-review.dto';
 import { isNotEmptyObject } from 'class-validator';
-import { MentorReviewChecklistService } from '../mentor-review-checklist/services/mentor-review-checklist.service';
 import { MentorReviewChecklistCount } from 'src/total-count/entities/mentor-review-checklist-count.entity';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { MentorReviewChecklistCountsService } from 'src/total-count/services/mentor-review-checklist-counts.service';
@@ -25,7 +24,6 @@ import { MentorReviewChecklistCountsService } from 'src/total-count/services/men
 export class MentorReviewsService {
   constructor(
     private readonly dataSource: DataSource,
-    private readonly mentorReviewChecklistService: MentorReviewChecklistService,
     private readonly mentorReviewRepository: MentorReviewRepository,
     private readonly userService: UserService,
     private readonly mentorReviewChecklistCountsService: MentorReviewChecklistCountsService,
@@ -35,6 +33,13 @@ export class MentorReviewsService {
     menteeId: number,
     createMentorReviewRequestBodyDto: CreateMentorReviewRequestBodyDto,
   ): Promise<MentorReviewDto> {
+    if (mentorId === menteeId) {
+      throw new ForbiddenException('자기 자신에게 리뷰를 쓸 수 없습니다.');
+    }
+
+    const { review, createMentorReviewChecklistRequestBodyDto } =
+      createMentorReviewRequestBodyDto;
+
     const existMentor = await this.userService.findOneByOrNotFound({
       select: {
         id: true,
@@ -44,9 +49,6 @@ export class MentorReviewsService {
       },
     });
 
-    const { review, createMentorReviewChecklistRequestBodyDto } =
-      createMentorReviewRequestBodyDto;
-
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -55,25 +57,21 @@ export class MentorReviewsService {
     try {
       const entityManager = queryRunner.manager;
 
-      const mentorReview = await entityManager
-        .getRepository(MentorReview)
-        .save({
-          mentorId: existMentor.id,
-          menteeId,
-          review,
-        });
-
-      const mentorReviewChecklist =
-        await this.mentorReviewChecklistService.createMentorReviewChecklist(
+      const mentorReview =
+        await this.mentorReviewRepository.createMentorReviewWithEntityManager(
           entityManager,
-          mentorReview.id,
-          { ...createMentorReviewChecklistRequestBodyDto },
+          existMentor.id,
+          menteeId,
+          {
+            review,
+            ...createMentorReviewChecklistRequestBodyDto,
+          } as MentorReview,
         );
 
-      const incrementColumns = Object.keys(mentorReviewChecklist)
-        .filter((key) => mentorReviewChecklist[key] === true)
+      const incrementColumns = Object.keys(mentorReview)
+        .filter((key) => mentorReview[key] === true)
         .reduce((result, key) => {
-          result[`${key}Count`] = () => `${key}Count + :incrementValue`;
+          result[`${key}Count`] = () => `${key}Count + 1`;
           return result;
         }, {}) as QueryDeepPartialEntity<MentorReviewChecklistCount>;
 
@@ -87,7 +85,6 @@ export class MentorReviewsService {
 
       return new MentorReviewDto({
         ...mentorReview,
-        mentorReviewChecklist,
       });
     } catch (error) {
       if (queryRunner.isTransactionActive) {
@@ -185,9 +182,6 @@ export class MentorReviewsService {
         id: reviewId,
         mentorId,
       },
-      relations: {
-        mentorReviewChecklist: true,
-      },
     });
 
     return new MentorReviewDto(existReview);
@@ -199,7 +193,7 @@ export class MentorReviewsService {
     reviewId: number,
     patchUpdateMentorReviewDto: PatchUpdateMentorReviewDto,
   ): Promise<MentorReviewDto> {
-    const { mentorReviewChecklist, review } = patchUpdateMentorReviewDto;
+    const { review, mentorReviewChecklist } = patchUpdateMentorReviewDto;
 
     if (!isNotEmptyObject(patchUpdateMentorReviewDto)) {
       throw new BadRequestException('At least one update field must exist.');
@@ -209,9 +203,6 @@ export class MentorReviewsService {
       where: {
         mentorId,
         id: reviewId,
-      },
-      relations: {
-        mentorReviewChecklist: true,
       },
     });
 
@@ -227,37 +218,43 @@ export class MentorReviewsService {
     try {
       const entityManager = queryRunner.manager;
 
-      if (review !== undefined) {
-        await entityManager.getRepository(MentorReview).update(
-          {
-            id: reviewId,
-            mentorId,
-            menteeId,
-          },
-          { review },
-        );
-      }
+      await this.mentorReviewRepository.updateMentorReviewWithEntityManager(
+        entityManager,
+        reviewId,
+        mentorId,
+        menteeId,
+        { ...existReview, review, ...mentorReviewChecklist },
+      );
 
-      if (mentorReviewChecklist !== undefined) {
-        await this.mentorReviewChecklistService.patchUpdateMentorReviewChecklist(
+      const incrementColumns = Object.entries(mentorReviewChecklist).reduce(
+        (result, [key, value]) => {
+          if (
+            key.startsWith('is') &&
+            existReview[key] !== mentorReviewChecklist[key]
+          ) {
+            const incrementValue = value ? 1 : -1;
+
+            result[`${key}Count`] = () => `${key}Count + ${incrementValue}`;
+          }
+          return result;
+        },
+        {},
+      ) as QueryDeepPartialEntity<MentorReviewChecklistCount>;
+
+      if (isNotEmptyObject(incrementColumns)) {
+        await this.mentorReviewChecklistCountsService.incrementMentorReviewChecklistCounts(
           entityManager,
-          existReview.id,
-          mentorReviewChecklist,
+          mentorId,
+          incrementColumns,
         );
       }
 
       await queryRunner.commitTransaction();
 
-      const updatedMentorReview = {
+      return new MentorReviewDto({
         ...existReview,
-        ...patchUpdateMentorReviewDto,
-        mentorReviewChecklist: {
-          ...existReview.mentorReviewChecklist,
-          ...mentorReviewChecklist,
-        },
-      };
-
-      return new MentorReviewDto(updatedMentorReview);
+        ...mentorReviewChecklist,
+      });
     } catch (error) {
       if (queryRunner.isTransactionActive) {
         await queryRunner.rollbackTransaction();
@@ -266,7 +263,7 @@ export class MentorReviewsService {
       console.error(error);
 
       throw new InternalServerErrorException(
-        '멘토 리뷰 업데이트 중 에러가 발생했습니다.',
+        '멘토 리뷰 업데이트 중 알 수 없는 서버에러 발생',
       );
     } finally {
       if (!queryRunner.isReleased) {
@@ -279,9 +276,8 @@ export class MentorReviewsService {
     mentorId: number,
     menteeId: number,
     reviewId: number,
-  ): Promise<void> {
+  ): Promise<UpdateResult> {
     const existReview = await this.findOneMentorReviewOrFail(mentorId, {
-      select: ['id', 'menteeId', 'mentorId'],
       where: {
         mentorId,
         id: reviewId,
@@ -300,23 +296,36 @@ export class MentorReviewsService {
     try {
       const entityManager = queryRunner.manager;
 
-      await entityManager.getRepository(MentorReview).update(
-        {
-          id: existReview.id,
-          mentorId: existReview.mentorId,
-          menteeId: existReview.menteeId,
-        },
-        {
-          deletedAt: new Date(),
-        },
-      );
+      const updateResult =
+        await this.mentorReviewRepository.updateMentorReviewWithEntityManager(
+          entityManager,
+          existReview.id,
+          existReview.mentorId,
+          existReview.menteeId,
+          {
+            deletedAt: new Date(),
+          } as MentorReview,
+        );
 
-      await this.mentorReviewChecklistService.removeMentorReviewChecklist(
+      const incrementColumns = Object.entries(existReview).reduce(
+        (result, [key, value]) => {
+          if (value === true) {
+            result[`${key}Count`] = () => `${key}Count - 1`;
+          }
+          return result;
+        },
+        {},
+      ) as QueryDeepPartialEntity<MentorReviewChecklistCount>;
+
+      await this.mentorReviewChecklistCountsService.incrementMentorReviewChecklistCounts(
         entityManager,
-        existReview.id,
+        mentorId,
+        incrementColumns,
       );
 
       await queryRunner.commitTransaction();
+
+      return updateResult;
     } catch (error) {
       if (queryRunner.isTransactionActive) {
         await queryRunner.rollbackTransaction();

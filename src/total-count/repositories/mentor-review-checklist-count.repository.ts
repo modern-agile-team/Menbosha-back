@@ -18,7 +18,6 @@ export class MentorReviewChecklistCountRepository {
       .update(MentorReviewChecklistCount)
       .where({ userId })
       .set({ ...incrementColumns })
-      .setParameter('incrementValue', 1)
       .execute();
   }
 
