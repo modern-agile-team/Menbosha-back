@@ -107,8 +107,8 @@ export class UserController {
     return this.userIntroService.updateMyIntro(userId, userData);
   }
 
-  @Get('/badge')
-  getUserBadge(@Param('mentorId') mentorId: number) {
-    return this.userBadgeService.checkUserBadge(mentorId);
+  @Get(':userId/badge')
+  getUserBadge(@Param('userId') userId: number) {
+    return this.userBadgeService.checkUserBadge(userId);
   }
 }
