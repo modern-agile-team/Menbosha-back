@@ -4,6 +4,7 @@ import {
   EntitySubscriberInterface,
   EventSubscriber,
   InsertEvent,
+  UpdateEvent,
 } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
@@ -19,14 +20,19 @@ export class MentorReviewChecklistCountSubscriber
     const incrementColumns = Object.keys(event.entity)
       .filter((key) => event.entity[key] === true)
       .reduce((result, key) => {
-        result[`${key}Count`] = () => `${key}Count + :incrementValue`;
+        result[`${key}Count`] = () => `${key}Count + 1`;
         return result;
       }, {}) as QueryDeepPartialEntity<MentorReviewChecklistCount>;
 
-    console.log(event);
+    await event.manager
+      .getRepository(MentorReviewChecklistCount)
+      .createQueryBuilder('mentorReviewChecklistCount')
+      .update(incrementColumns)
+      .where({ userId: event.entity.mentorId })
+      .execute();
+  }
 
-    //   event.manager
-    //     .getRepository(MentorReviewChecklistCount)
-    //     .update({userId: event.manager.},{ incrementColumns });
+  async afterUpdate(event: UpdateEvent<MentorReview>): Promise<void> {
+    console.log(event.entity);
   }
 }
