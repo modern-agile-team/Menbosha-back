@@ -156,7 +156,6 @@ export class UserBadgeService {
             break;
         }
 
-        //배열에 한번에 저장하기 위해서, createAt까지 주기.
         if (acquisition) {
           newBadges.push({ userId: Number(userId), badgeId: badge.id });
         }
