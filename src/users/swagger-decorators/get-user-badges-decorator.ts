@@ -5,7 +5,7 @@ export function ApiGetUserBadges() {
   return applyDecorators(
     ApiOperation({
       summary: '유저의 뱃지 정보를 가져오는 API',
-      description: '자신이 획득한 뱃지를 검사해서 표시해줍니다.',
+      description: '획득한 뱃지 검사하고, 유저의 뱃지 정보를 가져오는 API',
     }),
     ApiResponse({
       status: 200,

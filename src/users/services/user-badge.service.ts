@@ -19,14 +19,15 @@ export class UserBadgeService {
     // 2. 유저의 리뷰 카운트 불러오기
     const mentorReviewCount =
       await this.mentorReviewCountRepository.findOneByUserId(userId);
-    console.log(mentorReviewCount);
 
     // 3.뱃지 리스트 DB 정보 불러오기
     const badgeList = await this.userBadgeRepository.getBadgeList();
     const newBadges = [];
 
+    //아래 switch 문 각자의 역할별로 나누기
+
     for (const badge of badgeList) {
-      //예외처리 - 이미 내 뱃지에서 있는 거는 하지 않기.
+      //예외처리 - 이미 내 뱃지에서 있는 case 건너뛰기
       if (!userBadges.some((b) => b.badgeId === badge.id)) {
         let acquisition = false;
 
@@ -159,15 +160,14 @@ export class UserBadgeService {
       }
     }
 
-    console.log(newBadges);
-
+    // 새롭게 획득한 뱃지 추가. 기존의 userBadge와 새로 획득한 acquiredBadges 리턴
     if (newBadges.length > 0) {
-      await this.userBadgeRepository.createNewBadges(newBadges);
-    }
+      const acquiredBadges =
+        await this.userBadgeRepository.createNewBadges(newBadges);
 
-    // 부여된 뱃지 목록을 반환합니다.
-    const updatedUserBadges =
-      await this.userBadgeRepository.findUserBadges(userId);
-    return updatedUserBadges;
+      return [userBadges, acquiredBadges];
+    }
+    //새로 획득한 뱃지가 없을 경우 기존의 userBadge 리턴
+    return userBadges;
   }
 }

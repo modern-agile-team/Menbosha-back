@@ -27,9 +27,8 @@ export class UserBadgeRepository {
       userBadge.userId = badge.userId;
       userBadge.badgeId = badge.badgeId;
       userBadge.createdAt = new Date();
-      await this.entityManager.save(UserBadge, userBadge);
+      return await this.entityManager.save(UserBadge, userBadge);
     }
+    // 배열로 한번에 저장
   }
-
-  // async checkUserBadge(userId: number) {}
 }
