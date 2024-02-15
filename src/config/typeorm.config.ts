@@ -81,5 +81,6 @@ export const TypeORMconfig: TypeOrmModuleOptions = {
   subscribers: ['dist/**/subscribers/*{.ts,.js}'],
   migrationsTableName: 'migrations', // migration 이력을 저장하는 테이블
   migrations: ['src/migrations/*.ts'], // migration 할 파일들이 있는 directory
+  timezone: '+00:00',
   synchronize: process.env.NODE_ENV === 'true',
 };
