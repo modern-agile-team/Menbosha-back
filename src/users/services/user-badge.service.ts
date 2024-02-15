@@ -18,7 +18,9 @@ export class UserBadgeService {
 
     // 2. 유저의 리뷰 카운트 불러오기
     const mentorReviewCount =
-      await this.mentorReviewCountRepository.findOneByUserId(userId);
+      await this.mentorReviewCountRepository.findOneMentorReviewChecklistCount(
+        userId,
+      );
 
     // 3.뱃지 리스트 DB 정보 불러오기
     const badgeList = await this.userBadgeRepository.getBadgeList();
@@ -156,7 +158,7 @@ export class UserBadgeService {
 
         //배열에 한번에 저장하기 위해서, createAt까지 주기.
         if (acquisition) {
-          newBadges.push({ userId, badgeId: badge.id, createAt: new Date() });
+          newBadges.push({ userId, badgeId: badge.id });
         }
       }
     }
