@@ -14,24 +14,34 @@ export function ApiGetUserBadges() {
         JSON: {
           example: {
             data: [
-              {
-                id: 'number',
-                userId: 'number',
-                badgeId: 'number',
-                createdAt: '2024-02-14T08:02:34.000Z',
-              },
-              {
-                id: 'number',
-                userId: 'number',
-                badgeId: 'number',
-                createdAt: '2024-02-14T08:02:34.000Z',
-              },
-              {
-                id: 'number',
-                userId: 'number',
-                badgeId: 'number',
-                createdAt: '2024-02-14T08:02:34.000Z',
-              },
+              [
+                {
+                  id: 'number',
+                  userId: 'number',
+                  badgeId: 'number',
+                  createdAt: '2024-02-14T21:22:34.000Z',
+                },
+                {
+                  id: 'number',
+                  userId: 'number',
+                  badgeId: 'number',
+                  createdAt: '2024-02-14T21:22:34.000Z',
+                },
+                {
+                  id: 'number',
+                  userId: 'number',
+                  badgeId: 'number',
+                  createdAt: '2024-02-14T21:22:34.000Z',
+                },
+              ],
+              [
+                {
+                  userId: 'number',
+                  badgeId: 'number',
+                  id: 'number',
+                  createdAt: '2024-02-14T21:26:50.000Z',
+                },
+              ],
             ],
           },
         },
