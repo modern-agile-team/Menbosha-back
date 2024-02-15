@@ -263,7 +263,6 @@ export class MentorReviewsService {
           existReview.mentorId,
           existReview.menteeId,
           {
-            ...existReview,
             deletedAt: new Date(),
           } as MentorReview,
         );

@@ -77,9 +77,7 @@ export class MentorReviewChecklistCountSubscriber
   }
 
   async deleteIncrement(event: UpdateEvent<MentorReview>) {
-    const { entity } = event;
-
-    const incrementColumns = Object.entries(entity).reduce(
+    const incrementColumns = Object.entries(this.loadedEntity).reduce(
       (result, [key, value]) => {
         if (value === true) {
           result[`${key}Count`] = () => `${key}Count - 1`;
@@ -93,7 +91,7 @@ export class MentorReviewChecklistCountSubscriber
       .getRepository(MentorReviewChecklistCount)
       .createQueryBuilder('mentorReviewChecklistCount')
       .update({ ...incrementColumns })
-      .where({ userId: entity.mentorId })
+      .where({ userId: this.loadedEntity.mentorId })
       .execute();
   }
 }
