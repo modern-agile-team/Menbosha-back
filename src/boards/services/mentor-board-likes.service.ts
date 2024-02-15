@@ -58,6 +58,8 @@ export class MentorBoardLikeService {
     await queryRunner.startTransaction();
 
     try {
+      queryRunner.data.existBoard = { ...existBoard };
+
       const entityManager = queryRunner.manager;
 
       const newLike = await this.likesService.createLikeWithEntityManager(
@@ -65,15 +67,6 @@ export class MentorBoardLikeService {
         existBoard.id,
         userId,
       );
-
-      const likeCount = existBoard.mentorBoardLikes.length + 1;
-
-      if (likeCount === 10 && !existBoard.popularAt) {
-        await this.mentorBoardHotPostService.createMentorBoardHotPost(
-          entityManager,
-          existBoard.id,
-        );
-      }
 
       await queryRunner.commitTransaction();
 
