@@ -31,7 +31,7 @@ export class MentorReviewChecklistCountSubscriber
     await event.manager
       .getRepository(MentorReviewChecklistCount)
       .createQueryBuilder('mentorReviewChecklistCount')
-      .update(incrementColumns)
+      .update({ ...incrementColumns })
       .where({ userId: event.entity.mentorId })
       .execute();
   }
@@ -92,9 +92,8 @@ export class MentorReviewChecklistCountSubscriber
     return event.manager
       .getRepository(MentorReviewChecklistCount)
       .createQueryBuilder('mentorReviewChecklistCount')
-      .update(MentorReviewChecklistCount)
+      .update({ ...incrementColumns })
       .where({ userId: entity.mentorId })
-      .set({ ...incrementColumns })
       .execute();
   }
 }

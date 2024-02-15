@@ -17,16 +17,12 @@ import { DataSource, FindOneOptions, UpdateResult } from 'typeorm';
 import { MentorReview } from '../entities/mentor-review.entity';
 import { PatchUpdateMentorReviewDto } from '../dtos/patch-update-mentor-review.dto';
 import { isNotEmptyObject } from 'class-validator';
-import { MentorReviewChecklistCount } from 'src/total-count/entities/mentor-review-checklist-count.entity';
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { MentorReviewChecklistCountsService } from 'src/total-count/services/mentor-review-checklist-counts.service';
 @Injectable()
 export class MentorReviewsService {
   constructor(
     private readonly dataSource: DataSource,
     private readonly mentorReviewRepository: MentorReviewRepository,
     private readonly userService: UserService,
-    private readonly mentorReviewChecklistCountsService: MentorReviewChecklistCountsService,
   ) {}
   async createMentorReview(
     mentorId: number,
