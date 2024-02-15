@@ -51,12 +51,11 @@ export class MentorReviewChecklistCountSubscriber
   }
 
   async updateIncrement(event: UpdateEvent<MentorReview>) {
-    const incrementColumns = Object.entries(event.entity).reduce(
+    const { entity } = event;
+
+    const incrementColumns = Object.entries(entity).reduce(
       (result, [key, value]) => {
-        if (
-          key.startsWith('is') &&
-          event.entity[key] !== this.loadedEntity[key]
-        ) {
+        if (key.startsWith('is') && entity[key] !== this.loadedEntity[key]) {
           const incrementValue = value ? 1 : -1;
 
           result[`${key}Count`] = () => `${key}Count + ${incrementValue}`;
@@ -72,10 +71,30 @@ export class MentorReviewChecklistCountSubscriber
         .getRepository(MentorReviewChecklistCount)
         .createQueryBuilder('mentorReviewChecklistCount')
         .update(incrementColumns)
-        .where({ userId: event.entity.mentorId })
+        .where({ userId: entity.mentorId })
         .execute();
     }
   }
 
-  async deleteIncrement(event: UpdateEvent<MentorReview>) {}
+  async deleteIncrement(event: UpdateEvent<MentorReview>) {
+    const { entity } = event;
+
+    const incrementColumns = Object.entries(entity).reduce(
+      (result, [key, value]) => {
+        if (value === true) {
+          result[`${key}Count`] = () => `${key}Count - 1`;
+        }
+        return result;
+      },
+      {},
+    ) as QueryDeepPartialEntity<MentorReviewChecklistCount>;
+
+    return event.manager
+      .getRepository(MentorReviewChecklistCount)
+      .createQueryBuilder('mentorReviewChecklistCount')
+      .update(MentorReviewChecklistCount)
+      .where({ userId: entity.mentorId })
+      .set({ ...incrementColumns })
+      .execute();
+  }
 }

@@ -267,25 +267,10 @@ export class MentorReviewsService {
           existReview.mentorId,
           existReview.menteeId,
           {
+            ...existReview,
             deletedAt: new Date(),
           } as MentorReview,
         );
-
-      const incrementColumns = Object.entries(existReview).reduce(
-        (result, [key, value]) => {
-          if (value === true) {
-            result[`${key}Count`] = () => `${key}Count - 1`;
-          }
-          return result;
-        },
-        {},
-      ) as QueryDeepPartialEntity<MentorReviewChecklistCount>;
-
-      await this.mentorReviewChecklistCountsService.incrementMentorReviewChecklistCounts(
-        entityManager,
-        mentorId,
-        incrementColumns,
-      );
 
       await queryRunner.commitTransaction();
 
