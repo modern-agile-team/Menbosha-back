@@ -25,6 +25,7 @@ export class TotalCountService {
 
   // TODO : badgeCount subscriber로 구현 (뱃지가 완성되면 작업 시작)
   // TODO : reviewCount subscriber로 구현 (얘 소프트 딜리트인데 afterUpdate로 체크하면 entity값에 deletedAt만 있어서 트랜잭션으로 처리해야함)
+  // TODO : 위에 subscriber들이 다 구현되면 count 관련 코드 삭제하기
   async counting(
     entityManager: EntityManager,
     userId: number,

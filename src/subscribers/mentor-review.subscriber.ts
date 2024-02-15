@@ -35,5 +35,19 @@ export class MentorReviewSubscriber
   afterUpdate(event: UpdateEvent<MentorReview>): void | Promise<any> {
     const { mentorId, deletedAt } = event.entity;
     console.log(mentorId, deletedAt);
+    if (deletedAt) {
+      event.connection.manager.decrement(
+        TotalCount,
+        { userId: mentorId },
+        'reviewCount',
+        1,
+      );
+      event.connection.manager.decrement(
+        TotalCount,
+        { userId: mentorId },
+        'reviewCountInSevenDays',
+        1,
+      );
+    }
   }
 }
