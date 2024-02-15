@@ -62,7 +62,7 @@ export class MentorRepository {
 
     return Promise.all([
       queryBuilder.getCount(),
-      queryBuilder.groupBy('id').skip(skip).take(pageSize).getRawMany(),
+      queryBuilder.offset(skip).limit(pageSize).groupBy('id').getRawMany(),
     ]);
   }
 }
