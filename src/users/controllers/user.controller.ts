@@ -29,6 +29,8 @@ import { ApiGetMyRank } from '../swagger-decorators/get-my-rank-decorators';
 import { ApiGetUserInfo } from '../swagger-decorators/get-user-info.decorators';
 import { UserRankingService } from '../services/user-ranking.service';
 import { ApiGetTotalRanking } from '../swagger-decorators/get-total-ranking.decorator';
+import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -41,7 +43,8 @@ export class UserController {
   ) {}
 
   @ApiGetMyProfile()
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAccessTokenGuard)
   @Get('my/profile')
   async getMyProfile(@GetUserId() userId: number) {
     return this.userService.getMyProfile(userId);
