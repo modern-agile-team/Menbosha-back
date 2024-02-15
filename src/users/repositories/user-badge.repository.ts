@@ -21,14 +21,7 @@ export class UserBadgeRepository {
     return await this.entityManager.find(BadgeList);
   }
 
-  async createNewBadges(newBadges): Promise<any> {
-    for (const badge of newBadges) {
-      const userBadge = new UserBadge();
-      userBadge.userId = badge.userId;
-      userBadge.badgeId = badge.badgeId;
-      userBadge.createdAt = new Date();
-      return await this.entityManager.save(UserBadge, userBadge);
-    }
-    // 배열로 한번에 저장
+  async createNewBadges(newBadges: any[]): Promise<UserBadge[]> {
+    return await this.entityManager.save(UserBadge, newBadges);
   }
 }
