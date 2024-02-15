@@ -21,8 +21,7 @@ export class UserBadgeRepository {
     return await this.entityManager.find(BadgeList);
   }
 
-  async createNewBadges(newBadges: any[]): Promise<any> {
-    const badges = await this.entityManager.save(UserBadge, newBadges);
-    return { newBadges: badges };
+  async createNewBadges(newBadges: UserBadge[]): Promise<UserBadge[]> {
+    return await this.entityManager.save(UserBadge, newBadges);
   }
 }

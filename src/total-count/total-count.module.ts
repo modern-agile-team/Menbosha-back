@@ -19,7 +19,6 @@ import { MentorReviewChecklistCountRepository } from './repositories/mentor-revi
     TotalCountRepository,
     TotalCountService,
     MentorReviewChecklistCountsService,
-    MentorReviewChecklistCountRepository,
   ],
 })
 export class TotalCountModule {}

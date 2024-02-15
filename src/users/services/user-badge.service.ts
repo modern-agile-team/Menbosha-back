@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { UserBadgeRepository } from '../repositories/user-badge.repository';
-import { MentorReviewChecklistCountRepository } from 'src/total-count/repositories/mentor-review-checklist-count.repository';
+import { MentorReviewChecklistCountsService } from 'src/total-count/services/mentor-review-checklist-counts.service';
 
 @Injectable()
 export class UserBadgeService {
   constructor(
     private readonly userBadgeRepository: UserBadgeRepository,
-    private readonly mentorReviewCountRepository: MentorReviewChecklistCountRepository,
+    private readonly mentorReviewCountService: MentorReviewChecklistCountsService,
   ) {}
 
-  async checkUserBadge(userId: number): Promise<any> {
+  async checkUserBadges(userId: number): Promise<any> {
     // 내 뱃지 확인하고 내 리뷰 카운트 정보 불러오기.
     // 카운트가 5,10,25,50,100이상일때의 로직 수행하기.
 
@@ -18,7 +18,7 @@ export class UserBadgeService {
 
     // 2. 유저의 리뷰 카운트 불러오기
     const mentorReviewCount =
-      await this.mentorReviewCountRepository.findOneMentorReviewChecklistCount(
+      await this.mentorReviewCountService.findOneMentorReviewChecklistCountOrFail(
         userId,
       );
 
@@ -158,7 +158,7 @@ export class UserBadgeService {
 
         //배열에 한번에 저장하기 위해서, createAt까지 주기.
         if (acquisition) {
-          newBadges.push({ userId, badgeId: badge.id });
+          newBadges.push({ userId: Number(userId), badgeId: badge.id });
         }
       }
     }
@@ -168,7 +168,7 @@ export class UserBadgeService {
       const acquiredBadges =
         await this.userBadgeRepository.createNewBadges(newBadges);
 
-      return [userBadges, acquiredBadges];
+      return [userBadges, { acquiredBadges }];
     }
     //새로 획득한 뱃지가 없을 경우 기존의 userBadge 리턴
     return userBadges;

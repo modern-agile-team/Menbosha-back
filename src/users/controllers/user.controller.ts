@@ -30,7 +30,7 @@ import { ApiGetUserInfo } from '../swagger-decorators/get-user-info.decorators';
 import { UserRankingService } from '../services/user-ranking.service';
 import { ApiGetTotalRanking } from '../swagger-decorators/get-total-ranking.decorator';
 import { UserBadgeService } from '../services/user-badge.service';
-import { ApiGetUserBadges } from '../swagger-decorators/get-user-badges-decorator';
+import { ApiPostUserBadges } from '../swagger-decorators/get-user-badges-decorator';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -108,9 +108,9 @@ export class UserController {
     return this.userIntroService.updateMyIntro(userId, userData);
   }
 
-  @ApiGetUserBadges()
-  @Get(':userId/badge')
+  @ApiPostUserBadges()
+  @Post(':userId/badges')
   getUserBadge(@Param('userId') userId: number) {
-    return this.userBadgeService.checkUserBadge(userId);
+    return this.userBadgeService.checkUserBadges(userId);
   }
 }

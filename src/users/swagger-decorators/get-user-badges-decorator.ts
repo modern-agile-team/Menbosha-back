@@ -1,14 +1,14 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiParam, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-export function ApiGetUserBadges() {
+export function ApiPostUserBadges() {
   return applyDecorators(
     ApiOperation({
-      summary: '유저의 뱃지 정보를 가져오는 API',
+      summary: '유저의 획득한 뱃지를 검사하고  정보를 가져오는 API',
       description: '획득한 뱃지 검사하고, 유저의 뱃지 정보를 가져오는 API',
     }),
     ApiResponse({
-      status: 200,
+      status: 201,
       description: '성공적으로 뱃지를 가져올 경우',
       content: {
         JSON: {
@@ -19,28 +19,28 @@ export function ApiGetUserBadges() {
                   id: 'number',
                   userId: 'number',
                   badgeId: 'number',
-                  createdAt: '2024-02-14T21:22:34.000Z',
+                  createdAt: '2024-02-14T21:58:03.000Z',
                 },
                 {
                   id: 'number',
                   userId: 'number',
                   badgeId: 'number',
-                  createdAt: '2024-02-14T21:22:34.000Z',
+                  createdAt: '2024-02-14T21:58:03.000Z',
                 },
               ],
               {
-                newBadges: [
+                acquiredBadges: [
                   {
                     userId: 'number',
                     badgeId: 'number',
                     id: 'number',
-                    createdAt: '2024-02-14T21:33:55.000Z',
+                    createdAt: '2024-02-14T21:59:28.000Z',
                   },
                   {
                     userId: 'number',
                     badgeId: 'number',
                     id: 'number',
-                    createdAt: '2024-02-14T21:33:55.000Z',
+                    createdAt: '2024-02-14T21:59:28.000Z',
                   },
                 ],
               },
