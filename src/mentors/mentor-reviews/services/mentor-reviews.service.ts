@@ -232,7 +232,7 @@ export class MentorReviewsService {
     }
   }
 
-  async removeMentorReview(
+  async deleteMentorReview(
     mentorId: number,
     menteeId: number,
     reviewId: number,
