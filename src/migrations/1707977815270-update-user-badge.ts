@@ -21,10 +21,8 @@ export class UpdateUserBadge1707977815270 implements MigrationInterface {
       'created_at',
       new TableColumn({
         name: 'created_at',
-        type: 'timestamp',
-        isNullable: false,
-        default: 'CURRENT_TIMESTAMP',
-        comment: '생성일자',
+        type: 'date',
+        isNullable: true,
       }),
     );
   }
