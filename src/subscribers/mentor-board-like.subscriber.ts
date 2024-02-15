@@ -38,30 +38,20 @@ export class MentorBoardLikeSubscriber
     );
   }
 
-  // afterQuery(event: AfterQueryEvent<MentorBoardLike>): void | Promise<any> {
-  //   console.log('afterQuery', event);
-  // }
+  afterRemove(event: RemoveEvent<MentorBoardLike>): void | Promise<any> {
+    const { mentorId } = event.queryRunner.data;
 
-  async beforeRemove(event: RemoveEvent<MentorBoardLike>): Promise<any> {
-    // console.log('beforeRemove', event); // FIXME : 이거 undefined 나와서 아래 로직 실행 안됨
-    // const { parentId } = event.entity;
-    // const { userId } = await event.connection
-    //   .createQueryBuilder()
-    //   .select('mentorBoard.userId', 'userId')
-    //   .from('mentor_board', 'mentorBoard')
-    //   .where('mentorBoard.id = :parentId', { parentId })
-    //   .getRawOne();
-    // event.connection.manager.decrement(
-    //   TotalCount,
-    //   { userId },
-    //   'mentorBoardLikeCount',
-    //   1,
-    // );
-    // event.connection.manager.decrement(
-    //   TotalCount,
-    //   { userId },
-    //   'mentorBoardLikeCountInSevenDays',
-    //   1,
-    // );
+    event.connection.manager.decrement(
+      TotalCount,
+      { userId: mentorId },
+      'mentorBoardLikeCount',
+      1,
+    );
+    event.connection.manager.decrement(
+      TotalCount,
+      { userId: mentorId },
+      'mentorBoardLikeCountInSevenDays',
+      1,
+    );
   }
 }

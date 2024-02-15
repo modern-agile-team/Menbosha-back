@@ -4,6 +4,7 @@ import {
   EntitySubscriberInterface,
   EventSubscriber,
   InsertEvent,
+  UpdateEvent,
 } from 'typeorm';
 
 @EventSubscriber()
@@ -29,5 +30,10 @@ export class MentorReviewSubscriber
       'reviewCountInSevenDays',
       1,
     );
+  }
+
+  afterUpdate(event: UpdateEvent<MentorReview>): void | Promise<any> {
+    const { mentorId, deletedAt } = event.entity;
+    console.log(mentorId, deletedAt);
   }
 }

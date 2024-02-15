@@ -127,6 +127,7 @@ export class MentorBoardLikeService {
 
     await queryRunner.connect();
     await queryRunner.startTransaction();
+    queryRunner.data = { mentorId: existBoard.userId };
 
     try {
       const entityManager = queryRunner.manager;
@@ -145,14 +146,6 @@ export class MentorBoardLikeService {
           existBoard.id,
         );
       }
-
-      await this.totalCountService.counting(
-        entityManager,
-        0,
-        Type.MentorBoardLikeCount,
-        Action.Decrement,
-        existBoard.userId,
-      );
 
       await queryRunner.commitTransaction();
 
