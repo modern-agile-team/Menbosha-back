@@ -9,7 +9,6 @@ import { MentorBoardService } from 'src/boards/services/mentor.board.service';
 import { LikesService } from 'src/like/services/likes.service';
 import { MentorBoardLikeDto } from '../dto/mentorBoard/mentor-board-like.dto';
 import { DataSource } from 'typeorm';
-import { MentorBoardHotPostsService } from './mentor-board-hot-posts.service';
 
 @Injectable()
 export class MentorBoardLikeService {
@@ -17,7 +16,6 @@ export class MentorBoardLikeService {
     private readonly likesService: LikesService<MentorBoardLike>,
     private readonly dataSource: DataSource,
     private readonly mentorBoardService: MentorBoardService,
-    private readonly mentorBoardHotPostService: MentorBoardHotPostsService,
   ) {}
 
   async createMentorBoardLikeAndHotPost(
@@ -117,6 +115,8 @@ export class MentorBoardLikeService {
     await queryRunner.startTransaction();
 
     try {
+      queryRunner.data.existBoard = { ...existBoard };
+
       const entityManager = queryRunner.manager;
 
       await this.likesService.deleteLikeWithEntityManager(
@@ -124,15 +124,6 @@ export class MentorBoardLikeService {
         existBoard.id,
         userId,
       );
-
-      const likeCount = existBoard.mentorBoardLikes.length - 1;
-
-      if (likeCount === 9 && existBoard.popularAt) {
-        await this.mentorBoardHotPostService.deleteMentorBoardHotPost(
-          entityManager,
-          existBoard.id,
-        );
-      }
 
       await queryRunner.commitTransaction();
 

@@ -1,20 +1,16 @@
 import { MentorBoardLike } from 'src/boards/entities/mentor-board-like.entity';
 import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
-import { HotPostsRepository } from 'src/hot-posts/repositories/hot-posts.repository';
 import {
   EntitySubscriberInterface,
   EventSubscriber,
   InsertEvent,
+  RemoveEvent,
 } from 'typeorm';
 
 @EventSubscriber()
 export class MentorBoardLikeSubscriber
   implements EntitySubscriberInterface<MentorBoardLike>
 {
-  constructor(
-    private readonly hotPostsRepository: HotPostsRepository<MentorBoard>,
-  ) {}
-
   listenTo() {
     return MentorBoardLike;
   }
@@ -22,12 +18,23 @@ export class MentorBoardLikeSubscriber
   async afterInsert(event: InsertEvent<MentorBoardLike>): Promise<void> {
     const { existBoard } = event.queryRunner.data;
 
-    if (existBoard.mentorBoardLikes.length === 10 && !existBoard.popularAt) {
-      event.manager
+    if (
+      existBoard.mentorBoardLikes.length + 1 === 10 &&
+      !existBoard.popularAt
+    ) {
+      await event.manager
         .getRepository(MentorBoard)
         .update({ id: existBoard.id }, { popularAt: new Date() });
     }
+  }
 
-    console.log(event.entity);
+  async afterRemove(event: RemoveEvent<MentorBoardLike>): Promise<void> {
+    const { existBoard } = event.queryRunner.data;
+
+    if (existBoard.mentorBoardLikes.length - 1 === 9 && existBoard.popularAt) {
+      await event.manager
+        .getRepository(MentorBoard)
+        .update({ id: existBoard.id }, { popularAt: null });
+    }
   }
 }
