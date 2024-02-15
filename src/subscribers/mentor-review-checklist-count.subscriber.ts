@@ -69,6 +69,5 @@ export class MentorReviewChecklistCountSubscriber
         .where({ userId: event.entity.mentorId })
         .execute();
     }
-    throw new Error();
   }
 }
