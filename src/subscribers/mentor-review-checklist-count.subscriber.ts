@@ -45,6 +45,12 @@ export class MentorReviewChecklistCountSubscriber
   }
 
   async afterUpdate(event: UpdateEvent<MentorReview>): Promise<void> {
+    event.entity.deletedAt
+      ? await this.deleteIncrement(event)
+      : await this.updateIncrement(event);
+  }
+
+  async updateIncrement(event: UpdateEvent<MentorReview>) {
     const incrementColumns = Object.entries(event.entity).reduce(
       (result, [key, value]) => {
         if (
@@ -70,4 +76,6 @@ export class MentorReviewChecklistCountSubscriber
         .execute();
     }
   }
+
+  async deleteIncrement(event: UpdateEvent<MentorReview>) {}
 }
