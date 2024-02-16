@@ -49,8 +49,8 @@ export class AuthController {
 
     const { userId, socialAccessToken, socialRefreshToken, firstLogin } =
       await this.authService.login(code, 'naver');
-    const accessToken = await this.tokenService.createAccessToken(userId);
-    const refreshToken = await this.tokenService.createRefreshToken(userId);
+    const accessToken = await this.tokenService.generateAccessToken(userId);
+    const refreshToken = await this.tokenService.generateRefreshToken(userId);
 
     await this.tokenService.saveTokens(
       userId,
@@ -80,8 +80,8 @@ export class AuthController {
 
     const { userId, socialAccessToken, socialRefreshToken, firstLogin } =
       await this.authService.login(code, 'kakao');
-    const accessToken = await this.tokenService.createAccessToken(userId);
-    const refreshToken = await this.tokenService.createRefreshToken(userId);
+    const accessToken = await this.tokenService.generateAccessToken(userId);
+    const refreshToken = await this.tokenService.generateRefreshToken(userId);
 
     await this.tokenService.saveTokens(
       userId,
@@ -111,8 +111,8 @@ export class AuthController {
 
     const { userId, socialAccessToken, socialRefreshToken, firstLogin } =
       await this.authService.login(code, 'google');
-    const accessToken = await this.tokenService.createAccessToken(userId);
-    const refreshToken = await this.tokenService.createRefreshToken(userId);
+    const accessToken = await this.tokenService.generateAccessToken(userId);
+    const refreshToken = await this.tokenService.generateRefreshToken(userId);
 
     await this.tokenService.saveTokens(
       userId,
@@ -137,7 +137,7 @@ export class AuthController {
   @UseGuards(RefreshTokenAuthGuard)
   @Get('new-access-token')
   async newAccessToken(@GetUserId() userId: number, @Res() res) {
-    const newAccessToken = await this.tokenService.createAccessToken(userId);
+    const newAccessToken = await this.tokenService.generateAccessToken(userId);
     return res.json({ accessToken: newAccessToken });
   }
 

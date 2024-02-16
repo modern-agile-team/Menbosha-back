@@ -3,12 +3,15 @@ import { TokenRepository } from '../repositories/token.repository';
 import * as jwt from 'jsonwebtoken';
 import axios from 'axios';
 import { RedisService } from 'src/common/redis/redis.service';
+import { JwtService } from '@nestjs/jwt';
+import { TokenPayload } from '../interfaces/token-payload.interface';
 
 @Injectable()
 export class TokenService {
   constructor(
     private readonly tokenRepository: TokenRepository,
     private readonly redisService: RedisService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async getUserTokens(userId: number) {
@@ -166,31 +169,22 @@ export class TokenService {
     return userId;
   }
 
-  async createAccessToken(userId: number) {
-    const jwtSecretKey = process.env.JWT_SECRET_KEY;
-    const payload = {
+  async generateAccessToken(userId: number) {
+    const payload: TokenPayload = {
       sub: 'accessToken',
       userId,
-      // exp: Math.floor(Date.now() / 1000) + 60 * 60, // 1시간
-      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30, // 30일 (개발용)
     };
 
-    const accessToken = jwt.sign(payload, jwtSecretKey);
-
-    return accessToken;
+    return this.jwtService.sign(payload, { expiresIn: '12h' });
   }
 
-  async createRefreshToken(userId: number) {
-    const jwtSecretKey = process.env.JWT_SECRET_KEY;
-    const payload = {
+  async generateRefreshToken(userId: number) {
+    const payload: TokenPayload = {
       sub: 'refreshToken',
       userId,
-      // exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, // 7일
-      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30 * 3, // 90일 (개발용)
     };
-    const refreshToken = jwt.sign(payload, jwtSecretKey);
 
-    return refreshToken;
+    return this.jwtService.sign(payload, { expiresIn: '7d' });
   }
 
   async newAccessToken(refreshToken: string) {
@@ -198,7 +192,7 @@ export class TokenService {
     const payload = jwt.verify(refreshToken, jwtSecretKey);
 
     const userId = payload['userId'];
-    const newAccessToken = await this.createAccessToken(userId);
+    const newAccessToken = await this.generateAccessToken(userId);
     return newAccessToken;
   }
 }
