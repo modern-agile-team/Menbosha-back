@@ -8,7 +8,7 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 
-export function ApiRemoveMentorReview() {
+export function ApiDeleteMentorReview() {
   return applyDecorators(
     ApiOperation({
       summary: '멘토 리뷰 삭제',

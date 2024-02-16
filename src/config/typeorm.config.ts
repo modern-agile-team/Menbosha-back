@@ -78,7 +78,9 @@ export const TypeORMconfig: TypeOrmModuleOptions = {
     MentorBoardLike,
     MentorReviewChecklistCount,
   ], // 여기에 엔티티들을 추가해야 합니다.
+  subscribers: ['dist/**/subscribers/*{.ts,.js}'],
   migrationsTableName: 'migrations', // migration 이력을 저장하는 테이블
   migrations: ['src/migrations/*.ts'], // migration 할 파일들이 있는 directory
+  timezone: '+00:00',
   synchronize: process.env.NODE_ENV === 'true',
 };
