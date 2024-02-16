@@ -126,7 +126,7 @@ export class TokenService {
     }
   }
 
-  async generateAccessToken(userId: number) {
+  generateAccessToken(userId: number) {
     const payload: TokenPayload = {
       sub: 'accessToken',
       userId,
@@ -135,21 +135,12 @@ export class TokenService {
     return this.jwtService.sign(payload, { expiresIn: '12h' });
   }
 
-  async generateRefreshToken(userId: number) {
+  generateRefreshToken(userId: number) {
     const payload: TokenPayload = {
       sub: 'refreshToken',
       userId,
     };
 
     return this.jwtService.sign(payload, { expiresIn: '7d' });
-  }
-
-  async newAccessToken(refreshToken: string) {
-    const jwtSecretKey = process.env.JWT_SECRET_KEY;
-    const payload = jwt.verify(refreshToken, jwtSecretKey);
-
-    const userId = payload['userId'];
-    const newAccessToken = await this.generateAccessToken(userId);
-    return newAccessToken;
   }
 }
