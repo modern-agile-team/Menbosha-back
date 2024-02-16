@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { TokenRepository } from '../repositories/token.repository';
-import * as jwt from 'jsonwebtoken';
 import axios from 'axios';
 import { RedisService } from 'src/common/redis/redis.service';
 import { JwtService } from '@nestjs/jwt';
