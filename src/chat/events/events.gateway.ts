@@ -47,16 +47,18 @@ export class EventsGateway
     @MessageBody() loginChatRoomDto: LoginChatRoomsDto,
     @ConnectedSocket() socket: Socket,
   ) {
+    const { chatRoomIds } = loginChatRoomDto;
     console.log('login', loginChatRoomDto.userId);
-    loginChatRoomDto.chatRoomIds.forEach(async (room) => {
-      const isObjectId = mongoose.isObjectIdOrHexString(room);
+
+    for (let i = 0; i < chatRoomIds.length; i++) {
+      const isObjectId = mongoose.isObjectIdOrHexString(chatRoomIds[i]);
 
       if (!isObjectId) {
         throw new SocketException('BadRequest', '오브젝트 id 형식이 아닙니다');
       }
 
       const chatRoom = await this.chatService.findOneChatRoom({
-        _id: room,
+        _id: chatRoomIds[i],
         deletedAt: null,
       });
 
@@ -67,9 +69,9 @@ export class EventsGateway
         );
       }
 
-      console.log('join', socket.nsp.name, room);
+      console.log('join', socket.nsp.name, chatRoomIds[i]);
       socket.join(chatRoom._id.toString());
-    });
+    }
   }
 
   @AsyncApiSub({
