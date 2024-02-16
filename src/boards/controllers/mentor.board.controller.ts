@@ -106,6 +106,8 @@ export class MentorBoardController {
     @Query('mentorBoardId') mentorBoardId: number,
     @GetUserId() userId: number,
   ): Promise<oneMentorBoardResponseDTO> {
+    console.log(userId);
+
     return this.mentorBoardService.findOneMentorBoard(mentorBoardId, userId);
   }
 

@@ -6,6 +6,7 @@ export const GetUserId = createParamDecorator(
     if (!req.user) {
       return null;
     }
-    return req.user.userId;
+
+    return req.user.id;
   },
 );
