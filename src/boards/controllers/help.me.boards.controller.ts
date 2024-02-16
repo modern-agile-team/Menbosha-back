@@ -25,7 +25,6 @@ import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { ApiAddHelpMeBoard } from '../swagger-decorators/helpMeBoard/add-help-me-board-decorator';
 import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/create.help.me.board.dto';
 import { HelpMeBoard } from '../entities/help-me-board.entity';
-import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 import { oneHelpMeBoardResponseDTO } from '../dto/helpMeBoard/one.response.help.me.board.dto';
 import { ApiGetOneHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-one-help-me-board.dto';
 import { ApiUpdateHelpMeBoard } from '../swagger-decorators/helpMeBoard/patch-help-me-board.decorator';
@@ -42,7 +41,10 @@ import { HelpYouCommentPaginationResponseDto } from 'src/comments/dto/help-you-c
 import { ApiFindAllHelpYouComments } from 'src/comments/swagger-decorators/find-all-help-you-comments.decorator';
 import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
-import { AccessTokenAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+import {
+  AccessTokenAuthGuard,
+  AccessTokenOptionalAuthGuard,
+} from 'src/auth/jwt/jwt-auth.guard';
 
 /**
  * 팀원과 상의되면 주석처리된 옵션도 걸어줌.
@@ -113,7 +115,7 @@ export class HelpMeBoardController {
   @ApiTags('help-you-comment API')
   @Get(':helpMeBoardId/help-you-comments')
   @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
-  @UseGuards(JwtOptionalGuard)
+  @UseGuards(AccessTokenOptionalAuthGuard)
   @ApiFindAllHelpYouComments()
   findAllHelpYouComments(
     @GetUserId() userId: number,
@@ -128,7 +130,7 @@ export class HelpMeBoardController {
   }
 
   @Get('/unit') //하나의 게시판 불러오기
-  @UseGuards(JwtOptionalGuard)
+  @UseGuards(AccessTokenOptionalAuthGuard)
   @ApiGetOneHelpMeBoard()
   findOne(
     @Query('boardId') boardId: number,

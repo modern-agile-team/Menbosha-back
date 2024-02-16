@@ -22,7 +22,6 @@ import { ApiUpdateMentorBoard } from '../swagger-decorators/mentorBoard/patch-me
 import { ApiTags } from '@nestjs/swagger';
 import { ApiDeleteMentorBoard } from '../swagger-decorators/mentorBoard/delete-mentor-board-decorators';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
-import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 import { MentorBoardResponseDTO } from '../dto/mentorBoard/update.mentor.board.response.dto';
 import { UpdateMentorBoardDto } from '../dto/mentorBoard/update.mentor.board.dto';
 import { oneMentorBoardResponseDTO } from '../dto/mentorBoard/one.response.mentor.boards.dto';
@@ -35,7 +34,10 @@ import { MentorBoardPaginationResponseDto } from '../dto/mentorBoard/mentor-boar
 import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
 import { ApiFindAllMentorBoards } from '../swagger-decorators/mentorBoard/find-all-mentor-boards.decorator';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
-import { AccessTokenAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+import {
+  AccessTokenAuthGuard,
+  AccessTokenOptionalAuthGuard,
+} from 'src/auth/jwt/jwt-auth.guard';
 
 /**
  * 추후 리팩토링때
@@ -100,7 +102,7 @@ export class MentorBoardController {
   }
 
   @Get('/unit') //하나의 게시판 불러오기
-  @UseGuards(JwtOptionalGuard)
+  @UseGuards(AccessTokenOptionalAuthGuard)
   @ApiGetOneMentorBoard()
   findOne(
     @Query('mentorBoardId') mentorBoardId: number,

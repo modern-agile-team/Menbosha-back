@@ -5,6 +5,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { request } from 'express';
 import { Observable } from 'rxjs';
 
 function AuthGuardMixin(strategy: string) {
@@ -67,3 +68,25 @@ export class AccessTokenAuthGuard extends AuthGuardMixin('accessToken') {}
 
 @Injectable()
 export class RefreshTokenAuthGuard extends AuthGuardMixin('refreshToken') {}
+
+@Injectable()
+export class AccessTokenOptionalAuthGuard extends AuthGuard('accessToken') {
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+    return super.canActivate(context);
+  }
+
+  handleRequest(
+    err: any,
+    user: any,
+    info: { message: string | Record<string, any> },
+    context: ExecutionContext,
+  ): any {
+    if (user) {
+      request.user = { id: user.userId };
+      return request.user;
+    }
+    return null;
+  }
+}
