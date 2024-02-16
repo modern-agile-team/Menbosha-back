@@ -24,6 +24,7 @@ import { ChatRepository } from '../repositories/chat.repository';
 import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
 import { ResponseFindChatRoomsPaginationDto } from '../dto/response-find-chat-rooms-pagination.dto';
 import { PageQueryDto } from 'src/common/dto/page-query.dto';
+import { ChatRooms } from '../schemas/chat-rooms.schemas';
 // import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
 
 @Injectable()
@@ -65,7 +66,7 @@ export class ChatService {
   async findOneChatRoomOrFail(
     roomId: mongoose.Types.ObjectId,
   ): Promise<ChatRoomDto> {
-    const returnedRoom = await this.chatRepository.findOneChatRoom({
+    const returnedRoom = await this.findOneChatRoom({
       _id: roomId,
       deletedAt: null,
     });
@@ -75,6 +76,20 @@ export class ChatService {
     }
 
     return new ChatRoomDto(returnedRoom);
+  }
+
+  async findOneChatRoom(
+    filter: mongoose.FilterQuery<ChatRooms>,
+    projection?: mongoose.ProjectionType<ChatRooms>,
+    options?: mongoose.QueryOptions<ChatRooms>,
+  ) {
+    const returnedRoom = await this.chatRepository.findOneChatRoom(
+      filter,
+      projection,
+      options,
+    );
+
+    return returnedRoom ? new ChatRoomDto(returnedRoom) : null;
   }
 
   /**
@@ -88,7 +103,7 @@ export class ChatService {
     myId: number,
     chatPartnerId: number,
   ): Promise<ChatRoomDto> {
-    const returnedRoom = await this.chatRepository.findOneChatRoom({
+    const returnedRoom = await this.findOneChatRoom({
       originalMembers: { $all: [myId, chatPartnerId] },
       chatMembers: { $all: [myId, chatPartnerId] },
       deletedAt: null,

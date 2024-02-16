@@ -20,6 +20,7 @@ import { CategoryModule } from './category/category.module';
 import { BoardsModule } from './boards/boards.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { MentorsModule } from './mentors/mentors.module';
+import { WebSocketExceptionFilter } from './chat/exceptions/filters/websocket-exception.filter';
 
 @Module({
   imports: [
@@ -46,7 +47,12 @@ import { MentorsModule } from './mentors/mentors.module';
     CategoryModule,
     MentorsModule,
   ], //
-  providers: [UserImageService, UserImageRepository, S3Service],
+  providers: [
+    UserImageService,
+    UserImageRepository,
+    S3Service,
+    WebSocketExceptionFilter,
+  ],
 })
 export class AppModule implements NestModule {
   private readonly isDev: boolean =
