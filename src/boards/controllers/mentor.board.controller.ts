@@ -21,7 +21,6 @@ import { ApiGetOneMentorBoard } from '../swagger-decorators/mentorBoard/get-one-
 import { ApiUpdateMentorBoard } from '../swagger-decorators/mentorBoard/patch-mentor-board-decorators';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiDeleteMentorBoard } from '../swagger-decorators/mentorBoard/delete-mentor-board-decorators';
-import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
 import { MentorBoardResponseDTO } from '../dto/mentorBoard/update.mentor.board.response.dto';
@@ -36,6 +35,7 @@ import { MentorBoardPaginationResponseDto } from '../dto/mentorBoard/mentor-boar
 import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
 import { ApiFindAllMentorBoards } from '../swagger-decorators/mentorBoard/find-all-mentor-boards.decorator';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
+import { AccessTokenAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 
 /**
  * 추후 리팩토링때
@@ -57,7 +57,7 @@ export class MentorBoardController {
   ) {}
 
   @Post('')
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiAddMentorBoard()
   async create(
     @Body() createMentorBoardDto: CreateMentorBoardDto,
@@ -67,7 +67,7 @@ export class MentorBoardController {
   }
 
   @Post('/images')
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @UseInterceptors(FilesInterceptor('files', 3))
   @ApiUploadMentorBoardImages()
   uploadImage(
@@ -110,7 +110,7 @@ export class MentorBoardController {
   }
 
   @Patch('')
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiUpdateMentorBoard()
   editBoard(
     @GetUserId() userId: number,
@@ -125,7 +125,7 @@ export class MentorBoardController {
   }
 
   @Delete('')
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiDeleteMentorBoard()
   deleteBoard(
     @Query('mentorBoardId') mentorBoardId: number,

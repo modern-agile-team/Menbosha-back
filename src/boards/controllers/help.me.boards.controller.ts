@@ -21,7 +21,6 @@ import { CreateHelpMeBoardImageDto } from '../dto/helpMeBoard/create.board-image
 import { ApiUploadHelpMeBoardImages } from '../swagger-decorators/helpMeBoard/add-help-me-board-images-decorator';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiUpdateHelpMeBoardImage } from '../swagger-decorators/helpMeBoard/patch-help-me-board-images-decorators';
-import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { ApiAddHelpMeBoard } from '../swagger-decorators/helpMeBoard/add-help-me-board-decorator';
 import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/create.help.me.board.dto';
@@ -43,6 +42,7 @@ import { HelpYouCommentPaginationResponseDto } from 'src/comments/dto/help-you-c
 import { ApiFindAllHelpYouComments } from 'src/comments/swagger-decorators/find-all-help-you-comments.decorator';
 import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
+import { AccessTokenAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 
 /**
  * 팀원과 상의되면 주석처리된 옵션도 걸어줌.
@@ -63,7 +63,7 @@ export class HelpMeBoardController {
   ) {}
 
   @Post('')
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiAddHelpMeBoard()
   create(
     @GetUserId() userId: number,
@@ -73,7 +73,7 @@ export class HelpMeBoardController {
   }
 
   @Post('/images')
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @UseInterceptors(FilesInterceptor('files', 3))
   @ApiUploadHelpMeBoardImages()
   uploadImage(
@@ -138,7 +138,7 @@ export class HelpMeBoardController {
   }
 
   @Patch('')
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiUpdateHelpMeBoard()
   editBoard(
     @GetUserId() userId: number,
@@ -150,7 +150,7 @@ export class HelpMeBoardController {
 
   @Patch('/pulling-up')
   @ApiPullingUpHelpMeBoard()
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   pullingUpHelpMeBoard(
     @GetUserId() userId: number,
     @Query('helpMeBoardId') boardId: number,
@@ -159,7 +159,7 @@ export class HelpMeBoardController {
   }
 
   @Patch('/images')
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiUpdateHelpMeBoardImage()
   @UseInterceptors(FilesInterceptor('files', 3))
   async editBoardImages(
@@ -177,7 +177,7 @@ export class HelpMeBoardController {
   }
 
   @Delete('')
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiDeleteHelpMeBoard()
   deleteBoard(
     @Query('helpMeBoardId') boardId: number,

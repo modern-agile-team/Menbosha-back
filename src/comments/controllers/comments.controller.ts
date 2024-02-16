@@ -10,9 +10,9 @@ import { ApiTags } from '@nestjs/swagger';
 import { CommentsService } from '../services/comments.services';
 import { CreateCommentDto } from '../dto/create-comment-dto';
 import { ApiDeleteComment } from '../swagger-decorators/delete-comment-decorator';
-import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { ApiAddHelpComment } from '../swagger-decorators/post-help-you-comment-decorator';
+import { AccessTokenAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 
 @Controller('help-you-comments')
 @ApiTags('help-you-comment API')
@@ -20,7 +20,7 @@ export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
   @Post('')
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiAddHelpComment()
   async createComment(
     @GetUserId() userId: number,
@@ -31,7 +31,7 @@ export class CommentsController {
   }
 
   @Delete('')
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiDeleteComment()
   async deleteComment(
     @Query('commentId') commentId: number,

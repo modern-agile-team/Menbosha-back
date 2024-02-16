@@ -13,7 +13,6 @@ import {
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { ApiTags } from '@nestjs/swagger';
-import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { ApiGetMyProfile } from '../swagger-decorators/get-my-profile-decorator';
 import { ApiGetMyInfoWithOwner } from '../swagger-decorators/get-my-info-with-owner-decorator';
@@ -49,7 +48,7 @@ export class UserController {
   }
 
   @ApiGetMyRank()
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @Get('my/rank')
   async getMyRank(@GetUserId() userId: number) {
     return this.userService.getMyRank(userId);
@@ -61,7 +60,7 @@ export class UserController {
     return this.userService.getUserInfo(userId);
   }
 
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiGetMyInfoWithOwner()
   @Get('my-info/:targetId')
   async getMyInfoWithOwner(
@@ -86,7 +85,7 @@ export class UserController {
     return this.userRankingService.getUserRanking();
   }
 
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiPostUserIntro()
   @Post('/intro')
   addUserIntro(
@@ -96,7 +95,7 @@ export class UserController {
     return this.userIntroService.addUserIntro(userId, userData);
   }
 
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiUpdateUserIntro()
   @Patch('/my/intro')
   patchMyIntro(
