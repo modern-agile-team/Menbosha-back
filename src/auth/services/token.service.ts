@@ -126,49 +126,6 @@ export class TokenService {
     }
   }
 
-  async verifyToken(token: string) {
-    try {
-      const jwtSecretKey = process.env.JWT_SECRET_KEY;
-      const userId = jwt.verify(token, jwtSecretKey)['userId'];
-      const tokenType = jwt.verify(token, jwtSecretKey)['sub'];
-      if (tokenType === 'refreshToken') {
-        const rrt = await this.redisService.getToken(String(userId)); // RedisRefreshToken
-
-        if (token !== rrt) {
-          throw new HttpException(
-            'token not found in redis',
-            HttpStatus.UNAUTHORIZED,
-          );
-        }
-      }
-      return { message: '유효한 토큰입니다.' };
-    } catch (error) {
-      if (
-        error.message === 'jwt expired' ||
-        error.message === 'invalid signature' ||
-        error.message === 'token not found in redis'
-      ) {
-        throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
-      } else if (
-        error.message === 'invalid token' ||
-        error.message === 'jwt must be provided' ||
-        error.message === 'jwt malformed'
-      ) {
-        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-      } else {
-        console.log(error);
-        throw new HttpException('jwt error', HttpStatus.BAD_REQUEST);
-      }
-    }
-  }
-
-  async decodeToken(token: string) {
-    await this.verifyToken(token);
-    const payload = jwt.decode(token);
-    const userId = payload['userId'];
-    return userId;
-  }
-
   async generateAccessToken(userId: number) {
     const payload: TokenPayload = {
       sub: 'accessToken',
