@@ -47,15 +47,17 @@ export class EventsGateway
     @ConnectedSocket() socket: Socket,
   ) {
     console.log('login', loginChatRoomDto.userId);
-    loginChatRoomDto.chatRoomIds.forEach((room) => {
+    loginChatRoomDto.chatRoomIds.forEach(async (room) => {
       const isObjectId = mongoose.isObjectIdOrHexString(room);
 
       if (!isObjectId) {
         throw new WsException('오브젝트 id 형식이 아닙니다');
       }
 
+      const chatRoom = await this.chatService.findOneChatRoomOrFail(room);
+
       console.log('join', socket.nsp.name, room);
-      socket.join(room.toString());
+      socket.join(chatRoom._id.toString());
     });
   }
 
