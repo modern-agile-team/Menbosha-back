@@ -20,7 +20,12 @@ export class JwtAuthGuard extends AuthGuard('accessToken') {
     return super.canActivate(context);
   }
 
-  handleRequest(err, user, info, context) {
+  handleRequest(
+    err: any,
+    user: any,
+    info: { message: string | Record<string, any> },
+    context: ExecutionContext,
+  ) {
     if (user) {
       return super.handleRequest(err, user, info, context);
     } else if (
