@@ -27,6 +27,7 @@ import { RedisService } from 'src/common/redis/redis.service';
 import { ApiGoogleLogin } from '../swagger-decorators/google-login.decorator';
 import { ApiGoogleLogout } from '../swagger-decorators/google-logout.decorator';
 import { ApiGoogleUnlink } from '../swagger-decorators/google-unlink.decorator';
+import { RefreshTokenAuthGuard } from '../jwt/jwt-auth.guard';
 
 @Controller('auth')
 @ApiTags('auth API')
@@ -132,7 +133,7 @@ export class AuthController {
   }
 
   @ApiNewAccessToken()
-  @UseGuards(JwtRefreshTokenGuard)
+  @UseGuards(RefreshTokenAuthGuard)
   @Get('new-access-token')
   async newAccessToken(@GetUserId() userId: number, @Res() res) {
     const newAccessToken = await this.tokenService.createAccessToken(userId);

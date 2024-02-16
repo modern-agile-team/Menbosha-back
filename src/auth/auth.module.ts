@@ -8,7 +8,7 @@ import { TokenRepository } from './repositories/token.repository';
 import { TokenService } from './services/token.service';
 import { RedisModule } from 'src/common/redis/redis.module';
 import { TotalCountModule } from 'src/total-count/total-count.module';
-import { JwtStrategy } from './jwt/jwt.strategy';
+import { AccessTokenStrategy, RefreshTokenStrategy } from './jwt/jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
@@ -30,7 +30,8 @@ import { PassportModule } from '@nestjs/passport';
     UserImageRepository,
     TokenRepository,
     S3Service,
-    JwtStrategy,
+    AccessTokenStrategy,
+    RefreshTokenStrategy,
   ],
 })
 export class AuthModule {}
