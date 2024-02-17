@@ -17,16 +17,12 @@ import { DataSource, FindOneOptions, UpdateResult } from 'typeorm';
 import { MentorReview } from '../entities/mentor-review.entity';
 import { PatchUpdateMentorReviewDto } from '../dtos/patch-update-mentor-review.dto';
 import { isNotEmptyObject } from 'class-validator';
-import { MentorReviewChecklistCount } from 'src/total-count/entities/mentor-review-checklist-count.entity';
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { MentorReviewChecklistCountsService } from 'src/total-count/services/mentor-review-checklist-counts.service';
 @Injectable()
 export class MentorReviewsService {
   constructor(
     private readonly dataSource: DataSource,
     private readonly mentorReviewRepository: MentorReviewRepository,
     private readonly userService: UserService,
-    private readonly mentorReviewChecklistCountsService: MentorReviewChecklistCountsService,
   ) {}
   async createMentorReview(
     mentorId: number,
@@ -67,19 +63,6 @@ export class MentorReviewsService {
             ...createMentorReviewChecklistRequestBodyDto,
           } as MentorReview,
         );
-
-      const incrementColumns = Object.keys(mentorReview)
-        .filter((key) => mentorReview[key] === true)
-        .reduce((result, key) => {
-          result[`${key}Count`] = () => `${key}Count + 1`;
-          return result;
-        }, {}) as QueryDeepPartialEntity<MentorReviewChecklistCount>;
-
-      await this.mentorReviewChecklistCountsService.incrementMentorReviewChecklistCounts(
-        entityManager,
-        mentorId,
-        incrementColumns,
-      );
 
       await queryRunner.commitTransaction();
 
@@ -226,29 +209,6 @@ export class MentorReviewsService {
         { ...existReview, review, ...mentorReviewChecklist },
       );
 
-      const incrementColumns = Object.entries(mentorReviewChecklist).reduce(
-        (result, [key, value]) => {
-          if (
-            key.startsWith('is') &&
-            existReview[key] !== mentorReviewChecklist[key]
-          ) {
-            const incrementValue = value ? 1 : -1;
-
-            result[`${key}Count`] = () => `${key}Count + ${incrementValue}`;
-          }
-          return result;
-        },
-        {},
-      ) as QueryDeepPartialEntity<MentorReviewChecklistCount>;
-
-      if (isNotEmptyObject(incrementColumns)) {
-        await this.mentorReviewChecklistCountsService.incrementMentorReviewChecklistCounts(
-          entityManager,
-          mentorId,
-          incrementColumns,
-        );
-      }
-
       await queryRunner.commitTransaction();
 
       return new MentorReviewDto({
@@ -272,7 +232,7 @@ export class MentorReviewsService {
     }
   }
 
-  async removeMentorReview(
+  async deleteMentorReview(
     mentorId: number,
     menteeId: number,
     reviewId: number,
@@ -307,22 +267,6 @@ export class MentorReviewsService {
             deletedAt: new Date(),
           } as MentorReview,
         );
-
-      const incrementColumns = Object.entries(existReview).reduce(
-        (result, [key, value]) => {
-          if (value === true) {
-            result[`${key}Count`] = () => `${key}Count - 1`;
-          }
-          return result;
-        },
-        {},
-      ) as QueryDeepPartialEntity<MentorReviewChecklistCount>;
-
-      await this.mentorReviewChecklistCountsService.incrementMentorReviewChecklistCounts(
-        entityManager,
-        mentorId,
-        incrementColumns,
-      );
 
       await queryRunner.commitTransaction();
 
