@@ -26,7 +26,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { MentorReviewPageQueryDto } from '../dtos/mentor-review-page-query-dto';
 import { ApiFindMentorReviews } from '../swagger-decorators/find-mentor-reviews.decorator';
 import { ApiFindOneMentorReview } from '../swagger-decorators/find-one-mentor-review.decorator';
-import { ApiRemoveMentorReview } from '../swagger-decorators/remove-mentor-review.decorator';
+import { ApiDeleteMentorReview } from '../swagger-decorators/delete-mentor-review.decorator';
 import { PatchUpdateMentorReviewDto } from '../dtos/patch-update-mentor-review.dto';
 import { ApiPatchUpdateMentorReview } from '../swagger-decorators/patch-update-mentor-review.decorator';
 import { AccessTokenAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
@@ -99,13 +99,13 @@ export class MentorReviewsController {
 
   @UseGuards(AccessTokenAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiRemoveMentorReview()
+  @ApiDeleteMentorReview()
   @Delete(':reviewId')
-  removeMentorReview(
+  deleteMentorReview(
     @GetUserId() userId: number,
     @Param('mentorId', ParsePositiveIntPipe) mentorId: number,
     @Param('reviewId', ParsePositiveIntPipe) reviewId: number,
   ) {
-    return this.mentorsService.removeMentorReview(mentorId, userId, reviewId);
+    return this.mentorsService.deleteMentorReview(mentorId, userId, reviewId);
   }
 }

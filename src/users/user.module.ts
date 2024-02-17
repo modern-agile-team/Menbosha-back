@@ -15,6 +15,7 @@ import { UserIntroRepository } from './repositories/user-intro.repository';
 import { UserRankingService } from './services/user-ranking.service';
 import { UserRankingRepository } from './repositories/user-ranking.repository';
 import { TotalCountModule } from 'src/total-count/total-count.module';
+import { UserBadgeService } from './services/user-badge.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]), AuthModule, TotalCountModule],
@@ -26,6 +27,7 @@ import { TotalCountModule } from 'src/total-count/total-count.module';
     UserImageRepository,
     UserService,
     UserImageService,
+    UserBadgeService,
     UserBadgeRepository,
     UserIntroRepository,
     UserRankingService,
