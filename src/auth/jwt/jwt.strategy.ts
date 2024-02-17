@@ -19,7 +19,7 @@ export class AccessTokenStrategy extends PassportStrategy(
     if (payload.sub !== 'accessToken') {
       throw new HttpException('invalid token type', HttpStatus.BAD_REQUEST);
     }
-    return { tokenType: payload.sub, id: payload.userId };
+    return { id: payload.userId };
   }
 }
 
@@ -40,6 +40,6 @@ export class RefreshTokenStrategy extends PassportStrategy(
     if (payload.sub !== 'refreshToken') {
       throw new HttpException('invalid token type', HttpStatus.BAD_REQUEST);
     }
-    return { tokenType: payload.sub, id: payload.userId };
+    return { id: payload.userId };
   }
 }
