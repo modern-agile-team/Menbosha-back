@@ -71,22 +71,12 @@ export class RefreshTokenAuthGuard extends AuthGuardMixin('refreshToken') {}
 
 @Injectable()
 export class AccessTokenOptionalAuthGuard extends AuthGuard('accessToken') {
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
-    return super.canActivate(context);
-  }
-
   handleRequest(
     err: any,
     user: any,
     info: { message: string | Record<string, any> },
     context: ExecutionContext,
   ): any {
-    if (user) {
-      request.user = { id: user.userId };
-      return request.user;
-    }
-    return null;
+    return user;
   }
 }
