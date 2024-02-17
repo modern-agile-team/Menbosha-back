@@ -26,6 +26,6 @@ export class UserImageController {
     @GetUserId() userId: number,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return await this.userImageService.updateImage(userId, file);
+    return await this.userImageService.updateImageWithFile(userId, file);
   }
 }
