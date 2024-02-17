@@ -30,12 +30,11 @@ function AuthGuardMixin(strategy: string) {
       try {
         if (user) {
           return super.handleRequest(err, user, info, context);
-        } else {
-          if (err instanceof HttpException) throw err;
-          else {
-            throw new HttpException(info.message, this.getStatus(info.message));
-          }
         }
+        
+        if (err instanceof HttpException) throw err;
+       
+        throw new HttpException(info.message, this.getStatus(info.message));
       } catch (error) {
         if (error instanceof HttpException) throw error;
         else {
