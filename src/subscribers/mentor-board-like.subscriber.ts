@@ -28,7 +28,7 @@ export class MentorBoardLikeSubscriber
         .update({ id: existBoard.id }, { popularAt: new Date() });
     }
 
-    event.queryRunner.manager
+    await event.queryRunner.manager
       .createQueryBuilder()
       .update(TotalCount)
       .set({
@@ -49,7 +49,7 @@ export class MentorBoardLikeSubscriber
         .update({ id: existBoard.id }, { popularAt: null });
     }
 
-    event.queryRunner.manager
+    await event.queryRunner.manager
       .createQueryBuilder()
       .update(TotalCount)
       .set({

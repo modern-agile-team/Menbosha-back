@@ -15,10 +15,10 @@ export class MentorReviewSubscriber
     return MentorReview;
   }
 
-  afterInsert(event: InsertEvent<MentorReview>): void | Promise<any> {
+  async afterInsert(event: InsertEvent<MentorReview>): Promise<void> {
     const { mentorId } = event.entity;
 
-    event.queryRunner.manager
+    await event.queryRunner.manager
       .createQueryBuilder()
       .update(TotalCount)
       .set({
@@ -29,11 +29,11 @@ export class MentorReviewSubscriber
       .execute();
   }
 
-  afterUpdate(event: UpdateEvent<MentorReview>): void | Promise<any> {
+  async afterUpdate(event: UpdateEvent<MentorReview>): Promise<void> {
     const { mentorId, deletedAt } = event.entity;
 
     if (deletedAt) {
-      event.queryRunner.manager
+      await event.queryRunner.manager
         .createQueryBuilder()
         .update(TotalCount)
         .set({

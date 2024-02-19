@@ -14,10 +14,10 @@ export class UserBadgeSubscriber
     return UserBadge;
   }
 
-  afterInsert(event: InsertEvent<UserBadge>): void | Promise<any> {
+  async afterInsert(event: InsertEvent<UserBadge>): Promise<void> {
     const { userId } = event.entity;
 
-    event.queryRunner.manager
+    await event.queryRunner.manager
       .createQueryBuilder()
       .update(TotalCount)
       .set({

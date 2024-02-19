@@ -15,10 +15,10 @@ export class HelpYouCommentSubscriber
     return HelpYouComment;
   }
 
-  afterInsert(event: InsertEvent<HelpYouComment>): void | Promise<any> {
+  async afterInsert(event: InsertEvent<HelpYouComment>): Promise<void> {
     const { userId } = event.entity;
 
-    event.queryRunner.manager
+    await event.queryRunner.manager
       .createQueryBuilder()
       .update(TotalCount)
       .set({
@@ -30,10 +30,10 @@ export class HelpYouCommentSubscriber
       .execute();
   }
 
-  afterRemove(event: RemoveEvent<HelpYouComment>): void | Promise<any> {
+  async afterRemove(event: RemoveEvent<HelpYouComment>): Promise<void> {
     const { userId } = event.entity;
 
-    event.queryRunner.manager
+    await event.queryRunner.manager
       .createQueryBuilder()
       .update(TotalCount)
       .set({
