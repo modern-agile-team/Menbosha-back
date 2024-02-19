@@ -58,17 +58,15 @@ export class MentorBoardLikeSubscriber
         .update({ id: existBoard.id }, { popularAt: null });
     }
 
-    const { mentorId } = event.queryRunner.data;
-
     event.connection.manager.decrement(
       TotalCount,
-      { userId: mentorId },
+      { userId: existBoard.userId },
       'mentorBoardLikeCount',
       1,
     );
     event.connection.manager.decrement(
       TotalCount,
-      { userId: mentorId },
+      { userId: existBoard.userId },
       'mentorBoardLikeCountInSevenDays',
       1,
     );
