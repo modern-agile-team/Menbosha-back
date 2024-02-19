@@ -29,6 +29,7 @@ import {
   AccessTokenAuthGuard,
   RefreshTokenAuthGuard,
 } from '../jwt/jwt-auth.guard';
+import { Ttl } from 'src/common/redis/ttl.enum';
 
 @Controller('auth')
 @ApiTags('auth API')
@@ -59,7 +60,16 @@ export class AuthController {
       socialRefreshToken,
     );
 
-    await this.redisService.setToken(String(userId), refreshToken);
+    await this.redisService.setToken(
+      String(userId) + '-accessToken',
+      accessToken,
+      Ttl.accessToken,
+    );
+    await this.redisService.setToken(
+      String(userId) + '-refreshToken',
+      refreshToken,
+      Ttl.refreshToken,
+    );
 
     res.cookie('refresh_token', refreshToken, {
       httpOnly: true,
@@ -90,7 +100,16 @@ export class AuthController {
       socialRefreshToken,
     );
 
-    await this.redisService.setToken(String(userId), refreshToken);
+    await this.redisService.setToken(
+      String(userId) + '-accessToken',
+      accessToken,
+      Ttl.accessToken,
+    );
+    await this.redisService.setToken(
+      String(userId) + '-refreshToken',
+      refreshToken,
+      Ttl.refreshToken,
+    );
 
     res.cookie('refresh_Token', refreshToken, {
       httpOnly: true,
@@ -121,7 +140,16 @@ export class AuthController {
       socialRefreshToken,
     );
 
-    await this.redisService.setToken(String(userId), refreshToken);
+    await this.redisService.setToken(
+      String(userId) + '-accessToken',
+      accessToken,
+      Ttl.accessToken,
+    );
+    await this.redisService.setToken(
+      String(userId) + '-refreshToken',
+      refreshToken,
+      Ttl.refreshToken,
+    );
 
     res.cookie('refresh_Token', refreshToken, {
       httpOnly: true,
@@ -138,6 +166,11 @@ export class AuthController {
   @Get('new-access-token')
   async newAccessToken(@GetUserId() userId: number, @Res() res) {
     const newAccessToken = await this.tokenService.generateAccessToken(userId);
+    await this.redisService.setToken(
+      String(userId) + '-accessToken',
+      newAccessToken,
+      Ttl.accessToken,
+    );
     return res.json({ accessToken: newAccessToken });
   }
 

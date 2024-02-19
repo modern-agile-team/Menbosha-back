@@ -9,12 +9,11 @@ dotenv.config();
 @Module({
   imports: [
     CacheModule.register({
-      isGlobal: true,
+      isGlobal: false,
       store: redisStore,
       host: process.env.REDIS_HOST,
       port: process.env.REDIS_PORT,
       password: process.env.REDIS_PASSWORD,
-      ttl: 60 * 60 * 24 * 7, // 7 days
     }),
   ],
   controllers: [],
