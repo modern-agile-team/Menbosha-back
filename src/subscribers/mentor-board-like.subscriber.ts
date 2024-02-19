@@ -18,13 +18,6 @@ export class MentorBoardLikeSubscriber
 
   async afterInsert(event: InsertEvent<MentorBoardLike>): Promise<void> {
     const { existBoard } = event.queryRunner.data;
-    const { parentId } = event.entity;
-    const { userId } = await event.connection
-      .createQueryBuilder()
-      .select('mentorBoard.userId', 'userId')
-      .from('mentor_board', 'mentorBoard')
-      .where('mentorBoard.id = :parentId', { parentId })
-      .getRawOne();
 
     if (
       existBoard.mentorBoardLikes.length + 1 === 10 &&
@@ -37,13 +30,13 @@ export class MentorBoardLikeSubscriber
 
     event.connection.manager.increment(
       TotalCount,
-      { userId },
+      { userId: existBoard.userId },
       'mentorBoardLikeCount',
       1,
     );
     event.connection.manager.increment(
       TotalCount,
-      { userId },
+      { userId: existBoard.userId },
       'mentorBoardLikeCountInSevenDays',
       1,
     );
