@@ -16,12 +16,15 @@ export class UserBadgeSubscriber
 
   afterInsert(event: InsertEvent<UserBadge>): void | Promise<any> {
     const { userId } = event.entity;
-    event.connection.manager.increment(TotalCount, { userId }, 'badgeCount', 1);
-    event.connection.manager.increment(
-      TotalCount,
-      { userId },
-      'badgeCountInSevenDays',
-      1,
-    );
+
+    event.queryRunner.manager
+      .createQueryBuilder()
+      .update(TotalCount)
+      .set({
+        badgeCount: () => 'badgeCount + 1',
+        badgeCountInSevenDays: () => 'badgeCountInSevenDays + 1',
+      })
+      .where({ userId })
+      .execute();
   }
 }

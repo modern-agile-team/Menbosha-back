@@ -17,33 +17,29 @@ export class MentorBoardSubscriber
 
   afterInsert(event: InsertEvent<MentorBoard>): void | Promise<any> {
     const { userId } = event.entity;
-    event.connection.manager.increment(
-      TotalCount,
-      { userId },
-      'mentorBoardCount',
-      1,
-    );
-    event.connection.manager.increment(
-      TotalCount,
-      { userId },
-      'mentorBoardCountInSevenDays',
-      1,
-    );
+
+    event.queryRunner.manager
+      .createQueryBuilder()
+      .update(TotalCount)
+      .set({
+        mentorBoardCount: () => 'mentorBoardCount + 1',
+        mentorBoardCountInSevenDays: () => 'mentorBoardCountInSevenDays + 1',
+      })
+      .where({ userId })
+      .execute();
   }
 
   afterRemove(event: RemoveEvent<MentorBoard>): void | Promise<any> {
     const { userId } = event.entity;
-    event.connection.manager.decrement(
-      TotalCount,
-      { userId },
-      'mentorBoardCount',
-      1,
-    );
-    event.connection.manager.decrement(
-      TotalCount,
-      { userId },
-      'mentorBoardCountInSevenDays',
-      1,
-    );
+
+    event.queryRunner.manager
+      .createQueryBuilder()
+      .update(TotalCount)
+      .set({
+        mentorBoardCount: () => 'mentorBoardCount - 1',
+        mentorBoardCountInSevenDays: () => 'mentorBoardCountInSevenDays - 1',
+      })
+      .where({ userId })
+      .execute();
   }
 }

@@ -18,34 +18,30 @@ export class HelpYouCommentSubscriber
   afterInsert(event: InsertEvent<HelpYouComment>): void | Promise<any> {
     const { userId } = event.entity;
 
-    event.connection.manager.increment(
-      TotalCount,
-      { userId },
-      'helpYouCommentCount',
-      1,
-    );
-    event.connection.manager.increment(
-      TotalCount,
-      { userId },
-      'helpYouCommentCountInSevenDays',
-      1,
-    );
+    event.queryRunner.manager
+      .createQueryBuilder()
+      .update(TotalCount)
+      .set({
+        helpYouCommentCount: () => 'helpYouCommentCount + 1',
+        helpYouCommentCountInSevenDays: () =>
+          'helpYouCommentCountInSevenDays + 1',
+      })
+      .where({ userId })
+      .execute();
   }
 
   afterRemove(event: RemoveEvent<HelpYouComment>): void | Promise<any> {
     const { userId } = event.entity;
 
-    event.connection.manager.decrement(
-      TotalCount,
-      { userId },
-      'helpYouCommentCount',
-      1,
-    );
-    event.connection.manager.decrement(
-      TotalCount,
-      { userId },
-      'helpYouCommentCountInSevenDays',
-      1,
-    );
+    event.queryRunner.manager
+      .createQueryBuilder()
+      .update(TotalCount)
+      .set({
+        helpYouCommentCount: () => 'helpYouCommentCount - 1',
+        helpYouCommentCountInSevenDays: () =>
+          'helpYouCommentCountInSevenDays - 1',
+      })
+      .where({ userId })
+      .execute();
   }
 }

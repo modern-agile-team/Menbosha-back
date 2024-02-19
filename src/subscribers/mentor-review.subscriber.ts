@@ -18,36 +18,30 @@ export class MentorReviewSubscriber
   afterInsert(event: InsertEvent<MentorReview>): void | Promise<any> {
     const { mentorId } = event.entity;
 
-    event.connection.manager.increment(
-      TotalCount,
-      { userId: mentorId },
-      'reviewCount',
-      1,
-    );
-    event.connection.manager.increment(
-      TotalCount,
-      { userId: mentorId },
-      'reviewCountInSevenDays',
-      1,
-    );
+    event.queryRunner.manager
+      .createQueryBuilder()
+      .update(TotalCount)
+      .set({
+        reviewCount: () => 'reviewCount + 1',
+        reviewCountInSevenDays: () => 'reviewCountInSevenDays + 1',
+      })
+      .where({ userId: mentorId })
+      .execute();
   }
 
   afterUpdate(event: UpdateEvent<MentorReview>): void | Promise<any> {
     const { mentorId, deletedAt } = event.entity;
-    console.log(mentorId, deletedAt);
+
     if (deletedAt) {
-      event.connection.manager.decrement(
-        TotalCount,
-        { userId: mentorId },
-        'reviewCount',
-        1,
-      );
-      event.connection.manager.decrement(
-        TotalCount,
-        { userId: mentorId },
-        'reviewCountInSevenDays',
-        1,
-      );
+      event.queryRunner.manager
+        .createQueryBuilder()
+        .update(TotalCount)
+        .set({
+          reviewCount: () => 'reviewCount - 1',
+          reviewCountInSevenDays: () => 'reviewCountInSevenDays - 1',
+        })
+        .where({ userId: mentorId })
+        .execute();
     }
   }
 }

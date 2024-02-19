@@ -28,18 +28,16 @@ export class MentorBoardLikeSubscriber
         .update({ id: existBoard.id }, { popularAt: new Date() });
     }
 
-    event.connection.manager.increment(
-      TotalCount,
-      { userId: existBoard.userId },
-      'mentorBoardLikeCount',
-      1,
-    );
-    event.connection.manager.increment(
-      TotalCount,
-      { userId: existBoard.userId },
-      'mentorBoardLikeCountInSevenDays',
-      1,
-    );
+    event.queryRunner.manager
+      .createQueryBuilder()
+      .update(TotalCount)
+      .set({
+        mentorBoardLikeCount: () => 'mentorBoardLikeCount + 1',
+        mentorBoardLikeCountInSevenDays: () =>
+          'mentorBoardLikeCountInSevenDays + 1',
+      })
+      .where({ userId: existBoard.userId })
+      .execute();
   }
 
   async afterRemove(event: RemoveEvent<MentorBoardLike>): Promise<void> {
@@ -51,17 +49,15 @@ export class MentorBoardLikeSubscriber
         .update({ id: existBoard.id }, { popularAt: null });
     }
 
-    event.connection.manager.decrement(
-      TotalCount,
-      { userId: existBoard.userId },
-      'mentorBoardLikeCount',
-      1,
-    );
-    event.connection.manager.decrement(
-      TotalCount,
-      { userId: existBoard.userId },
-      'mentorBoardLikeCountInSevenDays',
-      1,
-    );
+    event.queryRunner.manager
+      .createQueryBuilder()
+      .update(TotalCount)
+      .set({
+        mentorBoardLikeCount: () => 'mentorBoardLikeCount - 1',
+        mentorBoardLikeCountInSevenDays: () =>
+          'mentorBoardLikeCountInSevenDays - 1',
+      })
+      .where({ userId: existBoard.userId })
+      .execute();
   }
 }
