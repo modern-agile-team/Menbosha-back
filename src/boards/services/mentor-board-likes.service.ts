@@ -113,7 +113,6 @@ export class MentorBoardLikeService {
 
     await queryRunner.connect();
     await queryRunner.startTransaction();
-    queryRunner.data = { mentorId: existBoard.userId };
 
     try {
       queryRunner.data.existBoard = { ...existBoard };
