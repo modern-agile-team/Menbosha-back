@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { RedisService } from 'src/common/redis/redis.service';
+import { TokenPayload } from '../interfaces/token-payload.interface';
 
 @Injectable()
 export class AccessTokenStrategy extends PassportStrategy(
@@ -18,7 +18,7 @@ export class AccessTokenStrategy extends PassportStrategy(
     });
   }
 
-  async validate(request: any, payload: any) {
+  async validate(request: any, payload: TokenPayload) {
     if (payload.sub !== 'accessToken') {
       throw new HttpException('invalid token type', HttpStatus.BAD_REQUEST);
     }
@@ -51,7 +51,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
     });
   }
 
-  async validate(request: any, payload: any) {
+  async validate(request: any, payload: TokenPayload) {
     if (payload.sub !== 'refreshToken') {
       throw new HttpException('invalid token type', HttpStatus.BAD_REQUEST);
     }
