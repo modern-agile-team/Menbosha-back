@@ -7,7 +7,6 @@ import {
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-  WsException,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ChatService } from 'src/chat/services/chat.service';
@@ -15,11 +14,13 @@ import { PostChatDto } from '../dto/post-chat.dto';
 import { AsyncApiSub } from 'nestjs-asyncapi';
 import { UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
 import { LoginChatRoomsDto } from '../dto/login-chat-rooms.dto';
-import { WebSocketExceptionFilter } from '../exceptions/websocket-exception.filter';
+import { WebSocketExceptionFilter } from '../exceptions/filters/websocket-exception.filter';
 import mongoose from 'mongoose';
+import { SocketException } from '../exceptions/socket.exception';
+
 @WebSocketGateway({ namespace: /\/ch-.+/, cors: true })
-@UsePipes(ValidationPipe)
 @UseFilters(WebSocketExceptionFilter)
+@UsePipes(ValidationPipe)
 export class EventsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
@@ -42,21 +43,35 @@ export class EventsGateway
     },
   })
   @SubscribeMessage('login')
-  handleLogin(
+  async handleLogin(
     @MessageBody() loginChatRoomDto: LoginChatRoomsDto,
     @ConnectedSocket() socket: Socket,
   ) {
+    const { chatRoomIds } = loginChatRoomDto;
     console.log('login', loginChatRoomDto.userId);
-    loginChatRoomDto.chatRoomIds.forEach((room) => {
-      const isObjectId = mongoose.isObjectIdOrHexString(room);
+
+    for (let i = 0; i < chatRoomIds.length; i++) {
+      const isObjectId = mongoose.isObjectIdOrHexString(chatRoomIds[i]);
 
       if (!isObjectId) {
-        throw new WsException('오브젝트 id 형식이 아닙니다');
+        throw new SocketException('BadRequest', '오브젝트 id 형식이 아닙니다');
       }
 
-      console.log('join', socket.nsp.name, room);
-      socket.join(room.toString());
-    });
+      const chatRoom = await this.chatService.findOneChatRoom({
+        _id: chatRoomIds[i],
+        deletedAt: null,
+      });
+
+      if (!chatRoom) {
+        throw new SocketException(
+          'NotFound',
+          '해당 채팅방은 존재하지 않습니다.',
+        );
+      }
+
+      console.log('join', socket.nsp.name, chatRoomIds[i]);
+      socket.join(chatRoom._id.toString());
+    }
   }
 
   @AsyncApiSub({
