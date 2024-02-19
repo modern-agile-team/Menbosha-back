@@ -3,7 +3,7 @@ import { UserBadgeRepository } from './../repositories/user-badge.repository';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { UserImageRepository } from '../repositories/user-image.repository';
-import { FindManyOptions, FindOneOptions } from 'typeorm';
+import { EntityManager, FindManyOptions, FindOneOptions } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { UserBadgeResponseDTO } from '../dtos/get-user-badge.dto';
 import { plainToInstance } from 'class-transformer';
@@ -17,6 +17,7 @@ export class UserService {
     private readonly userImageRepository: UserImageRepository,
     private readonly userBadgeRepository: UserBadgeRepository,
     private readonly userIntroRepository: UserIntroRepository,
+    private readonly entityManager: EntityManager,
   ) {}
 
   findAll(options: FindManyOptions<User>) {
@@ -31,6 +32,10 @@ export class UserService {
     }
 
     return existUser;
+  }
+
+  async createUser(entityManager: EntityManager, userInfo: any) {
+    return await this.userRepository.createUser(entityManager, userInfo);
   }
 
   async getMyProfile(userId: number) {
@@ -92,6 +97,14 @@ export class UserService {
       userImage,
       owner: userId === targetId,
     };
+  }
+
+  async updateUserName(userId: number, nickname: string) {
+    return await this.userRepository.updateUserName(userId, nickname);
+  }
+
+  async deleteUser(userId: number) {
+    return await this.userRepository.deleteUser(userId);
   }
 
   async countPageMentors(categoryId: number) {

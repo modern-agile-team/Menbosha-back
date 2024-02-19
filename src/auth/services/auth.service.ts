@@ -1,20 +1,20 @@
 import { TokenService } from './token.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { UserRepository } from 'src/users/repositories/user.repository';
 import * as dotenv from 'dotenv';
-import { UserImageRepository } from 'src/users/repositories/user-image.repository';
 import axios from 'axios';
 import { AuthServiceInterface } from '../interfaces/auth-service.interface';
 import { TotalCountService } from 'src/total-count/services/total-count.service';
 import { DataSource } from 'typeorm';
+import { UserService } from 'src/users/services/user.service';
+import { UserImageService } from 'src/users/services/user-image.service';
 
 dotenv.config();
 
 @Injectable()
 export class AuthService implements AuthServiceInterface {
   constructor(
-    private readonly userRepository: UserRepository,
-    private readonly userImageRepository: UserImageRepository,
+    private readonly userService: UserService,
+    private readonly userImageService: UserImageService,
     private readonly tokenService: TokenService,
     private readonly totalCountService: TotalCountService,
     private readonly dataSource: DataSource,
@@ -141,22 +141,26 @@ export class AuthService implements AuthServiceInterface {
         email,
       };
 
-      const checkUser = await this.userRepository.findUser(email, provider);
+      const checkUser = await this.userService.findOneByOrNotFound({
+        where: { email, provider },
+      });
+
       if (checkUser) {
         // 이미 존재하는 사용자인 경우
         const userId = checkUser.id;
 
-        await this.userRepository.updateUserName(userId, nickname); // 이름 업데이트
+        await this.userService.updateUserName(userId, nickname); // 이름 업데이트
 
-        const userImage = (
-          await this.userImageRepository.checkUserImage(userId)
-        ).imageUrl; // DB 이미지
+        const userImage = await this.userImageService.checkUserImage(userId); // DB 이미지
         const imageUrlParts = userImage.split('/');
         const dbImageProvider = imageUrlParts[imageUrlParts.length - 3]; // 이미지 제공자 이름
 
         if (dbImageProvider !== process.env.AWS_S3_URL) {
           // S3에 업로드된 이미지가 아닌 경우
-          await this.userImageRepository.updateUserImage(userId, profileImage); // DB에 이미지 URL 업데이트
+          await this.userImageService.updateUserImageByUrl(
+            userId,
+            profileImage,
+          ); // DB에 이미지 URL 업데이트
         }
 
         return {
@@ -174,19 +178,19 @@ export class AuthService implements AuthServiceInterface {
         try {
           const entityManager = queryRunner.manager;
 
-          const newUser = await this.userRepository.createUser(
+          const newUser = await this.userService.createUser(
             entityManager,
             userInfo,
           );
           const userId = newUser.id;
           if (!profileImage) {
-            await this.userImageRepository.uploadUserImage(
+            await this.userImageService.uploadUserImageWithEntityManager(
               entityManager,
               userId,
               process.env.DEFAULT_USER_IMAGE,
             );
           } else {
-            await this.userImageRepository.uploadUserImage(
+            await this.userImageService.uploadUserImageWithEntityManager(
               entityManager,
               userId,
               profileImage,
@@ -337,7 +341,7 @@ export class AuthService implements AuthServiceInterface {
   }
 
   async accountDelete(userId: number) {
-    const deleteUser = await this.userRepository.deleteUser(userId);
+    const deleteUser = await this.userService.deleteUser(userId);
     if (!deleteUser) {
       throw new HttpException(
         '사용자를 찾을 수 없습니다.',

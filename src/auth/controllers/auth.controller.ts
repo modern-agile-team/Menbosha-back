@@ -20,13 +20,15 @@ import { ApiKakaoUnlink } from '../swagger-decorators/kakao-unlink.decorator';
 import { ApiNaverLogout } from '../swagger-decorators/naver-logout.decorator';
 import { ApiNaverUnlink } from '../swagger-decorators/naver-unlink.decorator';
 import { ApiDeleteAccount } from '../swagger-decorators/delete-account.decorator';
-import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
-import { JwtRefreshTokenGuard } from 'src/config/guards/jwt-refresh-token.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { RedisService } from 'src/common/redis/redis.service';
 import { ApiGoogleLogin } from '../swagger-decorators/google-login.decorator';
 import { ApiGoogleLogout } from '../swagger-decorators/google-logout.decorator';
 import { ApiGoogleUnlink } from '../swagger-decorators/google-unlink.decorator';
+import {
+  AccessTokenAuthGuard,
+  RefreshTokenAuthGuard,
+} from '../jwt/jwt-auth.guard';
 
 @Controller('auth')
 @ApiTags('auth API')
@@ -47,8 +49,8 @@ export class AuthController {
 
     const { userId, socialAccessToken, socialRefreshToken, firstLogin } =
       await this.authService.login(code, 'naver');
-    const accessToken = await this.tokenService.createAccessToken(userId);
-    const refreshToken = await this.tokenService.createRefreshToken(userId);
+    const accessToken = await this.tokenService.generateAccessToken(userId);
+    const refreshToken = await this.tokenService.generateRefreshToken(userId);
 
     await this.tokenService.saveTokens(
       userId,
@@ -78,8 +80,8 @@ export class AuthController {
 
     const { userId, socialAccessToken, socialRefreshToken, firstLogin } =
       await this.authService.login(code, 'kakao');
-    const accessToken = await this.tokenService.createAccessToken(userId);
-    const refreshToken = await this.tokenService.createRefreshToken(userId);
+    const accessToken = await this.tokenService.generateAccessToken(userId);
+    const refreshToken = await this.tokenService.generateRefreshToken(userId);
 
     await this.tokenService.saveTokens(
       userId,
@@ -109,8 +111,8 @@ export class AuthController {
 
     const { userId, socialAccessToken, socialRefreshToken, firstLogin } =
       await this.authService.login(code, 'google');
-    const accessToken = await this.tokenService.createAccessToken(userId);
-    const refreshToken = await this.tokenService.createRefreshToken(userId);
+    const accessToken = await this.tokenService.generateAccessToken(userId);
+    const refreshToken = await this.tokenService.generateRefreshToken(userId);
 
     await this.tokenService.saveTokens(
       userId,
@@ -132,15 +134,15 @@ export class AuthController {
   }
 
   @ApiNewAccessToken()
-  @UseGuards(JwtRefreshTokenGuard)
+  @UseGuards(RefreshTokenAuthGuard)
   @Get('new-access-token')
   async newAccessToken(@GetUserId() userId: number, @Res() res) {
-    const newAccessToken = await this.tokenService.createAccessToken(userId);
+    const newAccessToken = await this.tokenService.generateAccessToken(userId);
     return res.json({ accessToken: newAccessToken });
   }
 
   @ApiKakaoLogout()
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @Post('kakao/logout')
   async kakaoLogout(@GetUserId() userId: number) {
     const { socialAccessToken, socialRefreshToken } =
@@ -153,7 +155,7 @@ export class AuthController {
   }
 
   @ApiKakaoUnlink()
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @Post('kakao/unlink')
   async kakaoUnlink(@GetUserId() userId: number) {
     const { socialAccessToken, socialRefreshToken } =
@@ -166,14 +168,14 @@ export class AuthController {
   }
 
   @ApiNaverLogout()
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @Post('naver/logout')
   async naverLogout(@GetUserId() userId: number) {
     return await this.tokenService.deleteTokens(userId);
   }
 
   @ApiNaverUnlink()
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @Post('naver/unlink')
   async naverUnlink(@GetUserId() userId: number) {
     const { socialAccessToken, socialRefreshToken } =
@@ -186,14 +188,14 @@ export class AuthController {
   }
 
   @ApiGoogleLogout()
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @Post('google/logout')
   async googleLogout(@GetUserId() userId: number) {
     return await this.tokenService.deleteTokens(userId);
   }
 
   @ApiGoogleUnlink()
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @Post('google/unlink')
   async googleUnlink(@GetUserId() userId: number) {
     const { socialAccessToken } = await this.tokenService.getUserTokens(userId);
@@ -202,7 +204,7 @@ export class AuthController {
   }
 
   @ApiDeleteAccount()
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @Delete('account')
   async accountDelete(@GetUserId() userId: number) {
     await this.s3Service.deleteImagesWithPrefix(userId + '_');

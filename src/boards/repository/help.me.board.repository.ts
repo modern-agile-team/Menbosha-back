@@ -114,6 +114,7 @@ export class HelpMeBoardRepository {
   }
 
   findAllHelpYouCommentsByQueryBuilder(
+    helpMeBoardId: number,
     skip: number,
     pageSize: number,
     orderField: HelpYouCommentOrderField,
@@ -140,7 +141,8 @@ export class HelpMeBoardRepository {
         'userImage.imageUrl',
         'userIntro.shortIntro',
         'userIntro.career',
-      ]);
+      ])
+      .where({ helpMeBoardId });
 
     this.queryBuilderHelper.buildWherePropForFind(
       queryBuilder,

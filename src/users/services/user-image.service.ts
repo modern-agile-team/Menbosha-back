@@ -3,6 +3,7 @@ import { S3Service } from 'src/common/s3/s3.service';
 import { UserImageRepository } from '../repositories/user-image.repository';
 import { InternalServerErrorException } from '@nestjs/common';
 import * as dotenv from 'dotenv';
+import { EntityManager } from 'typeorm';
 
 dotenv.config();
 
@@ -13,7 +14,30 @@ export class UserImageService {
     private readonly userImageRepository: UserImageRepository,
   ) {}
 
-  async updateImage(
+  async checkUserImage(userId: number): Promise<string> {
+    return (await this.userImageRepository.checkUserImage(userId)).imageUrl;
+  }
+
+  async updateUserImageByUrl(userId: number, profileImage: string) {
+    return await this.userImageRepository.updateUserImageByUrl(
+      userId,
+      profileImage,
+    );
+  }
+
+  async uploadUserImageWithEntityManager(
+    entityManager: EntityManager,
+    userId: number,
+    imageUrl: string,
+  ) {
+    return await this.userImageRepository.uploadUserImageWithEntityManager(
+      entityManager,
+      userId,
+      imageUrl,
+    );
+  }
+
+  async updateImageWithFile(
     userId: number,
     file: Express.Multer.File,
   ): Promise<{ message: string }> {
@@ -41,10 +65,8 @@ export class UserImageService {
         await this.s3Service.deleteImage('UserImages/' + imageKey); // S3에 업로드된 기존 이미지 삭제
       }
 
-      const updateUserImage = await this.userImageRepository.updateUserImage(
-        userId,
-        imageUrl,
-      ); // DB에 이미지 URL 업데이트
+      const updateUserImage =
+        await this.userImageRepository.updateUserImageByUrl(userId, imageUrl); // DB에 이미지 URL 업데이트
       if (!updateUserImage) {
         throw new InternalServerErrorException(
           '사용자 이미지 업데이트에 실패했습니다.',

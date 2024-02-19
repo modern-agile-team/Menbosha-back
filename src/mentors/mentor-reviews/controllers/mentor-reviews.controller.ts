@@ -20,7 +20,6 @@ import { SuccessResponseInterceptor } from 'src/common/interceptors/success-resp
 import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
 import { MentorReviewsService } from '../services/mentor-reviews.service';
 import { CreateMentorReviewRequestBodyDto } from '../dtos/create-mentor-review-request-body.dto';
-import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { MentorReviewDto } from '../dtos/mentor-review.dto';
 import { ApiCreateMentorReview } from '../swagger-decorators/create-mentor-review.decorator';
 import { ApiTags } from '@nestjs/swagger';
@@ -30,6 +29,7 @@ import { ApiFindOneMentorReview } from '../swagger-decorators/find-one-mentor-re
 import { ApiDeleteMentorReview } from '../swagger-decorators/delete-mentor-review.decorator';
 import { PatchUpdateMentorReviewDto } from '../dtos/patch-update-mentor-review.dto';
 import { ApiPatchUpdateMentorReview } from '../swagger-decorators/patch-update-mentor-review.decorator';
+import { AccessTokenAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 
 @UsePipes(
   new ValidationPipe({
@@ -44,7 +44,7 @@ import { ApiPatchUpdateMentorReview } from '../swagger-decorators/patch-update-m
 export class MentorReviewsController {
   constructor(private readonly mentorsService: MentorReviewsService) {}
 
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiCreateMentorReview()
   @Post()
   createMentorReview(
@@ -80,7 +80,7 @@ export class MentorReviewsController {
     return this.mentorsService.findOneMentorReview(mentorId, reviewId);
   }
 
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiPatchUpdateMentorReview()
   @Patch(':reviewId')
   patchUpdateMentorReview(
@@ -97,7 +97,7 @@ export class MentorReviewsController {
     );
   }
 
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiDeleteMentorReview()
   @Delete(':reviewId')

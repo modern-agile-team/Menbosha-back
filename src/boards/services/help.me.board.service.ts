@@ -98,6 +98,7 @@ export class HelpMeBoardService {
 
     const [helpYouComments, totalCount] =
       await this.helpMeBoardRepository.findAllHelpYouCommentsByQueryBuilder(
+        helpMeBoard.id,
         skip,
         pageSize,
         orderField,

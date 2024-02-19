@@ -1,6 +1,6 @@
 import { UserService } from './services/user.service';
 import { UserController } from './controllers/user.controller';
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { UserImageController } from './controllers/user-image.controller';
@@ -18,7 +18,11 @@ import { TotalCountModule } from 'src/total-count/total-count.module';
 import { UserBadgeService } from './services/user-badge.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), AuthModule, TotalCountModule],
+  imports: [
+    TypeOrmModule.forFeature([User]),
+    forwardRef(() => AuthModule),
+    TotalCountModule,
+  ],
   controllers: [UserController, UserImageController],
   providers: [
     UserIntroService,
@@ -33,6 +37,14 @@ import { UserBadgeService } from './services/user-badge.service';
     UserRankingService,
     UserRankingRepository,
   ],
-  exports: [UserService, UserRepository],
+  exports: [
+    UserService,
+    UserBadgeRepository,
+    UserIntroRepository,
+    UserIntroService,
+    UserImageService,
+    UserBadgeService,
+    UserRankingService,
+  ],
 })
 export class UserModule {}
