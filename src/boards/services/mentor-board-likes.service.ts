@@ -9,19 +9,12 @@ import { MentorBoardService } from 'src/boards/services/mentor.board.service';
 import { LikesService } from 'src/like/services/likes.service';
 import { MentorBoardLikeDto } from '../dto/mentorBoard/mentor-board-like.dto';
 import { DataSource } from 'typeorm';
-import { MentorBoardHotPostsService } from './mentor-board-hot-posts.service';
-import { TotalCountService } from 'src/total-count/services/total-count.service';
-import { Type } from 'src/total-count/enums/type.enum';
-import { Action } from 'src/total-count/enums/action.enum';
-
 @Injectable()
 export class MentorBoardLikeService {
   constructor(
     private readonly likesService: LikesService<MentorBoardLike>,
     private readonly dataSource: DataSource,
     private readonly mentorBoardService: MentorBoardService,
-    private readonly mentorBoardHotPostService: MentorBoardHotPostsService,
-    private readonly totalCountService: TotalCountService,
   ) {}
 
   async createMentorBoardLikeAndHotPost(
@@ -62,6 +55,8 @@ export class MentorBoardLikeService {
     await queryRunner.startTransaction();
 
     try {
+      queryRunner.data.existBoard = { ...existBoard };
+
       const entityManager = queryRunner.manager;
 
       const newLike = await this.likesService.createLikeWithEntityManager(
@@ -69,15 +64,6 @@ export class MentorBoardLikeService {
         existBoard.id,
         userId,
       );
-
-      const likeCount = existBoard.mentorBoardLikes.length + 1;
-
-      if (likeCount === 10 && !existBoard.popularAt) {
-        await this.mentorBoardHotPostService.createMentorBoardHotPost(
-          entityManager,
-          existBoard.id,
-        );
-      }
 
       await queryRunner.commitTransaction();
 
@@ -130,6 +116,8 @@ export class MentorBoardLikeService {
     queryRunner.data = { mentorId: existBoard.userId };
 
     try {
+      queryRunner.data.existBoard = { ...existBoard };
+
       const entityManager = queryRunner.manager;
 
       await this.likesService.deleteLikeWithEntityManager(
@@ -137,15 +125,6 @@ export class MentorBoardLikeService {
         existBoard.id,
         userId,
       );
-
-      const likeCount = existBoard.mentorBoardLikes.length - 1;
-
-      if (likeCount === 9 && existBoard.popularAt) {
-        await this.mentorBoardHotPostService.deleteMentorBoardHotPost(
-          entityManager,
-          existBoard.id,
-        );
-      }
 
       await queryRunner.commitTransaction();
 
