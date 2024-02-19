@@ -25,7 +25,6 @@ import { ApiCreateChatRoom } from '../swagger-decorators/create-chat-room.decora
 import { ApiLeaveChatRoom } from '../swagger-decorators/leave-chat-room.decorator';
 // import { ApiGetChatUnreadCounts } from '../swagger-decorators/get-chat-unread-counts.decorator';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
-import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
 import { ApiCreateChatImage } from '../swagger-decorators/create-chat-image.decorators';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
 import { ChatRoomDto } from '../dto/chat-room.dto';
@@ -42,6 +41,7 @@ import { ApiFindOneChatRoomByUserId } from '../swagger-decorators/find-one-chat-
 import { ApiFindOneChatRoom } from '../swagger-decorators/find-one-chat-room.decorator';
 import { ApiFindChats } from '../swagger-decorators/find-chats.decorator';
 import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
+import { AccessTokenAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 @ApiTags('CHAT')
 @UsePipes(
   new ValidationPipe({
@@ -61,7 +61,7 @@ export class ChatController {
    * @returns
    * @todo 추후 다른 기능들에서도 호출이 필요할 경우 service코드에 별도의 비즈니스 로직 추가
    */
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiFindChatNotificationSse()
   @Sse('listener')
   notificationListener(@GetUserId() userId: number): Observable<string> {
@@ -73,7 +73,7 @@ export class ChatController {
    * @param userId
    * @returns find all chat rooms with mapped user
    */
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiFindChatRooms()
   @Get()
   findAllChatRoomsWithUserAndChat(
@@ -90,7 +90,7 @@ export class ChatController {
    *
    * @deprecated 삭제 예정
    */
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiFindOneChatRoomByUserId()
   @Get('check')
   findOneChatRoomByUserIds(
@@ -119,7 +119,7 @@ export class ChatController {
    * @param createChatRoomBodyDto
    * @returns 채팅방 생성
    */
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiCreateChatRoom()
   @Post()
   createChatRoom(
@@ -135,7 +135,7 @@ export class ChatController {
    * @param roomId
    * @returns 채팅창 나가기
    */
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiLeaveChatRoom()
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':roomId')
@@ -152,7 +152,7 @@ export class ChatController {
    * @param roomId
    * @returns chatRoom
    */
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiFindChats()
   @Get(':roomId/chat')
   findAllChats(
@@ -163,7 +163,7 @@ export class ChatController {
     return this.chatService.findAllChats(userId, roomId, pageQueryDto);
   }
 
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiCreateChatImage()
   @Post(':roomId/chat/image')
   @UseInterceptors(FileInterceptor('file'))
@@ -175,7 +175,7 @@ export class ChatController {
     return this.chatService.createChatImage(roomId, userId, file);
   }
 
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiDeleteChat()
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':roomId/chat/:chatId')

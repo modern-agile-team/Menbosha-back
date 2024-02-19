@@ -17,7 +17,7 @@ export class UserImageRepository {
     return userImage;
   }
 
-  async uploadUserImage(
+  async uploadUserImageWithEntityManager(
     entityManager: EntityManager,
     userId: number,
     imageUrl: string,
@@ -29,7 +29,7 @@ export class UserImageRepository {
     return entityManager.save(userImage);
   }
 
-  async updateUserImage(
+  async updateUserImageByUrl(
     userId: number,
     newImageUrl: string,
   ): Promise<UserImage | null> {
