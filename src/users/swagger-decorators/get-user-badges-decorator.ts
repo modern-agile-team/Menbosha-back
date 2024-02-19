@@ -72,9 +72,6 @@ export function ApiPostUserBadges() {
                       createdAt: '2024-02-14T21:58:03.000Z',
                     },
                   ],
-                  {
-                    acquiredBadges: [],
-                  },
                 ],
                 statusCode: 201,
                 message: '새로운 뱃지는 없고, 기존의 뱃지만 불러올 경우',
