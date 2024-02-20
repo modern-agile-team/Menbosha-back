@@ -29,6 +29,7 @@ import {
   AccessTokenAuthGuard,
   RefreshTokenAuthGuard,
 } from '../jwt/jwt-auth.guard';
+import { Ttl } from 'src/common/redis/ttl.enum';
 
 @Controller('auth')
 @ApiTags('auth API')
@@ -59,7 +60,16 @@ export class AuthController {
       socialRefreshToken,
     );
 
-    await this.redisService.setToken(String(userId), refreshToken);
+    await this.redisService.setToken(
+      String(userId) + '-accessToken',
+      accessToken,
+      Ttl.accessToken,
+    );
+    await this.redisService.setToken(
+      String(userId) + '-refreshToken',
+      refreshToken,
+      Ttl.refreshToken,
+    );
 
     res.cookie('refresh_token', refreshToken, {
       httpOnly: true,
@@ -90,7 +100,16 @@ export class AuthController {
       socialRefreshToken,
     );
 
-    await this.redisService.setToken(String(userId), refreshToken);
+    await this.redisService.setToken(
+      String(userId) + '-accessToken',
+      accessToken,
+      Ttl.accessToken,
+    );
+    await this.redisService.setToken(
+      String(userId) + '-refreshToken',
+      refreshToken,
+      Ttl.refreshToken,
+    );
 
     res.cookie('refresh_Token', refreshToken, {
       httpOnly: true,
@@ -121,7 +140,16 @@ export class AuthController {
       socialRefreshToken,
     );
 
-    await this.redisService.setToken(String(userId), refreshToken);
+    await this.redisService.setToken(
+      String(userId) + '-accessToken',
+      accessToken,
+      Ttl.accessToken,
+    );
+    await this.redisService.setToken(
+      String(userId) + '-refreshToken',
+      refreshToken,
+      Ttl.refreshToken,
+    );
 
     res.cookie('refresh_Token', refreshToken, {
       httpOnly: true,
@@ -138,6 +166,11 @@ export class AuthController {
   @Get('new-access-token')
   async newAccessToken(@GetUserId() userId: number, @Res() res) {
     const newAccessToken = await this.tokenService.generateAccessToken(userId);
+    await this.redisService.setToken(
+      String(userId) + '-accessToken',
+      newAccessToken,
+      Ttl.accessToken,
+    );
     return res.json({ accessToken: newAccessToken });
   }
 
@@ -147,7 +180,11 @@ export class AuthController {
   async kakaoLogout(@GetUserId() userId: number) {
     const { socialAccessToken, socialRefreshToken } =
       await this.tokenService.getUserTokens(userId);
+
     await this.tokenService.deleteTokens(userId);
+    await this.redisService.delToken(String(userId) + '-accessToken');
+    await this.redisService.delToken(String(userId) + '-refreshToken');
+
     return await this.authService.kakaoLogout(
       socialAccessToken,
       socialRefreshToken,
@@ -160,7 +197,11 @@ export class AuthController {
   async kakaoUnlink(@GetUserId() userId: number) {
     const { socialAccessToken, socialRefreshToken } =
       await this.tokenService.getUserTokens(userId);
+
     await this.tokenService.deleteTokens(userId);
+    await this.redisService.delToken(String(userId) + '-accessToken');
+    await this.redisService.delToken(String(userId) + '-refreshToken');
+
     return await this.authService.kakaoUnlink(
       socialAccessToken,
       socialRefreshToken,
@@ -171,6 +212,9 @@ export class AuthController {
   @UseGuards(AccessTokenAuthGuard)
   @Post('naver/logout')
   async naverLogout(@GetUserId() userId: number) {
+    await this.redisService.delToken(String(userId) + '-accessToken');
+    await this.redisService.delToken(String(userId) + '-refreshToken');
+
     return await this.tokenService.deleteTokens(userId);
   }
 
@@ -180,7 +224,11 @@ export class AuthController {
   async naverUnlink(@GetUserId() userId: number) {
     const { socialAccessToken, socialRefreshToken } =
       await this.tokenService.getUserTokens(userId);
+
     await this.tokenService.deleteTokens(userId);
+    await this.redisService.delToken(String(userId) + '-accessToken');
+    await this.redisService.delToken(String(userId) + '-refreshToken');
+
     return await this.authService.naverUnlink(
       socialAccessToken,
       socialRefreshToken,
@@ -191,6 +239,9 @@ export class AuthController {
   @UseGuards(AccessTokenAuthGuard)
   @Post('google/logout')
   async googleLogout(@GetUserId() userId: number) {
+    await this.redisService.delToken(String(userId) + '-accessToken');
+    await this.redisService.delToken(String(userId) + '-refreshToken');
+
     return await this.tokenService.deleteTokens(userId);
   }
 
@@ -199,7 +250,11 @@ export class AuthController {
   @Post('google/unlink')
   async googleUnlink(@GetUserId() userId: number) {
     const { socialAccessToken } = await this.tokenService.getUserTokens(userId);
+
     await this.tokenService.deleteTokens(userId);
+    await this.redisService.delToken(String(userId) + '-accessToken');
+    await this.redisService.delToken(String(userId) + '-refreshToken');
+
     return await this.authService.googleUnlink(socialAccessToken);
   }
 
