@@ -24,6 +24,10 @@ export class UserService {
     return this.userRepository.findAll(options);
   }
 
+  findUser(email: string, provider: string) {
+    return this.userRepository.findUser(email, provider);
+  }
+
   async findOneByOrNotFound(options: FindOneOptions<User>) {
     const existUser = await this.userRepository.findOne(options);
 
