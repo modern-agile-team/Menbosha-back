@@ -18,6 +18,10 @@ import { UserRanking } from 'src/users/entities/user-ranking.entity';
 import { TotalCount } from 'src/total-count/entities/total-count.entity';
 import { DataSource } from 'typeorm';
 import { MentorReviewChecklistCount } from 'src/total-count/entities/mentor-review-checklist-count.entity';
+import { MentorBoardSubscriber } from 'src/subscribers/mentor-board.subscriber';
+import { HelpYouCommentSubscriber } from 'src/subscribers/help-you-comment.subscriber';
+import { MentorBoardLikeSubscriber } from 'src/subscribers/mentor-board-like.subscriber';
+import { MentorReviewSubscriber } from 'src/subscribers/mentor-review.subscriber';
 
 // .env 파일 로드
 dotenv.config();

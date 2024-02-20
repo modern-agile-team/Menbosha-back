@@ -22,6 +22,7 @@ import { MentorBoardLikeService } from './services/mentor-board-likes.service';
 import { CategoryModule } from 'src/category/category.module';
 import { MentorBoardLikeRepository } from './repository/mentor.board.likes.repository';
 import { QueryBuilderHelper } from 'src/helpers/query-builder.helper';
+import { TotalCountModule } from 'src/total-count/total-count.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { QueryBuilderHelper } from 'src/helpers/query-builder.helper';
     RedisModule,
     LikesModule.forFeature(MentorBoardLike),
     CategoryModule,
+    TotalCountModule,
   ],
   controllers: [
     MentorBoardController,

@@ -1,4 +1,5 @@
 import { MentorBoardLike } from 'src/boards/entities/mentor-board-like.entity';
+import { TotalCount } from 'src/total-count/entities/total-count.entity';
 import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
 import {
   EntitySubscriberInterface,
@@ -26,6 +27,17 @@ export class MentorBoardLikeSubscriber
         .getRepository(MentorBoard)
         .update({ id: existBoard.id }, { popularAt: new Date() });
     }
+
+    await event.queryRunner.manager
+      .createQueryBuilder()
+      .update(TotalCount)
+      .set({
+        mentorBoardLikeCount: () => 'mentorBoardLikeCount + 1',
+        mentorBoardLikeCountInSevenDays: () =>
+          'mentorBoardLikeCountInSevenDays + 1',
+      })
+      .where({ userId: existBoard.userId })
+      .execute();
   }
 
   async afterRemove(event: RemoveEvent<MentorBoardLike>): Promise<void> {
@@ -36,5 +48,16 @@ export class MentorBoardLikeSubscriber
         .getRepository(MentorBoard)
         .update({ id: existBoard.id }, { popularAt: null });
     }
+
+    await event.queryRunner.manager
+      .createQueryBuilder()
+      .update(TotalCount)
+      .set({
+        mentorBoardLikeCount: () => 'mentorBoardLikeCount - 1',
+        mentorBoardLikeCountInSevenDays: () =>
+          'mentorBoardLikeCountInSevenDays - 1',
+      })
+      .where({ userId: existBoard.userId })
+      .execute();
   }
 }

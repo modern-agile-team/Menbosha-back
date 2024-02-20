@@ -3,7 +3,7 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
-  ApiParam,
+  ApiQuery,
   ApiResponse,
 } from '@nestjs/swagger';
 
@@ -89,7 +89,7 @@ export function ApiAddHelpComment() {
       },
     }),
     ApiBearerAuth('access-token'),
-    ApiParam({
+    ApiQuery({
       name: 'helpMeBoardId',
       description: '댓글을 추가할 보드의 ID',
     }),

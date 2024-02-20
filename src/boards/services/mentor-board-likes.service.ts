@@ -9,7 +9,6 @@ import { MentorBoardService } from 'src/boards/services/mentor.board.service';
 import { LikesService } from 'src/like/services/likes.service';
 import { MentorBoardLikeDto } from '../dto/mentorBoard/mentor-board-like.dto';
 import { DataSource } from 'typeorm';
-
 @Injectable()
 export class MentorBoardLikeService {
   constructor(
@@ -91,6 +90,7 @@ export class MentorBoardLikeService {
     const existBoard = await this.mentorBoardService.findOneByOrNotFound({
       select: {
         id: true,
+        userId: true,
         mentorBoardLikes: {
           id: true,
         },
