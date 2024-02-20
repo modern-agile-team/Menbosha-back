@@ -9,11 +9,15 @@ export class RedisService {
   getToken(userId: string): Promise<string | undefined | null> {
     return this.cacheManager.get<string>(userId); // ? Retrieve data from the cache
   }
-  async setToken(userId: string, token: string, ttl: Ttl) {
-    await this.cacheManager.set(userId, token, { ttl }); // ? Save data to the cache
+  async setToken(key: string, token: string, ttl: Ttl) {
+    await this.cacheManager.set(key, token, { ttl }); // ? Save data to the cache
   }
 
-  async delToken(userId: string) {
-    await this.cacheManager.del(userId); // ? Delete data from the cache
+  async delToken(key: string) {
+    await this.cacheManager.del(key); // ? Delete data from the cache
+  }
+
+  async delTokens(keys: string[]) {
+    await this.cacheManager.store.del(keys);
   }
 }

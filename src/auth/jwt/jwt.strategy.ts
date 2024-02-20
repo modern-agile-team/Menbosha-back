@@ -31,6 +31,11 @@ export class AccessTokenStrategy extends PassportStrategy(
     if (!tokenInRedis) {
       throw new HttpException('token not found', HttpStatus.NOT_FOUND);
     } else if (tokenInRedis !== tokenFromRequest) {
+      await this.redisService.delTokens([
+        `${payload.userId}-accessToken`,
+        `${payload.userId}-refreshToken`,
+      ]);
+
       throw new HttpException('token mismatch', HttpStatus.UNAUTHORIZED);
     }
 
@@ -65,6 +70,11 @@ export class RefreshTokenStrategy extends PassportStrategy(
     if (!tokenInRedis) {
       throw new HttpException('token not found', HttpStatus.NOT_FOUND);
     } else if (tokenInRedis !== tokenFromRequest) {
+      await this.redisService.delTokens([
+        `${payload.userId}-accessToken`,
+        `${payload.userId}-refreshToken`,
+      ]);
+
       throw new HttpException('token mismatch', HttpStatus.UNAUTHORIZED);
     }
 
