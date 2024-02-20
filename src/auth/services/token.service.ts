@@ -131,7 +131,7 @@ export class TokenService {
       userId,
     };
 
-    return this.jwtService.sign(payload, { expiresIn: '12h' });
+    return this.jwtService.sign(payload, { expiresIn: '6h' });
   }
 
   generateRefreshToken(userId: number) {
