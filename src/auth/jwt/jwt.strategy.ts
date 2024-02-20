@@ -33,6 +33,7 @@ export class AccessTokenStrategy extends PassportStrategy(
     } else if (tokenInRedis !== tokenFromRequest) {
       throw new HttpException('token mismatch', HttpStatus.UNAUTHORIZED);
     }
+
     return { id: payload.userId };
   }
 }
@@ -66,6 +67,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
     } else if (tokenInRedis !== tokenFromRequest) {
       throw new HttpException('token mismatch', HttpStatus.UNAUTHORIZED);
     }
+
     return { id: payload.userId };
   }
 }
