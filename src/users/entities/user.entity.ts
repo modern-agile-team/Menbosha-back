@@ -20,6 +20,8 @@ import { TotalCount } from 'src/total-count/entities/total-count.entity';
 import { MentorBoardLike } from 'src/boards/entities/mentor-board-like.entity';
 import { UserRanking } from './user-ranking.entity';
 import { MentorReviewChecklistCount } from 'src/total-count/entities/mentor-review-checklist-count.entity';
+import { Report } from 'src/users/user-reports/entities/user-report.entity';
+import { BannedUser } from 'src/admins/entities/BannedUser';
 
 @Entity({
   name: 'user',
@@ -101,4 +103,10 @@ export class User {
 
   @OneToMany(() => UserRanking, (userRanking) => userRanking.user)
   userRanking: UserRanking;
+
+  @OneToMany(() => Report, (reports) => reports.user)
+  reports: Report[];
+
+  @OneToOne(() => BannedUser, (bannedUser) => bannedUser.user)
+  bannedUser: BannedUser;
 }
