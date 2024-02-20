@@ -141,9 +141,7 @@ export class AuthService implements AuthServiceInterface {
         email,
       };
 
-      const checkUser = await this.userService.findOneByOrNotFound({
-        where: { email, provider },
-      });
+      const checkUser = await this.userService.findUser(email, provider); // 사용자 존재 여부 확인
 
       if (checkUser) {
         // 이미 존재하는 사용자인 경우
