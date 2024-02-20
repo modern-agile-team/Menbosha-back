@@ -1,7 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { TokenRepository } from '../repositories/token.repository';
 import axios from 'axios';
-import { RedisService } from 'src/common/redis/redis.service';
 import { JwtService } from '@nestjs/jwt';
 import { TokenPayload } from '../interfaces/token-payload.interface';
 
@@ -9,7 +8,6 @@ import { TokenPayload } from '../interfaces/token-payload.interface';
 export class TokenService {
   constructor(
     private readonly tokenRepository: TokenRepository,
-    private readonly redisService: RedisService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -131,7 +129,10 @@ export class TokenService {
       userId,
     };
 
-    return this.jwtService.sign(payload, { expiresIn: '6h' });
+    return this.jwtService.sign(payload, {
+      expiresIn: '6h',
+      secret: process.env.JWT_ACCESSTOKEN_SECRET_KEY,
+    });
   }
 
   generateRefreshToken(userId: number) {
@@ -140,6 +141,9 @@ export class TokenService {
       userId,
     };
 
-    return this.jwtService.sign(payload, { expiresIn: '7d' });
+    return this.jwtService.sign(payload, {
+      expiresIn: '7d',
+      secret: process.env.JWT_REFRESHTOKEN_SECRET_KEY,
+    });
   }
 }
