@@ -165,7 +165,11 @@ export class AuthController {
 
     await this.tokenService.deleteTokens(userId);
 
-    return this.authService.kakaoUnlink(socialAccessToken, socialRefreshToken);
+    return this.authService.unlink(
+      'kakao',
+      socialAccessToken,
+      socialRefreshToken,
+    );
   }
 
   @ApiNaverLogout()
@@ -184,7 +188,11 @@ export class AuthController {
 
     await this.tokenService.deleteTokens(userId);
 
-    return this.authService.naverUnlink(socialAccessToken, socialRefreshToken);
+    return this.authService.unlink(
+      'naver',
+      socialAccessToken,
+      socialRefreshToken,
+    );
   }
 
   @ApiGoogleLogout()
@@ -202,7 +210,7 @@ export class AuthController {
 
     await this.tokenService.deleteTokens(userId);
 
-    return this.authService.googleUnlink(socialAccessToken);
+    return this.authService.unlink('google', socialAccessToken);
   }
 
   @ApiDeleteAccount()

@@ -264,77 +264,67 @@ export class AuthService implements AuthServiceInterface {
     }
   }
 
-  async kakaoUnlink(accessToken: string, refreshToken: string) {
+  async unlink(
+    provider: string,
+    accessToken: string,
+    refreshToken?: string,
+  ): Promise<any> {
     try {
-      const checkValidKakaoToken =
-        await this.tokenService.checkValidKakaoToken(accessToken);
-      if (checkValidKakaoToken === 401) {
-        const newKakaoToken =
-          await this.tokenService.getNewKakaoToken(refreshToken);
-        accessToken = newKakaoToken.access_token;
+      let checkValidAccessToken: number,
+        unlinkUrl: string,
+        unlinkHeader: object,
+        unlinkBody: object;
+
+      if (provider === 'kakao') {
+        checkValidAccessToken =
+          await this.tokenService.checkValidKakaoToken(accessToken);
+
+        if (checkValidAccessToken === 401) {
+          accessToken = (await this.tokenService.getNewKakaoToken(refreshToken))
+            .access_token;
+        }
+
+        unlinkUrl = 'https://kapi.kakao.com/v1/user/unlink';
+        unlinkHeader = {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        };
+        unlinkBody = {};
+      } else if (provider === 'naver') {
+        checkValidAccessToken =
+          await this.tokenService.checkValidNaverToken(accessToken);
+
+        if (checkValidAccessToken === 401) {
+          accessToken = (await this.tokenService.getNewNaverToken(refreshToken))
+            .access_token;
+        }
+
+        unlinkUrl = 'https://nid.naver.com/oauth2.0/token';
+        unlinkHeader = {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        };
+        unlinkBody = {
+          client_id: process.env.NAVER_CLIENT_ID,
+          client_secret: process.env.NAVER_CLIENT_SECRET,
+          grant_type: 'delete',
+          service_provider: 'NAVER',
+        };
+      } else if (provider === 'google') {
+        unlinkUrl = `https://accounts.google.com/o/oauth2/revoke?token=${accessToken}`;
+        unlinkHeader = {};
+        unlinkBody = {};
       }
 
-      const kakaoUnlinkUrl = 'https://kapi.kakao.com/v1/user/unlink';
-      const kakaoUnlinkHeader = {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      };
+      axios.post(unlinkUrl, unlinkBody, unlinkHeader);
 
-      axios.post(kakaoUnlinkUrl, {}, kakaoUnlinkHeader);
-      return { message: '카카오 연결 끊기가 완료되었습니다.' };
+      return { message: `${provider} 연결 끊기가 완료되었습니다.` };
     } catch (error) {
       console.log(error);
       throw new HttpException(
-        '카카오 연결 끊기 중 오류가 발생했습니다.',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
-
-  async naverUnlink(accessToken: string, refreshToken: string) {
-    try {
-      const checkValidNaverToken =
-        await this.tokenService.checkValidNaverToken(accessToken);
-      if (checkValidNaverToken === 401) {
-        const newNaverToken =
-          await this.tokenService.getNewNaverToken(refreshToken);
-        accessToken = newNaverToken.access_token;
-      }
-
-      const naverUnlinkUrl = 'https://nid.naver.com/oauth2.0/token';
-      const naverUnlinkHeader = {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      };
-      const naverUnlinkBody = {
-        client_id: process.env.NAVER_CLIENT_ID,
-        client_secret: process.env.NAVER_CLIENT_SECRET,
-        grant_type: 'delete',
-        service_provider: 'NAVER',
-      };
-
-      axios.post(naverUnlinkUrl, naverUnlinkBody, naverUnlinkHeader);
-      return { message: '네이버 연동 해제가 완료되었습니다.' };
-    } catch (error) {
-      console.log(error);
-      throw new HttpException(
-        '네이버 연결 끊기 중 오류가 발생했습니다.',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
-
-  async googleUnlink(accessToken: string) {
-    try {
-      const googleUnlinkUrl = `https://accounts.google.com/o/oauth2/revoke?token=${accessToken}`;
-      axios.post(googleUnlinkUrl);
-      return { message: '구글 연결 끊기가 완료되었습니다.' };
-    } catch (error) {
-      console.log(error);
-      throw new HttpException(
-        '구글 연결 끊기 중 오류가 발생했습니다.',
+        `${provider} 연결 끊기 중 오류가 발생했습니다.`,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
