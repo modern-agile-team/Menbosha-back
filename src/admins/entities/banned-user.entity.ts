@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity('banned_user', { schema: 'ma6_menbosha_db' })
+@Entity('banned_user')
 export class BannedUser {
   @PrimaryGeneratedColumn({
     type: 'int',
