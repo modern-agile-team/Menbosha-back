@@ -33,7 +33,7 @@ export class CreateReportTable1708424573050 implements MigrationInterface {
           new TableColumn({
             name: 'reason',
             type: 'varchar',
-            length: '200',
+            length: '255',
             isNullable: false,
             comment: '신고 상세 사유',
           }),
