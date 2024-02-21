@@ -91,7 +91,7 @@ export class UserInfoDto
   updatedAt: Date;
 
   @Exclude()
-  deletedAt: Date;
+  deletedAt: Date | null;
 
   constructor(userInfo: Partial<UserInfoDto> = {}) {
     Object.assign(this, userInfo);
