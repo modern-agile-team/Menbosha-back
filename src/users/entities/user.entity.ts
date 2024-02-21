@@ -21,7 +21,7 @@ import { MentorBoardLike } from 'src/boards/entities/mentor-board-like.entity';
 import { UserRanking } from './user-ranking.entity';
 import { MentorReviewChecklistCount } from 'src/total-count/entities/mentor-review-checklist-count.entity';
 import { Report } from 'src/users/user-reports/entities/user-report.entity';
-import { BannedUser } from 'src/admins/entities/BannedUser';
+import { BannedUser } from 'src/admins/entities/banned-user.entity';
 
 @Entity({
   name: 'user',
