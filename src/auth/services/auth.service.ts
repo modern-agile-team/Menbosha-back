@@ -76,6 +76,7 @@ export class AuthService implements AuthServiceInterface {
       }
 
       const token = (await axios.post(tokenUrl, tokenBody, tokenHeader)).data;
+
       const socialAccessToken = token.access_token;
       const socialRefreshToken = token.refresh_token;
 
@@ -114,7 +115,7 @@ export class AuthService implements AuthServiceInterface {
         provider === 'naver'
           ? socialUserInfo.response.nickname // 네이버 닉네임
           : provider === 'kakao'
-            ? socialUserInfo.properties.nickname // 카카오 닉네임
+            ? socialUserInfo.kakao_account.profile.nickname // 카카오 닉네임
             : provider === 'google'
               ? socialUserInfo.name // Google 닉네임
               : null;
@@ -130,7 +131,7 @@ export class AuthService implements AuthServiceInterface {
         provider === 'naver'
           ? socialUserInfo.response.profile_image // 네이버 프로필 이미지
           : provider === 'kakao'
-            ? socialUserInfo.properties.profile_image // 카카오 프로필 이미지
+            ? socialUserInfo.kakao_account.profile.profile_image.url // 카카오 프로필 이미지
             : provider === 'google'
               ? socialUserInfo.picture // Google 프로필 이미지
               : null;

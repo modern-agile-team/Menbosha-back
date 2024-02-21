@@ -43,7 +43,7 @@ export class AuthController {
 
   @ApiNaverLogin()
   @Get('naver/login')
-  async naverLogin(@Query() { code }, @Res() res) {
+  async naverLogin(@Query('code') code: string, @Res() res) {
     if (!code) {
       throw new BadRequestException('인가코드가 없습니다.');
     }
@@ -83,7 +83,7 @@ export class AuthController {
 
   @ApiKakaoLogin()
   @Get('kakao/login')
-  async kakaoLogin(@Query() { code }, @Res() res) {
+  async kakaoLogin(@Query('code') code: string, @Res() res) {
     if (!code) {
       throw new BadRequestException('인가코드가 없습니다.');
     }
@@ -123,7 +123,7 @@ export class AuthController {
 
   @ApiGoogleLogin()
   @Get('google/login')
-  async googleLogin(@Query() { code }, @Res() res) {
+  async googleLogin(@Query('code') code: string, @Res() res) {
     if (!code) {
       throw new BadRequestException('인가코드가 없습니다.');
     }
