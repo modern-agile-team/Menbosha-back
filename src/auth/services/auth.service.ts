@@ -142,19 +142,20 @@ export class AuthService implements AuthServiceInterface {
         email,
       };
 
-      const checkUser = await this.userService.findUser(email, provider); // 사용자 존재 여부 확인
+      const findUser = await this.userService.findUser(email, provider);
 
-      if (checkUser) {
-        // 이미 존재하는 사용자인 경우
-        const userId = checkUser.id;
+      if (findUser) {
+        const userId = findUser.id;
 
-        await this.userService.updateUserName(userId, nickname); // 이름 업데이트
+        await this.userService.updateUserName(userId, nickname);
 
-        const userImage = await this.userImageService.checkUserImage(userId); // DB 이미지
-        const imageUrlParts = userImage.split('/');
-        const dbImageProvider = imageUrlParts[imageUrlParts.length - 3]; // 이미지 제공자 이름
+        const userImageUrl = (await this.userImageService.findUserImage(userId))
+          .imageUrl;
+        const imageUrlParts = userImageUrl.split('/');
+        const imageProviderInDbImageUrl =
+          imageUrlParts[imageUrlParts.length - 3];
 
-        if (dbImageProvider !== process.env.AWS_S3_URL) {
+        if (imageProviderInDbImageUrl !== process.env.AWS_S3_URL) {
           // S3에 업로드된 이미지가 아닌 경우
           await this.userImageService.updateUserImageByUrl(
             userId,

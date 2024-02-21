@@ -3,12 +3,15 @@ import { TokenRepository } from '../repositories/token.repository';
 import axios from 'axios';
 import { JwtService } from '@nestjs/jwt';
 import { TokenPayload } from '../interfaces/token-payload.interface';
+import { RedisService } from 'src/common/redis/redis.service';
+import { Ttl } from 'src/common/redis/ttl.enum';
 
 @Injectable()
 export class TokenService {
   constructor(
     private readonly tokenRepository: TokenRepository,
     private readonly jwtService: JwtService,
+    private readonly redisService: RedisService,
   ) {}
 
   async getUserTokens(userId: number) {
@@ -21,13 +24,24 @@ export class TokenService {
 
   async saveTokens(
     userId: number,
+    accessToken: string,
     refreshToken: string,
     socialAccessToken: string,
     socialRefreshToken: string,
   ) {
-    const tokens = await this.tokenRepository.getUserTokens(userId);
+    await this.redisService.setToken(
+      String(userId) + '-accessToken',
+      accessToken,
+      Ttl.accessToken,
+    );
+    await this.redisService.setToken(
+      String(userId) + '-refreshToken',
+      refreshToken,
+      Ttl.refreshToken,
+    );
 
-    if (tokens.length > 0) {
+    const tokens = await this.tokenRepository.getUserTokens(userId);
+    if (tokens) {
       return await this.tokenRepository.updateTokens(
         userId,
         refreshToken,
@@ -115,6 +129,10 @@ export class TokenService {
 
   async deleteTokens(userId: number) {
     try {
+      await this.redisService.delTokens([
+        `${userId}-accessToken`,
+        `${userId}-refreshToken`,
+      ]);
       await this.tokenRepository.deleteTokens(userId);
 
       return { message: '토큰 삭제 성공' };

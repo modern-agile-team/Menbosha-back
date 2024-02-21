@@ -50,25 +50,15 @@ export class AuthController {
 
     const { userId, socialAccessToken, socialRefreshToken, firstLogin } =
       await this.authService.login(code, 'naver');
-    const accessToken = await this.tokenService.generateAccessToken(userId);
-    const refreshToken = await this.tokenService.generateRefreshToken(userId);
+    const accessToken = this.tokenService.generateAccessToken(userId);
+    const refreshToken = this.tokenService.generateRefreshToken(userId);
 
     await this.tokenService.saveTokens(
       userId,
+      accessToken,
       refreshToken,
       socialAccessToken,
       socialRefreshToken,
-    );
-
-    await this.redisService.setToken(
-      String(userId) + '-accessToken',
-      accessToken,
-      Ttl.accessToken,
-    );
-    await this.redisService.setToken(
-      String(userId) + '-refreshToken',
-      refreshToken,
-      Ttl.refreshToken,
     );
 
     res.cookie('refresh_token', refreshToken, {
@@ -90,25 +80,15 @@ export class AuthController {
 
     const { userId, socialAccessToken, socialRefreshToken, firstLogin } =
       await this.authService.login(code, 'kakao');
-    const accessToken = await this.tokenService.generateAccessToken(userId);
-    const refreshToken = await this.tokenService.generateRefreshToken(userId);
+    const accessToken = this.tokenService.generateAccessToken(userId);
+    const refreshToken = this.tokenService.generateRefreshToken(userId);
 
     await this.tokenService.saveTokens(
       userId,
+      accessToken,
       refreshToken,
       socialAccessToken,
       socialRefreshToken,
-    );
-
-    await this.redisService.setToken(
-      String(userId) + '-accessToken',
-      accessToken,
-      Ttl.accessToken,
-    );
-    await this.redisService.setToken(
-      String(userId) + '-refreshToken',
-      refreshToken,
-      Ttl.refreshToken,
     );
 
     res.cookie('refresh_Token', refreshToken, {
@@ -130,25 +110,15 @@ export class AuthController {
 
     const { userId, socialAccessToken, socialRefreshToken, firstLogin } =
       await this.authService.login(code, 'google');
-    const accessToken = await this.tokenService.generateAccessToken(userId);
-    const refreshToken = await this.tokenService.generateRefreshToken(userId);
+    const accessToken = this.tokenService.generateAccessToken(userId);
+    const refreshToken = this.tokenService.generateRefreshToken(userId);
 
     await this.tokenService.saveTokens(
       userId,
+      accessToken,
       refreshToken,
       socialAccessToken,
       socialRefreshToken,
-    );
-
-    await this.redisService.setToken(
-      String(userId) + '-accessToken',
-      accessToken,
-      Ttl.accessToken,
-    );
-    await this.redisService.setToken(
-      String(userId) + '-refreshToken',
-      refreshToken,
-      Ttl.refreshToken,
     );
 
     res.cookie('refresh_Token', refreshToken, {
@@ -164,14 +134,14 @@ export class AuthController {
   @ApiNewAccessToken()
   @UseGuards(RefreshTokenAuthGuard)
   @Get('new-access-token')
-  async newAccessToken(@GetUserId() userId: number, @Res() res) {
-    const newAccessToken = await this.tokenService.generateAccessToken(userId);
+  async newAccessToken(@GetUserId() userId: number) {
+    const newAccessToken = this.tokenService.generateAccessToken(userId);
     await this.redisService.setToken(
       String(userId) + '-accessToken',
       newAccessToken,
       Ttl.accessToken,
     );
-    return res.json({ accessToken: newAccessToken });
+    return { accessToken: newAccessToken };
   }
 
   @ApiKakaoLogout()
@@ -182,8 +152,6 @@ export class AuthController {
       await this.tokenService.getUserTokens(userId);
 
     await this.tokenService.deleteTokens(userId);
-    await this.redisService.delToken(String(userId) + '-accessToken');
-    await this.redisService.delToken(String(userId) + '-refreshToken');
 
     return await this.authService.kakaoLogout(
       socialAccessToken,
@@ -199,8 +167,6 @@ export class AuthController {
       await this.tokenService.getUserTokens(userId);
 
     await this.tokenService.deleteTokens(userId);
-    await this.redisService.delToken(String(userId) + '-accessToken');
-    await this.redisService.delToken(String(userId) + '-refreshToken');
 
     return await this.authService.kakaoUnlink(
       socialAccessToken,
@@ -212,9 +178,6 @@ export class AuthController {
   @UseGuards(AccessTokenAuthGuard)
   @Post('naver/logout')
   async naverLogout(@GetUserId() userId: number) {
-    await this.redisService.delToken(String(userId) + '-accessToken');
-    await this.redisService.delToken(String(userId) + '-refreshToken');
-
     return await this.tokenService.deleteTokens(userId);
   }
 
@@ -226,8 +189,6 @@ export class AuthController {
       await this.tokenService.getUserTokens(userId);
 
     await this.tokenService.deleteTokens(userId);
-    await this.redisService.delToken(String(userId) + '-accessToken');
-    await this.redisService.delToken(String(userId) + '-refreshToken');
 
     return await this.authService.naverUnlink(
       socialAccessToken,
@@ -239,9 +200,6 @@ export class AuthController {
   @UseGuards(AccessTokenAuthGuard)
   @Post('google/logout')
   async googleLogout(@GetUserId() userId: number) {
-    await this.redisService.delToken(String(userId) + '-accessToken');
-    await this.redisService.delToken(String(userId) + '-refreshToken');
-
     return await this.tokenService.deleteTokens(userId);
   }
 
@@ -252,8 +210,6 @@ export class AuthController {
     const { socialAccessToken } = await this.tokenService.getUserTokens(userId);
 
     await this.tokenService.deleteTokens(userId);
-    await this.redisService.delToken(String(userId) + '-accessToken');
-    await this.redisService.delToken(String(userId) + '-refreshToken');
 
     return await this.authService.googleUnlink(socialAccessToken);
   }
