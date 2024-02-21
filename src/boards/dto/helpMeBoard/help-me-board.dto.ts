@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
 
 export class HelpMeBoardDto
@@ -31,9 +32,12 @@ export class HelpMeBoardDto
 
   @ApiProperty({
     description: '도와주세요 게시판 글 끌어올리기 된 일자',
-    default: null,
+    nullable: true,
   })
   pullingUp: Date | null;
+
+  @Exclude()
+  deletedAt: Date | null;
 
   @ApiProperty({ description: '도와주세요 게시판 글 카테고리 고유 id' })
   categoryId: number;

@@ -7,6 +7,7 @@ import {
   OneToOne,
   Index,
   ManyToMany,
+  DeleteDateColumn,
 } from 'typeorm';
 import { UserImage } from './user-image.entity';
 import { Token } from 'src/auth/entities/token.entity';
@@ -20,6 +21,9 @@ import { TotalCount } from 'src/total-count/entities/total-count.entity';
 import { MentorBoardLike } from 'src/boards/entities/mentor-board-like.entity';
 import { UserRanking } from './user-ranking.entity';
 import { MentorReviewChecklistCount } from 'src/total-count/entities/mentor-review-checklist-count.entity';
+import { Report } from 'src/users/user-reports/entities/user-report.entity';
+import { BannedUser } from 'src/admins/entities/banned-user.entity';
+import { UserStatus } from 'src/users/constants/user-status.enum';
 
 @Entity({
   name: 'user',
@@ -74,6 +78,36 @@ export class User {
   @Column({ length: 20 })
   phone: string;
 
+  @Column('enum', {
+    nullable: false,
+    name: 'status',
+    enum: UserStatus,
+    default: UserStatus.ACTIVE,
+    comment: '유저 상태',
+  })
+  status: UserStatus;
+
+  @Column('datetime', {
+    name: 'created_at',
+    comment: '생성 일자',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
+
+  @Column('timestamp', {
+    name: 'updated_at',
+    comment: '수정 일자',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  updatedAt: Date;
+
+  @DeleteDateColumn({
+    name: 'deleted_at',
+    nullable: true,
+    comment: '삭제 일자',
+  })
+  deletedAt: Date | null;
+
   @OneToMany(() => MentorBoard, (mentorBoard) => mentorBoard.user)
   @JoinColumn({ name: 'mentor_board_id' })
   mentorBoard: MentorBoard;
@@ -101,4 +135,10 @@ export class User {
 
   @OneToMany(() => UserRanking, (userRanking) => userRanking.user)
   userRanking: UserRanking;
+
+  @OneToMany(() => Report, (reports) => reports.user)
+  reports: Report[];
+
+  @OneToOne(() => BannedUser, (bannedUser) => bannedUser.user)
+  bannedUser: BannedUser;
 }

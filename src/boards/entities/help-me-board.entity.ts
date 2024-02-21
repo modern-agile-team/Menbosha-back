@@ -3,6 +3,7 @@ import { HelpMeBoardImage } from './help-me-board-image.entity';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   Index,
   JoinColumn,
@@ -51,6 +52,13 @@ export class HelpMeBoard {
 
   @Column({ name: 'pulling_up', nullable: true, comment: '끌어올리기 된 일자' })
   pullingUp: Date | null;
+
+  @DeleteDateColumn({
+    name: 'deleted_at',
+    nullable: true,
+    comment: '삭제 일자',
+  })
+  deletedAt: Date | null;
 
   @Column({ name: 'category_list_id' })
   categoryId: number;

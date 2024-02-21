@@ -1,6 +1,7 @@
 import { Exclude } from 'class-transformer';
 import { User } from '../entities/user.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { UserStatus } from 'src/users/constants/user-status.enum';
 
 export class UserInfoDto
   implements
@@ -19,6 +20,8 @@ export class UserInfoDto
       | 'mentorBoardLikes'
       | 'userRanking'
       | 'mentorReviewChecklistCount'
+      | 'reports'
+      | 'bannedUser'
     >
 {
   @ApiProperty({
@@ -71,6 +74,24 @@ export class UserInfoDto
   })
   @Exclude()
   provider: string;
+
+  @Exclude()
+  status: UserStatus;
+
+  @ApiProperty({
+    description: '생성 일자',
+    format: 'timestamp',
+  })
+  createdAt: Date;
+
+  @ApiProperty({
+    description: '수정 일자',
+    format: 'timestamp',
+  })
+  updatedAt: Date;
+
+  @Exclude()
+  deletedAt: Date | null;
 
   constructor(userInfo: Partial<UserInfoDto> = {}) {
     Object.assign(this, userInfo);

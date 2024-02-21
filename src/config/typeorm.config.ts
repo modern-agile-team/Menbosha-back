@@ -18,10 +18,8 @@ import { UserRanking } from 'src/users/entities/user-ranking.entity';
 import { TotalCount } from 'src/total-count/entities/total-count.entity';
 import { DataSource } from 'typeorm';
 import { MentorReviewChecklistCount } from 'src/total-count/entities/mentor-review-checklist-count.entity';
-import { MentorBoardSubscriber } from 'src/subscribers/mentor-board.subscriber';
-import { HelpYouCommentSubscriber } from 'src/subscribers/help-you-comment.subscriber';
-import { MentorBoardLikeSubscriber } from 'src/subscribers/mentor-board-like.subscriber';
-import { MentorReviewSubscriber } from 'src/subscribers/mentor-review.subscriber';
+import { Report } from 'src/users/user-reports/entities/user-report.entity';
+import { BannedUser } from 'src/admins/entities/banned-user.entity';
 
 // .env 파일 로드
 dotenv.config();
@@ -51,9 +49,11 @@ export default new DataSource({
     TotalCount,
     MentorBoardLike,
     MentorReviewChecklistCount,
+    Report,
+    BannedUser,
   ], // 여기에 엔티티들을 추가해야 합니다.
   migrationsTableName: 'migrations', // migration 이력을 저장하는 테이블
-  migrations: ['src/migrations/*.ts'], // migration 할 파일들이 있는 directory
+  migrations: ['src/migrations/**/[0-9]*.ts'], // migration 할 파일들이 있는 directory
 });
 
 export const TypeORMconfig: TypeOrmModuleOptions = {
@@ -81,10 +81,10 @@ export const TypeORMconfig: TypeOrmModuleOptions = {
     TotalCount,
     MentorBoardLike,
     MentorReviewChecklistCount,
+    Report,
+    BannedUser,
   ], // 여기에 엔티티들을 추가해야 합니다.
   subscribers: ['dist/**/subscribers/*{.ts,.js}'],
-  migrationsTableName: 'migrations', // migration 이력을 저장하는 테이블
-  migrations: ['src/migrations/*.ts'], // migration 할 파일들이 있는 directory
   timezone: '+00:00',
   synchronize: process.env.NODE_ENV === 'true',
 };
