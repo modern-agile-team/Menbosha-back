@@ -153,10 +153,7 @@ export class AuthController {
 
     await this.tokenService.deleteTokens(userId);
 
-    return await this.authService.kakaoLogout(
-      socialAccessToken,
-      socialRefreshToken,
-    );
+    return this.authService.kakaoLogout(socialAccessToken, socialRefreshToken);
   }
 
   @ApiKakaoUnlink()
@@ -168,17 +165,14 @@ export class AuthController {
 
     await this.tokenService.deleteTokens(userId);
 
-    return await this.authService.kakaoUnlink(
-      socialAccessToken,
-      socialRefreshToken,
-    );
+    return this.authService.kakaoUnlink(socialAccessToken, socialRefreshToken);
   }
 
   @ApiNaverLogout()
   @UseGuards(AccessTokenAuthGuard)
   @Post('naver/logout')
-  async naverLogout(@GetUserId() userId: number) {
-    return await this.tokenService.deleteTokens(userId);
+  naverLogout(@GetUserId() userId: number) {
+    return this.tokenService.deleteTokens(userId);
   }
 
   @ApiNaverUnlink()
@@ -190,17 +184,14 @@ export class AuthController {
 
     await this.tokenService.deleteTokens(userId);
 
-    return await this.authService.naverUnlink(
-      socialAccessToken,
-      socialRefreshToken,
-    );
+    return this.authService.naverUnlink(socialAccessToken, socialRefreshToken);
   }
 
   @ApiGoogleLogout()
   @UseGuards(AccessTokenAuthGuard)
   @Post('google/logout')
-  async googleLogout(@GetUserId() userId: number) {
-    return await this.tokenService.deleteTokens(userId);
+  googleLogout(@GetUserId() userId: number) {
+    return this.tokenService.deleteTokens(userId);
   }
 
   @ApiGoogleUnlink()
@@ -211,7 +202,7 @@ export class AuthController {
 
     await this.tokenService.deleteTokens(userId);
 
-    return await this.authService.googleUnlink(socialAccessToken);
+    return this.authService.googleUnlink(socialAccessToken);
   }
 
   @ApiDeleteAccount()
@@ -219,6 +210,6 @@ export class AuthController {
   @Delete('account')
   async accountDelete(@GetUserId() userId: number) {
     await this.s3Service.deleteImagesWithPrefix(userId + '_');
-    return await this.authService.accountDelete(userId);
+    return this.authService.accountDelete(userId);
   }
 }
