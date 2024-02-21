@@ -17,7 +17,6 @@ export class UserService {
     private readonly userImageRepository: UserImageRepository,
     private readonly userBadgeRepository: UserBadgeRepository,
     private readonly userIntroRepository: UserIntroRepository,
-    private readonly entityManager: EntityManager,
   ) {}
 
   findAll(options: FindManyOptions<User>) {
@@ -103,12 +102,12 @@ export class UserService {
     };
   }
 
-  async updateUserName(userId: number, nickname: string) {
-    return await this.userRepository.updateUserName(userId, nickname);
+  updateUserName(userId: number, nickname: string) {
+    return this.userRepository.updateUserName(userId, nickname);
   }
 
-  async deleteUser(userId: number) {
-    return await this.userRepository.deleteUser(userId);
+  deleteUser(userId: number) {
+    return this.userRepository.deleteUser(userId);
   }
 
   async countPageMentors(categoryId: number) {

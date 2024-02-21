@@ -209,7 +209,7 @@ export class AuthController {
   @UseGuards(AccessTokenAuthGuard)
   @Delete('account')
   async accountDelete(@GetUserId() userId: number) {
-    await this.s3Service.deleteImagesWithPrefix(userId + '_');
+    await this.s3Service.deleteImagesWithPrefix(`${userId}_`);
     return this.authService.accountDelete(userId);
   }
 }

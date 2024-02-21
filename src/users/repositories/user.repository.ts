@@ -36,20 +36,20 @@ export class UserRepository {
     ).rank;
   }
 
-  async findUser(email: string, provider: string): Promise<User | undefined> {
+  findUser(email: string, provider: string): Promise<User | undefined> {
     return this.entityManager.findOne(User, { where: { email, provider } });
   }
 
-  async createUser(entityManager: EntityManager, userInfo: any): Promise<User> {
-    const user = new User();
-    user.provider = userInfo.provider;
-    user.name = userInfo.nickname;
-    user.email = userInfo.email;
-    user.hopeCategoryId = 1;
-    user.activityCategoryId = 1;
-    user.isMentor = false;
-
-    return entityManager.save(user);
+  createUser(entityManager: EntityManager, userInfo: any): Promise<User> {
+    const { provider, nickname: name, email } = userInfo;
+    return entityManager.save(User, {
+      provider,
+      name,
+      email,
+      hopeCategoryId: 1,
+      activityCategoryId: 1,
+      isMentor: false,
+    });
   }
 
   async updateUserName(userId: number, name: string): Promise<User> {
@@ -68,17 +68,17 @@ export class UserRepository {
 
   async deleteUser(userId: number): Promise<DeleteResult | undefined> {
     await this.entityManager.findOne(User, { where: { id: userId } });
-    return await this.entityManager.delete(User, { id: userId });
+    return this.entityManager.delete(User, { id: userId });
   }
 
-  async findCategoryIdByIsMentors(categoryId: number): Promise<number> {
-    return await this.entityManager.count(User, {
+  findCategoryIdByIsMentors(categoryId: number): Promise<number> {
+    return this.entityManager.count(User, {
       where: { isMentor: true, activityCategoryId: categoryId },
     });
   }
 
-  async findIsMentors(): Promise<number> {
-    return await this.entityManager.count(User, {
+  findIsMentors(): Promise<number> {
+    return this.entityManager.count(User, {
       where: { isMentor: true },
     });
   }
