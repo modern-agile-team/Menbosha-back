@@ -22,11 +22,7 @@ export class Report {
   @Column('enum', {
     name: 'type',
     comment: '신고 타입',
-    enum: [
-      UserReportType.HateSpeech,
-      UserReportType.IllegalPost,
-      UserReportType.PromotionalPost,
-    ],
+    enum: UserReportType,
   })
   type: UserReportType;
 
