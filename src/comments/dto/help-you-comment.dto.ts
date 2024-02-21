@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { HelpYouComment } from '../entities/help-you-comment.entity';
+import { Exclude } from 'class-transformer';
 
 export class HelpYouCommentDto
   implements Omit<HelpYouComment, 'user' | 'helpMeBoard' | 'content'>
@@ -27,6 +28,10 @@ export class HelpYouCommentDto
 
   @ApiProperty({
     description: '생성일자',
+    format: 'timestamp',
   })
   createdAt: Date;
+
+  @Exclude()
+  deletedAt: Date | null;
 }
