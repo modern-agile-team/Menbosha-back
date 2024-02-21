@@ -331,7 +331,9 @@ export class AuthService implements AuthServiceInterface {
   }
 
   async accountDelete(userId: number) {
-    const deleteUser = await this.userService.deleteUser(userId);
+    const deleteUser = await this.userService.updateUser(userId, {
+      deletedAt: new Date(),
+    });
     if (!deleteUser) {
       throw new HttpException(
         '사용자를 찾을 수 없습니다.',

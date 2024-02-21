@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import {
-  DeleteResult,
   EntityManager,
   FindManyOptions,
   FindOneOptions,
+  UpdateResult,
 } from 'typeorm';
 import { User } from '../entities/user.entity';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 @Injectable()
 export class UserRepository {
@@ -66,9 +67,11 @@ export class UserRepository {
     return this.entityManager.save(user);
   }
 
-  async deleteUser(userId: number): Promise<DeleteResult | undefined> {
-    await this.entityManager.findOne(User, { where: { id: userId } });
-    return this.entityManager.delete(User, { id: userId });
+  updateUser(
+    userId: number,
+    partialEntity: QueryDeepPartialEntity<User>,
+  ): Promise<UpdateResult> {
+    return this.entityManager.update(User, { id: userId }, partialEntity);
   }
 
   findCategoryIdByIsMentors(categoryId: number): Promise<number> {
@@ -80,12 +83,6 @@ export class UserRepository {
   findIsMentors(): Promise<number> {
     return this.entityManager.count(User, {
       where: { isMentor: true },
-    });
-  }
-
-  async findOneUser(userId: number): Promise<User> {
-    return await this.entityManager.findOne(User, {
-      where: { id: userId },
     });
   }
 

@@ -9,6 +9,7 @@ import { UserBadgeResponseDTO } from '../dtos/get-user-badge.dto';
 import { plainToInstance } from 'class-transformer';
 import { MyProfileResponseDTO } from '../dtos/get-my-profile.dto';
 import { MyIntroDto } from '../dtos/get-my-intro.dto';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 @Injectable()
 export class UserService {
@@ -106,8 +107,8 @@ export class UserService {
     return this.userRepository.updateUserName(userId, nickname);
   }
 
-  deleteUser(userId: number) {
-    return this.userRepository.deleteUser(userId);
+  updateUser(userId: number, partialEntity: QueryDeepPartialEntity<User>) {
+    return this.userRepository.updateUser(userId, partialEntity);
   }
 
   async countPageMentors(categoryId: number) {
