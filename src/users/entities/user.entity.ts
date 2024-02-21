@@ -136,8 +136,11 @@ export class User {
   @OneToMany(() => UserRanking, (userRanking) => userRanking.user)
   userRanking: UserRanking;
 
-  @OneToMany(() => Report, (reports) => reports.user)
+  @OneToMany(() => Report, (reports) => reports.reportUser)
   reports: Report[];
+
+  @OneToMany(() => Report, (reports) => reports.reportedUser)
+  reported: Report[];
 
   @OneToOne(() => BannedUser, (bannedUser) => bannedUser.user)
   bannedUser: BannedUser;
