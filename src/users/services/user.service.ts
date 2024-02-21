@@ -37,8 +37,8 @@ export class UserService {
     return existUser;
   }
 
-  async createUser(entityManager: EntityManager, userInfo: any) {
-    return await this.userRepository.createUser(entityManager, userInfo);
+  createUser(entityManager: EntityManager, userInfo: any) {
+    return this.userRepository.createUser(entityManager, userInfo);
   }
 
   async getMyProfile(userId: number) {
