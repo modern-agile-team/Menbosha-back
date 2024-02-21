@@ -3,7 +3,7 @@ import {
   generateDeletedAtColumn,
   generatePrimaryColumn,
 } from 'src/migrations/__utils/util';
-import { UserReportType } from 'src/users/user-reports/constants/user-report-type.enum';
+import { UserReportType } from 'src/reports/constants/report-type.enum';
 import { MigrationInterface, QueryRunner, Table, TableColumn } from 'typeorm';
 
 export class CreateReportTable1708424573050 implements MigrationInterface {
