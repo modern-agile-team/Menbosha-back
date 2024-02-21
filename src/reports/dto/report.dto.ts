@@ -13,14 +13,14 @@ export class ReportDto implements Omit<Report, 'reportUser' | 'reportedUser'> {
   id: number;
 
   @ApiProperty({
-    description: '신고 고유 ID',
+    description: '신고한 유저 고유 ID',
     format: 'integer',
     minimum: 1,
   })
   reportUserId: number;
 
   @ApiProperty({
-    description: '신고 고유 ID',
+    description: '신고 당한 유저 고유 ID',
     format: 'integer',
     minimum: 1,
   })
