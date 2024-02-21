@@ -26,7 +26,7 @@ export class Report {
   })
   type: UserReportType;
 
-  @Column('varchar', { name: 'reason', comment: '신고 상세 사유', length: 200 })
+  @Column('varchar', { name: 'reason', comment: '신고 상세 사유', length: 255 })
   reason: string;
 
   @Column('timestamp', {
@@ -44,16 +44,30 @@ export class Report {
   deletedAt: Date | null;
 
   @Column('int', {
-    name: 'user_id',
+    name: 'report_user_id',
     nullable: false,
-    comment: '유저 고유 ID',
+    comment: '신고한 유저 고유 ID',
   })
-  userId: number;
+  reportUserId: number;
 
   @ManyToOne(() => User, (user) => user.reports, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
-  @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
-  user: User;
+  @JoinColumn([{ name: 'report_user_id', referencedColumnName: 'id' }])
+  reportUser: User;
+
+  @Column('int', {
+    name: 'reported_user_id',
+    nullable: false,
+    comment: '신고 당한 유저 고유 ID',
+  })
+  reportedUserId: number;
+
+  @ManyToOne(() => User, (user) => user.reported, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn([{ name: 'reported_user_id', referencedColumnName: 'id' }])
+  reportedUser: User;
 }
