@@ -34,6 +34,9 @@ export class MentorBoardDto
   @Exclude()
   popularAt: Date | null;
 
+  @Exclude()
+  deletedAt: Date | null;
+
   @ApiProperty({ description: '멘토 게시판 글 카테고리 고유 id' })
   categoryId: number;
 
