@@ -18,7 +18,7 @@ import { UserRanking } from 'src/users/entities/user-ranking.entity';
 import { TotalCount } from 'src/total-count/entities/total-count.entity';
 import { DataSource } from 'typeorm';
 import { MentorReviewChecklistCount } from 'src/total-count/entities/mentor-review-checklist-count.entity';
-import { Report } from 'src/users/user-reports/entities/user-report.entity';
+import { Report } from 'src/reports/entities/report.entity';
 import { BannedUser } from 'src/admins/entities/banned-user.entity';
 
 // .env 파일 로드

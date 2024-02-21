@@ -1,5 +1,5 @@
 import { User } from 'src/users/entities/user.entity';
-import { UserReportType } from 'src/users/user-reports/constants/user-report-type.enum';
+import { UserReportType } from 'src/reports/constants/report-type.enum';
 import {
   Column,
   DeleteDateColumn,
