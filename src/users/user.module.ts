@@ -16,12 +16,14 @@ import { UserRankingService } from './services/user-ranking.service';
 import { UserRankingRepository } from './repositories/user-ranking.repository';
 import { TotalCountModule } from 'src/total-count/total-count.module';
 import { UserBadgeService } from './services/user-badge.service';
+import { UserReportsModule } from './user-reports/user-reports.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
     forwardRef(() => AuthModule),
     TotalCountModule,
+    UserReportsModule,
   ],
   controllers: [UserController, UserImageController],
   providers: [

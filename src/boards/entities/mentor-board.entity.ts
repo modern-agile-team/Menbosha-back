@@ -2,6 +2,7 @@ import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   Index,
   JoinColumn,
@@ -56,6 +57,13 @@ export class MentorBoard {
     comment: '인기 게시글 선정 일자',
   })
   popularAt: Date | null;
+
+  @DeleteDateColumn({
+    name: 'deleted_at',
+    nullable: true,
+    comment: '삭제 일자',
+  })
+  deletedAt: Date | null;
 
   @Column({ name: 'category_list_id' })
   categoryId: number;
