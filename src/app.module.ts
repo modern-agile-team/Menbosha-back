@@ -20,6 +20,7 @@ import { CategoryModule } from './category/category.module';
 import { BoardsModule } from './boards/boards.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { MentorsModule } from './mentors/mentors.module';
+import { AdminsModule } from 'src/admins/admins.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { MentorsModule } from './mentors/mentors.module';
     ExceptionsModule,
     CategoryModule,
     MentorsModule,
+    AdminsModule,
   ], //
   providers: [UserImageService, UserImageRepository, S3Service],
 })
