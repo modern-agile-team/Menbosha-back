@@ -2,6 +2,7 @@ import { User } from 'src/users/entities/user.entity';
 import { UserReportType } from 'src/users/user-reports/constants/user-report-type.enum';
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -39,7 +40,7 @@ export class Report {
   })
   createdAt: Date;
 
-  @Column('timestamp', {
+  @DeleteDateColumn({
     name: 'deleted_at',
     nullable: true,
     comment: '삭제 일자',
