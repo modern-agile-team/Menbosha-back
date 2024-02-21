@@ -103,8 +103,8 @@ export class UserService {
     };
   }
 
-  updateUserName(userId: number, nickname: string) {
-    return this.userRepository.updateUserName(userId, nickname);
+  updateUserName(userId: number, partialEntity: QueryDeepPartialEntity<User>) {
+    return this.userRepository.updateUser(userId, partialEntity);
   }
 
   updateUser(userId: number, partialEntity: QueryDeepPartialEntity<User>) {
