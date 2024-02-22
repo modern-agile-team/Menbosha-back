@@ -68,13 +68,13 @@ export class UserRepository {
     return this.entityManager.delete(User, { id: userId });
   }
 
-  findCategoryIdByIsMentors(categoryId: number): Promise<number> {
+  countMentorsInCategory(categoryId: number): Promise<number> {
     return this.entityManager.count(User, {
       where: { isMentor: true, activityCategoryId: categoryId },
     });
   }
 
-  findIsMentors(): Promise<number> {
+  countMentors(): Promise<number> {
     return this.entityManager.count(User, {
       where: { isMentor: true },
     });
