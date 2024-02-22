@@ -68,7 +68,7 @@ export class EventsGateway
       if (!chatRoom) {
         throw new SocketException(
           'NotFound',
-          '해당 채팅방은 존재하지 않습니다.',
+          '해당 채팅방이 존재하지 않습니다.',
         );
       }
 
