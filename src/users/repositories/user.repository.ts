@@ -36,7 +36,7 @@ export class UserRepository {
     ).rank;
   }
 
-  findUser(email: string, provider: string): Promise<User | undefined> {
+  findUser(email: string, provider: string): Promise<User | null> {
     return this.entityManager.findOne(User, { where: { email, provider } });
   }
 
