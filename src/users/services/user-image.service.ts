@@ -15,23 +15,20 @@ export class UserImageService {
     private readonly userImageRepository: UserImageRepository,
   ) {}
 
-  async findUserImage(userId: number): Promise<UserImage> {
-    return await this.userImageRepository.findUserImage(userId);
+  findUserImage(userId: number): Promise<UserImage> {
+    return this.userImageRepository.findUserImage(userId);
   }
 
-  async updateUserImageByUrl(userId: number, profileImage: string) {
-    return await this.userImageRepository.updateUserImageByUrl(
-      userId,
-      profileImage,
-    );
+  updateUserImageByUrl(userId: number, profileImage: string) {
+    return this.userImageRepository.updateUserImageByUrl(userId, profileImage);
   }
 
-  async uploadUserImageWithEntityManager(
+  uploadUserImageWithEntityManager(
     entityManager: EntityManager,
     userId: number,
     imageUrl: string,
   ) {
-    return await this.userImageRepository.uploadUserImageWithEntityManager(
+    return this.userImageRepository.uploadUserImageWithEntityManager(
       entityManager,
       userId,
       imageUrl,
