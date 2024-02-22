@@ -51,12 +51,6 @@ export class UserRepository {
     });
   }
 
-  async updateUserName(userId: number, name: string): Promise<User> {
-    const user = await this.entityManager.findOne(User, {
-      where: { id: userId },
-    });
-  }
-
   updateUser(
     userId: number,
     partialEntity: QueryDeepPartialEntity<User>,

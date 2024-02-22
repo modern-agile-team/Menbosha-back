@@ -12,7 +12,6 @@ import { MyIntroDto } from '../dtos/get-my-intro.dto';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { Provider } from 'src/auth/enums/provider.enum';
 
-
 @Injectable()
 export class UserService {
   constructor(
@@ -103,10 +102,6 @@ export class UserService {
       userImage,
       owner: userId === targetId,
     };
-  }
-
-  updateUserName(userId: number, partialEntity: QueryDeepPartialEntity<User>) {
-    return this.userRepository.updateUser(userId, partialEntity);
   }
 
   updateUser(userId: number, partialEntity: QueryDeepPartialEntity<User>) {

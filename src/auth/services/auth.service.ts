@@ -141,7 +141,7 @@ export class AuthService implements AuthServiceInterface {
       if (user) {
         const userId = user.id;
 
-        await this.userService.updateUserName(userId, name);
+        await this.userService.updateUser(userId, name);
 
         const userImageUrl = (await this.userImageService.findUserImage(userId))
           .imageUrl;
