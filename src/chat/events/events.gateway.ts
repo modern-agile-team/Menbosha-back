@@ -18,7 +18,7 @@ import { WebSocketExceptionFilter } from '../exceptions/filters/websocket-except
 import mongoose from 'mongoose';
 import { SocketException } from '../exceptions/socket.exception';
 
-@WebSocketGateway({ namespace: 'chat', cors: true })
+@WebSocketGateway({ cors: true })
 @UseFilters(WebSocketExceptionFilter)
 @UsePipes(ValidationPipe)
 export class EventsGateway
@@ -110,8 +110,8 @@ export class EventsGateway
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  afterInit(server: Server): any {
-    console.log('websocketserver init');
+  afterInit(_server: Server): any {
+    console.log('websocket server init');
   }
 
   handleConnection(@ConnectedSocket() socket: Socket): any {
