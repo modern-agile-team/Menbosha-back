@@ -15,7 +15,7 @@ export class ReportsService {
     createReportBodyDto: CreateReportBodyDto,
     reportUserId: number,
     reportedUserId: number,
-  ) {
+  ): Promise<ReportDto> {
     const user = await this.userService.findOneByOrNotFound({
       where: {
         id: reportedUserId,

@@ -15,6 +15,7 @@ import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
 import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
 import { CreateReportBodyDto } from 'src/reports/dto/create-report-body.dto';
+import { ReportDto } from 'src/reports/dto/report.dto';
 import { ReportsService } from 'src/reports/services/reports.service';
 import { ApiCreateReportDecorator } from 'src/reports/swagger-decorators/create-report.decorator';
 
@@ -38,7 +39,7 @@ export class ReportsController {
     @Body() createReportBodyDto: CreateReportBodyDto,
     @Param('userId', ParsePositiveIntPipe) userId: number,
     @GetUserId() myId: number,
-  ) {
+  ): Promise<ReportDto> {
     return this.reportsService.create(createReportBodyDto, myId, userId);
   }
 }

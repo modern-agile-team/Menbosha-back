@@ -11,7 +11,7 @@ export class ReportRepository {
     createReportBodyDto: CreateReportBodyDto,
     reportUserId: number,
     reportedUserId: number,
-  ) {
+  ): Promise<Report> {
     return this.entityManager
       .getRepository(Report)
       .save({ ...createReportBodyDto, reportUserId, reportedUserId });
