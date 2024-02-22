@@ -286,7 +286,7 @@ export class AuthService implements AuthServiceInterface {
     provider: Provider,
     accessToken: string,
     refreshToken?: string,
-  ): Promise<any> {
+  ): Promise<object> {
     try {
       let checkValidAccessToken: number,
         unlinkUrl: string,
