@@ -27,11 +27,6 @@ export class EventsGateway
   constructor(private readonly chatService: ChatService) {}
   @WebSocketServer() private readonly server: Server;
 
-  @SubscribeMessage('test')
-  handleTest(@MessageBody() data: string) {
-    console.log('test', data);
-  }
-
   @AsyncApiSub({
     description: `
     socket.join
@@ -116,12 +111,6 @@ export class EventsGateway
 
   handleConnection(@ConnectedSocket() socket: Socket): any {
     console.log('connected', socket.nsp.name);
-    socket.emit('hello', socket.nsp.name);
-    socket.on('connection-error', (err) => {
-      console.log(err.message);
-      console.log(err.description);
-      console.log(err.context);
-    });
   }
 
   handleDisconnect(@ConnectedSocket() socket: Socket): any {
