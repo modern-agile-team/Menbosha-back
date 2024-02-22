@@ -110,7 +110,6 @@ export class AuthService implements AuthServiceInterface {
 
       const socialUserInfo = (await axios.get(userInfoUrl, userInfoHeader))
         .data;
-      console.log(socialUserInfo);
 
       const nickname =
         provider === 'naver'
