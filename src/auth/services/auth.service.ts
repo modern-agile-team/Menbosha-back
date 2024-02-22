@@ -162,69 +162,86 @@ export class AuthService implements AuthServiceInterface {
             profileImage,
           ); // DB에 이미지 URL 업데이트
         }
-
-        return {
+        const accessToken = this.tokenService.generateAccessToken(userId);
+        const refreshToken = this.tokenService.generateRefreshToken(userId);
+        await this.tokenService.saveTokens(
           userId,
+          accessToken,
+          refreshToken,
           socialAccessToken,
           socialRefreshToken,
+        );
+
+        return {
+          accessToken,
+          refreshToken,
           firstLogin: false,
         };
-      } else {
-        // 존재하지 않는 사용자인 경우
-        const queryRunner = this.dataSource.createQueryRunner();
-        await queryRunner.connect();
-        await queryRunner.startTransaction();
+      }
 
-        try {
-          const entityManager = queryRunner.manager;
+      // 존재하지 않는 사용자인 경우
+      const queryRunner = this.dataSource.createQueryRunner();
+      await queryRunner.connect();
+      await queryRunner.startTransaction();
 
-          const newUser = await this.userService.createUser(
-            entityManager,
-            userInfo,
-          );
-          const userId = newUser.id;
-          if (!profileImage) {
-            await this.userImageService.uploadUserImageWithEntityManager(
-              entityManager,
-              userId,
-              process.env.DEFAULT_USER_IMAGE,
-            );
-          } else {
-            await this.userImageService.uploadUserImageWithEntityManager(
-              entityManager,
-              userId,
-              profileImage,
-            );
-          }
-          await this.totalCountService.createTotalCount(entityManager, userId);
-          await this.totalCountService.createMentorReviewChecklistCount(
+      try {
+        const entityManager = queryRunner.manager;
+
+        const newUser = await this.userService.createUser(
+          entityManager,
+          userInfo,
+        );
+        const userId = newUser.id;
+        if (!profileImage) {
+          await this.userImageService.uploadUserImageWithEntityManager(
             entityManager,
             userId,
+            process.env.DEFAULT_USER_IMAGE,
           );
-
-          await queryRunner.commitTransaction();
-
-          return {
+        } else {
+          await this.userImageService.uploadUserImageWithEntityManager(
+            entityManager,
             userId,
-            socialAccessToken,
-            socialRefreshToken,
-            firstLogin: true,
-          };
-        } catch (error) {
-          if (queryRunner.isTransactionActive) {
-            await queryRunner.rollbackTransaction();
-          }
-
-          console.error(error);
-
-          throw new HttpException(
-            '사용자 생성 중 오류가 발생했습니다.',
-            HttpStatus.INTERNAL_SERVER_ERROR,
+            profileImage,
           );
-        } finally {
-          if (!queryRunner.isReleased) {
-            await queryRunner.release();
-          }
+        }
+        await this.totalCountService.createTotalCount(entityManager, userId);
+        await this.totalCountService.createMentorReviewChecklistCount(
+          entityManager,
+          userId,
+        );
+
+        await queryRunner.commitTransaction();
+
+        const accessToken = this.tokenService.generateAccessToken(userId);
+        const refreshToken = this.tokenService.generateRefreshToken(userId);
+        await this.tokenService.saveTokens(
+          userId,
+          accessToken,
+          refreshToken,
+          socialAccessToken,
+          socialRefreshToken,
+        );
+
+        return {
+          accessToken,
+          refreshToken,
+          firstLogin: true,
+        };
+      } catch (error) {
+        if (queryRunner.isTransactionActive) {
+          await queryRunner.rollbackTransaction();
+        }
+
+        console.error(error);
+
+        throw new HttpException(
+          '사용자 생성 중 오류가 발생했습니다.',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      } finally {
+        if (!queryRunner.isReleased) {
+          await queryRunner.release();
         }
       }
     } catch (error) {

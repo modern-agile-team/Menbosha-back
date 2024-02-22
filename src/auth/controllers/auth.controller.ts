@@ -48,18 +48,8 @@ export class AuthController {
       throw new BadRequestException('인가코드가 없습니다.');
     }
 
-    const { userId, socialAccessToken, socialRefreshToken, firstLogin } =
+    const { accessToken, refreshToken, firstLogin } =
       await this.authService.login(code, 'naver');
-    const accessToken = this.tokenService.generateAccessToken(userId);
-    const refreshToken = this.tokenService.generateRefreshToken(userId);
-
-    await this.tokenService.saveTokens(
-      userId,
-      accessToken,
-      refreshToken,
-      socialAccessToken,
-      socialRefreshToken,
-    );
 
     res.cookie('refresh_token', refreshToken, {
       httpOnly: true,
@@ -78,18 +68,8 @@ export class AuthController {
       throw new BadRequestException('인가코드가 없습니다.');
     }
 
-    const { userId, socialAccessToken, socialRefreshToken, firstLogin } =
+    const { accessToken, refreshToken, firstLogin } =
       await this.authService.login(code, 'kakao');
-    const accessToken = this.tokenService.generateAccessToken(userId);
-    const refreshToken = this.tokenService.generateRefreshToken(userId);
-
-    await this.tokenService.saveTokens(
-      userId,
-      accessToken,
-      refreshToken,
-      socialAccessToken,
-      socialRefreshToken,
-    );
 
     res.cookie('refresh_Token', refreshToken, {
       httpOnly: true,
@@ -108,18 +88,8 @@ export class AuthController {
       throw new BadRequestException('인가코드가 없습니다.');
     }
 
-    const { userId, socialAccessToken, socialRefreshToken, firstLogin } =
+    const { accessToken, refreshToken, firstLogin } =
       await this.authService.login(code, 'google');
-    const accessToken = this.tokenService.generateAccessToken(userId);
-    const refreshToken = this.tokenService.generateRefreshToken(userId);
-
-    await this.tokenService.saveTokens(
-      userId,
-      accessToken,
-      refreshToken,
-      socialAccessToken,
-      socialRefreshToken,
-    );
 
     res.cookie('refresh_Token', refreshToken, {
       httpOnly: true,
