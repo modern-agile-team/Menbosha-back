@@ -18,7 +18,7 @@ import { WebSocketExceptionFilter } from '../exceptions/filters/websocket-except
 import mongoose from 'mongoose';
 import { SocketException } from '../exceptions/socket.exception';
 
-@WebSocketGateway({ namespace: 'chat', cors: true })
+@WebSocketGateway({ cors: true })
 @UseFilters(WebSocketExceptionFilter)
 @UsePipes(ValidationPipe)
 export class EventsGateway
