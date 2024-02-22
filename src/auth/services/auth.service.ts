@@ -142,10 +142,10 @@ export class AuthService implements AuthServiceInterface {
         email,
       };
 
-      const findUser = await this.userService.findUser(email, provider);
+      const user = await this.userService.findUser(email, provider);
 
-      if (findUser) {
-        const userId = findUser.id;
+      if (user) {
+        const userId = user.id;
 
         await this.userService.updateUserName(userId, nickname);
 
