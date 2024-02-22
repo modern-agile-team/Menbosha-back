@@ -24,8 +24,8 @@ import { SocketException } from '../exceptions/socket.exception';
 export class EventsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  constructor(private chatService: ChatService) {}
-  @WebSocketServer() public server: Server;
+  constructor(private readonly chatService: ChatService) {}
+  @WebSocketServer() private readonly server: Server;
 
   @SubscribeMessage('test')
   handleTest(@MessageBody() data: string) {
@@ -74,12 +74,8 @@ export class EventsGateway
 
       const stringChatRoomId = String(chatRoom._id);
 
-      await socket.join(stringChatRoomId);
+      socket.join(stringChatRoomId);
       console.log('join', socket.nsp.name, stringChatRoomId);
-
-      socket
-        .to(stringChatRoomId)
-        .emit('join', `join ${socket.nsp.name} ${stringChatRoomId}`);
     }
   }
 
@@ -106,10 +102,11 @@ export class EventsGateway
   @SubscribeMessage('message')
   async handleMessage(
     @MessageBody() postChatDto: PostChatDto,
-    @ConnectedSocket() socket: Socket,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @ConnectedSocket() _socket: Socket,
   ) {
     const returnedChat = await this.chatService.createChat(postChatDto);
-    socket.to(postChatDto.roomId.toString()).emit('message', returnedChat);
+    this.server.to(postChatDto.roomId.toString()).emit('message', returnedChat);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
