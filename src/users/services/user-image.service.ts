@@ -1,7 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { S3Service } from 'src/common/s3/s3.service';
 import { UserImageRepository } from '../repositories/user-image.repository';
-import { InternalServerErrorException } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 import { EntityManager } from 'typeorm';
 import { UserImage } from '../entities/user-image.entity';

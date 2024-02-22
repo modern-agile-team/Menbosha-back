@@ -112,30 +112,23 @@ export class AuthService implements AuthServiceInterface {
       const socialUserInfo = (await axios.get(userInfoUrl, userInfoHeader))
         .data;
 
-      const name =
-        provider === Provider.Naver
-          ? socialUserInfo.response.nickname // 네이버 닉네임
-          : provider === Provider.Kakao
-            ? socialUserInfo.kakao_account.profile.nickname // 카카오 닉네임
-            : provider === Provider.Google
-              ? socialUserInfo.name // Google 닉네임
-              : null;
-      const email =
-        provider === Provider.Naver
-          ? socialUserInfo.response.email // 네이버 이메일
-          : provider === Provider.Kakao
-            ? socialUserInfo.kakao_account.email // 카카오 이메일
-            : provider === Provider.Google
-              ? socialUserInfo.email // Google 이메일
-              : null;
-      const profileImage =
-        provider === Provider.Naver
-          ? socialUserInfo.response.profile_image // 네이버 프로필 이미지
-          : provider === Provider.Kakao
-            ? socialUserInfo.kakao_account.profile.profile_image_url // 카카오 프로필 이미지
-            : provider === Provider.Google
-              ? socialUserInfo.picture // Google 프로필 이미지
-              : null;
+      let name = null;
+      let email = null;
+      let profileImage = null;
+
+      if (provider === Provider.Naver) {
+        name = socialUserInfo.response.nickname; // 네이버 닉네임
+        email = socialUserInfo.response.email; // 네이버 이메일
+        profileImage = socialUserInfo.response.profile_image; // 네이버 프로필 이미지
+      } else if (provider === Provider.Kakao) {
+        name = socialUserInfo.kakao_account.profile.nickname; // 카카오 닉네임
+        email = socialUserInfo.kakao_account.email; // 카카오 이메일
+        profileImage = socialUserInfo.kakao_account.profile.profile_image_url; // 카카오 프로필 이미지
+      } else if (provider === Provider.Google) {
+        name = socialUserInfo.name; // Google 닉네임
+        email = socialUserInfo.email; // Google 이메일
+        profileImage = socialUserInfo.picture; // Google 프로필 이미지
+      }
 
       const userInfo: UserInfo = {
         provider,
