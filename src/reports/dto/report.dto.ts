@@ -47,4 +47,8 @@ export class ReportDto implements Omit<Report, 'reportUser' | 'reportedUser'> {
 
   @Exclude()
   deletedAt: Date | null;
+
+  constructor(reportDto: ReportDto) {
+    Object.assign(this, reportDto);
+  }
 }
