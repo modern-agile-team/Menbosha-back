@@ -137,7 +137,7 @@ export class AuthService implements AuthServiceInterface {
               ? socialUserInfo.picture // Google 프로필 이미지
               : null;
 
-      const userInfo = {
+      const userInfo: UserInfo = {
         provider,
         name,
         email,

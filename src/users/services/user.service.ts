@@ -38,7 +38,7 @@ export class UserService {
     return existUser;
   }
 
-  createUser(entityManager: EntityManager, userInfo: any) {
+  createUser(entityManager: EntityManager, userInfo: UserInfo) {
     return this.userRepository.createUser(entityManager, userInfo);
   }
 

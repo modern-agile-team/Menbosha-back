@@ -41,7 +41,7 @@ export class UserRepository {
     return this.entityManager.findOne(User, { where: { email, provider } });
   }
 
-  createUser(entityManager: EntityManager, userInfo: any): Promise<User> {
+  createUser(entityManager: EntityManager, userInfo: UserInfo): Promise<User> {
     return entityManager.save(User, {
       ...userInfo,
       hopeCategoryId: 1,
