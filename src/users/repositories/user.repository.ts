@@ -64,8 +64,7 @@ export class UserRepository {
     return this.entityManager.save(user);
   }
 
-  async deleteUser(userId: number): Promise<DeleteResult | undefined> {
-    await this.entityManager.findOne(User, { where: { id: userId } });
+  deleteUser(userId: number): Promise<DeleteResult> {
     return this.entityManager.delete(User, { id: userId });
   }
 
