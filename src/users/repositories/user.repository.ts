@@ -6,6 +6,7 @@ import {
   FindOneOptions,
 } from 'typeorm';
 import { User } from '../entities/user.entity';
+import { Provider } from 'src/auth/enums/provider.enum';
 
 @Injectable()
 export class UserRepository {
@@ -36,7 +37,7 @@ export class UserRepository {
     ).rank;
   }
 
-  findUser(email: string, provider: string): Promise<User | null> {
+  findUser(email: string, provider: Provider): Promise<User | null> {
     return this.entityManager.findOne(User, { where: { email, provider } });
   }
 

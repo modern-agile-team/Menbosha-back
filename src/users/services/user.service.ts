@@ -9,6 +9,7 @@ import { UserBadgeResponseDTO } from '../dtos/get-user-badge.dto';
 import { plainToInstance } from 'class-transformer';
 import { MyProfileResponseDTO } from '../dtos/get-my-profile.dto';
 import { MyIntroDto } from '../dtos/get-my-intro.dto';
+import { Provider } from 'src/auth/enums/provider.enum';
 
 @Injectable()
 export class UserService {
@@ -23,7 +24,7 @@ export class UserService {
     return this.userRepository.findAll(options);
   }
 
-  findUser(email: string, provider: string) {
+  findUser(email: string, provider: Provider) {
     return this.userRepository.findUser(email, provider);
   }
 
