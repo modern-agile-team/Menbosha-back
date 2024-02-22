@@ -21,6 +21,7 @@ import { BoardsModule } from './boards/boards.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { MentorsModule } from './mentors/mentors.module';
 import { AdminsModule } from 'src/admins/admins.module';
+import { ReportsModule } from 'src/reports/reports.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { AdminsModule } from 'src/admins/admins.module';
     CategoryModule,
     MentorsModule,
     AdminsModule,
+    ReportsModule,
   ], //
   providers: [UserImageService, UserImageRepository, S3Service],
 })
