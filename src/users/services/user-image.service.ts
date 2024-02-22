@@ -48,16 +48,15 @@ export class UserImageService {
       }
 
       const imageUrl = res.url; // S3에 업로드된 이미지 URL
-      const checkUserImage = (
-        await this.userImageRepository.findUserImage(userId)
-      ).imageUrl; // DB에 이미지가 있는지 확인
-      const imageUrlParts = checkUserImage.split('/');
+      const userImage = (await this.userImageRepository.findUserImage(userId))
+        .imageUrl; // DB에 이미지가 있는지 확인
+      const imageUrlParts = userImage.split('/');
       const imageKey = imageUrlParts[imageUrlParts.length - 1]; // S3에 업로드된 이미지의 키
       const dbImageUrl = imageUrlParts[imageUrlParts.length - 3]; // 이미지 제공자 이름
 
       if (
         dbImageUrl === process.env.AWS_S3_URL &&
-        imageKey !== 'UserIcon.svg'
+        imageKey !== 'default_user_image.png'
       ) {
         // S3에 업로드된 이미지이고, 기본 이미지가 아닌 경우
         await this.s3Service.deleteImage('UserImages/' + imageKey); // S3에 업로드된 기존 이미지 삭제
