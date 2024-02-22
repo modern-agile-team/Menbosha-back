@@ -52,10 +52,7 @@ export class AuthController {
       throw new BadRequestException('인가코드가 없습니다.');
     }
 
-    const { accessToken, refreshToken, firstLogin } =
-      await this.authService.login(code, Provider.Naver);
-
-    return { accessToken, refreshToken, firstLogin };
+    return await this.authService.login(code, Provider.Naver);
   }
 
   @ApiKakaoLogin()
@@ -65,10 +62,7 @@ export class AuthController {
       throw new BadRequestException('인가코드가 없습니다.');
     }
 
-    const { accessToken, refreshToken, firstLogin } =
-      await this.authService.login(code, Provider.Kakao);
-
-    return { accessToken, refreshToken, firstLogin };
+    return await this.authService.login(code, Provider.Kakao);
   }
 
   @ApiGoogleLogin()
@@ -78,10 +72,7 @@ export class AuthController {
       throw new BadRequestException('인가코드가 없습니다.');
     }
 
-    const { accessToken, refreshToken, firstLogin } =
-      await this.authService.login(code, Provider.Google);
-
-    return { accessToken, refreshToken, firstLogin };
+    return await this.authService.login(code, Provider.Google);
   }
 
   @ApiNewAccessToken()
