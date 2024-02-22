@@ -22,6 +22,7 @@ export class UserInfoDto
       | 'mentorReviewChecklistCount'
       | 'reports'
       | 'bannedUser'
+      | 'reported'
     >
 {
   @ApiProperty({
