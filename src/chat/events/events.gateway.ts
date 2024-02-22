@@ -110,8 +110,8 @@ export class EventsGateway
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  afterInit(server: Server): any {
-    console.log('websocketserver init');
+  afterInit(_server: Server): any {
+    console.log('websocket server init');
   }
 
   handleConnection(@ConnectedSocket() socket: Socket): any {
