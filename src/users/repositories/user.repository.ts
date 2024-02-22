@@ -6,6 +6,7 @@ import {
   FindOneOptions,
 } from 'typeorm';
 import { User } from '../entities/user.entity';
+import { Provider } from 'src/auth/enums/provider.enum';
 
 @Injectable()
 export class UserRepository {
@@ -36,20 +37,17 @@ export class UserRepository {
     ).rank;
   }
 
-  async findUser(email: string, provider: string): Promise<User | undefined> {
+  findUser(email: string, provider: Provider): Promise<User | null> {
     return this.entityManager.findOne(User, { where: { email, provider } });
   }
 
-  async createUser(entityManager: EntityManager, userInfo: any): Promise<User> {
-    const user = new User();
-    user.provider = userInfo.provider;
-    user.name = userInfo.nickname;
-    user.email = userInfo.email;
-    user.hopeCategoryId = 1;
-    user.activityCategoryId = 1;
-    user.isMentor = false;
-
-    return entityManager.save(user);
+  createUser(entityManager: EntityManager, userInfo: UserInfo): Promise<User> {
+    return entityManager.save(User, {
+      ...userInfo,
+      hopeCategoryId: 1,
+      activityCategoryId: 1,
+      isMentor: false,
+    });
   }
 
   async updateUserName(userId: number, name: string): Promise<User> {
@@ -66,19 +64,18 @@ export class UserRepository {
     return this.entityManager.save(user);
   }
 
-  async deleteUser(userId: number): Promise<DeleteResult | undefined> {
-    await this.entityManager.findOne(User, { where: { id: userId } });
-    return await this.entityManager.delete(User, { id: userId });
+  deleteUser(userId: number): Promise<DeleteResult> {
+    return this.entityManager.delete(User, { id: userId });
   }
 
-  async findCategoryIdByIsMentors(categoryId: number): Promise<number> {
-    return await this.entityManager.count(User, {
+  countMentorsInCategory(categoryId: number): Promise<number> {
+    return this.entityManager.count(User, {
       where: { isMentor: true, activityCategoryId: categoryId },
     });
   }
 
-  async findIsMentors(): Promise<number> {
-    return await this.entityManager.count(User, {
+  countMentors(): Promise<number> {
+    return this.entityManager.count(User, {
       where: { isMentor: true },
     });
   }

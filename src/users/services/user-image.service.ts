@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { S3Service } from 'src/common/s3/s3.service';
 import { UserImageRepository } from '../repositories/user-image.repository';
-import { InternalServerErrorException } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 import { EntityManager } from 'typeorm';
+import { UserImage } from '../entities/user-image.entity';
 
 dotenv.config();
 
@@ -14,23 +14,20 @@ export class UserImageService {
     private readonly userImageRepository: UserImageRepository,
   ) {}
 
-  async checkUserImage(userId: number): Promise<string> {
-    return (await this.userImageRepository.checkUserImage(userId)).imageUrl;
+  findUserImage(userId: number): Promise<UserImage> {
+    return this.userImageRepository.findUserImage(userId);
   }
 
-  async updateUserImageByUrl(userId: number, profileImage: string) {
-    return await this.userImageRepository.updateUserImageByUrl(
-      userId,
-      profileImage,
-    );
+  updateUserImageByUrl(userId: number, profileImage: string) {
+    return this.userImageRepository.updateUserImageByUrl(userId, profileImage);
   }
 
-  async uploadUserImageWithEntityManager(
+  uploadUserImageWithEntityManager(
     entityManager: EntityManager,
     userId: number,
     imageUrl: string,
   ) {
-    return await this.userImageRepository.uploadUserImageWithEntityManager(
+    return this.userImageRepository.uploadUserImageWithEntityManager(
       entityManager,
       userId,
       imageUrl,
@@ -50,16 +47,15 @@ export class UserImageService {
       }
 
       const imageUrl = res.url; // S3에 업로드된 이미지 URL
-      const checkUserImage = (
-        await this.userImageRepository.checkUserImage(userId)
-      ).imageUrl; // DB에 이미지가 있는지 확인
-      const imageUrlParts = checkUserImage.split('/');
+      const userImage = (await this.userImageRepository.findUserImage(userId))
+        .imageUrl; // DB에 이미지가 있는지 확인
+      const imageUrlParts = userImage.split('/');
       const imageKey = imageUrlParts[imageUrlParts.length - 1]; // S3에 업로드된 이미지의 키
       const dbImageUrl = imageUrlParts[imageUrlParts.length - 3]; // 이미지 제공자 이름
 
       if (
         dbImageUrl === process.env.AWS_S3_URL &&
-        imageKey !== 'UserIcon.svg'
+        imageKey !== 'default_user_image.png'
       ) {
         // S3에 업로드된 이미지이고, 기본 이미지가 아닌 경우
         await this.s3Service.deleteImage('UserImages/' + imageKey); // S3에 업로드된 기존 이미지 삭제

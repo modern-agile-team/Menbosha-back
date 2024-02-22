@@ -9,6 +9,7 @@ import { UserBadgeResponseDTO } from '../dtos/get-user-badge.dto';
 import { plainToInstance } from 'class-transformer';
 import { MyProfileResponseDTO } from '../dtos/get-my-profile.dto';
 import { MyIntroDto } from '../dtos/get-my-intro.dto';
+import { Provider } from 'src/auth/enums/provider.enum';
 
 @Injectable()
 export class UserService {
@@ -17,14 +18,13 @@ export class UserService {
     private readonly userImageRepository: UserImageRepository,
     private readonly userBadgeRepository: UserBadgeRepository,
     private readonly userIntroRepository: UserIntroRepository,
-    private readonly entityManager: EntityManager,
   ) {}
 
   findAll(options: FindManyOptions<User>) {
     return this.userRepository.findAll(options);
   }
 
-  findUser(email: string, provider: string) {
+  findUser(email: string, provider: Provider) {
     return this.userRepository.findUser(email, provider);
   }
 
@@ -38,8 +38,8 @@ export class UserService {
     return existUser;
   }
 
-  async createUser(entityManager: EntityManager, userInfo: any) {
-    return await this.userRepository.createUser(entityManager, userInfo);
+  createUser(entityManager: EntityManager, userInfo: UserInfo) {
+    return this.userRepository.createUser(entityManager, userInfo);
   }
 
   async getMyProfile(userId: number) {
@@ -52,7 +52,7 @@ export class UserService {
       await this.userIntroRepository.getUserIntro(userId),
     )[0];
 
-    const image = (await this.userImageRepository.checkUserImage(userId))
+    const image = (await this.userImageRepository.findUserImage(userId))
       .imageUrl;
 
     return { ...userInfo, image, intro };
@@ -73,7 +73,7 @@ export class UserService {
       MyProfileResponseDTO,
       await this.userRepository.getUserInfo(userId),
     );
-    const image = (await this.userImageRepository.checkUserImage(userId))
+    const image = (await this.userImageRepository.findUserImage(userId))
       .imageUrl;
     const intro = plainToInstance(
       MyIntroDto,
@@ -90,7 +90,7 @@ export class UserService {
   async getMyInfoWithOwner(userId: number, targetId: number) {
     const { name, email, admin, provider } =
       await this.userRepository.getUserInfo(userId);
-    const userImage = (await this.userImageRepository.checkUserImage(userId))
+    const userImage = (await this.userImageRepository.findUserImage(userId))
       .imageUrl;
     return {
       userId,
@@ -103,19 +103,19 @@ export class UserService {
     };
   }
 
-  async updateUserName(userId: number, nickname: string) {
-    return await this.userRepository.updateUserName(userId, nickname);
+  updateUserName(userId: number, name: string) {
+    return this.userRepository.updateUserName(userId, name);
   }
 
-  async deleteUser(userId: number) {
-    return await this.userRepository.deleteUser(userId);
+  deleteUser(userId: number) {
+    return this.userRepository.deleteUser(userId);
   }
 
   async countPageMentors(categoryId: number) {
     const limit = 10;
     const total = categoryId
-      ? await this.userRepository.findCategoryIdByIsMentors(categoryId)
-      : await this.userRepository.findIsMentors();
+      ? await this.userRepository.countMentorsInCategory(categoryId)
+      : await this.userRepository.countMentors();
     const page = total / limit;
     const totalPage = Math.ceil(page);
     return { total, totalPage };

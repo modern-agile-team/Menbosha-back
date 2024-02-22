@@ -18,14 +18,14 @@ import { WebSocketExceptionFilter } from '../exceptions/filters/websocket-except
 import mongoose from 'mongoose';
 import { SocketException } from '../exceptions/socket.exception';
 
-@WebSocketGateway({ namespace: /\/ch-.+/, cors: true })
+@WebSocketGateway({ cors: true })
 @UseFilters(WebSocketExceptionFilter)
 @UsePipes(ValidationPipe)
 export class EventsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  constructor(private chatService: ChatService) {}
-  @WebSocketServer() public server: Server;
+  constructor(private readonly chatService: ChatService) {}
+  @WebSocketServer() private readonly server: Server;
 
   @SubscribeMessage('test')
   handleTest(@MessageBody() data: string) {
@@ -50,15 +50,18 @@ export class EventsGateway
     const { chatRoomIds } = loginChatRoomDto;
     console.log('login', loginChatRoomDto.userId);
 
-    for (let i = 0; i < chatRoomIds.length; i++) {
-      const isObjectId = mongoose.isObjectIdOrHexString(chatRoomIds[i]);
+    for (const chatRoomId of chatRoomIds) {
+      const isObjectId = mongoose.isObjectIdOrHexString(chatRoomId);
 
       if (!isObjectId) {
-        throw new SocketException('BadRequest', '오브젝트 id 형식이 아닙니다');
+        throw new SocketException(
+          'BadRequest',
+          `${chatRoomId} 오브젝트 id 형식이 아닙니다`,
+        );
       }
 
       const chatRoom = await this.chatService.findOneChatRoom({
-        _id: chatRoomIds[i],
+        _id: chatRoomId,
         deletedAt: null,
       });
 
@@ -69,8 +72,10 @@ export class EventsGateway
         );
       }
 
-      console.log('join', socket.nsp.name, chatRoomIds[i]);
-      socket.join(chatRoom._id.toString());
+      const stringChatRoomId = String(chatRoom._id);
+
+      socket.join(stringChatRoomId);
+      console.log('join', socket.nsp.name, stringChatRoomId);
     }
   }
 
@@ -97,20 +102,26 @@ export class EventsGateway
   @SubscribeMessage('message')
   async handleMessage(
     @MessageBody() postChatDto: PostChatDto,
-    @ConnectedSocket() socket: Socket,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @ConnectedSocket() _socket: Socket,
   ) {
     const returnedChat = await this.chatService.createChat(postChatDto);
-    socket.to(postChatDto.roomId.toString()).emit('message', returnedChat);
+    this.server.to(postChatDto.roomId.toString()).emit('message', returnedChat);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  afterInit(server: Server): any {
-    console.log('websocketserver init');
+  afterInit(_server: Server): any {
+    console.log('websocket server init');
   }
 
   handleConnection(@ConnectedSocket() socket: Socket): any {
     console.log('connected', socket.nsp.name);
     socket.emit('hello', socket.nsp.name);
+    socket.on('connection-error', (err) => {
+      console.log(err.message);
+      console.log(err.description);
+      console.log(err.context);
+    });
   }
 
   handleDisconnect(@ConnectedSocket() socket: Socket): any {

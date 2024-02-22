@@ -6,7 +6,7 @@ import { UserImage } from '../entities/user-image.entity';
 export class UserImageRepository {
   constructor(private readonly entityManager: EntityManager) {}
 
-  async checkUserImage(userId: number): Promise<UserImage> {
+  async findUserImage(userId: number): Promise<UserImage> {
     const userImage = await this.entityManager.findOne(UserImage, {
       where: { userId },
     });
