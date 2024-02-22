@@ -125,6 +125,11 @@ export class EventsGateway
       console.log(err.description);
       console.log(err.context);
     });
+    this.server.engine.on('connection-error', (err) => {
+      console.log(err.message);
+      console.log(err.description);
+      console.log(err.context);
+    });
   }
 
   handleDisconnect(@ConnectedSocket() socket: Socket): any {
