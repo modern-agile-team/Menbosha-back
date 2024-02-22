@@ -19,7 +19,7 @@ export function ApiFindAllMentorsAndCount() {
       description: '멘토 리스트 성공적으로 불러옴.',
       schema: {
         properties: {
-          content: {
+          contents: {
             type: 'object',
             $ref: getSchemaPath(MentorPaginationResponseDto),
           },

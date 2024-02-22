@@ -1,6 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiExtraModels,
   ApiOperation,
@@ -11,6 +12,8 @@ import { ReportDto } from 'src/reports/dto/report.dto';
 
 export function ApiCreateReportDecorator(): MethodDecorator {
   return applyDecorators(
+    ApiBearerAuth(),
+
     ApiOperation({
       operationId: 'report_create',
       summary: 'report 생성',
@@ -19,7 +22,9 @@ export function ApiCreateReportDecorator(): MethodDecorator {
     ApiCreatedResponse({
       description: 'report 생성 완료',
       schema: {
-        $ref: getSchemaPath(ReportDto),
+        properties: {
+          contents: { $ref: getSchemaPath(ReportDto) },
+        },
       },
     }),
 

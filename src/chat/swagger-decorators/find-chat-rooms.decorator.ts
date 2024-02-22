@@ -20,7 +20,7 @@ export function ApiFindChatRooms() {
       status: 200,
       schema: {
         properties: {
-          content: {
+          contents: {
             type: 'object',
             $ref: getSchemaPath(ResponseFindChatRoomsPaginationDto),
           },

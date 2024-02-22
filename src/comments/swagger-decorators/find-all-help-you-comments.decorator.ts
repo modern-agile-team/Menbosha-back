@@ -21,7 +21,7 @@ export function ApiFindAllHelpYouComments() {
       description: '도와줄게요 댓글 성공적으로 불러옴.',
       schema: {
         properties: {
-          content: {
+          contents: {
             type: 'object',
             $ref: getSchemaPath(HelpYouCommentPaginationResponseDto),
           },

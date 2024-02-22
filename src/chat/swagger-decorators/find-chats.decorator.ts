@@ -21,7 +21,7 @@ export function ApiFindChats() {
         '성공적으로 채팅방 채팅 조회 및 읽지 않았던 채팅들 seenUsers에 myId 추가 및 pagination함. 20개씩 잘라서 가져옴.',
       schema: {
         properties: {
-          content: {
+          contents: {
             type: 'object',
             $ref: getSchemaPath(AggregateChatRoomForChatsDto),
           },
