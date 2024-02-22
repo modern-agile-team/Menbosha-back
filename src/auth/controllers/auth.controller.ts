@@ -30,6 +30,7 @@ import {
   RefreshTokenAuthGuard,
 } from '../jwt/jwt-auth.guard';
 import { Ttl } from 'src/common/redis/ttl.enum';
+import { Provider } from '../enums/provider.enum';
 
 @Controller('auth')
 @ApiTags('auth API')
@@ -136,7 +137,7 @@ export class AuthController {
     await this.tokenService.deleteTokens(userId);
 
     return this.authService.unlink(
-      'kakao',
+      Provider.Kakao,
       socialAccessToken,
       socialRefreshToken,
     );
@@ -159,7 +160,7 @@ export class AuthController {
     await this.tokenService.deleteTokens(userId);
 
     return this.authService.unlink(
-      'naver',
+      Provider.Naver,
       socialAccessToken,
       socialRefreshToken,
     );
@@ -180,7 +181,7 @@ export class AuthController {
 
     await this.tokenService.deleteTokens(userId);
 
-    return this.authService.unlink('google', socialAccessToken);
+    return this.authService.unlink(Provider.Google, socialAccessToken);
   }
 
   @ApiDeleteAccount()

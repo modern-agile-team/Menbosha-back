@@ -7,6 +7,7 @@ import { TotalCountService } from 'src/total-count/services/total-count.service'
 import { DataSource } from 'typeorm';
 import { UserService } from 'src/users/services/user.service';
 import { UserImageService } from 'src/users/services/user-image.service';
+import { Provider } from '../enums/provider.enum';
 
 dotenv.config();
 
@@ -282,7 +283,7 @@ export class AuthService implements AuthServiceInterface {
   }
 
   async unlink(
-    provider: string,
+    provider: Provider,
     accessToken: string,
     refreshToken?: string,
   ): Promise<any> {
@@ -292,7 +293,7 @@ export class AuthService implements AuthServiceInterface {
         unlinkHeader: object,
         unlinkBody: object;
 
-      if (provider === 'kakao') {
+      if (provider === Provider.Kakao) {
         checkValidAccessToken =
           await this.tokenService.checkValidKakaoToken(accessToken);
 
