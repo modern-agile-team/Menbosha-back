@@ -42,11 +42,8 @@ export class UserRepository {
   }
 
   createUser(entityManager: EntityManager, userInfo: any): Promise<User> {
-    const { provider, nickname: name, email } = userInfo;
     return entityManager.save(User, {
-      provider,
-      name,
-      email,
+      ...userInfo,
       hopeCategoryId: 1,
       activityCategoryId: 1,
       isMentor: false,

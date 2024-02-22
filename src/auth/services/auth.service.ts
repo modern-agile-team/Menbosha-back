@@ -112,7 +112,7 @@ export class AuthService implements AuthServiceInterface {
       const socialUserInfo = (await axios.get(userInfoUrl, userInfoHeader))
         .data;
 
-      const nickname =
+      const name =
         provider === Provider.Naver
           ? socialUserInfo.response.nickname // 네이버 닉네임
           : provider === Provider.Kakao
@@ -139,7 +139,7 @@ export class AuthService implements AuthServiceInterface {
 
       const userInfo = {
         provider,
-        nickname,
+        name,
         email,
       };
 
@@ -148,7 +148,7 @@ export class AuthService implements AuthServiceInterface {
       if (user) {
         const userId = user.id;
 
-        await this.userService.updateUserName(userId, nickname);
+        await this.userService.updateUserName(userId, name);
 
         const userImageUrl = (await this.userImageService.findUserImage(userId))
           .imageUrl;

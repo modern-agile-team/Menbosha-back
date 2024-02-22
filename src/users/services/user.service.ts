@@ -103,8 +103,8 @@ export class UserService {
     };
   }
 
-  updateUserName(userId: number, nickname: string) {
-    return this.userRepository.updateUserName(userId, nickname);
+  updateUserName(userId: number, name: string) {
+    return this.userRepository.updateUserName(userId, name);
   }
 
   deleteUser(userId: number) {
