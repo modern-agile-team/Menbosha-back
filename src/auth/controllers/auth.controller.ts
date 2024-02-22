@@ -56,6 +56,7 @@ export class AuthController {
   }
 
   @ApiKakaoLogin()
+  @UseInterceptors(CookieInterceptor)
   @Get('kakao/login')
   async kakaoLogin(@Query('code') code: string) {
     if (!code) {
@@ -66,6 +67,7 @@ export class AuthController {
   }
 
   @ApiGoogleLogin()
+  @UseInterceptors(CookieInterceptor)
   @Get('google/login')
   async googleLogin(@Query('code') code: string) {
     if (!code) {
