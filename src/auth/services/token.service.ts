@@ -153,6 +153,17 @@ export class TokenService {
     });
   }
 
+  async generateNewAccessToken(userId: number) {
+    const newAccessToken = this.generateAccessToken(userId);
+    await this.redisService.setToken(
+      String(userId) + '-accessToken',
+      newAccessToken,
+      Ttl.accessToken,
+    );
+
+    return { accessToken: newAccessToken };
+  }
+
   generateRefreshToken(userId: number) {
     const payload: TokenPayload = {
       sub: 'refreshToken',
