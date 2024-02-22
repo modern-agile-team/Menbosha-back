@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { Provider } from 'src/auth/enums/provider.enum';
 
 @Injectable()
 export class UserRepository {
@@ -37,19 +38,22 @@ export class UserRepository {
     ).rank;
   }
 
-  findUser(email: string, provider: string): Promise<User | undefined> {
+  findUser(email: string, provider: Provider): Promise<User | null> {
     return this.entityManager.findOne(User, { where: { email, provider } });
   }
 
-  createUser(entityManager: EntityManager, userInfo: any): Promise<User> {
-    const { provider, nickname: name, email } = userInfo;
+  createUser(entityManager: EntityManager, userInfo: UserInfo): Promise<User> {
     return entityManager.save(User, {
-      provider,
-      name,
-      email,
+      ...userInfo,
       hopeCategoryId: 1,
       activityCategoryId: 1,
       isMentor: false,
+    });
+  }
+
+  async updateUserName(userId: number, name: string): Promise<User> {
+    const user = await this.entityManager.findOne(User, {
+      where: { id: userId },
     });
   }
 
@@ -60,13 +64,13 @@ export class UserRepository {
     return this.entityManager.update(User, { id: userId }, partialEntity);
   }
 
-  findCategoryIdByIsMentors(categoryId: number): Promise<number> {
+  countMentorsInCategory(categoryId: number): Promise<number> {
     return this.entityManager.count(User, {
       where: { isMentor: true, activityCategoryId: categoryId },
     });
   }
 
-  findIsMentors(): Promise<number> {
+  countMentors(): Promise<number> {
     return this.entityManager.count(User, {
       where: { isMentor: true },
     });

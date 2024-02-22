@@ -10,6 +10,8 @@ import { plainToInstance } from 'class-transformer';
 import { MyProfileResponseDTO } from '../dtos/get-my-profile.dto';
 import { MyIntroDto } from '../dtos/get-my-intro.dto';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { Provider } from 'src/auth/enums/provider.enum';
+
 
 @Injectable()
 export class UserService {
@@ -24,7 +26,7 @@ export class UserService {
     return this.userRepository.findAll(options);
   }
 
-  findUser(email: string, provider: string) {
+  findUser(email: string, provider: Provider) {
     return this.userRepository.findUser(email, provider);
   }
 
@@ -38,7 +40,7 @@ export class UserService {
     return existUser;
   }
 
-  createUser(entityManager: EntityManager, userInfo: any) {
+  createUser(entityManager: EntityManager, userInfo: UserInfo) {
     return this.userRepository.createUser(entityManager, userInfo);
   }
 
@@ -114,8 +116,8 @@ export class UserService {
   async countPageMentors(categoryId: number) {
     const limit = 10;
     const total = categoryId
-      ? await this.userRepository.findCategoryIdByIsMentors(categoryId)
-      : await this.userRepository.findIsMentors();
+      ? await this.userRepository.countMentorsInCategory(categoryId)
+      : await this.userRepository.countMentors();
     const page = total / limit;
     const totalPage = Math.ceil(page);
     return { total, totalPage };

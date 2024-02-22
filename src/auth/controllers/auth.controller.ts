@@ -6,8 +6,8 @@ import {
   Get,
   Post,
   Query,
-  Res,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { S3Service } from 'src/common/s3/s3.service';
 import { TokenService } from '../services/token.service';
@@ -21,7 +21,6 @@ import { ApiNaverLogout } from '../swagger-decorators/naver-logout.decorator';
 import { ApiNaverUnlink } from '../swagger-decorators/naver-unlink.decorator';
 import { ApiDeleteAccount } from '../swagger-decorators/delete-account.decorator';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
-import { RedisService } from 'src/common/redis/redis.service';
 import { ApiGoogleLogin } from '../swagger-decorators/google-login.decorator';
 import { ApiGoogleLogout } from '../swagger-decorators/google-logout.decorator';
 import { ApiGoogleUnlink } from '../swagger-decorators/google-unlink.decorator';
@@ -29,7 +28,8 @@ import {
   AccessTokenAuthGuard,
   RefreshTokenAuthGuard,
 } from '../jwt/jwt-auth.guard';
-import { Ttl } from 'src/common/redis/ttl.enum';
+import { Provider } from '../enums/provider.enum';
+import { CookieInterceptor } from 'src/common/interceptors/cookie.interceptor';
 
 @Controller('auth')
 @ApiTags('auth API')
@@ -38,110 +38,46 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly tokenService: TokenService,
     private readonly s3Service: S3Service,
-    private readonly redisService: RedisService,
   ) {}
 
   @ApiNaverLogin()
+  @UseInterceptors(CookieInterceptor)
   @Get('naver/login')
-  async naverLogin(@Query('code') code: string, @Res() res) {
+  naverLogin(@Query('code') code: string) {
     if (!code) {
       throw new BadRequestException('인가코드가 없습니다.');
     }
 
-    const { userId, socialAccessToken, socialRefreshToken, firstLogin } =
-      await this.authService.login(code, 'naver');
-    const accessToken = this.tokenService.generateAccessToken(userId);
-    const refreshToken = this.tokenService.generateRefreshToken(userId);
-
-    await this.tokenService.saveTokens(
-      userId,
-      accessToken,
-      refreshToken,
-      socialAccessToken,
-      socialRefreshToken,
-    );
-
-    res.cookie('refresh_token', refreshToken, {
-      httpOnly: true,
-      sameSite: 'Lax',
-      domain: 'localhost',
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
-    });
-
-    return res.json({ accessToken, refreshToken, firstLogin });
+    return this.authService.login(code, Provider.Naver);
   }
 
   @ApiKakaoLogin()
+  @UseInterceptors(CookieInterceptor)
   @Get('kakao/login')
-  async kakaoLogin(@Query('code') code: string, @Res() res) {
+  kakaoLogin(@Query('code') code: string) {
     if (!code) {
       throw new BadRequestException('인가코드가 없습니다.');
     }
 
-    const { userId, socialAccessToken, socialRefreshToken, firstLogin } =
-      await this.authService.login(code, 'kakao');
-    const accessToken = this.tokenService.generateAccessToken(userId);
-    const refreshToken = this.tokenService.generateRefreshToken(userId);
-
-    await this.tokenService.saveTokens(
-      userId,
-      accessToken,
-      refreshToken,
-      socialAccessToken,
-      socialRefreshToken,
-    );
-
-    res.cookie('refresh_Token', refreshToken, {
-      httpOnly: true,
-      sameSite: 'Lax',
-      domain: 'localhost',
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
-    });
-
-    return res.json({ accessToken, refreshToken, firstLogin });
+    return this.authService.login(code, Provider.Kakao);
   }
 
   @ApiGoogleLogin()
+  @UseInterceptors(CookieInterceptor)
   @Get('google/login')
-  async googleLogin(@Query('code') code: string, @Res() res) {
+  googleLogin(@Query('code') code: string) {
     if (!code) {
       throw new BadRequestException('인가코드가 없습니다.');
     }
 
-    const { userId, socialAccessToken, socialRefreshToken, firstLogin } =
-      await this.authService.login(code, 'google');
-    const accessToken = this.tokenService.generateAccessToken(userId);
-    const refreshToken = this.tokenService.generateRefreshToken(userId);
-
-    await this.tokenService.saveTokens(
-      userId,
-      accessToken,
-      refreshToken,
-      socialAccessToken,
-      socialRefreshToken,
-    );
-
-    res.cookie('refresh_Token', refreshToken, {
-      httpOnly: true,
-      sameSite: 'Lax',
-      domain: 'localhost',
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
-    });
-
-    return res.json({ accessToken, refreshToken, firstLogin });
+    return this.authService.login(code, Provider.Google);
   }
 
   @ApiNewAccessToken()
   @UseGuards(RefreshTokenAuthGuard)
   @Get('new-access-token')
-  async newAccessToken(@GetUserId() userId: number) {
-    const newAccessToken = this.tokenService.generateAccessToken(userId);
-    await this.redisService.setToken(
-      String(userId) + '-accessToken',
-      newAccessToken,
-      Ttl.accessToken,
-    );
-    return { accessToken: newAccessToken };
+  newAccessToken(@GetUserId() userId: number) {
+    return this.tokenService.generateNewAccessToken(userId);
   }
 
   @ApiKakaoLogout()
@@ -166,7 +102,7 @@ export class AuthController {
     await this.tokenService.deleteTokens(userId);
 
     return this.authService.unlink(
-      'kakao',
+      Provider.Kakao,
       socialAccessToken,
       socialRefreshToken,
     );
@@ -189,7 +125,7 @@ export class AuthController {
     await this.tokenService.deleteTokens(userId);
 
     return this.authService.unlink(
-      'naver',
+      Provider.Naver,
       socialAccessToken,
       socialRefreshToken,
     );
@@ -210,7 +146,7 @@ export class AuthController {
 
     await this.tokenService.deleteTokens(userId);
 
-    return this.authService.unlink('google', socialAccessToken);
+    return this.authService.unlink(Provider.Google, socialAccessToken);
   }
 
   @ApiDeleteAccount()

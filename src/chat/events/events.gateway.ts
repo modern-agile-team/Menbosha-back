@@ -18,7 +18,7 @@ import { WebSocketExceptionFilter } from '../exceptions/filters/websocket-except
 import mongoose from 'mongoose';
 import { SocketException } from '../exceptions/socket.exception';
 
-@WebSocketGateway({ namespace: /\/ch-.+/, cors: true })
+@WebSocketGateway({ namespace: 'chat', cors: true })
 @UseFilters(WebSocketExceptionFilter)
 @UsePipes(ValidationPipe)
 export class EventsGateway
@@ -50,15 +50,18 @@ export class EventsGateway
     const { chatRoomIds } = loginChatRoomDto;
     console.log('login', loginChatRoomDto.userId);
 
-    for (let i = 0; i < chatRoomIds.length; i++) {
-      const isObjectId = mongoose.isObjectIdOrHexString(chatRoomIds[i]);
+    for (const chatRoomId of chatRoomIds) {
+      const isObjectId = mongoose.isObjectIdOrHexString(chatRoomId);
 
       if (!isObjectId) {
-        throw new SocketException('BadRequest', '오브젝트 id 형식이 아닙니다');
+        throw new SocketException(
+          'BadRequest',
+          `${chatRoomId} 오브젝트 id 형식이 아닙니다`,
+        );
       }
 
       const chatRoom = await this.chatService.findOneChatRoom({
-        _id: chatRoomIds[i],
+        _id: chatRoomId,
         deletedAt: null,
       });
 
@@ -69,8 +72,14 @@ export class EventsGateway
         );
       }
 
-      console.log('join', socket.nsp.name, chatRoomIds[i]);
-      socket.join(chatRoom._id.toString());
+      const stringChatRoomId = String(chatRoom._id);
+
+      await socket.join(stringChatRoomId);
+      console.log('join', socket.nsp.name, stringChatRoomId);
+
+      socket
+        .to(stringChatRoomId)
+        .emit('join', `join ${socket.nsp.name} ${stringChatRoomId}`);
     }
   }
 
@@ -111,6 +120,11 @@ export class EventsGateway
   handleConnection(@ConnectedSocket() socket: Socket): any {
     console.log('connected', socket.nsp.name);
     socket.emit('hello', socket.nsp.name);
+    socket.on('connection-error', (err) => {
+      console.log(err.message);
+      console.log(err.description);
+      console.log(err.context);
+    });
   }
 
   handleDisconnect(@ConnectedSocket() socket: Socket): any {
