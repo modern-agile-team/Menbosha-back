@@ -120,6 +120,11 @@ export class EventsGateway
   handleConnection(@ConnectedSocket() socket: Socket): any {
     console.log('connected', socket.nsp.name);
     socket.emit('hello', socket.nsp.name);
+    socket.on('connection-error', (err) => {
+      console.log(err.message);
+      console.log(err.description);
+      console.log(err.context);
+    });
   }
 
   handleDisconnect(@ConnectedSocket() socket: Socket): any {
