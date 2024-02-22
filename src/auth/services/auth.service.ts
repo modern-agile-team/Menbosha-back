@@ -110,6 +110,7 @@ export class AuthService implements AuthServiceInterface {
 
       const socialUserInfo = (await axios.get(userInfoUrl, userInfoHeader))
         .data;
+      console.log(socialUserInfo);
 
       const nickname =
         provider === 'naver'
@@ -131,7 +132,7 @@ export class AuthService implements AuthServiceInterface {
         provider === 'naver'
           ? socialUserInfo.response.profile_image // 네이버 프로필 이미지
           : provider === 'kakao'
-            ? socialUserInfo.kakao_account.profile.profile_image.url // 카카오 프로필 이미지
+            ? socialUserInfo.kakao_account.profile.profile_image_url // 카카오 프로필 이미지
             : provider === 'google'
               ? socialUserInfo.picture // Google 프로필 이미지
               : null;
