@@ -132,7 +132,7 @@ export class AuthService implements AuthServiceInterface {
         provider === Provider.Naver
           ? socialUserInfo.response.profile_image // 네이버 프로필 이미지
           : provider === Provider.Kakao
-            ? socialUserInfo.kakao_account.profile.profile_image.url // 카카오 프로필 이미지
+            ? socialUserInfo.kakao_account.profile.profile_image_url // 카카오 프로필 이미지
             : provider === Provider.Google
               ? socialUserInfo.picture // Google 프로필 이미지
               : null;

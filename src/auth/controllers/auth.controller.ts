@@ -8,6 +8,7 @@ import {
   Query,
   Res,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { S3Service } from 'src/common/s3/s3.service';
 import { TokenService } from '../services/token.service';
@@ -31,6 +32,7 @@ import {
 } from '../jwt/jwt-auth.guard';
 import { Ttl } from 'src/common/redis/ttl.enum';
 import { Provider } from '../enums/provider.enum';
+import { CookieInterceptor } from 'src/common/interceptors/cookie.interceptor';
 
 @Controller('auth')
 @ApiTags('auth API')
@@ -43,8 +45,9 @@ export class AuthController {
   ) {}
 
   @ApiNaverLogin()
+  @UseInterceptors(CookieInterceptor)
   @Get('naver/login')
-  async naverLogin(@Query('code') code: string, @Res() res) {
+  async naverLogin(@Query('code') code: string) {
     if (!code) {
       throw new BadRequestException('인가코드가 없습니다.');
     }
@@ -52,19 +55,12 @@ export class AuthController {
     const { accessToken, refreshToken, firstLogin } =
       await this.authService.login(code, Provider.Naver);
 
-    res.cookie('refresh_token', refreshToken, {
-      httpOnly: true,
-      sameSite: 'Lax',
-      domain: 'localhost',
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
-    });
-
-    return res.json({ accessToken, refreshToken, firstLogin });
+    return { accessToken, refreshToken, firstLogin };
   }
 
   @ApiKakaoLogin()
   @Get('kakao/login')
-  async kakaoLogin(@Query('code') code: string, @Res() res) {
+  async kakaoLogin(@Query('code') code: string) {
     if (!code) {
       throw new BadRequestException('인가코드가 없습니다.');
     }
@@ -72,19 +68,12 @@ export class AuthController {
     const { accessToken, refreshToken, firstLogin } =
       await this.authService.login(code, Provider.Kakao);
 
-    res.cookie('refresh_Token', refreshToken, {
-      httpOnly: true,
-      sameSite: 'Lax',
-      domain: 'localhost',
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
-    });
-
-    return res.json({ accessToken, refreshToken, firstLogin });
+    return { accessToken, refreshToken, firstLogin };
   }
 
   @ApiGoogleLogin()
   @Get('google/login')
-  async googleLogin(@Query('code') code: string, @Res() res) {
+  async googleLogin(@Query('code') code: string) {
     if (!code) {
       throw new BadRequestException('인가코드가 없습니다.');
     }
@@ -92,14 +81,7 @@ export class AuthController {
     const { accessToken, refreshToken, firstLogin } =
       await this.authService.login(code, Provider.Google);
 
-    res.cookie('refresh_Token', refreshToken, {
-      httpOnly: true,
-      sameSite: 'Lax',
-      domain: 'localhost',
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7일
-    });
-
-    return res.json({ accessToken, refreshToken, firstLogin });
+    return { accessToken, refreshToken, firstLogin };
   }
 
   @ApiNewAccessToken()
