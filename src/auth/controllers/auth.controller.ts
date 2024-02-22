@@ -50,7 +50,7 @@ export class AuthController {
     }
 
     const { accessToken, refreshToken, firstLogin } =
-      await this.authService.login(code, 'naver');
+      await this.authService.login(code, Provider.Naver);
 
     res.cookie('refresh_token', refreshToken, {
       httpOnly: true,
@@ -70,7 +70,7 @@ export class AuthController {
     }
 
     const { accessToken, refreshToken, firstLogin } =
-      await this.authService.login(code, 'kakao');
+      await this.authService.login(code, Provider.Kakao);
 
     res.cookie('refresh_Token', refreshToken, {
       httpOnly: true,
@@ -90,7 +90,7 @@ export class AuthController {
     }
 
     const { accessToken, refreshToken, firstLogin } =
-      await this.authService.login(code, 'google');
+      await this.authService.login(code, Provider.Google);
 
     res.cookie('refresh_Token', refreshToken, {
       httpOnly: true,

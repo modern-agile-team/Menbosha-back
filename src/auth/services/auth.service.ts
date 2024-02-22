@@ -21,7 +21,7 @@ export class AuthService implements AuthServiceInterface {
     private readonly dataSource: DataSource,
   ) {}
 
-  async login(authorizeCode: string, provider: string) {
+  async login(authorizeCode: string, provider: Provider) {
     try {
       let tokenUrl: string,
         tokenHeader: object,
@@ -29,7 +29,7 @@ export class AuthService implements AuthServiceInterface {
         userInfoUrl: string,
         userInfoHeader: object;
 
-      if (provider === 'naver') {
+      if (provider === Provider.Naver) {
         // 네이버 토큰 발급
         tokenUrl = 'https://nid.naver.com/oauth2.0/token';
         tokenHeader = {
@@ -45,7 +45,7 @@ export class AuthService implements AuthServiceInterface {
           state: 'test',
           redirect_uri: process.env.NAVER_REDIRECT_URI,
         };
-      } else if (provider === 'kakao') {
+      } else if (provider === Provider.Kakao) {
         // 카카오 토큰 발급
         tokenUrl = 'https://kauth.kakao.com/oauth/token';
         tokenHeader = {
@@ -59,7 +59,7 @@ export class AuthService implements AuthServiceInterface {
           redirect_uri: process.env.KAKAO_REDIRECT_URI,
           code: authorizeCode,
         };
-      } else if (provider === 'google') {
+      } else if (provider === Provider.Google) {
         // 구글 토큰 발급
         tokenUrl = 'https://oauth2.googleapis.com/token';
         tokenHeader = {
@@ -81,7 +81,7 @@ export class AuthService implements AuthServiceInterface {
       const socialAccessToken = token.access_token;
       const socialRefreshToken = token.refresh_token;
 
-      if (provider === 'naver') {
+      if (provider === Provider.Naver) {
         // 네이버 로그인 사용자 정보 조회
         userInfoUrl = 'https://openapi.naver.com/v1/nid/me';
         userInfoHeader = {
@@ -89,7 +89,7 @@ export class AuthService implements AuthServiceInterface {
             Authorization: `Bearer ${socialAccessToken}`,
           },
         };
-      } else if (provider === 'kakao') {
+      } else if (provider === Provider.Kakao) {
         // 카카오 로그인 사용자 정보 조회
         userInfoUrl = 'https://kapi.kakao.com/v2/user/me';
         userInfoHeader = {
@@ -98,7 +98,7 @@ export class AuthService implements AuthServiceInterface {
             'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
           },
         };
-      } else if (provider === 'google') {
+      } else if (provider === Provider.Google) {
         // 구글 로그인 사용자 정보 조회
         userInfoUrl = 'https://www.googleapis.com/oauth2/v2/userinfo';
         userInfoHeader = {
@@ -113,27 +113,27 @@ export class AuthService implements AuthServiceInterface {
         .data;
 
       const nickname =
-        provider === 'naver'
+        provider === Provider.Naver
           ? socialUserInfo.response.nickname // 네이버 닉네임
-          : provider === 'kakao'
+          : provider === Provider.Kakao
             ? socialUserInfo.kakao_account.profile.nickname // 카카오 닉네임
-            : provider === 'google'
+            : provider === Provider.Google
               ? socialUserInfo.name // Google 닉네임
               : null;
       const email =
-        provider === 'naver'
+        provider === Provider.Naver
           ? socialUserInfo.response.email // 네이버 이메일
-          : provider === 'kakao'
+          : provider === Provider.Kakao
             ? socialUserInfo.kakao_account.email // 카카오 이메일
-            : provider === 'google'
+            : provider === Provider.Google
               ? socialUserInfo.email // Google 이메일
               : null;
       const profileImage =
-        provider === 'naver'
+        provider === Provider.Naver
           ? socialUserInfo.response.profile_image // 네이버 프로필 이미지
-          : provider === 'kakao'
+          : provider === Provider.Kakao
             ? socialUserInfo.kakao_account.profile.profile_image.url // 카카오 프로필 이미지
-            : provider === 'google'
+            : provider === Provider.Google
               ? socialUserInfo.picture // Google 프로필 이미지
               : null;
 
@@ -309,7 +309,7 @@ export class AuthService implements AuthServiceInterface {
           },
         };
         unlinkBody = {};
-      } else if (provider === 'naver') {
+      } else if (provider === Provider.Naver) {
         checkValidAccessToken =
           await this.tokenService.checkValidNaverToken(accessToken);
 
@@ -330,7 +330,7 @@ export class AuthService implements AuthServiceInterface {
           grant_type: 'delete',
           service_provider: 'NAVER',
         };
-      } else if (provider === 'google') {
+      } else if (provider === Provider.Google) {
         unlinkUrl = `https://accounts.google.com/o/oauth2/revoke?token=${accessToken}`;
         unlinkHeader = {};
         unlinkBody = {};
