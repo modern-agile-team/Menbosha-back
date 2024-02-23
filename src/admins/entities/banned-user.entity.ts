@@ -17,7 +17,7 @@ export class BannedUser {
   })
   id: number;
 
-  @Column('varchar', { name: 'reason', comment: '정지 사유', length: 200 })
+  @Column('varchar', { name: 'reason', comment: '정지 사유', length: 255 })
   reason: string;
 
   @Column('timestamp', {
