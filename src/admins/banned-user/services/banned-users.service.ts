@@ -5,7 +5,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { BannedUserRepository } from 'src/admins/banned-user/repositories/banned-user.repository';
-import { CreateBannedUserBodyDto } from 'src/admins/banned-user/dtos/create-banned-user-body.dto';
+import { CreateBannedUserBodyDto } from 'src/admins/dtos/create-banned-user-body.dto';
 import { UserService } from 'src/users/services/user.service';
 import { DataSource } from 'typeorm';
 import { BannedUserDto } from 'src/admins/banned-user/dtos/banned-user.dto';
