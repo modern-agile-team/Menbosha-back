@@ -91,7 +91,7 @@ export class ChatRepository {
     update: mongoose.UpdateQuery<ChatRooms>,
     options?: mongoose.QueryOptions<ChatRooms>,
   ) {
-    await this.chatRoomsModel.updateOne(filter, update, options);
+    return this.chatRoomsModel.updateOne(filter, update, options);
   }
 
   updateManyChatRoom(
@@ -109,7 +109,7 @@ export class ChatRepository {
   }
 
   createChat(
-    id: mongoose.Types.ObjectId | any,
+    id: mongoose.Types.ObjectId,
     update: mongoose.UpdateQuery<ChatRooms>,
     options?: mongoose.QueryOptions<ChatRooms> | null,
   ): Promise<ChatRoomDto> {
@@ -121,10 +121,4 @@ export class ChatRepository {
   ): Promise<ChatImageDto> {
     return this.chatImagesModel.create(doc);
   }
-
-  // async getUnreadCounts(roomId: mongoose.Types.ObjectId, after: number) {
-  //   return this.chatsModel.count({
-  //     $and: [{ chatRoomId: roomId }, { createdAt: { $gt: new Date(after) } }],
-  //   });
-  // }
 }

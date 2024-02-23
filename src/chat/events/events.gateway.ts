@@ -18,19 +18,14 @@ import { WebSocketExceptionFilter } from '../exceptions/filters/websocket-except
 import mongoose from 'mongoose';
 import { SocketException } from '../exceptions/socket.exception';
 
-@WebSocketGateway({ namespace: 'chat', cors: true })
+@WebSocketGateway({ cors: true })
 @UseFilters(WebSocketExceptionFilter)
 @UsePipes(ValidationPipe)
 export class EventsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  constructor(private chatService: ChatService) {}
-  @WebSocketServer() public server: Server;
-
-  @SubscribeMessage('test')
-  handleTest(@MessageBody() data: string) {
-    console.log('test', data);
-  }
+  constructor(private readonly chatService: ChatService) {}
+  @WebSocketServer() private readonly server: Server;
 
   @AsyncApiSub({
     description: `
@@ -68,18 +63,14 @@ export class EventsGateway
       if (!chatRoom) {
         throw new SocketException(
           'NotFound',
-          '해당 채팅방은 존재하지 않습니다.',
+          '해당 채팅방이 존재하지 않습니다.',
         );
       }
 
       const stringChatRoomId = String(chatRoom._id);
 
-      await socket.join(stringChatRoomId);
+      socket.join(stringChatRoomId);
       console.log('join', socket.nsp.name, stringChatRoomId);
-
-      socket
-        .to(stringChatRoomId)
-        .emit('join', `join ${socket.nsp.name} ${stringChatRoomId}`);
     }
   }
 
@@ -106,25 +97,20 @@ export class EventsGateway
   @SubscribeMessage('message')
   async handleMessage(
     @MessageBody() postChatDto: PostChatDto,
-    @ConnectedSocket() socket: Socket,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @ConnectedSocket() _socket: Socket,
   ) {
     const returnedChat = await this.chatService.createChat(postChatDto);
-    socket.to(postChatDto.roomId.toString()).emit('message', returnedChat);
+    this.server.to(postChatDto.roomId.toString()).emit('message', returnedChat);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  afterInit(server: Server): any {
-    console.log('websocketserver init');
+  afterInit(_server: Server): any {
+    console.log('websocket server init');
   }
 
   handleConnection(@ConnectedSocket() socket: Socket): any {
     console.log('connected', socket.nsp.name);
-    socket.emit('hello', socket.nsp.name);
-    socket.on('connection-error', (err) => {
-      console.log(err.message);
-      console.log(err.description);
-      console.log(err.context);
-    });
   }
 
   handleDisconnect(@ConnectedSocket() socket: Socket): any {

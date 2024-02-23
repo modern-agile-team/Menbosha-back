@@ -23,7 +23,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ParseObjectIdPipe } from '../pipes/parse-object-id.pipe';
 import { ApiCreateChatRoom } from '../swagger-decorators/create-chat-room.decorator';
 import { ApiLeaveChatRoom } from '../swagger-decorators/leave-chat-room.decorator';
-// import { ApiGetChatUnreadCounts } from '../swagger-decorators/get-chat-unread-counts.decorator';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { ApiCreateChatImage } from '../swagger-decorators/create-chat-image.decorators';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
@@ -142,7 +141,7 @@ export class ChatController {
   leaveChatRoom(
     @GetUserId() userId: number,
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  ): Promise<void> {
+  ) {
     return this.chatService.leaveChatRoom(userId, roomId);
   }
 
@@ -186,13 +185,4 @@ export class ChatController {
   ) {
     return this.chatService.deleteChat(userId, roomId, chatId);
   }
-
-  // @ApiGetChatUnreadCounts()
-  // @Get(':roomId/chat/unReads')
-  //  getUnreadCounts(
-  //   @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  //   @Query('after', ParseIntPipe) after: number,
-  // ) {
-  //   return this.chatService.getUnreadCounts(roomId, after);
-  // }
 }
