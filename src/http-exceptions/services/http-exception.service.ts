@@ -3,6 +3,9 @@ import { ERROR_CODE } from 'src/constants/error/error-code.constant';
 import { ERROR_MESSAGE } from 'src/constants/error/error-message.constant';
 import { ValueOf } from 'src/type/type';
 import { ExceptionResponseDto } from '../dto/exception-response.dto';
+import { config } from 'dotenv';
+
+config();
 
 interface ExceptionError {
   code: ValueOf<typeof ERROR_CODE>;
@@ -21,7 +24,10 @@ export class HttpExceptionService {
       statusCode,
       code,
       message: ERROR_MESSAGE[code],
-      stack: statusCode >= 500 && exceptionError.stack,
+      stack:
+        statusCode >= 500 && process.env.NODE_ENV
+          ? exceptionError.stack
+          : undefined,
     });
   }
 }
