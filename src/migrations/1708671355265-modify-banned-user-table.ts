@@ -5,33 +5,35 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-export class ModifyReportTable1708498015531 implements MigrationInterface {
+export class ModifyBannedUserTable1708671355265 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.changeColumn(
-      'report',
+      'banned_user',
       'user_id',
       new TableColumn({
-        name: 'report_user_id',
+        name: 'ban_user_id',
         type: 'int',
         isNullable: false,
-        comment: '신고한 유저 고유 ID',
+        comment: '밴한 어드민 고유 ID',
       }),
     );
 
     await queryRunner.addColumn(
-      'report',
+      'banned_user',
       new TableColumn({
-        name: 'reported_user_id',
+        isUnique: true,
+        name: 'banned_user_id',
         type: 'int',
         isNullable: false,
-        comment: '신고 당한 유저 ID',
+        comment: '밴 당한 유저 고유 ID',
       }),
     );
 
     await queryRunner.createForeignKey(
-      'report',
+      'banned_user',
       new TableForeignKey({
-        columnNames: ['reported_user_id'],
+        name: 'fk_banned_user_id',
+        columnNames: ['banned_user_id'],
         referencedTableName: 'user',
         referencedColumnNames: ['id'],
         onDelete: 'CASCADE',
@@ -42,8 +44,8 @@ export class ModifyReportTable1708498015531 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.changeColumn(
-      'report',
-      'report_user_id',
+      'banned_user',
+      'ban_user_id',
       new TableColumn({
         name: 'user_id',
         type: 'int',
@@ -53,11 +55,15 @@ export class ModifyReportTable1708498015531 implements MigrationInterface {
     );
 
     await queryRunner.query(
-      'ALTER TABLE ma6_menbosha_db.report DROP FOREIGN KEY FK_798954c041abe4b92a8f47d6638;',
+      'ALTER TABLE ma6_menbosha_db.banned_user DROP FOREIGN KEY fk_banned_user_id;',
     );
 
     await queryRunner.query(
-      'ALTER TABLE ma6_menbosha_db.report DROP COLUMN reported_user_id;',
+      'ALTER TABLE ma6_menbosha_db.banned_user DROP KEY IDX_7a417d9ade1a42e5a3848157f4;',
+    );
+
+    await queryRunner.query(
+      'ALTER TABLE ma6_menbosha_db.banned_user DROP COLUMN banned_user_id;',
     );
   }
 }
