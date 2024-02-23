@@ -4,6 +4,7 @@ import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiExtraModels,
+  ApiNotFoundResponse,
   ApiOperation,
   ApiUnauthorizedResponse,
   getSchemaPath,
@@ -12,7 +13,7 @@ import { ReportDto } from 'src/reports/dto/report.dto';
 
 export function ApiCreateReportDecorator(): MethodDecorator {
   return applyDecorators(
-    ApiBearerAuth(),
+    ApiBearerAuth('access-token'),
 
     ApiOperation({
       operationId: 'report_create',
@@ -45,13 +46,24 @@ export function ApiCreateReportDecorator(): MethodDecorator {
               value: { statusCode: 400, message: 'jwt error' },
               description: '그 외 에러 (백엔드에 도움 요청하기)',
             },
+            'validation failed': {
+              value: {
+                message: [
+                  'reason must be longer than or equal to 1 characters',
+                  'type must be one of the following values: 증오발언 및 혐오표현 게시글, 불법성 게시글 및 불법 촬영물, 홍보성 게시글',
+                  'reason must be shorter than or equal to 255 characters',
+                ],
+                error: 'Bad Request',
+                statusCode: 400,
+              },
+              description: '유효성 검사 실패',
+            },
           },
         },
       },
     }),
 
     ApiUnauthorizedResponse({
-      status: 401,
       description: '401 error',
       content: {
         JSON: {
@@ -63,6 +75,24 @@ export function ApiCreateReportDecorator(): MethodDecorator {
             'jwt expired': {
               value: { statusCode: 401, message: 'jwt expired' },
               description: '만료된 토큰인 경우',
+            },
+          },
+        },
+      },
+    }),
+
+    ApiNotFoundResponse({
+      description: '404 error',
+      content: {
+        JSON: {
+          examples: {
+            'user not found': {
+              value: {
+                message: '해당 유저를 찾지 못했습니다.',
+                error: 'Not Found',
+                statusCode: 404,
+              },
+              description: '대상 유저를 찾지 못함.',
             },
           },
         },
