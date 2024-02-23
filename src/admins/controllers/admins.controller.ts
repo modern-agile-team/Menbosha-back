@@ -21,6 +21,8 @@ import { SuccessResponseInterceptor } from 'src/common/interceptors/success-resp
 import { ApiCreateBannedUser } from 'src/admins/swagger-decorators/create-banned-user.decorator';
 import { BannedUserDto } from 'src/admins/banned-user/dtos/banned-user.dto';
 import { PutUpdateUserForAdminDto } from 'src/admins/dtos/put-update-user-for-admin.dto';
+import { AdminsService } from 'src/admins/services/admins.service';
+import { ApiPutUpdateUserStatus } from 'src/admins/swagger-decorators/put-update-user-status.decorator';
 
 @ApiTags('_admin')
 @UsePipes(
@@ -33,7 +35,10 @@ import { PutUpdateUserForAdminDto } from 'src/admins/dtos/put-update-user-for-ad
 @UseInterceptors(ClassSerializerInterceptor, SuccessResponseInterceptor)
 @Controller('admins')
 export class AdminsController {
-  constructor(private readonly bannedUsersService: BannedUsersService) {}
+  constructor(
+    private readonly bannedUsersService: BannedUsersService,
+    private readonly adminsService: AdminsService,
+  ) {}
 
   @ApiCreateBannedUser()
   @Post('users/:userId/banned-users')
@@ -51,12 +56,19 @@ export class AdminsController {
     );
   }
 
+  @ApiPutUpdateUserStatus()
   @Put('users/:userId')
   @OnlyAdmin(true)
   @UseGuards(AccessTokenAuthGuard, AdminHandlerGuard)
-  putUserUpdateStatus(
+  putUpdateUserStatus(
     @Body() putUpdateUserForAdminDto: PutUpdateUserForAdminDto,
     @Param('userId') userId: number,
     @GetUserId() adminId: number,
-  ) {}
+  ) {
+    return this.adminsService.putUpdateUserStatus(
+      adminId,
+      userId,
+      putUpdateUserForAdminDto,
+    );
+  }
 }
