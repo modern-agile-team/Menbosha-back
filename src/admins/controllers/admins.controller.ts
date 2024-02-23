@@ -1,4 +1,5 @@
 import {
+  Body,
   ClassSerializerInterceptor,
   Controller,
   Param,
@@ -9,9 +10,10 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { BannedUsersService } from 'src/admins/banned-user/services/banned-users.service';
 import { OnlyAdmin } from 'src/admins/decorators/only-admin.decorator';
+import { CreateBannedUserBodyDto } from 'src/admins/dtos/create-banned-user-body.dto';
 import { AdminHandlerGuard } from 'src/admins/guards/admin-handler.guard';
-import { AdminsService } from 'src/admins/services/admins.service';
 import { AccessTokenAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
@@ -27,12 +29,20 @@ import { SuccessResponseInterceptor } from 'src/common/interceptors/success-resp
 @UseInterceptors(ClassSerializerInterceptor, SuccessResponseInterceptor)
 @Controller('admins')
 export class AdminsController {
-  constructor(private readonly adminsService: AdminsService) {}
+  constructor(private readonly bannedUsersService: BannedUsersService) {}
 
   @Post('users/:userId/banned-users')
   @OnlyAdmin(true)
   @UseGuards(AccessTokenAuthGuard, AdminHandlerGuard)
-  createBannedUser(@Param('userId') userId: number, @GetUserId() myId: number) {
-    return 'say hello admin';
+  createBannedUser(
+    @Body() createBannedUserBodyDto: CreateBannedUserBodyDto,
+    @Param('userId') userId: number,
+    @GetUserId() myId: number,
+  ) {
+    return this.bannedUsersService.createBannedUser(
+      myId,
+      userId,
+      createBannedUserBodyDto,
+    );
   }
 }
