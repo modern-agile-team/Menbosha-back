@@ -108,9 +108,8 @@ export class User {
   })
   deletedAt: Date | null;
 
-  @Column({
+  @Column('varchar', {
     name: 'unique_id',
-    type: 'varchar',
     length: '100',
     nullable: true,
   })
