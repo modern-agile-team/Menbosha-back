@@ -44,11 +44,11 @@ import { ReportsModule } from 'src/reports/reports.module';
     S3Module,
     BoardsModule,
     SearchModule,
-    ExceptionsModule,
     CategoryModule,
     MentorsModule,
     AdminsModule,
     ReportsModule,
+    ExceptionsModule,
   ], //
   providers: [UserImageService, UserImageRepository, S3Service],
 })
