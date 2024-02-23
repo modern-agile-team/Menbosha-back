@@ -114,7 +114,7 @@ export class User {
     length: '100',
     nullable: true,
   })
-  uniqueId: string;
+  uniqueId: string | null;
 
   @OneToMany(() => MentorBoard, (mentorBoard) => mentorBoard.user)
   @JoinColumn({ name: 'mentor_board_id' })
