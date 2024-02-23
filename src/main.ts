@@ -4,6 +4,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { setupSwagger } from './config/swagger';
 import * as cookieParser from 'cookie-parser';
 import { AsyncApiDocumentBuilder, AsyncApiModule } from 'nestjs-asyncapi';
+import { AdminExceptionFilter } from 'src/http-exceptions/exception-filters/admin-exception.filter';
 // import { HttpBadRequestExceptionFilter } from './http-exceptions/exception-filters/http-bad-request-exception.filter';
 // import { HttpProcessErrorExceptionFilter } from './http-exceptions/exception-filters/http-process-error-exception.filter';
 // import { HttpRemainderExceptionFilter } from './http-exceptions/exception-filters/http-remainder-exception.filter';
@@ -40,17 +41,18 @@ async function bootstrap() {
   await AsyncApiModule.setup('asyncapi', app, asyncApiDocument);
   app.useLogger(logger);
 
-  // app.useGlobalFilters(
-  //   app.get(HttpProcessErrorExceptionFilter),
-  //   app.get(HttpRemainderExceptionFilter),
-  //   app.get(HttpInternalServerErrorExceptionFilter),
-  //   app.get(HttpConflictExceptionFilter),
-  //   app.get(HttpNotFoundExceptionFilter),
-  //   app.get(HttpPathNotFoundExceptionFilter),
-  //   app.get(HttpForbiddenExceptionFilter),
-  //   app.get(HttpUnauthorizedExceptionFilter),
-  //   app.get(HttpBadRequestExceptionFilter),
-  // );
+  app.useGlobalFilters(
+    app.get(AdminExceptionFilter),
+    //   app.get(HttpProcessErrorExceptionFilter),
+    //   app.get(HttpRemainderExceptionFilter),
+    //   app.get(HttpInternalServerErrorExceptionFilter),
+    //   app.get(HttpConflictExceptionFilter),
+    //   app.get(HttpNotFoundExceptionFilter),
+    //   app.get(HttpPathNotFoundExceptionFilter),
+    //   app.get(HttpForbiddenExceptionFilter),
+    //   app.get(HttpUnauthorizedExceptionFilter),
+    //   app.get(HttpBadRequestExceptionFilter),
+  );
 
   await app.listen(3000);
 }
