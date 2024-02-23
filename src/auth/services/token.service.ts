@@ -16,7 +16,7 @@ export class TokenService {
 
   async getUserTokens(userId: number) {
     const getUserTokens = await this.tokenRepository.getUserTokens(userId);
-    if (getUserTokens) {
+    if (!getUserTokens) {
       throw new HttpException('토큰을 찾을 수 없습니다.', HttpStatus.NOT_FOUND);
     }
     return getUserTokens;
