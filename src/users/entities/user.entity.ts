@@ -108,6 +108,14 @@ export class User {
   })
   deletedAt: Date | null;
 
+  @Column({
+    name: 'unique_id',
+    type: 'varchar',
+    length: '100',
+    nullable: true,
+  })
+  uniqueId: string;
+
   @OneToMany(() => MentorBoard, (mentorBoard) => mentorBoard.user)
   @JoinColumn({ name: 'mentor_board_id' })
   mentorBoard: MentorBoard;
