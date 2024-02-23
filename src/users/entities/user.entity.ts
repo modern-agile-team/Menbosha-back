@@ -22,7 +22,7 @@ import { MentorBoardLike } from 'src/boards/entities/mentor-board-like.entity';
 import { UserRanking } from './user-ranking.entity';
 import { MentorReviewChecklistCount } from 'src/total-count/entities/mentor-review-checklist-count.entity';
 import { Report } from 'src/reports/entities/report.entity';
-import { BannedUser } from 'src/admins/entities/banned-user.entity';
+import { BannedUser } from 'src/admins/banned-user/entities/banned-user.entity';
 import { UserStatus } from 'src/users/constants/user-status.enum';
 
 @Entity({
@@ -142,6 +142,9 @@ export class User {
   @OneToMany(() => Report, (reports) => reports.reportedUser)
   reported: Report[];
 
-  @OneToOne(() => BannedUser, (bannedUser) => bannedUser.user)
-  bannedUser: BannedUser;
+  @OneToMany(() => BannedUser, (bannedUser) => bannedUser.banUser)
+  bans: BannedUser[];
+
+  @OneToOne(() => BannedUser, (bannedUser) => bannedUser.bannedUser)
+  banned: BannedUser;
 }

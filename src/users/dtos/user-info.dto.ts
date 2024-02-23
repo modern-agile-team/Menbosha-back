@@ -21,7 +21,8 @@ export class UserInfoDto
       | 'userRanking'
       | 'mentorReviewChecklistCount'
       | 'reports'
-      | 'bannedUser'
+      | 'banned'
+      | 'bans'
       | 'reported'
     >
 {
