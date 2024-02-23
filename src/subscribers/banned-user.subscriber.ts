@@ -18,8 +18,6 @@ export class BannedUserSubscriber
   async afterInsert(event: InsertEvent<BannedUser>): Promise<void> {
     const bannedUser = event.entity;
 
-    console.log(event.manager);
-
     await event.manager
       .getRepository(User)
       .update({ id: bannedUser.bannedUserId }, { status: UserStatus.INACTIVE });
