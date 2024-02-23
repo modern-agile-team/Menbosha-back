@@ -7,7 +7,9 @@ import { TotalCountService } from 'src/total-count/services/total-count.service'
 import { DataSource } from 'typeorm';
 import { UserService } from 'src/users/services/user.service';
 import { UserImageService } from 'src/users/services/user-image.service';
-import { Provider } from '../enums/provider.enum';
+import { UserStatus } from 'src/users/constants/user-status.enum';
+import { UserInfo } from 'src/auth/interfaces/user-info.interface';
+import { Provider } from 'src/auth/enums/provider.enum';
 
 dotenv.config();
 
@@ -137,6 +139,18 @@ export class AuthService implements AuthServiceInterface {
       };
 
       const user = await this.userService.findUser(email, provider);
+
+      /**
+       * @todo
+       * 1. 유저 상태 검사
+       * 2. 비활성화 상태라면 정지 테이블에서 유저 조회
+       * 3. 정지 테이블에 날짜를 현재 날짜와 비교
+       * 4. 현재 날짜와 비교해서 아직 정지가 끝나지 않았다면 정지 관련 에러 발생 및 정지 풀리는 날짜도 같이 throw
+       * 5. 만약 날짜가 지났다면 ACTIVE 상태로 다시 돌려주고 로직 진행
+       * 6. 정지 테이블에 없다면 알 수 없는 이유로 유저가 비활성화 상태. 서버 에러 발생(관리자에게 문의 관련 에러)
+       */
+      if (user.status === UserStatus.INACTIVE) {
+      }
 
       if (user) {
         const userId = user.id;
