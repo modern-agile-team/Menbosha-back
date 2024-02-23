@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { BANNED_USER_REASON_LENGTH } from 'src/admins/banned-user/constants/banned-user.constant';
 import { BannedUser } from 'src/admins/banned-user/entities/banned-user.entity';
 
 export class BannedUserDto
@@ -24,7 +25,8 @@ export class BannedUserDto
 
   @ApiProperty({
     description: '정지 사유',
-    maxLength: 255,
+    minLength: BANNED_USER_REASON_LENGTH.MIN,
+    maxLength: BANNED_USER_REASON_LENGTH.MAX,
   })
   reason: string;
 
