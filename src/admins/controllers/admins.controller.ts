@@ -13,13 +13,14 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { BannedUsersService } from 'src/admins/banned-user/services/banned-users.service';
 import { OnlyAdmin } from 'src/admins/decorators/only-admin.decorator';
-import { CreateBannedUserBodyDto } from 'src/admins/banned-user/dtos/create-banned-user-body.dto';
+import { CreateBannedUserBodyDto } from 'src/admins/dtos/create-banned-user-body.dto';
 import { AdminHandlerGuard } from 'src/admins/guards/admin-handler.guard';
 import { AccessTokenAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
 import { GetUserId } from 'src/common/decorators/get-userId.decorator';
 import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
 import { ApiCreateBannedUser } from 'src/admins/swagger-decorators/create-banned-user.decorator';
 import { BannedUserDto } from 'src/admins/banned-user/dtos/banned-user.dto';
+import { PutUpdateUserForAdminDto } from 'src/admins/dtos/put-update-user-for-admin.dto';
 
 @ApiTags('_admin')
 @UsePipes(
@@ -53,5 +54,9 @@ export class AdminsController {
   @Put('users/:userId')
   @OnlyAdmin(true)
   @UseGuards(AccessTokenAuthGuard, AdminHandlerGuard)
-  putUserUpdateStatus() {}
+  putUserUpdateStatus(
+    @Body() putUpdateUserForAdminDto: PutUpdateUserForAdminDto,
+    @Param('userId') userId: number,
+    @GetUserId() adminId: number,
+  ) {}
 }
