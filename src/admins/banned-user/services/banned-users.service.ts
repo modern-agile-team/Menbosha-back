@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  ForbiddenException,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
@@ -10,6 +9,8 @@ import { UserService } from 'src/users/services/user.service';
 import { DataSource } from 'typeorm';
 import { BannedUserDto } from 'src/admins/banned-user/dtos/banned-user.dto';
 import { UserStatus } from 'src/users/constants/user-status.enum';
+import { ADMIN_ERROR_CODE } from 'src/constants/error/admin/admin-error-code.constant';
+import { AdminException } from 'src/http-exceptions/exceptions/admin-exception';
 
 @Injectable()
 export class BannedUsersService {
@@ -36,7 +37,7 @@ export class BannedUsersService {
     });
 
     if (existTargetUser.admin) {
-      throw new ForbiddenException('Admin cannot be banned.');
+      throw new AdminException({ code: ADMIN_ERROR_CODE.DENIED_FOR_ADMINS });
     }
 
     const queryRunner = this.dataSource.createQueryRunner();
@@ -46,8 +47,6 @@ export class BannedUsersService {
 
     try {
       const entityManager = queryRunner.manager;
-
-      console.log(entityManager);
 
       const bannedUser = await this.bannedUserRepository.createBannedUser(
         entityManager,
