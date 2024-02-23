@@ -6,17 +6,17 @@ import { Token } from '../entities/token.entity';
 export class TokenRepository {
   constructor(private readonly entityManager: EntityManager) {}
 
-  async getUserTokens(userId: number): Promise<Token> {
-    return await this.entityManager.findOne(Token, { where: { userId } });
+  getUserTokens(userId: number): Promise<Token> {
+    return this.entityManager.findOne(Token, { where: { userId } });
   }
 
-  async saveTokens(
+  saveTokens(
     userId: number,
     refreshToken: string,
     socialAccessToken: string,
     socialRefreshToken: string,
   ): Promise<Token> {
-    return await this.entityManager.save(Token, {
+    return this.entityManager.save(Token, {
       userId,
       refreshToken,
       socialAccessToken,
@@ -24,13 +24,13 @@ export class TokenRepository {
     });
   }
 
-  async updateTokens(
+  updateTokens(
     userId: number,
     refreshToken: string,
     socialAccessToken: string,
     socialRefreshToken: string,
   ): Promise<UpdateResult> {
-    return await this.entityManager.update(
+    return this.entityManager.update(
       Token,
       { userId },
       { refreshToken, socialAccessToken, socialRefreshToken },
