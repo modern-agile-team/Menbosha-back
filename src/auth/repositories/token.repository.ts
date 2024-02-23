@@ -6,7 +6,7 @@ import { Token } from '../entities/token.entity';
 export class TokenRepository {
   constructor(private readonly entityManager: EntityManager) {}
 
-  getUserTokens(userId: number): Promise<Token> {
+  getUserToken(userId: number): Promise<Token> {
     return this.entityManager.findOne(Token, { where: { userId } });
   }
 
