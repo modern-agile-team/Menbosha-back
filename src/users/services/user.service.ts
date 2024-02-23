@@ -11,6 +11,7 @@ import { MyProfileResponseDTO } from '../dtos/get-my-profile.dto';
 import { MyIntroDto } from '../dtos/get-my-intro.dto';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { Provider } from 'src/auth/enums/provider.enum';
+import { UserInfo } from 'src/auth/interfaces/user-info.interface';
 
 @Injectable()
 export class UserService {
