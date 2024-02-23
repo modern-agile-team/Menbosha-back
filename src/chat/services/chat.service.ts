@@ -73,7 +73,7 @@ export class ChatService {
     });
 
     if (!returnedRoom) {
-      throw new NotFoundException('해당 채팅방이 없습니다.');
+      throw new NotFoundException('해당 채팅방이 존재하지 않습니다.');
     }
 
     return new ChatRoomDto(returnedRoom);
@@ -317,14 +317,10 @@ export class ChatService {
     content,
     senderId,
   }: PostChatDto): Promise<ChatDto> {
-    const returnedChatRoom = await this.chatRepository.findOneChatRoom({
-      _id: roomId,
-      chatMembers: senderId,
-      deletedAt: null,
-    });
+    const returnedChatRoom = await this.findOneChatRoomOrFail(roomId);
 
-    if (!returnedChatRoom) {
-      throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
+    if (!returnedChatRoom.chatMembers.includes(senderId)) {
+      throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다,');
     }
 
     const newChat: ChatDto = {

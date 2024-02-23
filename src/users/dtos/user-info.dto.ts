@@ -24,6 +24,8 @@ export class UserInfoDto
       | 'banned'
       | 'bans'
       | 'reported'
+      | 'bannedUser'
+      | 'uniqueId'
     >
 {
   @ApiProperty({

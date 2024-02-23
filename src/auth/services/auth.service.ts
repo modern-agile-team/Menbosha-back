@@ -141,7 +141,7 @@ export class AuthService implements AuthServiceInterface {
       if (user) {
         const userId = user.id;
 
-        await this.userService.updateUserName(userId, name);
+        await this.userService.updateUser(userId, { name });
 
         const userImageUrl = (await this.userImageService.findUserImage(userId))
           .imageUrl;
@@ -342,7 +342,9 @@ export class AuthService implements AuthServiceInterface {
   }
 
   async accountDelete(userId: number) {
-    const deleteUser = await this.userService.deleteUser(userId);
+    const deleteUser = await this.userService.updateUser(userId, {
+      deletedAt: new Date(),
+    });
     if (!deleteUser) {
       throw new HttpException(
         '사용자를 찾을 수 없습니다.',

@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import {
-  DeleteResult,
   EntityManager,
   FindManyOptions,
   FindOneOptions,
+  UpdateResult,
 } from 'typeorm';
 import { User } from '../entities/user.entity';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { Provider } from 'src/auth/enums/provider.enum';
 
 @Injectable()
@@ -50,22 +51,11 @@ export class UserRepository {
     });
   }
 
-  async updateUserName(userId: number, name: string): Promise<User> {
-    const user = await this.entityManager.findOne(User, {
-      where: { id: userId },
-    });
-
-    if (!user) {
-      throw new NotFoundException('사용자를 찾을 수 없습니다.');
-    }
-
-    user.name = name;
-
-    return this.entityManager.save(user);
-  }
-
-  deleteUser(userId: number): Promise<DeleteResult> {
-    return this.entityManager.delete(User, { id: userId });
+  updateUser(
+    userId: number,
+    partialEntity: QueryDeepPartialEntity<User>,
+  ): Promise<UpdateResult> {
+    return this.entityManager.update(User, { id: userId }, partialEntity);
   }
 
   countMentorsInCategory(categoryId: number): Promise<number> {
@@ -77,12 +67,6 @@ export class UserRepository {
   countMentors(): Promise<number> {
     return this.entityManager.count(User, {
       where: { isMentor: true },
-    });
-  }
-
-  async findOneUser(userId: number): Promise<User> {
-    return await this.entityManager.findOne(User, {
-      where: { id: userId },
     });
   }
 

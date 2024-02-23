@@ -15,11 +15,11 @@ export class TokenService {
   ) {}
 
   async getUserTokens(userId: number) {
-    const getUserTokens = await this.tokenRepository.getUserTokens(userId);
-    if (getUserTokens.length <= 0) {
+    const getUserTokens = await this.tokenRepository.getUserToken(userId);
+    if (!getUserTokens) {
       throw new HttpException('토큰을 찾을 수 없습니다.', HttpStatus.NOT_FOUND);
     }
-    return getUserTokens[0];
+    return getUserTokens;
   }
 
   async saveTokens(
@@ -40,7 +40,8 @@ export class TokenService {
       Ttl.refreshToken,
     );
 
-    const tokens = await this.tokenRepository.getUserTokens(userId);
+    const tokens = await this.tokenRepository.getUserToken(userId);
+
     if (tokens) {
       return await this.tokenRepository.updateTokens(
         userId,
