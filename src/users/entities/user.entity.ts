@@ -24,6 +24,7 @@ import { MentorReviewChecklistCount } from 'src/total-count/entities/mentor-revi
 import { Report } from 'src/reports/entities/report.entity';
 import { BannedUser } from 'src/admins/banned-user/entities/banned-user.entity';
 import { UserStatus } from 'src/users/constants/user-status.enum';
+import { Provider } from 'src/auth/enums/provider.enum';
 
 @Entity({
   name: 'user',
@@ -51,7 +52,7 @@ export class User {
   mentee: MentorReview;
 
   @Column({ length: 10 })
-  provider: string;
+  provider: Provider;
 
   @Index({ fulltext: true })
   @Column('varchar', { length: 20 })
