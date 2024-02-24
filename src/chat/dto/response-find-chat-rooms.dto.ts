@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { AggregateChatRoomsDto } from '@src/chat/dto/aggregate-chat-rooms.dto';
 import { ChatUserDto } from '@src/users/dtos/chat-user.dto';
-import { AggregateChatRoomsDto } from './aggregate-chat-rooms.dto';
 
 export class ResponseFindChatRoomsDto {
   @ApiProperty({

@@ -1,4 +1,3 @@
-import { TokenService } from './token.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 import axios from 'axios';
@@ -10,6 +9,7 @@ import { UserImageService } from '@src/users/services/user-image.service';
 import { UserStatus } from '@src/users/constants/user-status.enum';
 import { UserInfo } from '@src/auth/interfaces/user-info.interface';
 import { Provider } from '@src/auth/enums/provider.enum';
+import { TokenService } from '@src/auth/services/token.service';
 
 dotenv.config();
 

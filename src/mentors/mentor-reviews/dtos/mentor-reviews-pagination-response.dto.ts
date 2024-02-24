@@ -1,6 +1,6 @@
 import { PaginationResponseDto } from '@src/common/dto/pagination-response.dto';
-import { MentorReviewsItemResponseDto } from './mentor-reviews-item-response.dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { MentorReviewsItemResponseDto } from '@src/mentors/mentor-reviews/dtos/mentor-reviews-item-response.dto';
 
 export class MentorReviewsPaginationResponseDto extends PaginationResponseDto {
   @ApiProperty({

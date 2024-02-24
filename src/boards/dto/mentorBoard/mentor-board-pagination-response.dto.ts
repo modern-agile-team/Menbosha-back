@@ -1,6 +1,6 @@
 import { PaginationResponseDto } from '@src/common/dto/pagination-response.dto';
-import { MentorBoardWithUserAndImageDto } from './mentor-board-with-user-and-image.dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { MentorBoardWithUserAndImageDto } from '@src/boards/dto/mentorBoard/mentor-board-with-user-and-image.dto';
 
 /**
  * @todo 멘토 보드로 통합되면 dto명 수정 및 Property description 수정

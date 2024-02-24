@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserBadge } from './../entities/user-badge.entity';
+import { UserBadge } from '@src/users/entities/user-badge.entity';
 import { Exclude } from 'class-transformer';
 
 export class UserBadgeDto implements Omit<UserBadge, 'user' | 'badge'> {

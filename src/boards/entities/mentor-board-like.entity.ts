@@ -5,8 +5,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { MentorBoard } from './mentor-board.entity';
 import { User } from '@src/users/entities/user.entity';
+import { MentorBoard } from '@src/boards/entities/mentor-board.entity';
 
 @Entity({ name: 'mentor_board_like' })
 export class MentorBoardLike {

@@ -1,5 +1,5 @@
-import { MentorReviewDto } from './mentor-review.dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { MentorReviewDto } from '@src/mentors/mentor-reviews/dtos/mentor-review.dto';
 import { UserInfoDto } from '@src/users/dtos/user-info.dto';
 import { UserImage } from '@src/users/entities/user-image.entity';
 import { UserIntro } from '@src/users/entities/user-intro.entity';

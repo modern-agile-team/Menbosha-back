@@ -1,6 +1,6 @@
 import { PaginationResponseDto } from '@src/common/dto/pagination-response.dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { HelpMeBoardWithUserAndImagesDto } from './help-me-board-with-user-and-images.dto';
+import { HelpMeBoardWithUserAndImagesDto } from '@src/boards/dto/helpMeBoard/help-me-board-with-user-and-images.dto';
 
 export class HelpMeBoardPaginationResponseDto extends PaginationResponseDto {
   @ApiProperty({

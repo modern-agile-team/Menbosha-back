@@ -1,6 +1,6 @@
 import { PaginationResponseDto } from '@src/common/dto/pagination-response.dto';
-import { UserWithImageAndIntroDto } from './user-with-image-and-intro.dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { UserWithImageAndIntroDto } from '@src/mentors/dtos/user-with-image-and-intro.dto';
 
 export class MentorPaginationResponseDto extends PaginationResponseDto {
   @ApiProperty({

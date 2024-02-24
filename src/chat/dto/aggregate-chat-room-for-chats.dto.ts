@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ChatRoomDto } from './chat-room.dto';
+import { ChatRoomDto } from '@src/chat/dto/chat-room.dto';
 import { PaginationResponseDto } from '@src/common/dto/pagination-response.dto';
 import { ChatUserDto } from '@src/users/dtos/chat-user.dto';
 
