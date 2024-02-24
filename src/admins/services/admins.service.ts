@@ -1,9 +1,10 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { PutUpdateUserForAdminDto } from 'src/admins/dtos/put-update-user-for-admin.dto';
-import { UserResponseForAdminDto } from 'src/admins/dtos/user-response-for-admin.dto';
-import { ADMIN_ERROR_CODE } from 'src/constants/error/admin/admin-error-code.constant';
-import { AdminException } from 'src/http-exceptions/exceptions/admin-exception';
-import { UserService } from 'src/users/services/user.service';
+import { PutUpdateUserForAdminDto } from '@src/admins/dtos/put-update-user-for-admin.dto';
+import { UserResponseForAdminDto } from '@src/admins/dtos/user-response-for-admin.dto';
+import { ADMIN_ERROR_CODE } from '@src/constants/error/admin/admin-error-code.constant';
+import { AdminException } from '@src/http-exceptions/exceptions/admin-exception';
+import { UserRole } from '@src/users/constants/user-role.enum';
+import { UserService } from '@src/users/services/user.service';
 
 @Injectable()
 export class AdminsService {
@@ -18,7 +19,7 @@ export class AdminsService {
       where: { id: userId },
     });
 
-    if (adminId !== userId && existUser.admin) {
+    if (adminId !== userId && existUser.role === UserRole.ADMIN) {
       throw new AdminException({ code: ADMIN_ERROR_CODE.DENIED_FOR_ADMINS });
     }
 
