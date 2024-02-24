@@ -3,7 +3,7 @@ import { CreateMentorReviewChecklistRequestBodyDto } from './create-mentor-revie
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
-import { IsNotEmptyObjectAndAllFalse } from 'src/common/decorators/validators/is-not-empty-object-and-all-false.decorator';
+import { IsNotEmptyObjectAndAllFalse } from '@src/common/decorators/validators/is-not-empty-object-and-all-false.decorator';
 
 export class CreateMentorReviewRequestBodyDto
   implements Partial<MentorReviewDto>

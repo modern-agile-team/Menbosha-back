@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateReportBodyDto } from 'src/reports/dto/create-report-body.dto';
-import { Report } from 'src/reports/entities/report.entity';
+import { CreateReportBodyDto } from '@src/reports/dto/create-report-body.dto';
+import { Report } from '@src/reports/entities/report.entity';
 import { EntityManager } from 'typeorm';
 
 @Injectable()

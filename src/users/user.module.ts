@@ -4,17 +4,17 @@ import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { UserImageController } from './controllers/user-image.controller';
-import { S3Service } from 'src/common/s3/s3.service';
+import { S3Service } from '@src/common/s3/s3.service';
 import { UserRepository } from './repositories/user.repository';
 import { UserImageRepository } from './repositories/user-image.repository';
 import { UserImageService } from './services/user-image.service';
-import { AuthModule } from 'src/auth/auth.module';
+import { AuthModule } from '@src/auth/auth.module';
 import { UserIntroService } from './services/user-intro-service';
 import { UserBadgeRepository } from './repositories/user-badge.repository';
 import { UserIntroRepository } from './repositories/user-intro.repository';
 import { UserRankingService } from './services/user-ranking.service';
 import { UserRankingRepository } from './repositories/user-ranking.repository';
-import { TotalCountModule } from 'src/total-count/total-count.module';
+import { TotalCountModule } from '@src/total-count/total-count.module';
 import { UserBadgeService } from './services/user-badge.service';
 
 @Module({

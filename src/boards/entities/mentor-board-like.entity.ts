@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { MentorBoard } from './mentor-board.entity';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '@src/users/entities/user.entity';
 
 @Entity({ name: 'mentor_board_like' })
 export class MentorBoardLike {

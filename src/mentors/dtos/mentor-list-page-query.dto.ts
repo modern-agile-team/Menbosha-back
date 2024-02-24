@@ -1,14 +1,11 @@
-import { PageQueryDto } from 'src/common/dto/page-query.dto';
+import { PageQueryDto } from '@src/common/dto/page-query.dto';
 import { User } from '../../users/entities/user.entity';
-import { SortOrder } from 'src/common/constants/sort-order.enum';
+import { SortOrder } from '@src/common/constants/sort-order.enum';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { IsPositiveInt } from 'src/common/decorators/validators/is-positive-int.decorator';
+import { IsPositiveInt } from '@src/common/decorators/validators/is-positive-int.decorator';
 import { MentorOrderField } from '../constants/mentor-order-field.enum';
 
-/**
- * @todo create provider enum, mentorOrderField
- */
 export class MentorListPageQueryDto
   extends PageQueryDto
   implements Partial<Pick<User, 'id' | 'name' | 'activityCategoryId'>>

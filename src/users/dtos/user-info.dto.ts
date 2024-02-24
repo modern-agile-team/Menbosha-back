@@ -1,8 +1,9 @@
 import { Exclude } from 'class-transformer';
 import { User } from '../entities/user.entity';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserStatus } from 'src/users/constants/user-status.enum';
-import { Provider } from 'src/auth/enums/provider.enum';
+import { UserStatus } from '@src/users/constants/user-status.enum';
+import { Provider } from '@src/auth/enums/provider.enum';
+import { UserRole } from '@src/users/constants/user-role.enum';
 
 export class UserInfoDto
   implements
@@ -45,9 +46,10 @@ export class UserInfoDto
   email: string;
 
   @ApiProperty({
-    description: '관리자 여부',
+    description: '유저 역할',
+    enum: UserRole,
   })
-  admin: boolean;
+  role: UserRole;
 
   @ApiProperty({
     description: '멘토 여부',

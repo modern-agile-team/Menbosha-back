@@ -15,9 +15,9 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { GetUserId } from 'src/common/decorators/get-userId.decorator';
-import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
-import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
+import { GetUserId } from '@src/common/decorators/get-userId.decorator';
+import { SuccessResponseInterceptor } from '@src/common/interceptors/success-response.interceptor';
+import { ParsePositiveIntPipe } from '@src/common/pipes/parse-positive-int.pipe';
 import { MentorReviewsService } from '../services/mentor-reviews.service';
 import { CreateMentorReviewRequestBodyDto } from '../dtos/create-mentor-review-request-body.dto';
 import { MentorReviewDto } from '../dtos/mentor-review.dto';
@@ -29,7 +29,7 @@ import { ApiFindOneMentorReview } from '../swagger-decorators/find-one-mentor-re
 import { ApiDeleteMentorReview } from '../swagger-decorators/delete-mentor-review.decorator';
 import { PatchUpdateMentorReviewDto } from '../dtos/patch-update-mentor-review.dto';
 import { ApiPatchUpdateMentorReview } from '../swagger-decorators/patch-update-mentor-review.decorator';
-import { AccessTokenAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+import { AccessTokenAuthGuard } from '@src/auth/jwt/jwt-auth.guard';
 
 @UsePipes(
   new ValidationPipe({

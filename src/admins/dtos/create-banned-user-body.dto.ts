@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, Length, Matches } from 'class-validator';
-import { BANNED_USER_REASON_LENGTH } from 'src/admins/banned-user/constants/banned-user.constant';
-import { BannedUserDto } from 'src/admins/banned-user/dtos/banned-user.dto';
-import { ISO_8601_REGEXP } from 'src/common/constants/ISO-8601.regexp';
+import { BANNED_USER_REASON_LENGTH } from '@src/admins/banned-user/constants/banned-user.constant';
+import { BannedUserDto } from '@src/admins/banned-user/dtos/banned-user.dto';
+import { ISO_8601_REGEXP } from '@src/common/constants/ISO-8601.regexp';
 
 export class CreateBannedUserBodyDto
   implements

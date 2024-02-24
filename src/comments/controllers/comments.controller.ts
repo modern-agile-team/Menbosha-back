@@ -10,9 +10,9 @@ import { ApiTags } from '@nestjs/swagger';
 import { CommentsService } from '../services/comments.services';
 import { CreateCommentDto } from '../dto/create-comment-dto';
 import { ApiDeleteComment } from '../swagger-decorators/delete-comment-decorator';
-import { GetUserId } from 'src/common/decorators/get-userId.decorator';
+import { GetUserId } from '@src/common/decorators/get-userId.decorator';
 import { ApiAddHelpComment } from '../swagger-decorators/post-help-you-comment-decorator';
-import { AccessTokenAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+import { AccessTokenAuthGuard } from '@src/auth/jwt/jwt-auth.guard';
 
 @Controller('help-you-comments')
 @ApiTags('help-you-comment API')

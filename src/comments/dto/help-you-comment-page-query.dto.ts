@@ -1,8 +1,8 @@
 import { ApiPropertyOptional, ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsEnum } from 'class-validator';
-import { SortOrder } from 'src/common/constants/sort-order.enum';
-import { IsPositiveInt } from 'src/common/decorators/validators/is-positive-int.decorator';
-import { PageQueryDto } from 'src/common/dto/page-query.dto';
+import { SortOrder } from '@src/common/constants/sort-order.enum';
+import { IsPositiveInt } from '@src/common/decorators/validators/is-positive-int.decorator';
+import { PageQueryDto } from '@src/common/dto/page-query.dto';
 import { HelpYouCommentOrderField } from '../constants/help-you-comment-order-field.enum';
 
 export class HelpYouCommentPageQueryDto extends PageQueryDto {

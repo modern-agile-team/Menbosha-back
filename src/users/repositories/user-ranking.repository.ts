@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager, MoreThanOrEqual } from 'typeorm';
 import { User } from '../entities/user.entity';
-import { TotalCount } from 'src/total-count/entities/total-count.entity';
+import { TotalCount } from '@src/total-count/entities/total-count.entity';
 import { UserRanking } from '../entities/user-ranking.entity';
 import { UserIntro } from '../entities/user-intro.entity';
 import { UserImage } from '../entities/user-image.entity';

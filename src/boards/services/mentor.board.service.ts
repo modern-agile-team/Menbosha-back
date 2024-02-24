@@ -14,7 +14,7 @@ import { MentorBoardLikeRepository } from '../repository/mentor.board.likes.repo
 import { MentorBoardWithUserAndImageDto } from '../dto/mentorBoard/mentor-board-with-user-and-image.dto';
 import { MentorBoardPaginationResponseDto } from '../dto/mentorBoard/mentor-board-pagination-response.dto';
 import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
-import { CategoryService } from 'src/category/services/category.service';
+import { CategoryService } from '@src/category/services/category.service';
 
 @Injectable()
 export class MentorBoardService {

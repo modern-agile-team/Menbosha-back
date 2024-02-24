@@ -11,7 +11,7 @@ import {
   ApiUnauthorizedResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { UserResponseForAdminDto } from 'src/admins/dtos/user-response-for-admin.dto';
+import { UserResponseForAdminDto } from '@src/admins/dtos/user-response-for-admin.dto';
 
 export const ApiPutUpdateUserStatus = () => {
   return applyDecorators(

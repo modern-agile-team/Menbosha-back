@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { ApiTags } from '@nestjs/swagger';
-import { GetUserId } from 'src/common/decorators/get-userId.decorator';
+import { GetUserId } from '@src/common/decorators/get-userId.decorator';
 import { ApiGetMyProfile } from '../swagger-decorators/get-my-profile-decorator';
 import { ApiGetMyInfoWithOwner } from '../swagger-decorators/get-my-info-with-owner-decorator';
 import { ApiGetPageNumberByMentor } from '../swagger-decorators/get-mentor-page-decorator';
@@ -28,7 +28,7 @@ import { ApiGetMyRank } from '../swagger-decorators/get-my-rank-decorators';
 import { ApiGetUserInfo } from '../swagger-decorators/get-user-info.decorators';
 import { UserRankingService } from '../services/user-ranking.service';
 import { ApiGetTotalRanking } from '../swagger-decorators/get-total-ranking.decorator';
-import { AccessTokenAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+import { AccessTokenAuthGuard } from '@src/auth/jwt/jwt-auth.guard';
 import { UserBadgeService } from '../services/user-badge.service';
 import { ApiPostUserBadges } from '../swagger-decorators/get-user-badges-decorator';
 

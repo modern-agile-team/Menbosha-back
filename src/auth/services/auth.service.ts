@@ -3,13 +3,13 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 import axios from 'axios';
 import { AuthServiceInterface } from '../interfaces/auth-service.interface';
-import { TotalCountService } from 'src/total-count/services/total-count.service';
+import { TotalCountService } from '@src/total-count/services/total-count.service';
 import { DataSource } from 'typeorm';
-import { UserService } from 'src/users/services/user.service';
-import { UserImageService } from 'src/users/services/user-image.service';
-import { UserStatus } from 'src/users/constants/user-status.enum';
-import { UserInfo } from 'src/auth/interfaces/user-info.interface';
-import { Provider } from 'src/auth/enums/provider.enum';
+import { UserService } from '@src/users/services/user.service';
+import { UserImageService } from '@src/users/services/user-image.service';
+import { UserStatus } from '@src/users/constants/user-status.enum';
+import { UserInfo } from '@src/auth/interfaces/user-info.interface';
+import { Provider } from '@src/auth/enums/provider.enum';
 
 dotenv.config();
 

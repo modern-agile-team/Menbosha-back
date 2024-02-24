@@ -9,7 +9,7 @@ import { HttpConflictExceptionFilter } from './exception-filters/http-conflict-e
 import { HttpInternalServerErrorExceptionFilter } from './exception-filters/http-internal-server-error-exception.filter';
 import { HttpProcessErrorExceptionFilter } from './exception-filters/http-process-error-exception.filter';
 import { HttpRemainderExceptionFilter } from './exception-filters/http-remainder-exception.filter';
-import { AdminExceptionFilter } from 'src/http-exceptions/exception-filters/admin-exception.filter';
+import { AdminExceptionFilter } from '@src/http-exceptions/exception-filters/admin-exception.filter';
 
 @Module({
   providers: [

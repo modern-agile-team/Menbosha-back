@@ -10,21 +10,23 @@ import {
   DeleteDateColumn,
 } from 'typeorm';
 import { UserImage } from './user-image.entity';
-import { Token } from 'src/auth/entities/token.entity';
-import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
-import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
+import { Token } from '@src/auth/entities/token.entity';
+import { MentorBoard } from '@src/boards/entities/mentor-board.entity';
+import { HelpMeBoard } from '@src/boards/entities/help-me-board.entity';
 import { MentorReview } from '../../mentors/mentor-reviews/entities/mentor-review.entity';
 import { UserBadge } from './user-badge.entity';
 import { CategoryList } from '../../category/entity/category-list.entity';
 import { UserIntro } from './user-intro.entity';
-import { TotalCount } from 'src/total-count/entities/total-count.entity';
-import { MentorBoardLike } from 'src/boards/entities/mentor-board-like.entity';
+import { TotalCount } from '@src/total-count/entities/total-count.entity';
+import { MentorBoardLike } from '@src/boards/entities/mentor-board-like.entity';
 import { UserRanking } from './user-ranking.entity';
-import { MentorReviewChecklistCount } from 'src/total-count/entities/mentor-review-checklist-count.entity';
-import { Report } from 'src/reports/entities/report.entity';
-import { BannedUser } from 'src/admins/banned-user/entities/banned-user.entity';
-import { UserStatus } from 'src/users/constants/user-status.enum';
-import { Provider } from 'src/auth/enums/provider.enum';
+import { MentorReviewChecklistCount } from '@src/total-count/entities/mentor-review-checklist-count.entity';
+import { Report } from '@src/reports/entities/report.entity';
+import { BannedUser } from '@src/admins/banned-user/entities/banned-user.entity';
+import { UserStatus } from '@src/users/constants/user-status.enum';
+import { Provider } from '@src/auth/enums/provider.enum';
+import { BooleanTransformer } from '@src/common/entity/transformers/boolean.transformer';
+import { UserRole } from '@src/users/constants/user-role.enum';
 
 @Entity({
   name: 'user',
@@ -61,10 +63,23 @@ export class User {
   @Column({ length: 100 })
   email: string;
 
-  @Column({ default: false })
-  admin: boolean;
+  @Column('enum', {
+    name: 'role',
+    default: UserRole.USER,
+    enum: UserRole,
+    nullable: false,
+    comment: '유저 역할',
+  })
+  role: UserRole;
 
-  @Column({ default: false })
+  @Column('tinyint', {
+    name: 'is_mentor',
+    unsigned: true,
+    nullable: false,
+    default: () => "'0'",
+    transformer: new BooleanTransformer(),
+    comment: '멘토 여부 (0: 멘티, 1: 멘토)',
+  })
   isMentor: boolean;
 
   @Column({ name: 'hope_category_list_id' }) //희망 카테고리 id

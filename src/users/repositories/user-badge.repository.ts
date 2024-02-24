@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { UserBadge } from '../entities/user-badge.entity';
-import { BadgeList } from 'src/common/entity/badge-list.entity';
+import { BadgeList } from '@src/common/entity/badge-list.entity';
 
 @Injectable()
 export class UserBadgeRepository {

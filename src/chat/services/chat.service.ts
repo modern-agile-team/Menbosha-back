@@ -9,11 +9,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import * as mongoose from 'mongoose';
-import { S3Service } from 'src/common/s3/s3.service';
+import { S3Service } from '@src/common/s3/s3.service';
 import { Observable, Subject, catchError, map } from 'rxjs';
 import { In } from 'typeorm';
-import { UserService } from 'src/users/services/user.service';
-import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
+import { UserService } from '@src/users/services/user.service';
+import { ChatUserDto } from '@src/users/dtos/chat-user.dto';
 import { ResponseFindChatRoomsDto } from '../dto/response-find-chat-rooms.dto';
 import { ChatRoomDto } from '../dto/chat-room.dto';
 import { AggregateChatRoomsDto } from '../dto/aggregate-chat-rooms.dto';
@@ -24,9 +24,9 @@ import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 import { ChatRepository } from '../repositories/chat.repository';
 import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
 import { ResponseFindChatRoomsPaginationDto } from '../dto/response-find-chat-rooms-pagination.dto';
-import { PageQueryDto } from 'src/common/dto/page-query.dto';
+import { PageQueryDto } from '@src/common/dto/page-query.dto';
 import { ChatRooms } from '../schemas/chat-rooms.schemas';
-import { PostChatDto } from 'src/chat/dto/post-chat.dto';
+import { PostChatDto } from '@src/chat/dto/post-chat.dto';
 
 @Injectable()
 export class ChatService {

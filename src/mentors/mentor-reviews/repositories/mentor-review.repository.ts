@@ -1,7 +1,7 @@
 import { EntityManager, FindOneOptions, Like, UpdateResult } from 'typeorm';
 import { MentorReview } from '../entities/mentor-review.entity';
 import { MentorReviewOrderField } from '../constants/mentor-review-order-field.enum';
-import { SortOrder } from 'src/common/constants/sort-order.enum';
+import { SortOrder } from '@src/common/constants/sort-order.enum';
 import { Injectable } from '@nestjs/common';
 import { MentorReviewsItemResponseDto } from '../dtos/mentor-reviews-item-response.dto';
 

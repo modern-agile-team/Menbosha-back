@@ -1,6 +1,6 @@
-import { BannedUser } from 'src/admins/banned-user/entities/banned-user.entity';
-import { UserStatus } from 'src/users/constants/user-status.enum';
-import { User } from 'src/users/entities/user.entity';
+import { BannedUser } from '@src/admins/banned-user/entities/banned-user.entity';
+import { UserStatus } from '@src/users/constants/user-status.enum';
+import { User } from '@src/users/entities/user.entity';
 import {
   EntitySubscriberInterface,
   EventSubscriber,

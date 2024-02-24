@@ -1,5 +1,5 @@
-import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
-import { TotalCount } from 'src/total-count/entities/total-count.entity';
+import { MentorBoard } from '@src/boards/entities/mentor-board.entity';
+import { TotalCount } from '@src/total-count/entities/total-count.entity';
 import {
   EntitySubscriberInterface,
   EventSubscriber,

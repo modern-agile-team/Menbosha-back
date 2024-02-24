@@ -1,5 +1,5 @@
-import { generateDeletedAtColumn } from 'src/migrations/__utils/util';
-import { UserStatus } from 'src/users/constants/user-status.enum';
+import { generateDeletedAtColumn } from '@src/migrations/__utils/util';
+import { UserStatus } from '@src/users/constants/user-status.enum';
 import { MigrationInterface, QueryRunner, TableColumn } from 'typeorm';
 
 export class SoftDeleteUser1708423002121 implements MigrationInterface {

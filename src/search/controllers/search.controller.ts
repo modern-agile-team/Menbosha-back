@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { SearchService } from '../services/search.service';
 import { ApiTags } from '@nestjs/swagger';
-import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
+import { SuccessResponseInterceptor } from '@src/common/interceptors/success-response.interceptor';
 import { SearchAllPageSizeDto } from '../dtos/search-all-page-size.dto';
 import { SearchAllBoardsAndMentorsQueryDto } from '../dtos/search-all-boards-and-mentors-query.dto';
 import { ApiSearchAllBoardsAndMentors } from '../swagger-decorators/search-all-boards-and-mentors.swagger';

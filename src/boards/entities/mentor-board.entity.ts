@@ -1,4 +1,4 @@
-import { User } from 'src/users/entities/user.entity';
+import { User } from '@src/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -11,7 +11,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { CategoryList } from 'src/category/entity/category-list.entity';
+import { CategoryList } from '@src/category/entity/category-list.entity';
 import { MentorBoardLike } from './mentor-board-like.entity';
 import { MentorBoardImage } from './mentor-board-image.entity';
 

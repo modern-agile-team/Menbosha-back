@@ -6,7 +6,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { HelpMeBoardPaginationResponseDto } from 'src/boards/dto/helpMeBoard/help-me-board-pagination-response.dto';
+import { HelpMeBoardPaginationResponseDto } from '@src/boards/dto/helpMeBoard/help-me-board-pagination-response.dto';
 
 export function ApiFindAllHelpMeBoards() {
   return applyDecorators(

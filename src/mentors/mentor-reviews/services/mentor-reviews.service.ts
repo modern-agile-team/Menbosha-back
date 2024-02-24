@@ -12,7 +12,7 @@ import { MentorReviewPageQueryDto } from '../dtos/mentor-review-page-query-dto';
 import { MentorReviewsItemResponseDto } from '../dtos/mentor-reviews-item-response.dto';
 import { plainToInstance } from 'class-transformer';
 import { MentorReviewsPaginationResponseDto } from '../dtos/mentor-reviews-pagination-response.dto';
-import { UserService } from 'src/users/services/user.service';
+import { UserService } from '@src/users/services/user.service';
 import { DataSource, FindOneOptions, UpdateResult } from 'typeorm';
 import { MentorReview } from '../entities/mentor-review.entity';
 import { PatchUpdateMentorReviewDto } from '../dtos/patch-update-mentor-review.dto';

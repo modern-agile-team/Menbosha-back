@@ -6,7 +6,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { MentorBoardPaginationResponseDto } from 'src/boards/dto/mentorBoard/mentor-board-pagination-response.dto';
+import { MentorBoardPaginationResponseDto } from '@src/boards/dto/mentorBoard/mentor-board-pagination-response.dto';
 
 export function ApiFindAllMentorBoards() {
   return applyDecorators(

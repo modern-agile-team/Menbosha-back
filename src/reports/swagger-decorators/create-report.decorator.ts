@@ -9,7 +9,7 @@ import {
   ApiUnauthorizedResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ReportDto } from 'src/reports/dto/report.dto';
+import { ReportDto } from '@src/reports/dto/report.dto';
 
 export function ApiCreateReportDecorator(): MethodDecorator {
   return applyDecorators(

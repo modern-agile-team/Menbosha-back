@@ -21,7 +21,7 @@ import { CreateHelpMeBoardImageDto } from '../dto/helpMeBoard/create.board-image
 import { ApiUploadHelpMeBoardImages } from '../swagger-decorators/helpMeBoard/add-help-me-board-images-decorator';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiUpdateHelpMeBoardImage } from '../swagger-decorators/helpMeBoard/patch-help-me-board-images-decorators';
-import { GetUserId } from 'src/common/decorators/get-userId.decorator';
+import { GetUserId } from '@src/common/decorators/get-userId.decorator';
 import { ApiAddHelpMeBoard } from '../swagger-decorators/helpMeBoard/add-help-me-board-decorator';
 import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/create.help.me.board.dto';
 import { HelpMeBoard } from '../entities/help-me-board.entity';
@@ -36,15 +36,15 @@ import { ApiPullingUpHelpMeBoard } from '../swagger-decorators/helpMeBoard/pulli
 import { HelpMeBoardPageQueryDto } from '../dto/helpMeBoard/help-me-board-page-query.dto';
 import { HelpMeBoardPaginationResponseDto } from '../dto/helpMeBoard/help-me-board-pagination-response.dto';
 import { ApiFindAllHelpMeBoards } from '../swagger-decorators/helpMeBoard/find-all-help-me-boards.decorator';
-import { HelpYouCommentPageQueryDto } from 'src/comments/dto/help-you-comment-page-query.dto';
-import { HelpYouCommentPaginationResponseDto } from 'src/comments/dto/help-you-comment-pagination-response.dto';
-import { ApiFindAllHelpYouComments } from 'src/comments/swagger-decorators/find-all-help-you-comments.decorator';
-import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
-import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
+import { HelpYouCommentPageQueryDto } from '@src/comments/dto/help-you-comment-page-query.dto';
+import { HelpYouCommentPaginationResponseDto } from '@src/comments/dto/help-you-comment-pagination-response.dto';
+import { ApiFindAllHelpYouComments } from '@src/comments/swagger-decorators/find-all-help-you-comments.decorator';
+import { ParsePositiveIntPipe } from '@src/common/pipes/parse-positive-int.pipe';
+import { SuccessResponseInterceptor } from '@src/common/interceptors/success-response.interceptor';
 import {
   AccessTokenAuthGuard,
   AccessTokenOptionalAuthGuard,
-} from 'src/auth/jwt/jwt-auth.guard';
+} from '@src/auth/jwt/jwt-auth.guard';
 
 /**
  * 팀원과 상의되면 주석처리된 옵션도 걸어줌.

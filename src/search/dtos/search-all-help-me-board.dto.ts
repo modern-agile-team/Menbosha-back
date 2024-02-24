@@ -1,5 +1,5 @@
-import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
-import { CategoryList } from 'src/category/entity/category-list.entity';
+import { HelpMeBoard } from '@src/boards/entities/help-me-board.entity';
+import { CategoryList } from '@src/category/entity/category-list.entity';
 import { SearchUserDto } from './search-user-dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';

@@ -3,8 +3,8 @@ import { TokenRepository } from '../repositories/token.repository';
 import axios from 'axios';
 import { JwtService } from '@nestjs/jwt';
 import { TokenPayload } from '../interfaces/token-payload.interface';
-import { RedisService } from 'src/common/redis/redis.service';
-import { Ttl } from 'src/common/redis/ttl.enum';
+import { RedisService } from '@src/common/redis/redis.service';
+import { Ttl } from '@src/common/redis/ttl.enum';
 
 @Injectable()
 export class TokenService {

@@ -4,11 +4,11 @@ import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/create.help.me.board.dt
 import { HelpMeBoard } from '../entities/help-me-board.entity';
 import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dto';
 import { HelpMeBoardOrderField } from '../constants/help-me-board-order-field.enum';
-import { SortOrder } from 'src/common/constants/sort-order.enum';
-import { QueryBuilderHelper } from 'src/helpers/query-builder.helper';
+import { SortOrder } from '@src/common/constants/sort-order.enum';
+import { QueryBuilderHelper } from '@src/helpers/query-builder.helper';
 import { HelpMeBoardDto } from '../dto/helpMeBoard/help-me-board.dto';
-import { HelpYouCommentOrderField } from 'src/comments/constants/help-you-comment-order-field.enum';
-import { HelpYouComment } from 'src/comments/entities/help-you-comment.entity';
+import { HelpYouCommentOrderField } from '@src/comments/constants/help-you-comment-order-field.enum';
+import { HelpYouComment } from '@src/comments/entities/help-you-comment.entity';
 
 @Injectable()
 export class HelpMeBoardRepository {

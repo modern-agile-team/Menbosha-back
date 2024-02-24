@@ -1,8 +1,8 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { HelpYouCommentDto } from './help-you-comment.dto';
-import { UserForJoinDto } from 'src/users/dtos/user-for-join.dto';
-import { User } from 'src/users/entities/user.entity';
-import { UserIntro } from 'src/users/entities/user-intro.entity';
+import { UserForJoinDto } from '@src/users/dtos/user-for-join.dto';
+import { User } from '@src/users/entities/user.entity';
+import { UserIntro } from '@src/users/entities/user-intro.entity';
 
 class HelpYouCommentUserIntroDto
   implements Pick<UserIntro, 'shortIntro' | 'career'>
