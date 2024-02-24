@@ -104,8 +104,8 @@ export class SearchRepository {
           'user.name',
           'user.isMentor',
           'userImage.imageUrl',
-          'userIntro.mainField',
-          'userIntro.introduce',
+          'userIntro.customCategory',
+          'userIntro.shortIntro',
         ])
         .where('MATCH(name) AGAINST (:searchQuery IN BOOLEAN MODE)', {
           searchQuery,
