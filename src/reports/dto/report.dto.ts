@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { UserReportType } from 'src/reports/constants/report-type.enum';
-import { REPORT_REASON_LENGTH } from 'src/reports/constants/report.constant';
-import { Report } from 'src/reports/entities/report.entity';
+import { UserReportType } from '@src/reports/constants/report-type.enum';
+import { REPORT_REASON_LENGTH } from '@src/reports/constants/report.constant';
+import { Report } from '@src/reports/entities/report.entity';
 
 export class ReportDto implements Omit<Report, 'reportUser' | 'reportedUser'> {
   @ApiProperty({

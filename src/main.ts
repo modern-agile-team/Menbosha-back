@@ -4,7 +4,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { setupSwagger } from './config/swagger';
 import * as cookieParser from 'cookie-parser';
 import { AsyncApiDocumentBuilder, AsyncApiModule } from 'nestjs-asyncapi';
-import { AdminExceptionFilter } from 'src/http-exceptions/exception-filters/admin-exception.filter';
+import { AdminExceptionFilter } from '@src/http-exceptions/exception-filters/admin-exception.filter';
 // import { HttpBadRequestExceptionFilter } from './http-exceptions/exception-filters/http-bad-request-exception.filter';
 // import { HttpProcessErrorExceptionFilter } from './http-exceptions/exception-filters/http-process-error-exception.filter';
 // import { HttpRemainderExceptionFilter } from './http-exceptions/exception-filters/http-remainder-exception.filter';

@@ -1,9 +1,9 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { ONLY_ADMIN_TOKEN } from 'src/admins/constants/only-admin.token';
-import { ADMIN_ERROR_CODE } from 'src/constants/error/admin/admin-error-code.constant';
-import { AdminException } from 'src/http-exceptions/exceptions/admin-exception';
-import { UserService } from 'src/users/services/user.service';
+import { ONLY_ADMIN_TOKEN } from '@src/admins/constants/only-admin.token';
+import { ADMIN_ERROR_CODE } from '@src/constants/error/admin/admin-error-code.constant';
+import { AdminException } from '@src/http-exceptions/exceptions/admin-exception';
+import { UserService } from '@src/users/services/user.service';
 
 @Injectable()
 export class AdminHandlerGuard implements CanActivate {

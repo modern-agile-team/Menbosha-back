@@ -11,7 +11,7 @@ import {
   ApiUnauthorizedResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { BannedUserDto } from 'src/admins/banned-user/dtos/banned-user.dto';
+import { BannedUserDto } from '@src/admins/banned-user/dtos/banned-user.dto';
 
 export const ApiCreateBannedUser = () => {
   return applyDecorators(

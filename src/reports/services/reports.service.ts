@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateReportBodyDto } from 'src/reports/dto/create-report-body.dto';
-import { ReportDto } from 'src/reports/dto/report.dto';
-import { ReportRepository } from 'src/reports/repositories/report.repository';
-import { UserService } from 'src/users/services/user.service';
+import { CreateReportBodyDto } from '@src/reports/dto/create-report-body.dto';
+import { ReportDto } from '@src/reports/dto/report.dto';
+import { ReportRepository } from '@src/reports/repositories/report.repository';
+import { UserService } from '@src/users/services/user.service';
 
 @Injectable()
 export class ReportsService {

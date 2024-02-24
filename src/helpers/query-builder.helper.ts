@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { SortOrder } from 'src/common/constants/sort-order.enum';
-import { OrderFieldForHelper } from 'src/common/types/order-field-for-helper.type';
+import { SortOrder } from '@src/common/constants/sort-order.enum';
+import { OrderFieldForHelper } from '@src/common/types/order-field-for-helper.type';
 import { SelectQueryBuilder } from 'typeorm';
 
 @Injectable()

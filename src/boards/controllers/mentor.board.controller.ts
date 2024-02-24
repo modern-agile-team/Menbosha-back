@@ -21,7 +21,7 @@ import { ApiGetOneMentorBoard } from '../swagger-decorators/mentorBoard/get-one-
 import { ApiUpdateMentorBoard } from '../swagger-decorators/mentorBoard/patch-mentor-board-decorators';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiDeleteMentorBoard } from '../swagger-decorators/mentorBoard/delete-mentor-board-decorators';
-import { GetUserId } from 'src/common/decorators/get-userId.decorator';
+import { GetUserId } from '@src/common/decorators/get-userId.decorator';
 import { MentorBoardResponseDTO } from '../dto/mentorBoard/update.mentor.board.response.dto';
 import { UpdateMentorBoardDto } from '../dto/mentorBoard/update.mentor.board.dto';
 import { oneMentorBoardResponseDTO } from '../dto/mentorBoard/one.response.mentor.boards.dto';
@@ -33,11 +33,11 @@ import { ApiGetPageNumberByMentorBoard } from '../swagger-decorators/mentorBoard
 import { MentorBoardPaginationResponseDto } from '../dto/mentorBoard/mentor-board-pagination-response.dto';
 import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
 import { ApiFindAllMentorBoards } from '../swagger-decorators/mentorBoard/find-all-mentor-boards.decorator';
-import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
+import { SuccessResponseInterceptor } from '@src/common/interceptors/success-response.interceptor';
 import {
   AccessTokenAuthGuard,
   AccessTokenOptionalAuthGuard,
-} from 'src/auth/jwt/jwt-auth.guard';
+} from '@src/auth/jwt/jwt-auth.guard';
 
 /**
  * 추후 리팩토링때

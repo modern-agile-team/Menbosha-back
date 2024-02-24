@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../../../users/entities/user.entity';
-import { BooleanTransformer } from 'src/common/entity/transformers/boolean.transformer';
+import { BooleanTransformer } from '@src/common/entity/transformers/boolean.transformer';
 
 @Entity({ name: 'mentor_review' })
 export class MentorReview {

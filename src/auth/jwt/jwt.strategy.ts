@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { RedisService } from 'src/common/redis/redis.service';
+import { RedisService } from '@src/common/redis/redis.service';
 import { TokenPayload } from '../interfaces/token-payload.interface';
 
 @Injectable()

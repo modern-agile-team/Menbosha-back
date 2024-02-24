@@ -1,7 +1,7 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
 import { Response } from 'express';
-import { AdminException } from 'src/http-exceptions/exceptions/admin-exception';
-import { HttpExceptionService } from 'src/http-exceptions/services/http-exception.service';
+import { AdminException } from '@src/http-exceptions/exceptions/admin-exception';
+import { HttpExceptionService } from '@src/http-exceptions/services/http-exception.service';
 
 @Catch(AdminException)
 export class AdminExceptionFilter implements ExceptionFilter<AdminException> {

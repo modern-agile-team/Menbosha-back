@@ -1,9 +1,9 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { PutUpdateUserForAdminDto } from 'src/admins/dtos/put-update-user-for-admin.dto';
-import { UserResponseForAdminDto } from 'src/admins/dtos/user-response-for-admin.dto';
-import { ADMIN_ERROR_CODE } from 'src/constants/error/admin/admin-error-code.constant';
-import { AdminException } from 'src/http-exceptions/exceptions/admin-exception';
-import { UserService } from 'src/users/services/user.service';
+import { PutUpdateUserForAdminDto } from '@src/admins/dtos/put-update-user-for-admin.dto';
+import { UserResponseForAdminDto } from '@src/admins/dtos/user-response-for-admin.dto';
+import { ADMIN_ERROR_CODE } from '@src/constants/error/admin/admin-error-code.constant';
+import { AdminException } from '@src/http-exceptions/exceptions/admin-exception';
+import { UserService } from '@src/users/services/user.service';
 
 @Injectable()
 export class AdminsService {

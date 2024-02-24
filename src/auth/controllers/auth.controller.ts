@@ -9,7 +9,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { S3Service } from 'src/common/s3/s3.service';
+import { S3Service } from '@src/common/s3/s3.service';
 import { TokenService } from '../services/token.service';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiNaverLogin } from '../swagger-decorators/naver-login.decorator';
@@ -20,7 +20,7 @@ import { ApiKakaoUnlink } from '../swagger-decorators/kakao-unlink.decorator';
 import { ApiNaverLogout } from '../swagger-decorators/naver-logout.decorator';
 import { ApiNaverUnlink } from '../swagger-decorators/naver-unlink.decorator';
 import { ApiDeleteAccount } from '../swagger-decorators/delete-account.decorator';
-import { GetUserId } from 'src/common/decorators/get-userId.decorator';
+import { GetUserId } from '@src/common/decorators/get-userId.decorator';
 import { ApiGoogleLogin } from '../swagger-decorators/google-login.decorator';
 import { ApiGoogleLogout } from '../swagger-decorators/google-logout.decorator';
 import { ApiGoogleUnlink } from '../swagger-decorators/google-unlink.decorator';
@@ -29,7 +29,7 @@ import {
   RefreshTokenAuthGuard,
 } from '../jwt/jwt-auth.guard';
 import { Provider } from '../enums/provider.enum';
-import { CookieInterceptor } from 'src/common/interceptors/cookie.interceptor';
+import { CookieInterceptor } from '@src/common/interceptors/cookie.interceptor';
 
 @Controller('auth')
 @ApiTags('auth API')

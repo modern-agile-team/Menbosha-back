@@ -1,11 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator';
-import { MentorBoardOrderField } from 'src/boards/constants/mentor-board-order-field.enum';
+import { MentorBoardOrderField } from '@src/boards/constants/mentor-board-order-field.enum';
 import { SortOrder } from '../../../common/constants/sort-order.enum';
-import { PageQueryDto } from 'src/common/dto/page-query.dto';
-import { IsPositiveInt } from 'src/common/decorators/validators/is-positive-int.decorator';
-import { ParseOptionalBoolean } from 'src/common/transformers/parse-optional-boolean.transformer';
+import { PageQueryDto } from '@src/common/dto/page-query.dto';
+import { IsPositiveInt } from '@src/common/decorators/validators/is-positive-int.decorator';
+import { ParseOptionalBoolean } from '@src/common/transformers/parse-optional-boolean.transformer';
 
 export class MentorBoardPageQueryDto extends PageQueryDto {
   @ApiPropertyOptional({

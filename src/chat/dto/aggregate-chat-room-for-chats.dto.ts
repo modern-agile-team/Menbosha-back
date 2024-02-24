@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ChatRoomDto } from './chat-room.dto';
-import { PaginationResponseDto } from 'src/common/dto/pagination-response.dto';
-import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
+import { PaginationResponseDto } from '@src/common/dto/pagination-response.dto';
+import { ChatUserDto } from '@src/users/dtos/chat-user.dto';
 
 export class AggregateChatRoomForChatsDto
   extends ChatRoomDto

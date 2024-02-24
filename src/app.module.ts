@@ -20,8 +20,8 @@ import { CategoryModule } from './category/category.module';
 import { BoardsModule } from './boards/boards.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { MentorsModule } from './mentors/mentors.module';
-import { AdminsModule } from 'src/admins/admins.module';
-import { ReportsModule } from 'src/reports/reports.module';
+import { AdminsModule } from '@src/admins/admins.module';
+import { ReportsModule } from '@src/reports/reports.module';
 
 @Module({
   imports: [

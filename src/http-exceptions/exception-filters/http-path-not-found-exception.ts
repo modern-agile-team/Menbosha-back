@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { HttpExceptionService } from '../services/http-exception.service';
 import { Response } from 'express';
-import { COMMON_ERROR_CODE } from 'src/constants/error/common/common-error-code.constant';
+import { COMMON_ERROR_CODE } from '@src/constants/error/common/common-error-code.constant';
 
 @Catch(NotFoundException)
 export class HttpPathNotFoundExceptionFilter

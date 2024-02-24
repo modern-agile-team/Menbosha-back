@@ -1,5 +1,5 @@
-import { MentorReview } from 'src/mentors/mentor-reviews/entities/mentor-review.entity';
-import { TotalCount } from 'src/total-count/entities/total-count.entity';
+import { MentorReview } from '@src/mentors/mentor-reviews/entities/mentor-review.entity';
+import { TotalCount } from '@src/total-count/entities/total-count.entity';
 import {
   EntitySubscriberInterface,
   EventSubscriber,

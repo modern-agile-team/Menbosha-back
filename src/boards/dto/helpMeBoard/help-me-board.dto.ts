@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
+import { HelpMeBoard } from '@src/boards/entities/help-me-board.entity';
 
 export class HelpMeBoardDto
   implements Omit<HelpMeBoard, 'user' | 'categoryList' | 'helpMeBoardImages'>

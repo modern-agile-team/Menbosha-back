@@ -4,14 +4,14 @@ import { ChatService } from './services/chat.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ChatRooms, ChatRoomsSchema } from './schemas/chat-rooms.schemas';
 import { ChatImages, ChatImagesSchema } from './schemas/chat-images.schemas';
-import { S3Module } from 'src/common/s3/s3.module';
+import { S3Module } from '@src/common/s3/s3.module';
 import { ChatRepository } from './repositories/chat.repository';
 import { NotificationService } from './services/notification.service';
 import { EventsGateway } from './events/events.gateway';
-import { AuthModule } from 'src/auth/auth.module';
-import { UserModule } from 'src/users/user.module';
+import { AuthModule } from '@src/auth/auth.module';
+import { UserModule } from '@src/users/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '@src/users/entities/user.entity';
 
 @Module({
   imports: [

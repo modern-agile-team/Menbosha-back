@@ -1,5 +1,5 @@
-import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
-import { User } from 'src/users/entities/user.entity';
+import { HelpMeBoard } from '@src/boards/entities/help-me-board.entity';
+import { User } from '@src/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,

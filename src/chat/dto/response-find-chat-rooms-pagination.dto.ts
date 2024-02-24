@@ -1,4 +1,4 @@
-import { PaginationResponseDto } from 'src/common/dto/pagination-response.dto';
+import { PaginationResponseDto } from '@src/common/dto/pagination-response.dto';
 import { ResponseFindChatRoomsDto } from './response-find-chat-rooms.dto';
 import { ApiProperty } from '@nestjs/swagger';
 

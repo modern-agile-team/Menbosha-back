@@ -1,4 +1,4 @@
-import { PaginationResponseDto } from 'src/common/dto/pagination-response.dto';
+import { PaginationResponseDto } from '@src/common/dto/pagination-response.dto';
 import { UserWithImageAndIntroDto } from './user-with-image-and-intro.dto';
 import { ApiProperty } from '@nestjs/swagger';
 

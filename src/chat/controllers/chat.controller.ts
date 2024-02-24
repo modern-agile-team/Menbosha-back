@@ -23,15 +23,15 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ParseObjectIdPipe } from '../pipes/parse-object-id.pipe';
 import { ApiCreateChatRoom } from '../swagger-decorators/create-chat-room.decorator';
 import { ApiLeaveChatRoom } from '../swagger-decorators/leave-chat-room.decorator';
-import { GetUserId } from 'src/common/decorators/get-userId.decorator';
+import { GetUserId } from '@src/common/decorators/get-userId.decorator';
 import { ApiCreateChatImage } from '../swagger-decorators/create-chat-image.decorators';
-import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
+import { SuccessResponseInterceptor } from '@src/common/interceptors/success-response.interceptor';
 import { ChatRoomDto } from '../dto/chat-room.dto';
 import { ApiFindChatRooms } from '../swagger-decorators/find-chat-rooms.decorator';
 import { Observable } from 'rxjs';
 import { ApiFindChatNotificationSse } from '../swagger-decorators/find-chat-notification-Sse.decorator';
 import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
-import { PageQueryDto } from 'src/common/dto/page-query.dto';
+import { PageQueryDto } from '@src/common/dto/page-query.dto';
 import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
 import { ChatImageDto } from '../dto/chat-image.dto';
 import { ResponseFindChatRoomsPaginationDto } from '../dto/response-find-chat-rooms-pagination.dto';
@@ -39,8 +39,8 @@ import { ApiDeleteChat } from '../swagger-decorators/delete-chat.decorator';
 import { ApiFindOneChatRoomByUserId } from '../swagger-decorators/find-one-chat-room-by-user-id.decorator';
 import { ApiFindOneChatRoom } from '../swagger-decorators/find-one-chat-room.decorator';
 import { ApiFindChats } from '../swagger-decorators/find-chats.decorator';
-import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
-import { AccessTokenAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
+import { ParsePositiveIntPipe } from '@src/common/pipes/parse-positive-int.pipe';
+import { AccessTokenAuthGuard } from '@src/auth/jwt/jwt-auth.guard';
 @ApiTags('CHAT')
 @UsePipes(
   new ValidationPipe({

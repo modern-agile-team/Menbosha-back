@@ -6,23 +6,23 @@ import { HelpMeBoardService } from './services/help.me.board.service';
 import { MentorBoardService } from './services/mentor.board.service';
 import { HelpMeBoard } from './entities/help-me-board.entity';
 import { BoardImagesService } from './services/BoardImage.service';
-import { S3Service } from 'src/common/s3/s3.service';
+import { S3Service } from '@src/common/s3/s3.service';
 import { MentorBoard } from './entities/mentor-board.entity';
 import { HelpMeBoardRepository } from './repository/help.me.board.repository';
 import { MentorBoardRepository } from './repository/mentor.boards.repository';
 import { BoardImageRepository } from './repository/boardImage.repository';
 import { HelpMeBoardImage } from './entities/help-me-board-image.entity';
 import { MentorBoardImage } from './entities/mentor-board-image.entity';
-import { RedisModule } from 'src/common/redis/redis.module';
-import { AuthModule } from 'src/auth/auth.module';
-import { LikesModule } from 'src/like/likes.module';
+import { RedisModule } from '@src/common/redis/redis.module';
+import { AuthModule } from '@src/auth/auth.module';
+import { LikesModule } from '@src/like/likes.module';
 import { MentorBoardLike } from './entities/mentor-board-like.entity';
 import { MentorBoardLikeController } from './controllers/mentor-board-likes.controller';
 import { MentorBoardLikeService } from './services/mentor-board-likes.service';
-import { CategoryModule } from 'src/category/category.module';
+import { CategoryModule } from '@src/category/category.module';
 import { MentorBoardLikeRepository } from './repository/mentor.board.likes.repository';
-import { QueryBuilderHelper } from 'src/helpers/query-builder.helper';
-import { TotalCountModule } from 'src/total-count/total-count.module';
+import { QueryBuilderHelper } from '@src/helpers/query-builder.helper';
+import { TotalCountModule } from '@src/total-count/total-count.module';
 
 @Module({
   imports: [

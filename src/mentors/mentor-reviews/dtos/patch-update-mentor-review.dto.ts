@@ -2,7 +2,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsOptional, IsString, ValidateNested } from 'class-validator';
 import { CreateMentorReviewChecklistRequestBodyDto } from './create-mentor-review-checklist-request-body.dto';
-import { IsNotEmptyObjectAndAllFalse } from 'src/common/decorators/validators/is-not-empty-object-and-all-false.decorator';
+import { IsNotEmptyObjectAndAllFalse } from '@src/common/decorators/validators/is-not-empty-object-and-all-false.decorator';
 
 export class PatchUpdateMentorReviewDto {
   @ApiPropertyOptional({

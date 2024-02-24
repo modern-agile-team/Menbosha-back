@@ -1,8 +1,8 @@
 import { Exclude } from 'class-transformer';
 import { User } from '../entities/user.entity';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserStatus } from 'src/users/constants/user-status.enum';
-import { Provider } from 'src/auth/enums/provider.enum';
+import { UserStatus } from '@src/users/constants/user-status.enum';
+import { Provider } from '@src/auth/enums/provider.enum';
 
 export class UserInfoDto
   implements

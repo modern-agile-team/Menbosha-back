@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { BannedUserRepository } from 'src/admins/banned-user/repositories/banned-user.repository';
-import { BannedUsersService } from 'src/admins/banned-user/services/banned-users.service';
-import { UserModule } from 'src/users/user.module';
+import { BannedUserRepository } from '@src/admins/banned-user/repositories/banned-user.repository';
+import { BannedUsersService } from '@src/admins/banned-user/services/banned-users.service';
+import { UserModule } from '@src/users/user.module';
 
 @Module({
   imports: [UserModule],

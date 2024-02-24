@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { BANNED_USER_REASON_LENGTH } from 'src/admins/banned-user/constants/banned-user.constant';
-import { BannedUser } from 'src/admins/banned-user/entities/banned-user.entity';
+import { BANNED_USER_REASON_LENGTH } from '@src/admins/banned-user/constants/banned-user.constant';
+import { BannedUser } from '@src/admins/banned-user/entities/banned-user.entity';
 
 export class BannedUserDto
   implements Omit<BannedUser, 'banUser' | 'bannedUser'>

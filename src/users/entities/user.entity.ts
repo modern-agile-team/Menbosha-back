@@ -10,21 +10,21 @@ import {
   DeleteDateColumn,
 } from 'typeorm';
 import { UserImage } from './user-image.entity';
-import { Token } from 'src/auth/entities/token.entity';
-import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
-import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
+import { Token } from '@src/auth/entities/token.entity';
+import { MentorBoard } from '@src/boards/entities/mentor-board.entity';
+import { HelpMeBoard } from '@src/boards/entities/help-me-board.entity';
 import { MentorReview } from '../../mentors/mentor-reviews/entities/mentor-review.entity';
 import { UserBadge } from './user-badge.entity';
 import { CategoryList } from '../../category/entity/category-list.entity';
 import { UserIntro } from './user-intro.entity';
-import { TotalCount } from 'src/total-count/entities/total-count.entity';
-import { MentorBoardLike } from 'src/boards/entities/mentor-board-like.entity';
+import { TotalCount } from '@src/total-count/entities/total-count.entity';
+import { MentorBoardLike } from '@src/boards/entities/mentor-board-like.entity';
 import { UserRanking } from './user-ranking.entity';
-import { MentorReviewChecklistCount } from 'src/total-count/entities/mentor-review-checklist-count.entity';
-import { Report } from 'src/reports/entities/report.entity';
-import { BannedUser } from 'src/admins/banned-user/entities/banned-user.entity';
-import { UserStatus } from 'src/users/constants/user-status.enum';
-import { Provider } from 'src/auth/enums/provider.enum';
+import { MentorReviewChecklistCount } from '@src/total-count/entities/mentor-review-checklist-count.entity';
+import { Report } from '@src/reports/entities/report.entity';
+import { BannedUser } from '@src/admins/banned-user/entities/banned-user.entity';
+import { UserStatus } from '@src/users/constants/user-status.enum';
+import { Provider } from '@src/auth/enums/provider.enum';
 
 @Entity({
   name: 'user',
