@@ -1,4 +1,4 @@
-import { User } from 'src/users/entities/user.entity';
+import { User } from '@src/users/entities/user.entity';
 import {
   Column,
   Entity,
@@ -29,7 +29,7 @@ export class BannedUser {
   })
   bannedAt: Date;
 
-  @Column('timestamp', { name: 'end_at', comment: '정지가 끝나는 날짜' })
+  @Column('datetime', { name: 'end_at', comment: '정지가 끝나는 날짜' })
   endAt: Date;
 
   @Column('int', {
