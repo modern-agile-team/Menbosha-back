@@ -3,24 +3,34 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { BannedUserRepository } from 'src/admins/banned-user/repositories/banned-user.repository';
-import { CreateBannedUserBodyDto } from 'src/admins/dtos/create-banned-user-body.dto';
-import { UserService } from 'src/users/services/user.service';
+import { BannedUserRepository } from '@src/admins/banned-user/repositories/banned-user.repository';
+import { CreateBannedUserBodyDto } from '@src/admins/dtos/create-banned-user-body.dto';
+import { UserService } from '@src/users/services/user.service';
 import { DataSource } from 'typeorm';
-import { BannedUserDto } from 'src/admins/banned-user/dtos/banned-user.dto';
-import { UserStatus } from 'src/users/constants/user-status.enum';
-import { ADMIN_ERROR_CODE } from 'src/constants/error/admin/admin-error-code.constant';
-import { AdminException } from 'src/http-exceptions/exceptions/admin-exception';
+import { BannedUserDto } from '@src/admins/banned-user/dtos/banned-user.dto';
+import { UserStatus } from '@src/users/constants/user-status.enum';
+import { ADMIN_ERROR_CODE } from '@src/constants/error/admin/admin-error-code.constant';
+import { AdminException } from '@src/http-exceptions/exceptions/admin-exception';
+import { UserRole } from '@src/users/constants/user-role.enum';
+import { BannedUserPageQueryDto } from '@src/admins/dtos/banned-user-page-query.dto';
+import { BannedUser } from '@src/admins/banned-user/entities/banned-user.entity';
+import { QueryHelper } from '@src/helpers/query.helper';
 
 @Injectable()
 export class BannedUsersService {
+  private readonly LIKE_SEARCH_FIELD: readonly (keyof Pick<
+    BannedUser,
+    'reason'
+  >)[] = ['reason'];
+
   constructor(
     private readonly bannedUserRepository: BannedUserRepository,
     private readonly userService: UserService,
     private readonly dataSource: DataSource,
+    private readonly queryHelper: QueryHelper,
   ) {}
 
-  async createBannedUser(
+  async create(
     adminId: number,
     userId: number,
     createBannedUserBodyDto: CreateBannedUserBodyDto,
@@ -32,11 +42,11 @@ export class BannedUsersService {
     }
 
     const existTargetUser = await this.userService.findOneByOrNotFound({
-      select: ['id', 'admin'],
+      select: ['id', 'role'],
       where: { id: userId, status: UserStatus.ACTIVE },
     });
 
-    if (existTargetUser.admin) {
+    if (existTargetUser.role === UserRole.ADMIN) {
       throw new AdminException({ code: ADMIN_ERROR_CODE.DENIED_FOR_ADMINS });
     }
 
@@ -48,7 +58,7 @@ export class BannedUsersService {
     try {
       const entityManager = queryRunner.manager;
 
-      const bannedUser = await this.bannedUserRepository.createBannedUser(
+      const bannedUser = await this.bannedUserRepository.create(
         entityManager,
         adminId,
         userId,
@@ -73,5 +83,32 @@ export class BannedUsersService {
         await queryRunner.release();
       }
     }
+  }
+
+  async findAll(bannedUserPageQueyDto: BannedUserPageQueryDto) {
+    const { page, pageSize, orderField, sortOrder, ...filter } =
+      bannedUserPageQueyDto;
+
+    const skip = (page - 1) * pageSize;
+
+    const where = this.queryHelper.buildWherePropForFind(
+      filter,
+      this.LIKE_SEARCH_FIELD,
+    );
+
+    const order = this.queryHelper.buildOrderByPropForFind(
+      orderField,
+      sortOrder,
+    );
+
+    const [bannedUsers, totalCount] =
+      await this.bannedUserRepository.findAllAndCount(
+        skip,
+        pageSize,
+        where,
+        order,
+      );
+
+    return bannedUsers;
   }
 }
