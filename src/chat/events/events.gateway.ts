@@ -69,8 +69,14 @@ export class EventsGateway
 
       const stringChatRoomId = String(chatRoom._id);
 
-      socket.join(stringChatRoomId);
+      await socket.join(stringChatRoomId);
       console.log('join', socket.nsp.name, stringChatRoomId);
+
+      socket.emit('join', {
+        namespace: socket.nsp.name,
+        roomId: stringChatRoomId,
+        message: '조인 됐습니다',
+      });
     }
   }
 
