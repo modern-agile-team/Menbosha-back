@@ -115,22 +115,27 @@ export class AuthService implements AuthServiceInterface {
       let name = null;
       let email = null;
       let profileImage = null;
+      let uniqueId = null;
 
       if (provider === Provider.Naver) {
         name = socialUserInfo.response.nickname; // 네이버 닉네임
         email = socialUserInfo.response.email; // 네이버 이메일
         profileImage = socialUserInfo.response.profile_image; // 네이버 프로필 이미지
+        uniqueId = socialUserInfo.response.id; // 네이버 고유 아이디
       } else if (provider === Provider.Kakao) {
         name = socialUserInfo.kakao_account.profile.nickname; // 카카오 닉네임
         email = socialUserInfo.kakao_account.email; // 카카오 이메일
         profileImage = socialUserInfo.kakao_account.profile.profile_image_url; // 카카오 프로필 이미지
+        uniqueId = socialUserInfo.id; // 카카오 고유 아이디
       } else if (provider === Provider.Google) {
         name = socialUserInfo.name; // Google 닉네임
         email = socialUserInfo.email; // Google 이메일
         profileImage = socialUserInfo.picture; // Google 프로필 이미지
+        uniqueId = socialUserInfo.id; // Google 고유 아이디
       }
 
       const userInfo: UserInfo = {
+        uniqueId,
         provider,
         name,
         email,
