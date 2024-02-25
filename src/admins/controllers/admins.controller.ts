@@ -12,7 +12,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { BannedUserDto } from '@src/admins/banned-user/dtos/banned-user.dto';
 import { BannedUsersService } from '@src/admins/banned-user/services/banned-users.service';
 import { Roles } from '@src/admins/decorators/roles.decorator';
@@ -60,6 +60,7 @@ export class AdminsController {
     );
   }
 
+  @ApiBearerAuth('access-token')
   @Get('banned-users')
   findAllBannedUsers(@Query() bannedUserPageQueryDto: BannedUserPageQueryDto) {
     return this.bannedUsersService.findAll(bannedUserPageQueryDto);
