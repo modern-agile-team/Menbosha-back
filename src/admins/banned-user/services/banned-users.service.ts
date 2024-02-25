@@ -15,6 +15,9 @@ import { UserRole } from '@src/users/constants/user-role.enum';
 import { BannedUserPageQueryDto } from '@src/admins/dtos/banned-user-page-query.dto';
 import { BannedUser } from '@src/admins/banned-user/entities/banned-user.entity';
 import { QueryHelper } from '@src/helpers/query.helper';
+import { plainToInstance } from 'class-transformer';
+import { BannedUsersItemDto } from '@src/admins/banned-user/dtos/banned-users-item.dto';
+import { BannedUsersPaginationResponseDto } from '@src/admins/banned-user/dtos/banned-users-pagination-response.dto';
 
 @Injectable()
 export class BannedUsersService {
@@ -109,6 +112,13 @@ export class BannedUsersService {
         order,
       );
 
-    return bannedUsers;
+    const bannedUsersItemDto = plainToInstance(BannedUsersItemDto, bannedUsers);
+
+    return new BannedUsersPaginationResponseDto(
+      bannedUsersItemDto,
+      totalCount,
+      page,
+      pageSize,
+    );
   }
 }
