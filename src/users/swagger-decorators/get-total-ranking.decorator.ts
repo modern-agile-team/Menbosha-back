@@ -5,7 +5,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ResponseUserRankingDto } from '../dtos/response-user-ranking.dto';
+import { ResponseUserRankingDto } from '@src/users/dtos/response-user-ranking.dto';
 
 export function ApiGetTotalRanking() {
   return applyDecorators(

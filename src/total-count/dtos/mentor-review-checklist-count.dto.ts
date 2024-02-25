@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { MentorReviewChecklistCount } from '../entities/mentor-review-checklist-count.entity';
+import { MentorReviewChecklistCount } from '@src/total-count/entities/mentor-review-checklist-count.entity';
 
 export class MentorReviewChecklistCountDto
   implements Omit<MentorReviewChecklistCount, 'user'>

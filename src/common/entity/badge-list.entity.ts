@@ -1,3 +1,4 @@
+import { UserBadge } from '@src/users/entities/user-badge.entity';
 import {
   Column,
   Entity,
@@ -5,7 +6,6 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { UserBadge } from '../../users/entities/user-badge.entity';
 
 @Entity({ name: 'badge_list' })
 export class BadgeList {

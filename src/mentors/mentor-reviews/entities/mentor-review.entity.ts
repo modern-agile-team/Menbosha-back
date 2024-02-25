@@ -6,8 +6,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '../../../users/entities/user.entity';
 import { BooleanTransformer } from '@src/common/entity/transformers/boolean.transformer';
+import { User } from '@src/users/entities/user.entity';
 
 @Entity({ name: 'mentor_review' })
 export class MentorReview {

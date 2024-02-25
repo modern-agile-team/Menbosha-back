@@ -12,8 +12,6 @@ import {
 import { Token } from '@src/auth/entities/token.entity';
 import { MentorBoard } from '@src/boards/entities/mentor-board.entity';
 import { HelpMeBoard } from '@src/boards/entities/help-me-board.entity';
-import { MentorReview } from '../../mentors/mentor-reviews/entities/mentor-review.entity';
-import { CategoryList } from '../../category/entity/category-list.entity';
 import { TotalCount } from '@src/total-count/entities/total-count.entity';
 import { MentorBoardLike } from '@src/boards/entities/mentor-board-like.entity';
 import { MentorReviewChecklistCount } from '@src/total-count/entities/mentor-review-checklist-count.entity';
@@ -27,6 +25,8 @@ import { UserBadge } from '@src/users/entities/user-badge.entity';
 import { UserImage } from '@src/users/entities/user-image.entity';
 import { UserIntro } from '@src/users/entities/user-intro.entity';
 import { UserRanking } from '@src/users/entities/user-ranking.entity';
+import { CategoryList } from '@src/category/entity/category-list.entity';
+import { MentorReview } from '@src/mentors/mentor-reviews/entities/mentor-review.entity';
 
 @Entity({
   name: 'user',

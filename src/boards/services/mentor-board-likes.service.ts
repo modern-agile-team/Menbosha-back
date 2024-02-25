@@ -4,10 +4,10 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { MentorBoardLike } from '../entities/mentor-board-like.entity';
+import { MentorBoardLikeDto } from '@src/boards/dto/mentorBoard/mentor-board-like.dto';
+import { MentorBoardLike } from '@src/boards/entities/mentor-board-like.entity';
 import { MentorBoardService } from '@src/boards/services/mentor.board.service';
 import { LikesService } from '@src/like/services/likes.service';
-import { MentorBoardLikeDto } from '../dto/mentorBoard/mentor-board-like.dto';
 import { DataSource } from 'typeorm';
 @Injectable()
 export class MentorBoardLikeService {

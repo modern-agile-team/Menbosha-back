@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { COMMON_ERROR_CODE } from '@src/constants/error/common/common-error-code.constant';
-import { HttpProcessErrorException } from '../exceptions/http-process-error.exception';
-import { HttpExceptionService } from '../services/http-exception.service';
+import { HttpExceptionService } from '@src/http-exceptions/services/http-exception.service';
+import { HttpProcessErrorException } from '@src/http-exceptions/exceptions/http-process-error.exception';
 
 /**
  * node  process error exception

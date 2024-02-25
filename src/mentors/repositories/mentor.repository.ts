@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@src/users/entities/user.entity';
 import { EntityManager } from 'typeorm';
-import { MentorOrderField } from '../constants/mentor-order-field.enum';
 import { SortOrder } from '@src/common/constants/sort-order.enum';
 import { QueryBuilderHelper } from '@src/helpers/query-builder.helper';
+import { MentorOrderField } from '@src/mentors/constants/mentor-order-field.enum';
 
 @Injectable()
 export class MentorRepository {

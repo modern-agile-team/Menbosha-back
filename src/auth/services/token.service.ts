@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { TokenRepository } from '../repositories/token.repository';
 import axios from 'axios';
 import { JwtService } from '@nestjs/jwt';
-import { TokenPayload } from '../interfaces/token-payload.interface';
 import { RedisService } from '@src/common/redis/redis.service';
 import { Ttl } from '@src/common/redis/ttl.enum';
+import { TokenPayload } from '@src/auth/interfaces/token-payload.interface';
+import { TokenRepository } from '@src/auth/repositories/token.repository';
 
 @Injectable()
 export class TokenService {

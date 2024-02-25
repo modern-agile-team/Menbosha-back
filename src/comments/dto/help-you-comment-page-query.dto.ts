@@ -3,8 +3,7 @@ import { IsOptional, IsEnum } from 'class-validator';
 import { SortOrder } from '@src/common/constants/sort-order.enum';
 import { IsPositiveInt } from '@src/common/decorators/validators/is-positive-int.decorator';
 import { PageQueryDto } from '@src/common/dto/page-query.dto';
-import { HelpYouCommentOrderField } from '../constants/help-you-comment-order-field.enum';
-
+import { HelpYouCommentOrderField } from '@src/comments/constants/help-you-comment-order-field.enum';
 export class HelpYouCommentPageQueryDto extends PageQueryDto {
   @ApiPropertyOptional({
     description: '도와줄게요 댓글 고유 ID 필터링',

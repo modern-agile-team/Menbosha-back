@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 import mongoose from 'mongoose';
-import { Chat } from '../schemas/chats.schemas';
 import { TransformMongoId } from '@src/chat/dto/transform/transform-mongo-id';
+import { Chat } from '@src/chat/schemas/chats.schemas';
 
 export class ChatDto implements Chat {
   @ApiProperty({

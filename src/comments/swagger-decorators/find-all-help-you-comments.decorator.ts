@@ -7,7 +7,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { HelpYouCommentPaginationResponseDto } from '../dto/help-you-comment-pagination-response.dto';
+import { HelpYouCommentPaginationResponseDto } from '@src/comments/dto/help-you-comment-pagination-response.dto';
 
 export function ApiFindAllHelpYouComments() {
   return applyDecorators(

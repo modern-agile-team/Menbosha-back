@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { MentorReviewChecklistCountRepository } from '../repositories/mentor-review-checklist-count.repository';
-import { MentorReviewChecklistCountDto } from '../dtos/mentor-review-checklist-count.dto';
+import { MentorReviewChecklistCountDto } from '@src/total-count/dtos/mentor-review-checklist-count.dto';
+import { MentorReviewChecklistCountRepository } from '@src/total-count/repositories/mentor-review-checklist-count.repository';
 
 @Injectable()
 export class MentorReviewChecklistCountsService {

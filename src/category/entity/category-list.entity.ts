@@ -6,9 +6,9 @@ import {
   ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
 import { HelpMeBoard } from '@src/boards/entities/help-me-board.entity';
 import { MentorBoard } from '@src/boards/entities/mentor-board.entity';
+import { User } from '@src/users/entities/user.entity';
 
 @Entity({ name: 'category_list' })
 export class CategoryList {

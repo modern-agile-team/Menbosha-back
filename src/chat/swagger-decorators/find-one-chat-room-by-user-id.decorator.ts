@@ -6,7 +6,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ChatRoomDto } from '../dto/chat-room.dto';
+import { ChatRoomDto } from '@src/chat/dto/chat-room.dto';
 
 export function ApiFindOneChatRoomByUserId() {
   return applyDecorators(

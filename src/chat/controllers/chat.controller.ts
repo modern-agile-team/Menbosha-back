@@ -16,31 +16,31 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ChatService } from '../services/chat.service';
 import { ApiTags } from '@nestjs/swagger';
 import mongoose from 'mongoose';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ParseObjectIdPipe } from '../pipes/parse-object-id.pipe';
-import { ApiCreateChatRoom } from '../swagger-decorators/create-chat-room.decorator';
-import { ApiLeaveChatRoom } from '../swagger-decorators/leave-chat-room.decorator';
 import { GetUserId } from '@src/common/decorators/get-userId.decorator';
-import { ApiCreateChatImage } from '../swagger-decorators/create-chat-image.decorators';
 import { SuccessResponseInterceptor } from '@src/common/interceptors/success-response.interceptor';
-import { ChatRoomDto } from '../dto/chat-room.dto';
-import { ApiFindChatRooms } from '../swagger-decorators/find-chat-rooms.decorator';
 import { Observable } from 'rxjs';
-import { ApiFindChatNotificationSse } from '../swagger-decorators/find-chat-notification-Sse.decorator';
-import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
 import { PageQueryDto } from '@src/common/dto/page-query.dto';
-import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
-import { ChatImageDto } from '../dto/chat-image.dto';
-import { ResponseFindChatRoomsPaginationDto } from '../dto/response-find-chat-rooms-pagination.dto';
-import { ApiDeleteChat } from '../swagger-decorators/delete-chat.decorator';
-import { ApiFindOneChatRoomByUserId } from '../swagger-decorators/find-one-chat-room-by-user-id.decorator';
-import { ApiFindOneChatRoom } from '../swagger-decorators/find-one-chat-room.decorator';
-import { ApiFindChats } from '../swagger-decorators/find-chats.decorator';
 import { ParsePositiveIntPipe } from '@src/common/pipes/parse-positive-int.pipe';
 import { AccessTokenAuthGuard } from '@src/auth/jwt/jwt-auth.guard';
+import { AggregateChatRoomForChatsDto } from '@src/chat/dto/aggregate-chat-room-for-chats.dto';
+import { ChatImageDto } from '@src/chat/dto/chat-image.dto';
+import { ChatRoomDto } from '@src/chat/dto/chat-room.dto';
+import { CreateChatRoomBodyDto } from '@src/chat/dto/create-chat-room-body.dto';
+import { ResponseFindChatRoomsPaginationDto } from '@src/chat/dto/response-find-chat-rooms-pagination.dto';
+import { ParseObjectIdPipe } from '@src/chat/pipes/parse-object-id.pipe';
+import { ChatService } from '@src/chat/services/chat.service';
+import { ApiCreateChatImage } from '@src/chat/swagger-decorators/create-chat-image.decorators';
+import { ApiCreateChatRoom } from '@src/chat/swagger-decorators/create-chat-room.decorator';
+import { ApiDeleteChat } from '@src/chat/swagger-decorators/delete-chat.decorator';
+import { ApiFindChatNotificationSse } from '@src/chat/swagger-decorators/find-chat-notification-Sse.decorator';
+import { ApiFindChatRooms } from '@src/chat/swagger-decorators/find-chat-rooms.decorator';
+import { ApiFindChats } from '@src/chat/swagger-decorators/find-chats.decorator';
+import { ApiFindOneChatRoomByUserId } from '@src/chat/swagger-decorators/find-one-chat-room-by-user-id.decorator';
+import { ApiFindOneChatRoom } from '@src/chat/swagger-decorators/find-one-chat-room.decorator';
+import { ApiLeaveChatRoom } from '@src/chat/swagger-decorators/leave-chat-room.decorator';
 @ApiTags('CHAT')
 @UsePipes(
   new ValidationPipe({

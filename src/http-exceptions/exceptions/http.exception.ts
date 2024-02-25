@@ -1,7 +1,7 @@
 import { HttpException as NestHttpException } from '@nestjs/common';
 import { ErrorHttpStatusCode } from '@nestjs/common/utils/http-error-by-code.util';
-import { HttpError } from '../type/exception.type';
 import { ERROR_CODE } from '@src/constants/error/error-code.constant';
+import { HttpError } from '@src/http-exceptions/type/exception.type';
 import { ValueOf } from '@src/type/type';
 
 export class HttpException extends NestHttpException {

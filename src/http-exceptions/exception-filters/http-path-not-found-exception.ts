@@ -4,9 +4,9 @@ import {
   ExceptionFilter,
   NotFoundException,
 } from '@nestjs/common';
-import { HttpExceptionService } from '../services/http-exception.service';
 import { Response } from 'express';
 import { COMMON_ERROR_CODE } from '@src/constants/error/common/common-error-code.constant';
+import { HttpExceptionService } from '@src/http-exceptions/services/http-exception.service';
 
 @Catch(NotFoundException)
 export class HttpPathNotFoundExceptionFilter

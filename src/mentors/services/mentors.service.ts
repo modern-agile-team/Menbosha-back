@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CategoryService } from '@src/category/services/category.service';
 import { MentorListPageQueryDto } from '@src/mentors/dtos/mentor-list-page-query.dto';
-import { MentorRepository } from '../repositories/mentor.repository';
-import { UserWithImageAndIntroDto } from '../dtos/user-with-image-and-intro.dto';
-import { MentorPaginationResponseDto } from '../dtos/mentors-pagination-response.dto';
+import { MentorPaginationResponseDto } from '@src/mentors/dtos/mentors-pagination-response.dto';
+import { UserWithImageAndIntroDto } from '@src/mentors/dtos/user-with-image-and-intro.dto';
+import { MentorRepository } from '@src/mentors/repositories/mentor.repository';
 
 @Injectable()
 export class MentorsService {

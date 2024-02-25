@@ -14,28 +14,9 @@ import {
   Param,
   ClassSerializerInterceptor,
 } from '@nestjs/common';
-import { HelpMeBoardService } from '../services/help.me.board.service';
-import { BoardImagesService } from '../services/BoardImage.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { CreateHelpMeBoardImageDto } from '../dto/helpMeBoard/create.board-image.dto';
-import { ApiUploadHelpMeBoardImages } from '../swagger-decorators/helpMeBoard/add-help-me-board-images-decorator';
 import { ApiTags } from '@nestjs/swagger';
-import { ApiUpdateHelpMeBoardImage } from '../swagger-decorators/helpMeBoard/patch-help-me-board-images-decorators';
 import { GetUserId } from '@src/common/decorators/get-userId.decorator';
-import { ApiAddHelpMeBoard } from '../swagger-decorators/helpMeBoard/add-help-me-board-decorator';
-import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/create.help.me.board.dto';
-import { HelpMeBoard } from '../entities/help-me-board.entity';
-import { oneHelpMeBoardResponseDTO } from '../dto/helpMeBoard/one.response.help.me.board.dto';
-import { ApiGetOneHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-one-help-me-board.dto';
-import { ApiUpdateHelpMeBoard } from '../swagger-decorators/helpMeBoard/patch-help-me-board.decorator';
-import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dto';
-import { HelpMeBoardResponseDTO } from '../dto/helpMeBoard/update.help.me.board.response.dto';
-import { ApiDeleteHelpMeBoard } from '../swagger-decorators/helpMeBoard/delete-help-me-board-decorator';
-import { ApiGetPageNumberByHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-board-page-number.decorator';
-import { ApiPullingUpHelpMeBoard } from '../swagger-decorators/helpMeBoard/pulling-up-help-me-board.decorator';
-import { HelpMeBoardPageQueryDto } from '../dto/helpMeBoard/help-me-board-page-query.dto';
-import { HelpMeBoardPaginationResponseDto } from '../dto/helpMeBoard/help-me-board-pagination-response.dto';
-import { ApiFindAllHelpMeBoards } from '../swagger-decorators/helpMeBoard/find-all-help-me-boards.decorator';
 import { HelpYouCommentPageQueryDto } from '@src/comments/dto/help-you-comment-page-query.dto';
 import { HelpYouCommentPaginationResponseDto } from '@src/comments/dto/help-you-comment-pagination-response.dto';
 import { ApiFindAllHelpYouComments } from '@src/comments/swagger-decorators/find-all-help-you-comments.decorator';
@@ -45,6 +26,25 @@ import {
   AccessTokenAuthGuard,
   AccessTokenOptionalAuthGuard,
 } from '@src/auth/jwt/jwt-auth.guard';
+import { CreateHelpMeBoardImageDto } from '@src/boards/dto/helpMeBoard/create.board-image.dto';
+import { CreateHelpMeBoardDto } from '@src/boards/dto/helpMeBoard/create.help.me.board.dto';
+import { HelpMeBoardPageQueryDto } from '@src/boards/dto/helpMeBoard/help-me-board-page-query.dto';
+import { HelpMeBoardPaginationResponseDto } from '@src/boards/dto/helpMeBoard/help-me-board-pagination-response.dto';
+import { oneHelpMeBoardResponseDTO } from '@src/boards/dto/helpMeBoard/one.response.help.me.board.dto';
+import { UpdateHelpMeBoardDto } from '@src/boards/dto/helpMeBoard/update.help.me.board.dto';
+import { HelpMeBoardResponseDTO } from '@src/boards/dto/helpMeBoard/update.help.me.board.response.dto';
+import { HelpMeBoard } from '@src/boards/entities/help-me-board.entity';
+import { BoardImagesService } from '@src/boards/services/BoardImage.service';
+import { HelpMeBoardService } from '@src/boards/services/help.me.board.service';
+import { ApiAddHelpMeBoard } from '@src/boards/swagger-decorators/helpMeBoard/add-help-me-board-decorator';
+import { ApiUploadHelpMeBoardImages } from '@src/boards/swagger-decorators/helpMeBoard/add-help-me-board-images-decorator';
+import { ApiDeleteHelpMeBoard } from '@src/boards/swagger-decorators/helpMeBoard/delete-help-me-board-decorator';
+import { ApiFindAllHelpMeBoards } from '@src/boards/swagger-decorators/helpMeBoard/find-all-help-me-boards.decorator';
+import { ApiGetPageNumberByHelpMeBoard } from '@src/boards/swagger-decorators/helpMeBoard/get-board-page-number.decorator';
+import { ApiGetOneHelpMeBoard } from '@src/boards/swagger-decorators/helpMeBoard/get-one-help-me-board.dto';
+import { ApiUpdateHelpMeBoardImage } from '@src/boards/swagger-decorators/helpMeBoard/patch-help-me-board-images-decorators';
+import { ApiUpdateHelpMeBoard } from '@src/boards/swagger-decorators/helpMeBoard/patch-help-me-board.decorator';
+import { ApiPullingUpHelpMeBoard } from '@src/boards/swagger-decorators/helpMeBoard/pulling-up-help-me-board.decorator';
 
 /**
  * 팀원과 상의되면 주석처리된 옵션도 걸어줌.

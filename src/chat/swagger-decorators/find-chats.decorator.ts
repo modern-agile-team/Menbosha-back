@@ -8,7 +8,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
+import { AggregateChatRoomForChatsDto } from '@src/chat/dto/aggregate-chat-room-for-chats.dto';
 
 export function ApiFindChats() {
   return applyDecorators(

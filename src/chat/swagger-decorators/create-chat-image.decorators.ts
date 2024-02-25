@@ -11,7 +11,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ChatImageDto } from '../dto/chat-image.dto';
+import { ChatImageDto } from '@src/chat/dto/chat-image.dto';
 
 export function ApiCreateChatImage() {
   return applyDecorators(

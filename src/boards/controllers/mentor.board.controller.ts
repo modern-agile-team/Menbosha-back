@@ -13,31 +13,31 @@ import {
   ValidationPipe,
   ClassSerializerInterceptor,
 } from '@nestjs/common';
-import { MentorBoardService } from '../services/mentor.board.service';
-import { MentorBoard } from '../entities/mentor-board.entity';
-import { CreateMentorBoardDto } from '../dto/mentorBoard/create.mentor.board.dto';
-import { ApiAddMentorBoard } from '../swagger-decorators/mentorBoard/add-mentor-board-decorators';
-import { ApiGetOneMentorBoard } from '../swagger-decorators/mentorBoard/get-one-mentor-board-decorators';
-import { ApiUpdateMentorBoard } from '../swagger-decorators/mentorBoard/patch-mentor-board-decorators';
 import { ApiTags } from '@nestjs/swagger';
-import { ApiDeleteMentorBoard } from '../swagger-decorators/mentorBoard/delete-mentor-board-decorators';
 import { GetUserId } from '@src/common/decorators/get-userId.decorator';
-import { MentorBoardResponseDTO } from '../dto/mentorBoard/update.mentor.board.response.dto';
-import { UpdateMentorBoardDto } from '../dto/mentorBoard/update.mentor.board.dto';
-import { oneMentorBoardResponseDTO } from '../dto/mentorBoard/one.response.mentor.boards.dto';
-import { BoardImagesService } from '../services/BoardImage.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { CreateMentorBoardImageDto } from '../dto/mentorBoard/create.mentor.board.image.dto';
-import { ApiUploadMentorBoardImages } from '../swagger-decorators/mentorBoard/add-mentor-board-images-decorator';
-import { ApiGetPageNumberByMentorBoard } from '../swagger-decorators/mentorBoard/get-page-number-mentor-board-decorator';
-import { MentorBoardPaginationResponseDto } from '../dto/mentorBoard/mentor-board-pagination-response.dto';
-import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
-import { ApiFindAllMentorBoards } from '../swagger-decorators/mentorBoard/find-all-mentor-boards.decorator';
 import { SuccessResponseInterceptor } from '@src/common/interceptors/success-response.interceptor';
 import {
   AccessTokenAuthGuard,
   AccessTokenOptionalAuthGuard,
 } from '@src/auth/jwt/jwt-auth.guard';
+import { CreateMentorBoardDto } from '@src/boards/dto/mentorBoard/create.mentor.board.dto';
+import { CreateMentorBoardImageDto } from '@src/boards/dto/mentorBoard/create.mentor.board.image.dto';
+import { MentorBoardPageQueryDto } from '@src/boards/dto/mentorBoard/mentor-board-page-query.dto';
+import { MentorBoardPaginationResponseDto } from '@src/boards/dto/mentorBoard/mentor-board-pagination-response.dto';
+import { oneMentorBoardResponseDTO } from '@src/boards/dto/mentorBoard/one.response.mentor.boards.dto';
+import { UpdateMentorBoardDto } from '@src/boards/dto/mentorBoard/update.mentor.board.dto';
+import { MentorBoardResponseDTO } from '@src/boards/dto/mentorBoard/update.mentor.board.response.dto';
+import { MentorBoard } from '@src/boards/entities/mentor-board.entity';
+import { BoardImagesService } from '@src/boards/services/BoardImage.service';
+import { MentorBoardService } from '@src/boards/services/mentor.board.service';
+import { ApiAddMentorBoard } from '@src/boards/swagger-decorators/mentorBoard/add-mentor-board-decorators';
+import { ApiUploadMentorBoardImages } from '@src/boards/swagger-decorators/mentorBoard/add-mentor-board-images-decorator';
+import { ApiDeleteMentorBoard } from '@src/boards/swagger-decorators/mentorBoard/delete-mentor-board-decorators';
+import { ApiFindAllMentorBoards } from '@src/boards/swagger-decorators/mentorBoard/find-all-mentor-boards.decorator';
+import { ApiGetOneMentorBoard } from '@src/boards/swagger-decorators/mentorBoard/get-one-mentor-board-decorators';
+import { ApiGetPageNumberByMentorBoard } from '@src/boards/swagger-decorators/mentorBoard/get-page-number-mentor-board-decorator';
+import { ApiUpdateMentorBoard } from '@src/boards/swagger-decorators/mentorBoard/patch-mentor-board-decorators';
 
 /**
  * 추후 리팩토링때

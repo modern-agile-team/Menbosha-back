@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { UserImage } from '@src/users/entities/user-image.entity';
 import { EntityManager } from 'typeorm';
-import { UserImage } from '../entities/user-image.entity';
 
 @Injectable()
 export class UserImageRepository {

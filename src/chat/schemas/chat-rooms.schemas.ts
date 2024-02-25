@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import { ChatRoomType } from '../constants/chat-rooms-enum';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 import { Chat } from '@src/chat/schemas/chats.schemas';
+import { ChatRoomType } from '@src/chat/constants/chat-rooms-enum';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
 

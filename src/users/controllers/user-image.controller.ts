@@ -6,11 +6,11 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { UserImageService } from '../services/user-image.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { ApiUpdateUserImage } from '../swagger-decorators/update-user-image.decorator';
 import { GetUserId } from '@src/common/decorators/get-userId.decorator';
 import { AccessTokenAuthGuard } from '@src/auth/jwt/jwt-auth.guard';
+import { UserImageService } from '@src/users/services/user-image.service';
+import { ApiUpdateUserImage } from '@src/users/swagger-decorators/update-user-image.decorator';
 
 @Controller('user/image')
 @ApiTags('user API')

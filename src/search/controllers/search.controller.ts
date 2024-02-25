@@ -7,15 +7,15 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { SearchService } from '../services/search.service';
 import { ApiTags } from '@nestjs/swagger';
 import { SuccessResponseInterceptor } from '@src/common/interceptors/success-response.interceptor';
-import { SearchAllPageSizeDto } from '../dtos/search-all-page-size.dto';
-import { SearchAllBoardsAndMentorsQueryDto } from '../dtos/search-all-boards-and-mentors-query.dto';
-import { ApiSearchAllBoardsAndMentors } from '../swagger-decorators/search-all-boards-and-mentors.swagger';
-import { ApiSearchAllBoardsAndMentorsForPageSize } from '../swagger-decorators/search-all-boards-and-mentors-for-page-size.swagger';
-import { SearchAllHelpMeBoardDto } from '../dtos/search-all-help-me-board.dto';
-import { SearchAllMentorDto } from '../dtos/search-all-mentor.dto';
+import { SearchAllBoardsAndMentorsQueryDto } from '@src/search/dtos/search-all-boards-and-mentors-query.dto';
+import { SearchAllHelpMeBoardDto } from '@src/search/dtos/search-all-help-me-board.dto';
+import { SearchAllMentorDto } from '@src/search/dtos/search-all-mentor.dto';
+import { SearchAllPageSizeDto } from '@src/search/dtos/search-all-page-size.dto';
+import { SearchService } from '@src/search/services/search.service';
+import { ApiSearchAllBoardsAndMentorsForPageSize } from '@src/search/swagger-decorators/search-all-boards-and-mentors-for-page-size.swagger';
+import { ApiSearchAllBoardsAndMentors } from '@src/search/swagger-decorators/search-all-boards-and-mentors.swagger';
 
 @ApiTags('SEARCH')
 @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)

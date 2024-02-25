@@ -3,8 +3,8 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { PageQueryDto } from '@src/common/dto/page-query.dto';
 import { SortOrder } from '@src/common/constants/sort-order.enum';
-import { MentorReviewOrderField } from '../constants/mentor-review-order-field.enum';
 import { IsPositiveInt } from '@src/common/decorators/validators/is-positive-int.decorator';
+import { MentorReviewOrderField } from '@src/mentors/mentor-reviews/constants/mentor-review-order-field.enum';
 
 export class MentorReviewPageQueryDto extends PageQueryDto {
   @ApiPropertyOptional({

@@ -18,18 +18,18 @@ import {
 import { GetUserId } from '@src/common/decorators/get-userId.decorator';
 import { SuccessResponseInterceptor } from '@src/common/interceptors/success-response.interceptor';
 import { ParsePositiveIntPipe } from '@src/common/pipes/parse-positive-int.pipe';
-import { MentorReviewsService } from '../services/mentor-reviews.service';
-import { CreateMentorReviewRequestBodyDto } from '../dtos/create-mentor-review-request-body.dto';
-import { MentorReviewDto } from '../dtos/mentor-review.dto';
-import { ApiCreateMentorReview } from '../swagger-decorators/create-mentor-review.decorator';
 import { ApiTags } from '@nestjs/swagger';
-import { MentorReviewPageQueryDto } from '../dtos/mentor-review-page-query-dto';
-import { ApiFindMentorReviews } from '../swagger-decorators/find-mentor-reviews.decorator';
-import { ApiFindOneMentorReview } from '../swagger-decorators/find-one-mentor-review.decorator';
-import { ApiDeleteMentorReview } from '../swagger-decorators/delete-mentor-review.decorator';
-import { PatchUpdateMentorReviewDto } from '../dtos/patch-update-mentor-review.dto';
-import { ApiPatchUpdateMentorReview } from '../swagger-decorators/patch-update-mentor-review.decorator';
 import { AccessTokenAuthGuard } from '@src/auth/jwt/jwt-auth.guard';
+import { CreateMentorReviewRequestBodyDto } from '@src/mentors/mentor-reviews/dtos/create-mentor-review-request-body.dto';
+import { MentorReviewPageQueryDto } from '@src/mentors/mentor-reviews/dtos/mentor-review-page-query-dto';
+import { MentorReviewDto } from '@src/mentors/mentor-reviews/dtos/mentor-review.dto';
+import { PatchUpdateMentorReviewDto } from '@src/mentors/mentor-reviews/dtos/patch-update-mentor-review.dto';
+import { MentorReviewsService } from '@src/mentors/mentor-reviews/services/mentor-reviews.service';
+import { ApiCreateMentorReview } from '@src/mentors/mentor-reviews/swagger-decorators/create-mentor-review.decorator';
+import { ApiDeleteMentorReview } from '@src/mentors/mentor-reviews/swagger-decorators/delete-mentor-review.decorator';
+import { ApiFindMentorReviews } from '@src/mentors/mentor-reviews/swagger-decorators/find-mentor-reviews.decorator';
+import { ApiFindOneMentorReview } from '@src/mentors/mentor-reviews/swagger-decorators/find-one-mentor-review.decorator';
+import { ApiPatchUpdateMentorReview } from '@src/mentors/mentor-reviews/swagger-decorators/patch-update-mentor-review.decorator';
 
 @UsePipes(
   new ValidationPipe({

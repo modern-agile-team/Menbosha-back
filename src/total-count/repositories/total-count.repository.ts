@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { TotalCount } from '@src/total-count/entities/total-count.entity';
 import { EntityManager } from 'typeorm';
-import { TotalCount } from '../entities/total-count.entity';
 
 @Injectable()
 export class TotalCountRepository {

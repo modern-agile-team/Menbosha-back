@@ -1,7 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { ChatRoomType } from '../constants/chat-rooms-enum';
 import { IsEnum, IsOptional } from 'class-validator';
 import { ReceivedUserDto } from '@src/chat/dto/received-user.dto';
+import { ChatRoomType } from '@src/chat/constants/chat-rooms-enum';
 
 export class CreateChatRoomBodyDto extends ReceivedUserDto {
   @ApiPropertyOptional({

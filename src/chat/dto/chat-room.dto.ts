@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose, plainToInstance } from 'class-transformer';
 import mongoose from 'mongoose';
-import { ChatRooms } from '../schemas/chat-rooms.schemas';
-import { ChatRoomType } from '../constants/chat-rooms-enum';
 import { ChatDto } from '@src/chat/dto/chat.dto';
 import { TransformMongoId } from '@src/chat/dto/transform/transform-mongo-id';
+import { ChatRoomType } from '@src/chat/constants/chat-rooms-enum';
+import { ChatRooms } from '@src/chat/schemas/chat-rooms.schemas';
 
 export class ChatRoomDto implements Omit<ChatRooms, 'unprotectedData'> {
   @ApiProperty({

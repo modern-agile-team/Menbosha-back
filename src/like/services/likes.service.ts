@@ -3,14 +3,14 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { RequiredLikeColumn } from '../types/like.type';
+import { LikesRepository } from '@src/like/repositories/likes.repository';
+import { RequiredLikeColumn } from '@src/like/types/like.type';
 import {
   DeleteResult,
   EntityManager,
   FindManyOptions,
   FindOneOptions,
 } from 'typeorm';
-import { LikesRepository } from '../repositories/likes.repository';
 
 @Injectable()
 export class LikesService<E extends RequiredLikeColumn> {
