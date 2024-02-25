@@ -38,7 +38,7 @@ export class BannedUserDto
 
   @ApiProperty({
     description: '정지가 풀리는 날짜',
-    format: 'timestamp',
+    format: 'datetime',
   })
   endAt: Date;
 
