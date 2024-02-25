@@ -8,7 +8,7 @@ import { IsEnum, IsOptional, IsString, Length } from 'class-validator';
 
 export class BannedUserPageQueryDto extends PageQueryDto {
   @ApiPropertyOptional({
-    description: '멘토 고유 ID 필터링',
+    description: '밴한 유저 테이블 고유 ID 필터링',
     format: 'integer',
   })
   @IsOptional()
