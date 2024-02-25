@@ -12,7 +12,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { BannedUserDto } from '@src/admins/banned-user/dtos/banned-user.dto';
 import { BannedUsersService } from '@src/admins/banned-user/services/banned-users.service';
 import { Roles } from '@src/admins/decorators/roles.decorator';
@@ -22,6 +22,7 @@ import { PutUpdateUserForAdminDto } from '@src/admins/dtos/put-update-user-for-a
 import { RoleClassGuard } from '@src/admins/guards/role-class.guard';
 import { AdminsService } from '@src/admins/services/admins.service';
 import { ApiCreateBannedUser } from '@src/admins/swagger-decorators/create-banned-user.decorator';
+import { ApiFindAllBannedUsers } from '@src/admins/swagger-decorators/find-all-banned-users.decorator';
 import { ApiPutUpdateUserStatus } from '@src/admins/swagger-decorators/put-update-user-status.decorator';
 import { AccessTokenAuthGuard } from '@src/auth/jwt/jwt-auth.guard';
 import { GetUserId } from '@src/common/decorators/get-userId.decorator';
@@ -60,7 +61,7 @@ export class AdminsController {
     );
   }
 
-  @ApiBearerAuth('access-token')
+  @ApiFindAllBannedUsers()
   @Get('banned-users')
   findAllBannedUsers(@Query() bannedUserPageQueryDto: BannedUserPageQueryDto) {
     return this.bannedUsersService.findAll(bannedUserPageQueryDto);
