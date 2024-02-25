@@ -25,7 +25,7 @@ export class BannedUserRepository {
     pageSize: number,
     where: Record<string, any>,
     order: Record<string, any>,
-  ) {
+  ): Promise<[BannedUser[], number]> {
     return this.entityManager.getRepository(BannedUser).findAndCount({
       select: ['id', 'banUserId', 'bannedUserId', 'bannedAt', 'endAt'],
       where,

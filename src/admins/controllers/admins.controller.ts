@@ -14,11 +14,13 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { BannedUserDto } from '@src/admins/banned-user/dtos/banned-user.dto';
+import { BannedUsersPaginationResponseDto } from '@src/admins/banned-user/dtos/banned-users-pagination-response.dto';
 import { BannedUsersService } from '@src/admins/banned-user/services/banned-users.service';
 import { Roles } from '@src/admins/decorators/roles.decorator';
 import { BannedUserPageQueryDto } from '@src/admins/dtos/banned-user-page-query.dto';
 import { CreateBannedUserBodyDto } from '@src/admins/dtos/create-banned-user-body.dto';
 import { PutUpdateUserForAdminDto } from '@src/admins/dtos/put-update-user-for-admin.dto';
+import { UserResponseForAdminDto } from '@src/admins/dtos/user-response-for-admin.dto';
 import { RoleClassGuard } from '@src/admins/guards/role-class.guard';
 import { AdminsService } from '@src/admins/services/admins.service';
 import { ApiCreateBannedUser } from '@src/admins/swagger-decorators/create-banned-user.decorator';
@@ -63,8 +65,15 @@ export class AdminsController {
 
   @ApiFindAllBannedUsers()
   @Get('banned-users')
-  findAllBannedUsers(@Query() bannedUserPageQueryDto: BannedUserPageQueryDto) {
+  findAllBannedUsers(
+    @Query() bannedUserPageQueryDto: BannedUserPageQueryDto,
+  ): Promise<BannedUsersPaginationResponseDto> {
     return this.bannedUsersService.findAll(bannedUserPageQueryDto);
+  }
+
+  @Get('banned-users/:userId')
+  findOneBannedUser(@Param('userId') userId: number) {
+    return this.bannedUsersService.findOne();
   }
 
   @ApiPutUpdateUserStatus()
@@ -73,7 +82,7 @@ export class AdminsController {
     @Body() putUpdateUserForAdminDto: PutUpdateUserForAdminDto,
     @Param('userId') userId: number,
     @GetUserId() adminId: number,
-  ) {
+  ): Promise<UserResponseForAdminDto> {
     return this.adminsService.putUpdateUserStatus(
       adminId,
       userId,

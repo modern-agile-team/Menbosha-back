@@ -88,7 +88,9 @@ export class BannedUsersService {
     }
   }
 
-  async findAll(bannedUserPageQueyDto: BannedUserPageQueryDto) {
+  async findAll(
+    bannedUserPageQueyDto: BannedUserPageQueryDto,
+  ): Promise<BannedUsersPaginationResponseDto> {
     const { page, pageSize, orderField, sortOrder, ...filter } =
       bannedUserPageQueyDto;
 

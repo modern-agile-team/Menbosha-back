@@ -14,7 +14,7 @@ export class AdminsService {
     adminId: number,
     userId: number,
     putUpdateUserForAdminDto: PutUpdateUserForAdminDto,
-  ) {
+  ): Promise<UserResponseForAdminDto> {
     const existUser = await this.userService.findOneByOrNotFound({
       where: { id: userId },
     });
