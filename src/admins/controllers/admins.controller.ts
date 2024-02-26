@@ -36,6 +36,7 @@ import { UserRole } from '@src/users/constants/user-role.enum';
 import { ApiFindAllReports } from '@src/admins/swagger-decorators/find-all-reports.decorator';
 import { ParsePositiveIntPipe } from '@src/common/pipes/parse-positive-int.pipe';
 import { ReportDto } from '@src/reports/dto/report.dto';
+import { ApiFindOneReport } from '@src/admins/swagger-decorators/find-one-report-decorator';
 
 @ApiTags('_admin')
 @UsePipes(
@@ -92,6 +93,7 @@ export class AdminsController {
     return this.reportsService.findAll(reportPageQueryDto);
   }
 
+  @ApiFindOneReport()
   @Get('reports/:reportId')
   findOneReport(
     @Param('reportId', ParsePositiveIntPipe) reportId: number,
