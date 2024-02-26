@@ -15,6 +15,8 @@ export class ModifyUserDefaultOption1708913292118
           type: 'int',
           default: 1,
           comment: '희망 카테고리 아이디',
+          unsigned: true,
+          isNullable: false,
         }),
       },
       {
@@ -27,6 +29,8 @@ export class ModifyUserDefaultOption1708913292118
           type: 'int',
           default: 1,
           comment: '활동 카테고리 아이디',
+          unsigned: true,
+          isNullable: false,
         }),
       },
     ]);
@@ -39,6 +43,8 @@ export class ModifyUserDefaultOption1708913292118
           type: 'int',
           default: 1,
           comment: '희망 카테고리 아이디',
+          unsigned: true,
+          isNullable: false,
         }),
         newColumn: new TableColumn({
           name: 'hope_category_list_id',
@@ -51,6 +57,8 @@ export class ModifyUserDefaultOption1708913292118
           type: 'int',
           default: 1,
           comment: '활동 카테고리 아이디',
+          unsigned: true,
+          isNullable: false,
         }),
         newColumn: new TableColumn({
           name: 'activity_category_list_id',
