@@ -38,8 +38,8 @@ export class UserRepository {
     ).rank;
   }
 
-  findUser(email: string, provider: Provider): Promise<User | null> {
-    return this.entityManager.findOne(User, { where: { email, provider } });
+  findUser(uniqueId: string, provider: Provider): Promise<User | null> {
+    return this.entityManager.findOne(User, { where: { uniqueId, provider } });
   }
 
   createUser(entityManager: EntityManager, userInfo: UserInfo): Promise<User> {
