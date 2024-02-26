@@ -31,4 +31,8 @@ export class ReportRepository {
       take: pageSize,
     });
   }
+
+  findOneBy(reportId: number): Promise<Report> {
+    return this.entityManager.getRepository(Report).findOneBy({ id: reportId });
+  }
 }

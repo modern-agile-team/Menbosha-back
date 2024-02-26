@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ReportPageQueryDto } from '@src/reports/dto/report-page-query-dto';
 import { QueryHelper } from '@src/helpers/query.helper';
 import { CreateReportBodyDto } from '@src/reports/dto/create-report-body.dto';
@@ -74,5 +74,21 @@ export class ReportsService {
       page,
       pageSize,
     );
+  }
+
+  async findOneOrNotFound(reportId: number): Promise<ReportDto> {
+    const existReport = await this.findOneBy(reportId);
+
+    if (!existReport) {
+      throw new NotFoundException('해당 신고 정보를 찾지 못했습니다');
+    }
+
+    return existReport;
+  }
+
+  async findOneBy(reportId: number): Promise<ReportDto> {
+    const existBannedUser = await this.reportRepository.findOneBy(reportId);
+
+    return existBannedUser ? new ReportDto(existBannedUser) : null;
   }
 }
