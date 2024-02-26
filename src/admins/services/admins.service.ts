@@ -2,7 +2,7 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { PutUpdateUserForAdminDto } from '@src/admins/dtos/put-update-user-for-admin.dto';
 import { UserResponseForAdminDto } from '@src/admins/dtos/user-response-for-admin.dto';
 import { ADMIN_ERROR_CODE } from '@src/constants/error/admin/admin-error-code.constant';
-import { AdminException } from '@src/http-exceptions/exceptions/admin-exception';
+import { HttpForbiddenException } from '@src/http-exceptions/exceptions/http-forbidden.exception';
 import { UserRole } from '@src/users/constants/user-role.enum';
 import { UserService } from '@src/users/services/user.service';
 
@@ -20,7 +20,9 @@ export class AdminsService {
     });
 
     if (adminId !== userId && existUser.role === UserRole.ADMIN) {
-      throw new AdminException({ code: ADMIN_ERROR_CODE.DENIED_FOR_ADMINS });
+      throw new HttpForbiddenException({
+        code: ADMIN_ERROR_CODE.DENIED_FOR_ADMINS,
+      });
     }
 
     const updateResult = await this.userService.updateUser(userId, {

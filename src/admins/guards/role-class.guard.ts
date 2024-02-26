@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { ROLES_TOKEN } from '@src/admins/constants/roles.token';
 import { ADMIN_ERROR_CODE } from '@src/constants/error/admin/admin-error-code.constant';
-import { AdminException } from '@src/http-exceptions/exceptions/admin-exception';
+import { HttpForbiddenException } from '@src/http-exceptions/exceptions/http-forbidden.exception';
 import { UserRole } from '@src/users/constants/user-role.enum';
 import { UserService } from '@src/users/services/user.service';
 
@@ -22,7 +22,9 @@ export class RoleClassGuard implements CanActivate {
     const isRoleValid = this.getMetadata(context).includes(role);
 
     if (!isRoleValid) {
-      throw new AdminException({ code: ADMIN_ERROR_CODE.ADMIN_ONLY_ACCESS });
+      throw new HttpForbiddenException({
+        code: ADMIN_ERROR_CODE.ADMIN_ONLY_ACCESS,
+      });
     }
 
     return isRoleValid;

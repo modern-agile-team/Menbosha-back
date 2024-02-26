@@ -12,7 +12,7 @@ import { DataSource } from 'typeorm';
 import { BannedUserDto } from '@src/admins/banned-user/dtos/banned-user.dto';
 import { UserStatus } from '@src/users/constants/user-status.enum';
 import { ADMIN_ERROR_CODE } from '@src/constants/error/admin/admin-error-code.constant';
-import { AdminException } from '@src/http-exceptions/exceptions/admin-exception';
+import { HttpForbiddenException } from '@src/http-exceptions/exceptions/http-forbidden.exception';
 import { UserRole } from '@src/users/constants/user-role.enum';
 import { BannedUserPageQueryDto } from '@src/admins/banned-user/dtos/banned-user-page-query.dto';
 import { BannedUser } from '@src/admins/banned-user/entities/banned-user.entity';
@@ -53,7 +53,9 @@ export class BannedUsersService {
     });
 
     if (existTargetUser.role === UserRole.ADMIN) {
-      throw new AdminException({ code: ADMIN_ERROR_CODE.DENIED_FOR_ADMINS });
+      throw new HttpForbiddenException({
+        code: ADMIN_ERROR_CODE.DENIED_FOR_ADMINS,
+      });
     }
 
     const existBannedUser = await this.findOneByUserId(existTargetUser.id);
