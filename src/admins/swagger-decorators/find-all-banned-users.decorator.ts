@@ -19,7 +19,7 @@ export const ApiFindAllBannedUsers = () => {
       summary: '밴당한 유저 조회(pagination) api(for admin)',
       description:
         '일단은 기획이 나온게 없고 성능 이슈 때문에 reason은 따로 response에 실어주지 않음.',
-      operationId: 'admin_findAll',
+      operationId: 'admin_findAllBannedUser',
     }),
 
     ApiOkResponse({

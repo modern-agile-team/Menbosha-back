@@ -17,7 +17,7 @@ export const ApiFindOneBannedUser = () => {
     ApiBearerAuth('access-token'),
     ApiOperation({
       summary: '밴 정보 상세 조회',
-      operationId: 'admin_findOne',
+      operationId: 'admin_findOneBannedUser',
     }),
 
     ApiOkResponse({
