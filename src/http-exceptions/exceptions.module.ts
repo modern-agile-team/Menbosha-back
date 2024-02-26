@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AdminExceptionFilter } from '@src/http-exceptions/exception-filters/admin-exception.filter';
+import { BannedUserExceptionFilter } from '@src/http-exceptions/exception-filters/banned-user-exception.filter';
 import { HttpBadRequestExceptionFilter } from '@src/http-exceptions/exception-filters/http-bad-request-exception.filter';
 import { HttpConflictExceptionFilter } from '@src/http-exceptions/exception-filters/http-conflict-exception.filter';
 import { HttpForbiddenExceptionFilter } from '@src/http-exceptions/exception-filters/http-forbidden-exception.filter';
@@ -14,6 +14,7 @@ import { HttpExceptionService } from '@src/http-exceptions/services/http-excepti
 @Module({
   providers: [
     HttpExceptionService,
+    BannedUserExceptionFilter,
     HttpBadRequestExceptionFilter,
     HttpUnauthorizedExceptionFilter,
     HttpForbiddenExceptionFilter,
@@ -23,7 +24,6 @@ import { HttpExceptionService } from '@src/http-exceptions/services/http-excepti
     HttpInternalServerErrorExceptionFilter,
     HttpProcessErrorExceptionFilter,
     HttpRemainderExceptionFilter,
-    AdminExceptionFilter,
   ],
 })
 export class ExceptionsModule {}

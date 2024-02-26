@@ -10,13 +10,16 @@ export class HttpException extends NestHttpException {
   public readonly code: ValueOf<typeof ERROR_CODE>;
 
   constructor(
-    error: HttpError<HttpException> & { statusCode: ErrorHttpStatusCode },
+    error: (HttpError<HttpException> & { statusCode: ErrorHttpStatusCode }) & {
+      additionalResponse?: Record<string, any>;
+    },
   ) {
-    const { statusCode, code } = error;
+    const { statusCode, code, additionalResponse } = error;
 
     super(
       {
         code,
+        additionalResponse,
       },
       statusCode,
     );

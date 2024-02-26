@@ -7,9 +7,10 @@ import { config } from 'dotenv';
 
 config();
 
-interface ExceptionError {
+export interface ExceptionError {
   code: ValueOf<typeof ERROR_CODE>;
   stack?: any;
+  additionalResponse?: Record<string, any>;
 }
 
 @Injectable()
@@ -28,6 +29,7 @@ export class HttpExceptionService {
         statusCode >= 500 && process.env.NODE_ENV
           ? exceptionError.stack
           : undefined,
+      additionalResponse: exceptionError.additionalResponse,
     });
   }
 }
