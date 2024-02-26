@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateReportBodyDto } from '@src/reports/dto/create-report-body.dto';
 import { Report } from '@src/reports/entities/report.entity';
-import { EntityManager } from 'typeorm';
+import { EntityManager, UpdateResult } from 'typeorm';
 
 @Injectable()
 export class ReportRepository {
@@ -34,5 +34,11 @@ export class ReportRepository {
 
   findOneBy(reportId: number): Promise<Report> {
     return this.entityManager.getRepository(Report).findOneBy({ id: reportId });
+  }
+
+  delete(reportId: number): Promise<UpdateResult> {
+    return this.entityManager
+      .getRepository(Report)
+      .update({ id: reportId }, { deletedAt: new Date() });
   }
 }

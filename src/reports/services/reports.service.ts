@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { ReportPageQueryDto } from '@src/reports/dto/report-page-query-dto';
 import { QueryHelper } from '@src/helpers/query.helper';
 import { CreateReportBodyDto } from '@src/reports/dto/create-report-body.dto';
@@ -9,6 +13,7 @@ import { ReportRepository } from '@src/reports/repositories/report.repository';
 import { UserService } from '@src/users/services/user.service';
 import { plainToInstance } from 'class-transformer';
 import { ReportsPaginationResponseDto } from '@src/reports/dto/reports-pagination-response.dto';
+import { UpdateResult } from 'typeorm';
 
 @Injectable()
 export class ReportsService {
@@ -87,8 +92,22 @@ export class ReportsService {
   }
 
   async findOneBy(reportId: number): Promise<ReportDto> {
-    const existBannedUser = await this.reportRepository.findOneBy(reportId);
+    const existReport = await this.reportRepository.findOneBy(reportId);
 
-    return existBannedUser ? new ReportDto(existBannedUser) : null;
+    return existReport ? new ReportDto(existReport) : null;
+  }
+
+  async delete(reportId: number): Promise<UpdateResult> {
+    const existReport = await this.findOneOrNotFound(reportId);
+
+    const updateResult = await this.reportRepository.delete(existReport.id);
+
+    if (!updateResult.affected) {
+      throw new InternalServerErrorException(
+        '신고 삭제 중 알 수 없는 서버에러 발생',
+      );
+    }
+
+    return updateResult;
   }
 }

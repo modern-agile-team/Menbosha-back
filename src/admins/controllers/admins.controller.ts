@@ -2,7 +2,10 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -37,6 +40,7 @@ import { ApiFindAllReports } from '@src/admins/swagger-decorators/find-all-repor
 import { ParsePositiveIntPipe } from '@src/common/pipes/parse-positive-int.pipe';
 import { ReportDto } from '@src/reports/dto/report.dto';
 import { ApiFindOneReport } from '@src/admins/swagger-decorators/find-one-report-decorator';
+import { ApiDeleteReport } from '@src/admins/swagger-decorators/delete-report.decorator';
 
 @ApiTags('_admin')
 @UsePipes(
@@ -99,6 +103,13 @@ export class AdminsController {
     @Param('reportId', ParsePositiveIntPipe) reportId: number,
   ): Promise<ReportDto> {
     return this.reportsService.findOneOrNotFound(reportId);
+  }
+
+  @ApiDeleteReport()
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete('reports/:reportId')
+  deleteReport(@Param('reportId', ParsePositiveIntPipe) reportId: number) {
+    return this.reportsService.delete(reportId);
   }
 
   @ApiPutUpdateUserStatus()
