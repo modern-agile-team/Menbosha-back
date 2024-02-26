@@ -71,9 +71,9 @@ export class AdminsController {
     return this.bannedUsersService.findAll(bannedUserPageQueryDto);
   }
 
-  @Get('banned-users/:userId')
-  findOneBannedUser(@Param('userId') userId: number) {
-    return this.bannedUsersService.findOne();
+  @Get('banned-users/:bannedUserId')
+  findOneBannedUser(@Param('bannedUserId') bannedUserId: number) {
+    return this.bannedUsersService.findOneOrNotFound(bannedUserId);
   }
 
   @ApiPutUpdateUserStatus()

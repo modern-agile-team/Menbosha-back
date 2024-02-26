@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBannedUserBodyDto } from '@src/admins/dtos/create-banned-user-body.dto';
 import { BannedUser } from '@src/admins/banned-user/entities/banned-user.entity';
-import { EntityManager } from 'typeorm';
+import { EntityManager, FindOneOptions } from 'typeorm';
 
 @Injectable()
 export class BannedUserRepository {
@@ -33,5 +33,9 @@ export class BannedUserRepository {
       skip,
       take: pageSize,
     });
+  }
+
+  findOne(options: FindOneOptions<BannedUser>): Promise<BannedUser> {
+    return this.entityManager.getRepository(BannedUser).findOne(options);
   }
 }

@@ -1,7 +1,9 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { BannedUserRepository } from '@src/admins/banned-user/repositories/banned-user.repository';
 import { CreateBannedUserBodyDto } from '@src/admins/dtos/create-banned-user-body.dto';
@@ -18,6 +20,7 @@ import { QueryHelper } from '@src/helpers/query.helper';
 import { plainToInstance } from 'class-transformer';
 import { BannedUsersItemDto } from '@src/admins/banned-user/dtos/banned-users-item.dto';
 import { BannedUsersPaginationResponseDto } from '@src/admins/banned-user/dtos/banned-users-pagination-response.dto';
+import { SortOrder } from '@src/common/constants/sort-order.enum';
 
 @Injectable()
 export class BannedUsersService {
@@ -53,6 +56,12 @@ export class BannedUsersService {
       throw new AdminException({ code: ADMIN_ERROR_CODE.DENIED_FOR_ADMINS });
     }
 
+    const existBannedUser = await this.findOneByUserId(existTargetUser.id);
+
+    if (existBannedUser?.endAt > new Date()) {
+      throw new ConflictException('user has already been banned.');
+    }
+
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -64,7 +73,7 @@ export class BannedUsersService {
       const bannedUser = await this.bannedUserRepository.create(
         entityManager,
         adminId,
-        userId,
+        existTargetUser.id,
         createBannedUserBodyDto,
       );
 
@@ -122,5 +131,26 @@ export class BannedUsersService {
       page,
       pageSize,
     );
+  }
+
+  async findOneOrNotFound(bannedUserId: number): Promise<BannedUserDto> {
+    const existBannedUser = await this.bannedUserRepository.findOne({
+      where: { id: bannedUserId },
+    });
+
+    if (!existBannedUser) {
+      throw new NotFoundException('해당 밴 정보를 찾지 못했습니다');
+    }
+
+    return new BannedUserDto(existBannedUser);
+  }
+
+  async findOneByUserId(userId: number): Promise<BannedUserDto> {
+    const existBannedUser = await this.bannedUserRepository.findOne({
+      where: { bannedUserId: userId },
+      order: { bannedAt: SortOrder.Desc },
+    });
+
+    return existBannedUser ? new BannedUserDto(existBannedUser) : null;
   }
 }
