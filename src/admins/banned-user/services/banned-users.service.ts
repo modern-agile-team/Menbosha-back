@@ -133,9 +133,9 @@ export class BannedUsersService {
     );
   }
 
-  async findOneOrNotFound(bannedUserId: number): Promise<BannedUserDto> {
+  async findOneOrNotFound(id: number): Promise<BannedUserDto> {
     const existBannedUser = await this.bannedUserRepository.findOne({
-      where: { id: bannedUserId },
+      where: { id },
     });
 
     if (!existBannedUser) {
