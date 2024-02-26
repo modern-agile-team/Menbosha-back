@@ -17,9 +17,10 @@ import { BannedUserDto } from '@src/admins/banned-user/dtos/banned-user.dto';
 import { BannedUsersPaginationResponseDto } from '@src/admins/banned-user/dtos/banned-users-pagination-response.dto';
 import { BannedUsersService } from '@src/admins/banned-user/services/banned-users.service';
 import { Roles } from '@src/admins/decorators/roles.decorator';
-import { BannedUserPageQueryDto } from '@src/admins/dtos/banned-user-page-query.dto';
-import { CreateBannedUserBodyDto } from '@src/admins/dtos/create-banned-user-body.dto';
+import { BannedUserPageQueryDto } from '@src/admins/banned-user/dtos/banned-user-page-query.dto';
+import { CreateBannedUserBodyDto } from '@src/admins/banned-user/dtos/create-banned-user-body.dto';
 import { PutUpdateUserForAdminDto } from '@src/admins/dtos/put-update-user-for-admin.dto';
+import { ReportPageQueryDto } from '@src/reports/dto/report-page-query-dto';
 import { UserResponseForAdminDto } from '@src/admins/dtos/user-response-for-admin.dto';
 import { RoleClassGuard } from '@src/admins/guards/role-class.guard';
 import { AdminsService } from '@src/admins/services/admins.service';
@@ -30,6 +31,7 @@ import { ApiPutUpdateUserStatus } from '@src/admins/swagger-decorators/put-updat
 import { AccessTokenAuthGuard } from '@src/auth/jwt/jwt-auth.guard';
 import { GetUserId } from '@src/common/decorators/get-userId.decorator';
 import { SuccessResponseInterceptor } from '@src/common/interceptors/success-response.interceptor';
+import { ReportsService } from '@src/reports/services/reports.service';
 import { UserRole } from '@src/users/constants/user-role.enum';
 
 @ApiTags('_admin')
@@ -46,6 +48,7 @@ import { UserRole } from '@src/users/constants/user-role.enum';
 @Controller('admins')
 export class AdminsController {
   constructor(
+    private readonly reportsService: ReportsService,
     private readonly bannedUsersService: BannedUsersService,
     private readonly adminsService: AdminsService,
   ) {}
@@ -74,8 +77,15 @@ export class AdminsController {
 
   @ApiFindOneBannedUser()
   @Get('banned-users/:bannedUserId')
-  findOneBannedUser(@Param('bannedUserId') bannedUserId: number) {
+  findOneBannedUser(
+    @Param('bannedUserId') bannedUserId: number,
+  ): Promise<BannedUserDto> {
     return this.bannedUsersService.findOneOrNotFound(bannedUserId);
+  }
+
+  @Get('reports')
+  findAllReports(@Query() reportPageQueryDto: ReportPageQueryDto) {
+    return this.reportsService.findAll(reportPageQueryDto);
   }
 
   @ApiPutUpdateUserStatus()

@@ -16,4 +16,19 @@ export class ReportRepository {
       .getRepository(Report)
       .save({ ...createReportBodyDto, reportUserId, reportedUserId });
   }
+
+  findAllAndCount(
+    skip: number,
+    pageSize: number,
+    where: Record<string, any>,
+    order: Record<string, any>,
+  ): Promise<[Report[], number]> {
+    return this.entityManager.getRepository(Report).findAndCount({
+      select: ['id', 'type', 'reportUserId', 'reportedUserId', 'createdAt'],
+      where,
+      order,
+      skip,
+      take: pageSize,
+    });
+  }
 }
