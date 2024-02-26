@@ -25,6 +25,7 @@ import { RoleClassGuard } from '@src/admins/guards/role-class.guard';
 import { AdminsService } from '@src/admins/services/admins.service';
 import { ApiCreateBannedUser } from '@src/admins/swagger-decorators/create-banned-user.decorator';
 import { ApiFindAllBannedUsers } from '@src/admins/swagger-decorators/find-all-banned-users.decorator';
+import { ApiFindOneBannedUser } from '@src/admins/swagger-decorators/find-one-banned-user.decorator';
 import { ApiPutUpdateUserStatus } from '@src/admins/swagger-decorators/put-update-user-status.decorator';
 import { AccessTokenAuthGuard } from '@src/auth/jwt/jwt-auth.guard';
 import { GetUserId } from '@src/common/decorators/get-userId.decorator';
@@ -71,6 +72,7 @@ export class AdminsController {
     return this.bannedUsersService.findAll(bannedUserPageQueryDto);
   }
 
+  @ApiFindOneBannedUser()
   @Get('banned-users/:bannedUserId')
   findOneBannedUser(@Param('bannedUserId') bannedUserId: number) {
     return this.bannedUsersService.findOneOrNotFound(bannedUserId);
