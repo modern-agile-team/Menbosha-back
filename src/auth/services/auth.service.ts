@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import * as dotenv from 'dotenv';
 import axios from 'axios';
 import { TotalCountService } from '@src/total-count/services/total-count.service';
@@ -10,6 +15,10 @@ import { UserInfo } from '@src/auth/interfaces/user-info.interface';
 import { Provider } from '@src/auth/enums/provider.enum';
 import { TokenService } from '@src/auth/services/token.service';
 import { AuthServiceInterface } from '@src/auth/interfaces/auth-service.interface';
+import { BannedUsersService } from '@src/admins/banned-user/services/banned-users.service';
+import { BannedUserException } from '@src/http-exceptions/exceptions/banned-user.exception';
+import { AUTH_ERROR_CODE } from '@src/constants/error/auth/auth-error-code.constant';
+import { BannedUserDto } from '@src/admins/banned-user/dtos/banned-user.dto';
 
 dotenv.config();
 
@@ -20,6 +29,7 @@ export class AuthService implements AuthServiceInterface {
     private readonly userImageService: UserImageService,
     private readonly tokenService: TokenService,
     private readonly totalCountService: TotalCountService,
+    private readonly bannedUsersService: BannedUsersService,
     private readonly dataSource: DataSource,
   ) {}
 
@@ -138,18 +148,64 @@ export class AuthService implements AuthServiceInterface {
         email,
       };
 
-      const user = await this.userService.findUser(email, provider);
+      const user = await this.userService.findOne({
+        where: { email, provider },
+        withDeleted: true,
+      });
 
       /**
-       * @todo
-       * 1. 유저 상태 검사
-       * 2. 비활성화 상태라면 정지 테이블에서 유저 조회
-       * 3. 정지 테이블에 날짜를 현재 날짜와 비교
-       * 4. 현재 날짜와 비교해서 아직 정지가 끝나지 않았다면 정지 관련 에러 발생 및 정지 풀리는 날짜도 같이 throw
-       * 5. 만약 날짜가 지났다면 ACTIVE 상태로 다시 돌려주고 로직 진행
-       * 6. 정지 테이블에 없다면 알 수 없는 이유로 유저가 비활성화 상태. 서버 에러 발생(관리자에게 문의 관련 에러)
+       * @todo 추후 기획에 따라 유저를 restore하는 방식을 정해야 함.
+       * 현재 - 탈퇴 후 다시 로그인 하면 자동 복원.
+       * 방법 1. NotFound 에러를 던짐.(문의를 통해서만 복구 가능. 근데 현재 기획 상 별도의 문의 페이지가 없음.)
+       * 방법 2. 탈퇴된 계정 전용 페이지를 만듬. 복구요청(별도의 api 만들기) 혹은 그대로 사이트 나가기
+       * 방법 3. 자동 복원(현재)
        */
-      if (user.status === UserStatus.INACTIVE) {
+      if (user?.deletedAt && user?.status === UserStatus.INACTIVE) {
+        user.status = UserStatus.ACTIVE;
+        user.deletedAt = null;
+
+        const updateResult = await this.userService.updateUser(user.id, {
+          ...user,
+        });
+
+        if (!updateResult.affected) {
+          throw new InternalServerErrorException(
+            'Unknown server error during user sign-in.',
+          );
+        }
+      }
+
+      if (!user?.deletedAt && user?.status === UserStatus.INACTIVE) {
+        const existBannedUser = await this.bannedUsersService.findOneByUserId(
+          user.id,
+        );
+
+        if (!existBannedUser) {
+          throw new InternalServerErrorException(
+            'User disabled for unknown reason.',
+          );
+        }
+
+        if (existBannedUser.endAt > new Date()) {
+          throw new BannedUserException(
+            { code: AUTH_ERROR_CODE.BANNED_USER },
+            { ...new BannedUserDto(existBannedUser) },
+          );
+        }
+
+        if (existBannedUser.endAt <= new Date()) {
+          user.status = UserStatus.ACTIVE;
+
+          const updateResult = await this.userService.updateUser(user.id, {
+            ...user,
+          });
+
+          if (!updateResult.affected) {
+            throw new InternalServerErrorException(
+              'Unknown server error during user sign-in.',
+            );
+          }
+        }
       }
 
       if (user) {
@@ -254,6 +310,11 @@ export class AuthService implements AuthServiceInterface {
       }
     } catch (error) {
       console.log(error);
+
+      if (error instanceof BannedUserException) {
+        throw error;
+      }
+
       throw new HttpException(
         `${provider} 로그인 중 오류가 발생했습니다.`,
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -358,6 +419,7 @@ export class AuthService implements AuthServiceInterface {
   async accountDelete(userId: number) {
     const deleteUser = await this.userService.updateUser(userId, {
       deletedAt: new Date(),
+      status: UserStatus.INACTIVE,
     });
     if (!deleteUser) {
       throw new HttpException(
