@@ -2,10 +2,8 @@ import { User } from '@src/users/entities/user.entity';
 import {
   Column,
   Entity,
-  Index,
   JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -46,16 +44,14 @@ export class BannedUser {
   @JoinColumn([{ name: 'ban_user_id', referencedColumnName: 'id' }])
   banUser: User;
 
-  @Index({ unique: true })
   @Column('int', {
-    unique: true,
     name: 'banned_user_id',
     nullable: false,
     comment: '밴 당한 유저 고유 ID',
   })
   bannedUserId: number;
 
-  @OneToOne(() => User, (user) => user.banned, {
+  @ManyToOne(() => User, (user) => user.banned, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })

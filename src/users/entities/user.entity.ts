@@ -168,6 +168,6 @@ export class User {
   @OneToMany(() => BannedUser, (bannedUser) => bannedUser.banUser)
   bans: BannedUser[];
 
-  @OneToOne(() => BannedUser, (bannedUser) => bannedUser.bannedUser)
-  banned: BannedUser;
+  @OneToMany(() => BannedUser, (bannedUser) => bannedUser.bannedUser)
+  banned: BannedUser[];
 }
