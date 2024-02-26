@@ -1,5 +1,5 @@
 import { User } from '@src/users/entities/user.entity';
-import { UserReportType } from '@src/reports/constants/report-type.enum';
+import { ReportType } from '@src/reports/constants/report-type.enum';
 import {
   Column,
   DeleteDateColumn,
@@ -22,9 +22,9 @@ export class Report {
   @Column('enum', {
     name: 'type',
     comment: '신고 타입',
-    enum: UserReportType,
+    enum: ReportType,
   })
-  type: UserReportType;
+  type: ReportType;
 
   @Column('varchar', { name: 'reason', comment: '신고 상세 사유', length: 255 })
   reason: string;
