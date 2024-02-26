@@ -33,6 +33,9 @@ import { GetUserId } from '@src/common/decorators/get-userId.decorator';
 import { SuccessResponseInterceptor } from '@src/common/interceptors/success-response.interceptor';
 import { ReportsService } from '@src/reports/services/reports.service';
 import { UserRole } from '@src/users/constants/user-role.enum';
+import { ApiFindAllReports } from '@src/admins/swagger-decorators/find-all-reports.decorator';
+import { ParsePositiveIntPipe } from '@src/common/pipes/parse-positive-int.pipe';
+import { ReportDto } from '@src/reports/dto/report.dto';
 
 @ApiTags('_admin')
 @UsePipes(
@@ -57,7 +60,7 @@ export class AdminsController {
   @Post('users/:userId/banned-users')
   createBannedUser(
     @Body() createBannedUserBodyDto: CreateBannedUserBodyDto,
-    @Param('userId') userId: number,
+    @Param('userId', ParsePositiveIntPipe) userId: number,
     @GetUserId() adminId: number,
   ): Promise<BannedUserDto> {
     return this.bannedUsersService.create(
@@ -76,23 +79,31 @@ export class AdminsController {
   }
 
   @ApiFindOneBannedUser()
-  @Get('banned-users/:bannedUserId')
+  @Get('banned-users/:id')
   findOneBannedUser(
-    @Param('bannedUserId') bannedUserId: number,
+    @Param('id', ParsePositiveIntPipe) id: number,
   ): Promise<BannedUserDto> {
-    return this.bannedUsersService.findOneOrNotFound(bannedUserId);
+    return this.bannedUsersService.findOneOrNotFound(id);
   }
 
+  @ApiFindAllReports()
   @Get('reports')
   findAllReports(@Query() reportPageQueryDto: ReportPageQueryDto) {
     return this.reportsService.findAll(reportPageQueryDto);
+  }
+
+  @Get('reports/:reportId')
+  findOneReport(
+    @Param('reportId', ParsePositiveIntPipe) reportId: number,
+  ): Promise<ReportDto> {
+    return this.reportsService.findOneOrNotFound(reportId);
   }
 
   @ApiPutUpdateUserStatus()
   @Put('users/:userId')
   putUpdateUserStatus(
     @Body() putUpdateUserForAdminDto: PutUpdateUserForAdminDto,
-    @Param('userId') userId: number,
+    @Param('userId', ParsePositiveIntPipe) userId: number,
     @GetUserId() adminId: number,
   ): Promise<UserResponseForAdminDto> {
     return this.adminsService.putUpdateUserStatus(
