@@ -43,12 +43,7 @@ export class UserRepository {
   }
 
   createUser(entityManager: EntityManager, userInfo: UserInfo): Promise<User> {
-    return entityManager.save(User, {
-      ...userInfo,
-      hopeCategoryId: 1,
-      activityCategoryId: 1,
-      isMentor: false,
-    });
+    return entityManager.save(User, { ...userInfo });
   }
 
   updateUser(
