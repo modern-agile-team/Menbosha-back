@@ -2,12 +2,13 @@ import { NestFactory } from '@nestjs/core';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import { AsyncApiDocumentBuilder, AsyncApiModule } from 'nestjs-asyncapi';
-import { AdminExceptionFilter } from '@src/http-exceptions/exception-filters/admin-exception.filter';
+
 import { setupSwagger } from '@src/config/swagger';
 import { AppModule } from '@src/app.module';
 // import { HttpBadRequestExceptionFilter } from '@src/http-exceptions/exception-filters/http-bad-request-exception.filter';
 // import { HttpConflictExceptionFilter } from '@src/http-exceptions/exception-filters/http-conflict-exception.filter';
-// import { HttpForbiddenExceptionFilter } from '@src/http-exceptions/exception-filters/http-forbidden-exception.filter';
+import { HttpForbiddenExceptionFilter } from '@src/http-exceptions/exception-filters/http-forbidden-exception.filter';
+import { BannedUserExceptionFilter } from '@src/http-exceptions/exception-filters/banned-user-exception.filter';
 // import { HttpInternalServerErrorExceptionFilter } from '@src/http-exceptions/exception-filters/http-internal-server-error-exception.filter';
 // import { HttpNotFoundExceptionFilter } from '@src/http-exceptions/exception-filters/http-not-found-exception';
 // import { HttpPathNotFoundExceptionFilter } from '@src/http-exceptions/exception-filters/http-path-not-found-exception';
@@ -42,14 +43,14 @@ async function bootstrap() {
   app.useLogger(logger);
 
   app.useGlobalFilters(
-    app.get(AdminExceptionFilter),
     // app.get(HttpProcessErrorExceptionFilter),
     // app.get(HttpRemainderExceptionFilter),
     // app.get(HttpInternalServerErrorExceptionFilter),
     // app.get(HttpConflictExceptionFilter),
     // app.get(HttpNotFoundExceptionFilter),
     // app.get(HttpPathNotFoundExceptionFilter),
-    // app.get(HttpForbiddenExceptionFilter),
+    app.get(HttpForbiddenExceptionFilter),
+    app.get(BannedUserExceptionFilter),
     // app.get(HttpUnauthorizedExceptionFilter),
     // app.get(HttpBadRequestExceptionFilter),
   );
