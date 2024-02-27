@@ -37,30 +37,22 @@
 # # redis를 실행할 포트
 # EXPOSE 6379
 
-#ngnix이미지 최신버전
+#nginx 이미지 사용
 FROM nginx:latest
 
-# Install certbot
-RUN apt-get update && \
-    apt-get install -y certbot && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+#nignx와 certbot 설치
+RUN apt-get update && apt-get install -y certbot python3-certbot-nginx
 
-# Copy nginx.conf
+#nginx.conf(설정파일 복사)
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Copy certbot script
-COPY certbot_script.sh /usr/local/bin/certbot_script.sh
-
-# Set execute permission for certbot script
-RUN chmod +x /usr/local/bin/certbot_script.sh
-
-# 80- http 443- https
+#port
 EXPOSE 80
 EXPOSE 443
 
-# Nginx 시작
-CMD ["nginx", "-g", "daemon off;"]
+#entrypoint.sh 복사, 권한부여
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# cerbot 시작
-RUN /usr/local/bin/certbot_script.sh
+#컨테이너가 실행될 때 entrypoint.sh 실행
+CMD ["/entrypoint.sh"]
