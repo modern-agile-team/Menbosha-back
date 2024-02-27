@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { MentorReview } from '@src/mentors/mentor-reviews/entities/mentor-review.entity';
 import { IsBoolean, IsOptional } from 'class-validator';
-import { MentorReview } from '../entities/mentor-review.entity';
 
 export class CreateMentorReviewChecklistRequestBodyDto
   implements Partial<MentorReview>

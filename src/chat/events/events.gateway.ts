@@ -9,14 +9,15 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { ChatService } from 'src/chat/services/chat.service';
-import { PostChatDto } from '../dto/post-chat.dto';
+import { ChatService } from '@src/chat/services/chat.service';
+
 import { AsyncApiSub } from 'nestjs-asyncapi';
 import { UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
-import { LoginChatRoomsDto } from '../dto/login-chat-rooms.dto';
-import { WebSocketExceptionFilter } from '../exceptions/filters/websocket-exception.filter';
 import mongoose from 'mongoose';
-import { SocketException } from '../exceptions/socket.exception';
+import { LoginChatRoomsDto } from '@src/chat/dto/login-chat-rooms.dto';
+import { PostChatDto } from '@src/chat/dto/post-chat.dto';
+import { WebSocketExceptionFilter } from '@src/chat/exceptions/filters/websocket-exception.filter';
+import { SocketException } from '@src/chat/exceptions/socket.exception';
 
 @WebSocketGateway({ cors: true })
 @UseFilters(WebSocketExceptionFilter)
@@ -69,8 +70,14 @@ export class EventsGateway
 
       const stringChatRoomId = String(chatRoom._id);
 
-      socket.join(stringChatRoomId);
+      await socket.join(stringChatRoomId);
       console.log('join', socket.nsp.name, stringChatRoomId);
+
+      socket.emit('join', {
+        namespace: socket.nsp.name,
+        roomId: stringChatRoomId,
+        message: '조인 됐습니다',
+      });
     }
   }
 

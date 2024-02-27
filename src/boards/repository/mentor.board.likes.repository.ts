@@ -1,7 +1,7 @@
 import { EntityManager } from 'typeorm';
 
 import { Injectable } from '@nestjs/common';
-import { MentorBoardLike } from '../entities/mentor-board-like.entity';
+import { MentorBoardLike } from '@src/boards/entities/mentor-board-like.entity';
 
 @Injectable()
 export class MentorBoardLikeRepository {

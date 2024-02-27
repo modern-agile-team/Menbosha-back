@@ -1,7 +1,7 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
-import { HttpExceptionService } from '../services/http-exception.service';
+import { HttpUnauthorizedException } from '@src/http-exceptions/exceptions/http-unauthorized.exception';
+import { HttpExceptionService } from '@src/http-exceptions/services/http-exception.service';
 import { Response } from 'express';
-import { HttpUnauthorizedException } from '../exceptions/http-unauthorized.exception';
 
 @Catch(HttpUnauthorizedException)
 export class HttpUnauthorizedExceptionFilter

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { BoardImageRepository } from '../repository/boardImage.repository';
-import { S3Service } from '../../common/s3/s3.service';
-import { CreateHelpMeBoardImageDto } from '../dto/helpMeBoard/create.board-image.dto';
-import { HelpMeBoardImage } from '../entities/help-me-board-image.entity';
-import { CreateMentorBoardImageDto } from '../dto/mentorBoard/create.mentor.board.image.dto';
+import { CreateHelpMeBoardImageDto } from '@src/boards/dto/helpMeBoard/create.board-image.dto';
+import { CreateMentorBoardImageDto } from '@src/boards/dto/mentorBoard/create.mentor.board.image.dto';
+import { HelpMeBoardImage } from '@src/boards/entities/help-me-board-image.entity';
+import { BoardImageRepository } from '@src/boards/repository/boardImage.repository';
+import { S3Service } from '@src/common/s3/s3.service';
 
 @Injectable()
 export class BoardImagesService {

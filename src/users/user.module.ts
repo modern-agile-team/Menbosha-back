@@ -1,29 +1,27 @@
-import { UserService } from './services/user.service';
-import { UserController } from './controllers/user.controller';
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
-import { UserImageController } from './controllers/user-image.controller';
-import { S3Service } from 'src/common/s3/s3.service';
-import { UserRepository } from './repositories/user.repository';
-import { UserImageRepository } from './repositories/user-image.repository';
-import { UserImageService } from './services/user-image.service';
-import { AuthModule } from 'src/auth/auth.module';
-import { UserIntroService } from './services/user-intro-service';
-import { UserBadgeRepository } from './repositories/user-badge.repository';
-import { UserIntroRepository } from './repositories/user-intro.repository';
-import { UserRankingService } from './services/user-ranking.service';
-import { UserRankingRepository } from './repositories/user-ranking.repository';
-import { TotalCountModule } from 'src/total-count/total-count.module';
-import { UserBadgeService } from './services/user-badge.service';
-import { UserReportsModule } from './user-reports/user-reports.module';
+import { S3Service } from '@src/common/s3/s3.service';
+import { AuthModule } from '@src/auth/auth.module';
+import { TotalCountModule } from '@src/total-count/total-count.module';
+import { UserImageController } from '@src/users/controllers/user-image.controller';
+import { UserController } from '@src/users/controllers/user.controller';
+import { User } from '@src/users/entities/user.entity';
+import { UserBadgeRepository } from '@src/users/repositories/user-badge.repository';
+import { UserImageRepository } from '@src/users/repositories/user-image.repository';
+import { UserIntroRepository } from '@src/users/repositories/user-intro.repository';
+import { UserRankingRepository } from '@src/users/repositories/user-ranking.repository';
+import { UserRepository } from '@src/users/repositories/user.repository';
+import { UserBadgeService } from '@src/users/services/user-badge.service';
+import { UserImageService } from '@src/users/services/user-image.service';
+import { UserIntroService } from '@src/users/services/user-intro-service';
+import { UserRankingService } from '@src/users/services/user-ranking.service';
+import { UserService } from '@src/users/services/user.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
     forwardRef(() => AuthModule),
     TotalCountModule,
-    UserReportsModule,
   ],
   controllers: [UserController, UserImageController],
   providers: [

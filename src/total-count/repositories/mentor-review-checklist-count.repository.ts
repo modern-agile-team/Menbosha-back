@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { MentorReviewChecklistCount } from '@src/total-count/entities/mentor-review-checklist-count.entity';
 import { EntityManager } from 'typeorm';
-import { MentorReviewChecklistCount } from '../entities/mentor-review-checklist-count.entity';
 
 @Injectable()
 export class MentorReviewChecklistCountRepository {

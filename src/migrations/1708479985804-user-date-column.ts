@@ -1,7 +1,7 @@
 import {
   generateCreatedAtColumn,
   generateUpdatedAtColumn,
-} from 'src/migrations/__utils/util';
+} from '@src/migrations/__utils/util';
 import { MigrationInterface, QueryRunner, TableColumn } from 'typeorm';
 
 export class UserDateColumn1708479985804 implements MigrationInterface {

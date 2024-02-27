@@ -5,9 +5,10 @@ import {
   FindOneOptions,
   UpdateResult,
 } from 'typeorm';
-import { User } from '../entities/user.entity';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { Provider } from 'src/auth/enums/provider.enum';
+import { Provider } from '@src/auth/enums/provider.enum';
+import { UserInfo } from '@src/auth/interfaces/user-info.interface';
+import { User } from '@src/users/entities/user.entity';
 
 @Injectable()
 export class UserRepository {

@@ -1,26 +1,27 @@
-import { RedisModule } from './common/redis/redis.module';
-import { UserImageService } from './users/services/user-image.service';
-import { AuthModule } from './auth/auth.module';
-import { CommentModule } from './comments/comment.module';
-import { UserModule } from './users/user.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TypeORMconfig } from './config/typeorm.config';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ChatModule } from './chat/chat.module';
-import { S3Module } from './common/s3/s3.module';
-import { S3Service } from './common/s3/s3.service';
 import * as mongoose from 'mongoose';
-import { UserImageRepository } from './users/repositories/user-image.repository';
 import { ScheduleModule } from '@nestjs/schedule';
-import { SearchModule } from './search/search.module';
-import { ExceptionsModule } from './http-exceptions/exceptions.module';
-import { CategoryModule } from './category/category.module';
-import { BoardsModule } from './boards/boards.module';
-import { LoggerMiddleware } from './middlewares/logger.middleware';
-import { MentorsModule } from './mentors/mentors.module';
-import { AdminsModule } from 'src/admins/admins.module';
+import { AdminsModule } from '@src/admins/admins.module';
+import { ReportsModule } from '@src/reports/reports.module';
+import { AuthModule } from '@src/auth/auth.module';
+import { BoardsModule } from '@src/boards/boards.module';
+import { CategoryModule } from '@src/category/category.module';
+import { ChatModule } from '@src/chat/chat.module';
+import { CommentModule } from '@src/comments/comment.module';
+import { RedisModule } from '@src/common/redis/redis.module';
+import { S3Module } from '@src/common/s3/s3.module';
+import { S3Service } from '@src/common/s3/s3.service';
+import { TypeORMconfig } from '@src/config/typeorm.config';
+import { ExceptionsModule } from '@src/http-exceptions/exceptions.module';
+import { MentorsModule } from '@src/mentors/mentors.module';
+import { LoggerMiddleware } from '@src/middlewares/logger.middleware';
+import { SearchModule } from '@src/search/search.module';
+import { UserImageRepository } from '@src/users/repositories/user-image.repository';
+import { UserImageService } from '@src/users/services/user-image.service';
+import { UserModule } from '@src/users/user.module';
 
 @Module({
   imports: [
@@ -43,10 +44,11 @@ import { AdminsModule } from 'src/admins/admins.module';
     S3Module,
     BoardsModule,
     SearchModule,
-    ExceptionsModule,
     CategoryModule,
     MentorsModule,
     AdminsModule,
+    ReportsModule,
+    ExceptionsModule,
   ], //
   providers: [UserImageService, UserImageRepository, S3Service],
 })

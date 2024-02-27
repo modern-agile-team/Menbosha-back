@@ -1,16 +1,17 @@
-import { UserIntroRepository } from './../repositories/user-intro.repository';
-import { UserBadgeRepository } from './../repositories/user-badge.repository';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { UserRepository } from '../repositories/user.repository';
-import { UserImageRepository } from '../repositories/user-image.repository';
 import { EntityManager, FindManyOptions, FindOneOptions } from 'typeorm';
-import { User } from '../entities/user.entity';
-import { UserBadgeResponseDTO } from '../dtos/get-user-badge.dto';
 import { plainToInstance } from 'class-transformer';
-import { MyProfileResponseDTO } from '../dtos/get-my-profile.dto';
-import { MyIntroDto } from '../dtos/get-my-intro.dto';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { Provider } from 'src/auth/enums/provider.enum';
+import { Provider } from '@src/auth/enums/provider.enum';
+import { UserInfo } from '@src/auth/interfaces/user-info.interface';
+import { UserBadgeRepository } from '@src/users/repositories/user-badge.repository';
+import { UserIntroRepository } from '@src/users/repositories/user-intro.repository';
+import { MyIntroDto } from '@src/users/dtos/get-my-intro.dto';
+import { MyProfileResponseDTO } from '@src/users/dtos/get-my-profile.dto';
+import { UserBadgeResponseDTO } from '@src/users/dtos/get-user-badge.dto';
+import { UserImageRepository } from '@src/users/repositories/user-image.repository';
+import { UserRepository } from '@src/users/repositories/user.repository';
+import { User } from '@src/users/entities/user.entity';
 
 @Injectable()
 export class UserService {
@@ -29,8 +30,12 @@ export class UserService {
     return this.userRepository.findUser(uniqueId, provider);
   }
 
+  findOne(options: FindOneOptions<User>) {
+    return this.userRepository.findOne(options);
+  }
+
   async findOneByOrNotFound(options: FindOneOptions<User>) {
-    const existUser = await this.userRepository.findOne(options);
+    const existUser = await this.findOne(options);
 
     if (!existUser) {
       throw new NotFoundException('해당 유저를 찾지 못했습니다.');
@@ -89,7 +94,7 @@ export class UserService {
   }
 
   async getMyInfoWithOwner(userId: number, targetId: number) {
-    const { name, email, admin, provider } =
+    const { name, email, role, provider } =
       await this.userRepository.getUserInfo(userId);
     const userImage = (await this.userImageRepository.findUserImage(userId))
       .imageUrl;
@@ -97,7 +102,7 @@ export class UserService {
       userId,
       name,
       email,
-      admin,
+      role,
       provider,
       userImage,
       owner: userId === targetId,

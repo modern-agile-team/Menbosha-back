@@ -1,5 +1,4 @@
-import { User } from 'src/users/entities/user.entity';
-import { HelpMeBoardImage } from './help-me-board-image.entity';
+import { User } from '@src/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -12,7 +11,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { CategoryList } from 'src/category/entity/category-list.entity';
+import { CategoryList } from '@src/category/entity/category-list.entity';
+import { HelpMeBoardImage } from '@src/boards/entities/help-me-board-image.entity';
 
 @Entity({
   name: 'help_me_board',

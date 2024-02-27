@@ -1,7 +1,7 @@
 import { IsEnum } from 'class-validator';
-import { Action } from '../enums/action.enum';
-import { Type } from '../enums/type.enum';
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from '@src/total-count/enums/type.enum';
+import { Action } from '@src/total-count/enums/action.enum';
 
 export class UpdateCountingDto {
   mentorId?: number;

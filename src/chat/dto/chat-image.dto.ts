@@ -1,8 +1,8 @@
 import { Types } from 'mongoose';
-import { ChatImages } from '../schemas/chat-images.schemas';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { TransformMongoId } from './transform/transform-mongo-id';
+import { TransformMongoId } from '@src/chat/dto/transform/transform-mongo-id';
+import { ChatImages } from '@src/chat/schemas/chat-images.schemas';
 
 export class ChatImageDto implements Omit<ChatImages, 'unprotectedData'> {
   @ApiProperty({

@@ -6,8 +6,8 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { SearchAllHelpMeBoardDto } from '../dtos/search-all-help-me-board.dto';
-import { SearchAllMentorDto } from '../dtos/search-all-mentor.dto';
+import { SearchAllHelpMeBoardDto } from '@src/search/dtos/search-all-help-me-board.dto';
+import { SearchAllMentorDto } from '@src/search/dtos/search-all-mentor.dto';
 
 export function ApiSearchAllBoardsAndMentors() {
   return applyDecorators(

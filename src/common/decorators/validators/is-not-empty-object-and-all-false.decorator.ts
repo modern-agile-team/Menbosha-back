@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { applyDecorators } from '@nestjs/common';
-import { Type } from 'class-transformer';
 import {
   IsNotEmptyObject,
   ValidationArguments,
@@ -21,10 +18,10 @@ export function IsNotEmptyObjectAndAllFalse(
       constraints: [],
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any, _args: ValidationArguments) {
           return Object.values(value).some((value) => value);
         },
-        defaultMessage(args: ValidationArguments) {
+        defaultMessage(_args: ValidationArguments) {
           return 'At least one property in $property should be true.';
         },
       },

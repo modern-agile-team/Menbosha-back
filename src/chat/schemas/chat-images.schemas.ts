@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
+import { ChatRooms } from '@src/chat/schemas/chat-rooms.schemas';
 import * as mongoose from 'mongoose';
-import { ChatRooms } from './chat-rooms.schemas';
 
 const options: SchemaOptions = {
   collection: 'chat_images',

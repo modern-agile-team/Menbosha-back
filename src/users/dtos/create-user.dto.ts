@@ -1,3 +1,4 @@
+import { UserRole } from '@src/users/constants/user-role.enum';
 import { IsBoolean, IsEmail, IsString } from 'class-validator';
 
 export class CreateUserDto {
@@ -11,5 +12,5 @@ export class CreateUserDto {
   readonly email: string;
 
   @IsBoolean()
-  readonly admin: boolean;
+  readonly role: UserRole;
 }

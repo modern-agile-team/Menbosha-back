@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CategoryList } from 'src/category/entity/category-list.entity';
+import { CategoryList } from '@src/category/entity/category-list.entity';
 import { EntityManager } from 'typeorm';
 
 @Injectable()

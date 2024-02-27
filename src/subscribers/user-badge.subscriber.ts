@@ -1,5 +1,5 @@
-import { TotalCount } from 'src/total-count/entities/total-count.entity';
-import { UserBadge } from 'src/users/entities/user-badge.entity';
+import { TotalCount } from '@src/total-count/entities/total-count.entity';
+import { UserBadge } from '@src/users/entities/user-badge.entity';
 import {
   EntitySubscriberInterface,
   EventSubscriber,

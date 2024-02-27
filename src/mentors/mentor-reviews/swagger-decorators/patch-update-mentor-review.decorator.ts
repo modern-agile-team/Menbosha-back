@@ -9,7 +9,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { MentorReviewDto } from '../dtos/mentor-review.dto';
+import { MentorReviewDto } from '@src/mentors/mentor-reviews/dtos/mentor-review.dto';
 
 export function ApiPatchUpdateMentorReview() {
   return applyDecorators(

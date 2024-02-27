@@ -4,15 +4,15 @@ import {
   FindOptionsWhere,
   UpdateResult,
 } from 'typeorm';
-import { MentorBoard } from '../entities/mentor-board.entity';
-import { CreateMentorBoardDto } from '../dto/mentorBoard/create.mentor.board.dto';
 import { Injectable } from '@nestjs/common';
-import { UpdateMentorBoardDto } from '../dto/mentorBoard/update.mentor.board.dto';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { QueryBuilderHelper } from 'src/helpers/query-builder.helper';
-import { SortOrder } from 'src/common/constants/sort-order.enum';
-import { MentorBoardOrderField } from '../constants/mentor-board-order-field.enum';
-import { MentorBoardDto } from '../dto/mentorBoard/mentor-board.dto';
+import { QueryBuilderHelper } from '@src/helpers/query-builder.helper';
+import { SortOrder } from '@src/common/constants/sort-order.enum';
+import { MentorBoardOrderField } from '@src/boards/constants/mentor-board-order-field.enum';
+import { CreateMentorBoardDto } from '@src/boards/dto/mentorBoard/create.mentor.board.dto';
+import { MentorBoardDto } from '@src/boards/dto/mentorBoard/mentor-board.dto';
+import { UpdateMentorBoardDto } from '@src/boards/dto/mentorBoard/update.mentor.board.dto';
+import { MentorBoard } from '@src/boards/entities/mentor-board.entity';
 
 @Injectable()
 export class MentorBoardRepository {
