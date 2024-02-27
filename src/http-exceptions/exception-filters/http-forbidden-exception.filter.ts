@@ -1,7 +1,7 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
-import { HttpExceptionService } from '../services/http-exception.service';
+import { HttpForbiddenException } from '@src/http-exceptions/exceptions/http-forbidden.exception';
+import { HttpExceptionService } from '@src/http-exceptions/services/http-exception.service';
 import { Response } from 'express';
-import { HttpForbiddenException } from '../exceptions/http-forbidden.exception';
 
 @Catch(HttpForbiddenException)
 export class HttpForbiddenExceptionFilter

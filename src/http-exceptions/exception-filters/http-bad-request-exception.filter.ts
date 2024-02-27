@@ -1,6 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
-import { HttpBadRequestException } from '../exceptions/http-bad-request.exception';
-import { HttpExceptionService } from '../services/http-exception.service';
+import { HttpBadRequestException } from '@src/http-exceptions/exceptions/http-bad-request.exception';
+import { HttpExceptionService } from '@src/http-exceptions/services/http-exception.service';
 import { Response } from 'express';
 
 @Catch(HttpBadRequestException)

@@ -1,9 +1,9 @@
-import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 import {
+  generatePrimaryColumn,
   generateCountColumn,
   generateCreatedAtColumn,
-  generatePrimaryColumn,
-} from './__utils/util';
+} from '@src/migrations/__utils/util';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class CreateMentorReviewChecklistCountTable1706687627541
   implements MigrationInterface

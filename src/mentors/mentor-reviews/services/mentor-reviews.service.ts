@@ -5,18 +5,18 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { MentorReviewRepository } from '../repositories/mentor-review.repository';
-import { CreateMentorReviewRequestBodyDto } from '../dtos/create-mentor-review-request-body.dto';
-import { MentorReviewDto } from '../dtos/mentor-review.dto';
-import { MentorReviewPageQueryDto } from '../dtos/mentor-review-page-query-dto';
-import { MentorReviewsItemResponseDto } from '../dtos/mentor-reviews-item-response.dto';
 import { plainToInstance } from 'class-transformer';
-import { MentorReviewsPaginationResponseDto } from '../dtos/mentor-reviews-pagination-response.dto';
-import { UserService } from 'src/users/services/user.service';
+import { UserService } from '@src/users/services/user.service';
 import { DataSource, FindOneOptions, UpdateResult } from 'typeorm';
-import { MentorReview } from '../entities/mentor-review.entity';
-import { PatchUpdateMentorReviewDto } from '../dtos/patch-update-mentor-review.dto';
 import { isNotEmptyObject } from 'class-validator';
+import { CreateMentorReviewRequestBodyDto } from '@src/mentors/mentor-reviews/dtos/create-mentor-review-request-body.dto';
+import { MentorReviewPageQueryDto } from '@src/mentors/mentor-reviews/dtos/mentor-review-page-query-dto';
+import { MentorReviewDto } from '@src/mentors/mentor-reviews/dtos/mentor-review.dto';
+import { MentorReviewsItemResponseDto } from '@src/mentors/mentor-reviews/dtos/mentor-reviews-item-response.dto';
+import { MentorReviewsPaginationResponseDto } from '@src/mentors/mentor-reviews/dtos/mentor-reviews-pagination-response.dto';
+import { PatchUpdateMentorReviewDto } from '@src/mentors/mentor-reviews/dtos/patch-update-mentor-review.dto';
+import { MentorReview } from '@src/mentors/mentor-reviews/entities/mentor-review.entity';
+import { MentorReviewRepository } from '@src/mentors/mentor-reviews/repositories/mentor-review.repository';
 @Injectable()
 export class MentorReviewsService {
   constructor(

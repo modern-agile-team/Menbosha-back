@@ -3,18 +3,18 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { MentorBoardRepository } from '../repository/mentor.boards.repository';
-import { CreateMentorBoardDto } from '../dto/mentorBoard/create.mentor.board.dto';
-import { MentorBoard } from '../entities/mentor-board.entity';
-import { MentorBoardResponseDTO } from '../dto/mentorBoard/update.mentor.board.response.dto';
-import { UpdateMentorBoardDto } from '../dto/mentorBoard/update.mentor.board.dto';
-import { oneMentorBoardResponseDTO } from '../dto/mentorBoard/one.response.mentor.boards.dto';
 import { FindOneOptions } from 'typeorm';
-import { MentorBoardLikeRepository } from '../repository/mentor.board.likes.repository';
-import { MentorBoardWithUserAndImageDto } from '../dto/mentorBoard/mentor-board-with-user-and-image.dto';
-import { MentorBoardPaginationResponseDto } from '../dto/mentorBoard/mentor-board-pagination-response.dto';
-import { MentorBoardPageQueryDto } from '../dto/mentorBoard/mentor-board-page-query.dto';
-import { CategoryService } from 'src/category/services/category.service';
+import { CategoryService } from '@src/category/services/category.service';
+import { CreateMentorBoardDto } from '@src/boards/dto/mentorBoard/create.mentor.board.dto';
+import { MentorBoardPageQueryDto } from '@src/boards/dto/mentorBoard/mentor-board-page-query.dto';
+import { MentorBoardPaginationResponseDto } from '@src/boards/dto/mentorBoard/mentor-board-pagination-response.dto';
+import { MentorBoardWithUserAndImageDto } from '@src/boards/dto/mentorBoard/mentor-board-with-user-and-image.dto';
+import { oneMentorBoardResponseDTO } from '@src/boards/dto/mentorBoard/one.response.mentor.boards.dto';
+import { UpdateMentorBoardDto } from '@src/boards/dto/mentorBoard/update.mentor.board.dto';
+import { MentorBoardResponseDTO } from '@src/boards/dto/mentorBoard/update.mentor.board.response.dto';
+import { MentorBoard } from '@src/boards/entities/mentor-board.entity';
+import { MentorBoardLikeRepository } from '@src/boards/repository/mentor.board.likes.repository';
+import { MentorBoardRepository } from '@src/boards/repository/mentor.boards.repository';
 
 @Injectable()
 export class MentorBoardService {

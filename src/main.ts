@@ -1,18 +1,20 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
-import { setupSwagger } from './config/swagger';
 import * as cookieParser from 'cookie-parser';
 import { AsyncApiDocumentBuilder, AsyncApiModule } from 'nestjs-asyncapi';
-// import { HttpBadRequestExceptionFilter } from './http-exceptions/exception-filters/http-bad-request-exception.filter';
-// import { HttpProcessErrorExceptionFilter } from './http-exceptions/exception-filters/http-process-error-exception.filter';
-// import { HttpRemainderExceptionFilter } from './http-exceptions/exception-filters/http-remainder-exception.filter';
-// import { HttpInternalServerErrorExceptionFilter } from './http-exceptions/exception-filters/http-internal-server-error-exception.filter';
-// import { HttpConflictExceptionFilter } from './http-exceptions/exception-filters/http-conflict-exception.filter';
-// import { HttpNotFoundExceptionFilter } from './http-exceptions/exception-filters/http-not-found-exception';
-// import { HttpPathNotFoundExceptionFilter } from './http-exceptions/exception-filters/http-path-not-found-exception';
-// import { HttpForbiddenExceptionFilter } from './http-exceptions/exception-filters/http-forbidden-exception.filter';
-// import { HttpUnauthorizedExceptionFilter } from './http-exceptions/exception-filters/http-unauthorized-exception.filter';
+
+import { setupSwagger } from '@src/config/swagger';
+import { AppModule } from '@src/app.module';
+// import { HttpBadRequestExceptionFilter } from '@src/http-exceptions/exception-filters/http-bad-request-exception.filter';
+// import { HttpConflictExceptionFilter } from '@src/http-exceptions/exception-filters/http-conflict-exception.filter';
+import { HttpForbiddenExceptionFilter } from '@src/http-exceptions/exception-filters/http-forbidden-exception.filter';
+import { BannedUserExceptionFilter } from '@src/http-exceptions/exception-filters/banned-user-exception.filter';
+// import { HttpInternalServerErrorExceptionFilter } from '@src/http-exceptions/exception-filters/http-internal-server-error-exception.filter';
+// import { HttpNotFoundExceptionFilter } from '@src/http-exceptions/exception-filters/http-not-found-exception';
+// import { HttpPathNotFoundExceptionFilter } from '@src/http-exceptions/exception-filters/http-path-not-found-exception';
+// import { HttpProcessErrorExceptionFilter } from '@src/http-exceptions/exception-filters/http-process-error-exception.filter';
+// import { HttpRemainderExceptionFilter } from '@src/http-exceptions/exception-filters/http-remainder-exception.filter';
+// import { HttpUnauthorizedExceptionFilter } from '@src/http-exceptions/exception-filters/http-unauthorized-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -40,17 +42,18 @@ async function bootstrap() {
   await AsyncApiModule.setup('asyncapi', app, asyncApiDocument);
   app.useLogger(logger);
 
-  // app.useGlobalFilters(
-  //   app.get(HttpProcessErrorExceptionFilter),
-  //   app.get(HttpRemainderExceptionFilter),
-  //   app.get(HttpInternalServerErrorExceptionFilter),
-  //   app.get(HttpConflictExceptionFilter),
-  //   app.get(HttpNotFoundExceptionFilter),
-  //   app.get(HttpPathNotFoundExceptionFilter),
-  //   app.get(HttpForbiddenExceptionFilter),
-  //   app.get(HttpUnauthorizedExceptionFilter),
-  //   app.get(HttpBadRequestExceptionFilter),
-  // );
+  app.useGlobalFilters(
+    // app.get(HttpProcessErrorExceptionFilter),
+    // app.get(HttpRemainderExceptionFilter),
+    // app.get(HttpInternalServerErrorExceptionFilter),
+    // app.get(HttpConflictExceptionFilter),
+    // app.get(HttpNotFoundExceptionFilter),
+    // app.get(HttpPathNotFoundExceptionFilter),
+    app.get(HttpForbiddenExceptionFilter),
+    app.get(BannedUserExceptionFilter),
+    // app.get(HttpUnauthorizedExceptionFilter),
+    // app.get(HttpBadRequestExceptionFilter),
+  );
 
   await app.listen(3000);
 }

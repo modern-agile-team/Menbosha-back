@@ -1,10 +1,10 @@
 import { DynamicModule, Module, Type } from '@nestjs/common';
-import { LikesService } from './services/likes.service';
-import { RequiredLikeColumn } from './types/like.type';
-import { LIKE_REPOSITORY_TOKEN } from './constants/like.token';
 import { DataSource } from 'typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { LikesRepository } from './repositories/likes.repository';
+import { LIKE_REPOSITORY_TOKEN } from '@src/like/constants/like.token';
+import { LikesRepository } from '@src/like/repositories/likes.repository';
+import { LikesService } from '@src/like/services/likes.service';
+import { RequiredLikeColumn } from '@src/like/types/like.type';
 
 @Module({})
 export class LikesModule {

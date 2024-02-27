@@ -2,8 +2,8 @@ import {
   generateCreatedAtColumn,
   generateDeletedAtColumn,
   generatePrimaryColumn,
-} from 'src/migrations/__utils/util';
-import { UserReportType } from 'src/users/user-reports/constants/user-report-type.enum';
+} from '@src/migrations/__utils/util';
+import { ReportType } from '@src/reports/constants/report-type.enum';
 import { MigrationInterface, QueryRunner, Table, TableColumn } from 'typeorm';
 
 export class CreateReportTable1708424573050 implements MigrationInterface {
@@ -23,9 +23,9 @@ export class CreateReportTable1708424573050 implements MigrationInterface {
             name: 'type',
             type: 'enum',
             enum: [
-              UserReportType.HateSpeech,
-              UserReportType.IllegalPost,
-              UserReportType.PromotionalPost,
+              ReportType.HateSpeech,
+              ReportType.IllegalPost,
+              ReportType.PromotionalPost,
             ],
             isNullable: false,
             comment: '신고 타입',
@@ -33,7 +33,7 @@ export class CreateReportTable1708424573050 implements MigrationInterface {
           new TableColumn({
             name: 'reason',
             type: 'varchar',
-            length: '200',
+            length: '255',
             isNullable: false,
             comment: '신고 상세 사유',
           }),

@@ -6,7 +6,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { MentorReviewsPaginationResponseDto } from '../dtos/mentor-reviews-pagination-response.dto';
+import { MentorReviewsPaginationResponseDto } from '@src/mentors/mentor-reviews/dtos/mentor-reviews-pagination-response.dto';
 
 export function ApiFindMentorReviews() {
   return applyDecorators(

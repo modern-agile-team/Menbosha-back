@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
+import { MentorBoard } from '@src/boards/entities/mentor-board.entity';
 
 export class MentorBoardDto
   implements

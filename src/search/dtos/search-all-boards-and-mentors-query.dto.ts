@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { PageQueryDto } from '@src/common/dto/page-query.dto';
 import { Length } from 'class-validator';
-import { PageQueryDto } from '../../common/dto/page-query.dto';
 
 export class SearchAllBoardsAndMentorsQueryDto extends PageQueryDto {
   @ApiProperty({

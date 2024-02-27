@@ -7,7 +7,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { HelpYouCommentPaginationResponseDto } from '../dto/help-you-comment-pagination-response.dto';
+import { HelpYouCommentPaginationResponseDto } from '@src/comments/dto/help-you-comment-pagination-response.dto';
 
 export function ApiFindAllHelpYouComments() {
   return applyDecorators(
@@ -21,7 +21,7 @@ export function ApiFindAllHelpYouComments() {
       description: '도와줄게요 댓글 성공적으로 불러옴.',
       schema: {
         properties: {
-          content: {
+          contents: {
             type: 'object',
             $ref: getSchemaPath(HelpYouCommentPaginationResponseDto),
           },

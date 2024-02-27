@@ -6,7 +6,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { MentorBoardPaginationResponseDto } from 'src/boards/dto/mentorBoard/mentor-board-pagination-response.dto';
+import { MentorBoardPaginationResponseDto } from '@src/boards/dto/mentorBoard/mentor-board-pagination-response.dto';
 
 export function ApiFindAllMentorBoards() {
   return applyDecorators(
@@ -20,7 +20,7 @@ export function ApiFindAllMentorBoards() {
       description: '멘토 게시판 글 성공적으로 불러옴.',
       schema: {
         properties: {
-          content: {
+          contents: {
             type: 'object',
             $ref: getSchemaPath(MentorBoardPaginationResponseDto),
           },

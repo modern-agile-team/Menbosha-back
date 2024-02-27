@@ -6,7 +6,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { MentorPaginationResponseDto } from '../dtos/mentors-pagination-response.dto';
+import { MentorPaginationResponseDto } from '@src/mentors/dtos/mentors-pagination-response.dto';
 
 export function ApiFindAllMentorsAndCount() {
   return applyDecorators(
@@ -19,7 +19,7 @@ export function ApiFindAllMentorsAndCount() {
       description: '멘토 리스트 성공적으로 불러옴.',
       schema: {
         properties: {
-          content: {
+          contents: {
             type: 'object',
             $ref: getSchemaPath(MentorPaginationResponseDto),
           },

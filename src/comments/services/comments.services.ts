@@ -4,9 +4,9 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CommentsRepository } from '../repository/comments.repository';
-import { CreateCommentDto } from '../dto/create-comment-dto';
-// import { UpdateCommentDto } from '../dto/update-comment-dto';
+import { CreateCommentDto } from '@src/comments/dto/create-comment-dto';
+import { CommentsRepository } from '@src/comments/repository/comments.repository';
+// import { UpdateCommentDto } from '@src/dto/update-comment-dto';
 
 @Injectable()
 export class CommentsService {

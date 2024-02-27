@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserImage } from '../entities/user-image.entity';
+import { UserImage } from '@src/users/entities/user-image.entity';
 
 export class ResponseUserImageDto implements Pick<UserImage, 'imageUrl'> {
   @ApiProperty({

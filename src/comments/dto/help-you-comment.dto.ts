@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { HelpYouComment } from '../entities/help-you-comment.entity';
+import { HelpYouComment } from '@src/comments/entities/help-you-comment.entity';
 import { Exclude } from 'class-transformer';
 
 export class HelpYouCommentDto

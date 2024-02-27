@@ -1,6 +1,6 @@
 import { Cron } from '@nestjs/schedule';
-import { UserRankingRepository } from './../repositories/user-ranking.repository';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { UserRankingRepository } from '@src/users/repositories/user-ranking.repository';
 
 @Injectable()
 export class UserRankingService {
