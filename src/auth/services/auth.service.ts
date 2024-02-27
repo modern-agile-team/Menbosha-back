@@ -18,7 +18,7 @@ import { AuthServiceInterface } from '@src/auth/interfaces/auth-service.interfac
 import { BannedUsersService } from '@src/admins/banned-user/services/banned-users.service';
 import { BannedUserException } from '@src/http-exceptions/exceptions/banned-user.exception';
 import { AUTH_ERROR_CODE } from '@src/constants/error/auth/auth-error-code.constant';
-import { BannedUserDto } from '@src/admins/banned-user/dtos/banned-user.dto';
+import { BannedUserErrorResponseDto } from '@src/admins/banned-user/dtos/banned-user-error-response.dto';
 
 dotenv.config();
 
@@ -189,7 +189,7 @@ export class AuthService implements AuthServiceInterface {
         if (existBannedUser.endAt > new Date()) {
           throw new BannedUserException(
             { code: AUTH_ERROR_CODE.BANNED_USER },
-            { ...new BannedUserDto(existBannedUser) },
+            { ...new BannedUserErrorResponseDto(existBannedUser) },
           );
         }
 
