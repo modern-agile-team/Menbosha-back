@@ -3,8 +3,9 @@ import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator';
 import { PageQueryDto } from '@src/common/dto/page-query.dto';
 import { IsPositiveInt } from '@src/common/decorators/validators/is-positive-int.decorator';
 import { HelpMeBoardOrderField } from '@src/boards/constants/help-me-board-order-field.enum';
-import { ParseOptionalBoolean } from '@src/common/transformers/parse-optional-boolean.transformer';
 import { SortOrder } from '@src/common/constants/sort-order.enum';
+import { stringToBoolean } from '@src/common/decorators/transformer/string-to-boolean.transformer';
+import { Transform } from 'class-transformer';
 
 export class HelpMeBoardPageQueryDto extends PageQueryDto {
   @ApiPropertyOptional({
@@ -54,7 +55,7 @@ export class HelpMeBoardPageQueryDto extends PageQueryDto {
   })
   @IsOptional()
   @IsBoolean()
-  @ParseOptionalBoolean()
+  @Transform(stringToBoolean)
   loadOnlyPullingUp: boolean = false;
 
   @ApiProperty({
