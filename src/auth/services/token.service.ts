@@ -1,33 +1,48 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { TokenRepository } from '../repositories/token.repository';
 import axios from 'axios';
 import { JwtService } from '@nestjs/jwt';
-import { TokenPayload } from '../interfaces/token-payload.interface';
+import { RedisService } from '@src/common/redis/redis.service';
+import { Ttl } from '@src/common/redis/ttl.enum';
+import { TokenPayload } from '@src/auth/interfaces/token-payload.interface';
+import { TokenRepository } from '@src/auth/repositories/token.repository';
 
 @Injectable()
 export class TokenService {
   constructor(
     private readonly tokenRepository: TokenRepository,
     private readonly jwtService: JwtService,
+    private readonly redisService: RedisService,
   ) {}
 
   async getUserTokens(userId: number) {
-    const getUserTokens = await this.tokenRepository.getUserTokens(userId);
-    if (getUserTokens.length <= 0) {
+    const getUserTokens = await this.tokenRepository.getUserToken(userId);
+    if (!getUserTokens) {
       throw new HttpException('토큰을 찾을 수 없습니다.', HttpStatus.NOT_FOUND);
     }
-    return getUserTokens[0];
+    return getUserTokens;
   }
 
   async saveTokens(
     userId: number,
+    accessToken: string,
     refreshToken: string,
     socialAccessToken: string,
     socialRefreshToken: string,
   ) {
-    const tokens = await this.tokenRepository.getUserTokens(userId);
+    await this.redisService.setToken(
+      String(userId) + '-accessToken',
+      accessToken,
+      Ttl.accessToken,
+    );
+    await this.redisService.setToken(
+      String(userId) + '-refreshToken',
+      refreshToken,
+      Ttl.refreshToken,
+    );
 
-    if (tokens.length > 0) {
+    const tokens = await this.tokenRepository.getUserToken(userId);
+
+    if (tokens) {
       return await this.tokenRepository.updateTokens(
         userId,
         refreshToken,
@@ -115,6 +130,10 @@ export class TokenService {
 
   async deleteTokens(userId: number) {
     try {
+      await this.redisService.delTokens([
+        `${userId}-accessToken`,
+        `${userId}-refreshToken`,
+      ]);
       await this.tokenRepository.deleteTokens(userId);
 
       return { message: '토큰 삭제 성공' };
@@ -133,6 +152,17 @@ export class TokenService {
       expiresIn: '6h',
       secret: process.env.JWT_ACCESSTOKEN_SECRET_KEY,
     });
+  }
+
+  async generateNewAccessToken(userId: number) {
+    const newAccessToken = this.generateAccessToken(userId);
+    await this.redisService.setToken(
+      String(userId) + '-accessToken',
+      newAccessToken,
+      Ttl.accessToken,
+    );
+
+    return { accessToken: newAccessToken };
   }
 
   generateRefreshToken(userId: number) {

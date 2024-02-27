@@ -1,10 +1,10 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator';
-import { SortOrder } from '../../../common/constants/sort-order.enum';
-import { PageQueryDto } from 'src/common/dto/page-query.dto';
-import { IsPositiveInt } from 'src/common/decorators/validators/is-positive-int.decorator';
-import { HelpMeBoardOrderField } from 'src/boards/constants/help-me-board-order-field.enum';
-import { ParseOptionalBoolean } from 'src/common/transformers/parse-optional-boolean.transformer';
+import { PageQueryDto } from '@src/common/dto/page-query.dto';
+import { IsPositiveInt } from '@src/common/decorators/validators/is-positive-int.decorator';
+import { HelpMeBoardOrderField } from '@src/boards/constants/help-me-board-order-field.enum';
+import { ParseOptionalBoolean } from '@src/common/transformers/parse-optional-boolean.transformer';
+import { SortOrder } from '@src/common/constants/sort-order.enum';
 
 export class HelpMeBoardPageQueryDto extends PageQueryDto {
   @ApiPropertyOptional({
@@ -69,9 +69,9 @@ export class HelpMeBoardPageQueryDto extends PageQueryDto {
   @ApiProperty({
     description: '오름차순 혹은 내림차순',
     enum: SortOrder,
-    default: SortOrder.Asc,
+    default: SortOrder.ASC,
   })
   @IsOptional()
   @IsEnum(SortOrder)
-  sortOrder: SortOrder = SortOrder.Asc;
+  sortOrder: SortOrder = SortOrder.ASC;
 }

@@ -4,28 +4,29 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
 import * as mongoose from 'mongoose';
-import { S3Service } from 'src/common/s3/s3.service';
+import { S3Service } from '@src/common/s3/s3.service';
 import { Observable, Subject, catchError, map } from 'rxjs';
 import { In } from 'typeorm';
-import { UserService } from 'src/users/services/user.service';
-import { ChatUserDto } from 'src/users/dtos/chat-user.dto';
-import { ResponseFindChatRoomsDto } from '../dto/response-find-chat-rooms.dto';
-import { ChatRoomDto } from '../dto/chat-room.dto';
-import { AggregateChatRoomsDto } from '../dto/aggregate-chat-rooms.dto';
-import { ChatDto } from '../dto/chat.dto';
-import { ChatImageDto } from '../dto/chat-image.dto';
-import { ChatRoomType } from '../constants/chat-rooms-enum';
-import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
-import { ChatRepository } from '../repositories/chat.repository';
-import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
-import { ResponseFindChatRoomsPaginationDto } from '../dto/response-find-chat-rooms-pagination.dto';
-import { PageQueryDto } from 'src/common/dto/page-query.dto';
-import { ChatRooms } from '../schemas/chat-rooms.schemas';
-// import { GetNotificationsResponseFromChatsDto } from '../dto/get-notifications-response-from-chats.dto';
+import { UserService } from '@src/users/services/user.service';
+import { ChatUserDto } from '@src/users/dtos/chat-user.dto';
+import { PageQueryDto } from '@src/common/dto/page-query.dto';
+import { PostChatDto } from '@src/chat/dto/post-chat.dto';
+import { ChatRoomType } from '@src/chat/constants/chat-rooms-enum';
+import { AggregateChatRoomForChatsDto } from '@src/chat/dto/aggregate-chat-room-for-chats.dto';
+import { AggregateChatRoomsDto } from '@src/chat/dto/aggregate-chat-rooms.dto';
+import { ChatImageDto } from '@src/chat/dto/chat-image.dto';
+import { ChatRoomDto } from '@src/chat/dto/chat-room.dto';
+import { ChatDto } from '@src/chat/dto/chat.dto';
+import { CreateChatRoomBodyDto } from '@src/chat/dto/create-chat-room-body.dto';
+import { ResponseFindChatRoomsPaginationDto } from '@src/chat/dto/response-find-chat-rooms-pagination.dto';
+import { ResponseFindChatRoomsDto } from '@src/chat/dto/response-find-chat-rooms.dto';
+import { ChatRepository } from '@src/chat/repositories/chat.repository';
+import { ChatRooms } from '@src/chat/schemas/chat-rooms.schemas';
 
 @Injectable()
 export class ChatService {
@@ -72,7 +73,7 @@ export class ChatService {
     });
 
     if (!returnedRoom) {
-      throw new NotFoundException('해당 채팅방이 없습니다.');
+      throw new NotFoundException('해당 채팅방이 존재하지 않습니다.');
     }
 
     return new ChatRoomDto(returnedRoom);
@@ -125,7 +126,6 @@ export class ChatService {
    * 만약에 둘다 현재 참가중인 1:1 채팅방이 있다면 conflict error를 던짐.
    * 둘 중에 하나만 있다면 없는 유저를 기존 채팅방으로 다시 초대.
    * 둘 다 없다면 새로운 채팅방 개설.
-   * @todo 나중에 new option을 활용해서 push메서드를 사용하지 않는 방향으로 개선할 예정(아마)
    */
   async createChatRoom(
     myId: number,
@@ -163,13 +163,18 @@ export class ChatService {
       return new ChatRoomDto(existChatRoom);
     }
 
-    await this.chatRepository.updateOneChatRoom(
+    const updateWriteOpResult = await this.chatRepository.updateOneChatRoom(
       { _id: _id },
       {
         $push: { chatMembers: pushUserId },
       },
-    ),
-      chatMembers.push(pushUserId);
+    );
+
+    if (!updateWriteOpResult.modifiedCount) {
+      throw new InternalServerErrorException('채팅방 생성 중 서버에러 발생');
+    }
+
+    chatMembers.push(pushUserId);
 
     return new ChatRoomDto(existChatRoom);
   }
@@ -184,7 +189,7 @@ export class ChatService {
   async leaveChatRoom(
     myId: number,
     roomId: mongoose.Types.ObjectId,
-  ): Promise<void> {
+  ): Promise<mongoose.UpdateWriteOpResult> {
     const existChatRoom = await this.findOneChatRoomOrFail(roomId);
 
     if (!existChatRoom.chatMembers.includes(myId)) {
@@ -307,15 +312,15 @@ export class ChatService {
     );
   }
 
-  async createChat({ roomId, content, senderId }): Promise<ChatDto> {
-    const returnedChatRoom = await this.chatRepository.findOneChatRoom({
-      _id: roomId,
-      chatMembers: senderId,
-      deletedAt: null,
-    });
+  async createChat({
+    roomId,
+    content,
+    senderId,
+  }: PostChatDto): Promise<ChatDto> {
+    const returnedChatRoom = await this.findOneChatRoomOrFail(roomId);
 
-    if (!returnedChatRoom) {
-      throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다');
+    if (!returnedChatRoom.chatMembers.includes(senderId)) {
+      throw new ForbiddenException('해당 채팅방에 접근 권한이 없습니다,');
     }
 
     const newChat: ChatDto = {
@@ -329,9 +334,7 @@ export class ChatService {
     };
 
     const updatedChatRoom = await this.chatRepository.createChat(
-      {
-        _id: roomId,
-      },
+      roomId,
       {
         $push: { chats: newChat },
       },
@@ -536,12 +539,4 @@ export class ChatService {
       { $set: { 'chats.$.deletedAt': new Date() } },
     );
   }
-
-  // async getUnreadCounts(roomId: mongoose.Types.ObjectId, after: number) {
-  //   const returnedRoom = await this.chatRoomsModel.findOne({ _id: roomId });
-  //   if (!returnedRoom) {
-  //     throw new NotFoundException('해당 채팅 룸을 찾지 못했습니다.');
-  //   }
-  //   return this.chatRepository.getUnreadCounts(roomId, after);
-  // }
 }

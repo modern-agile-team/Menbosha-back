@@ -1,4 +1,4 @@
-import { generatePrimaryColumn } from 'src/migrations/__utils/util';
+import { generatePrimaryColumn } from '@src/migrations/__utils/util';
 import { MigrationInterface, QueryRunner, Table, TableColumn } from 'typeorm';
 
 export class CreateBannedUserTable1708426630668 implements MigrationInterface {

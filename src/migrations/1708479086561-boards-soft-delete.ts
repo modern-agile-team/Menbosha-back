@@ -1,4 +1,4 @@
-import { generateDeletedAtColumn } from 'src/migrations/__utils/util';
+import { generateDeletedAtColumn } from '@src/migrations/__utils/util';
 import { MigrationInterface, QueryRunner, TableColumn } from 'typeorm';
 
 export class BoardsSoftDelete1708479086561 implements MigrationInterface {

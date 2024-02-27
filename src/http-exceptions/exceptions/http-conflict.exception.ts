@@ -1,6 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
-import { HttpException } from './http.exception';
-import { HttpError } from '../type/exception.type';
+import { HttpException } from '@src/http-exceptions/exceptions/http.exception';
+import { HttpError } from '@src/http-exceptions/type/exception.type';
 
 export class HttpConflictException extends HttpException {
   constructor(error: HttpError<HttpConflictException>) {

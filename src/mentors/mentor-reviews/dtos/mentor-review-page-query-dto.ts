@@ -1,10 +1,10 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { PageQueryDto } from 'src/common/dto/page-query.dto';
-import { SortOrder } from 'src/common/constants/sort-order.enum';
-import { MentorReviewOrderField } from '../constants/mentor-review-order-field.enum';
-import { IsPositiveInt } from 'src/common/decorators/validators/is-positive-int.decorator';
+import { PageQueryDto } from '@src/common/dto/page-query.dto';
+import { SortOrder } from '@src/common/constants/sort-order.enum';
+import { IsPositiveInt } from '@src/common/decorators/validators/is-positive-int.decorator';
+import { MentorReviewOrderField } from '@src/mentors/mentor-reviews/constants/mentor-review-order-field.enum';
 
 export class MentorReviewPageQueryDto extends PageQueryDto {
   @ApiPropertyOptional({
@@ -42,9 +42,9 @@ export class MentorReviewPageQueryDto extends PageQueryDto {
   @ApiPropertyOptional({
     description: '오름차순 혹은 내림차순',
     enum: SortOrder,
-    default: SortOrder.Asc,
+    default: SortOrder.ASC,
   })
   @IsOptional()
   @IsEnum(SortOrder)
-  sortOrder: SortOrder = SortOrder.Asc;
+  sortOrder: SortOrder = SortOrder.ASC;
 }

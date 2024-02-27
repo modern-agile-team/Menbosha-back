@@ -1,5 +1,8 @@
+import {
+  generateBooleanColumn,
+  generatePrimaryColumn,
+} from '@src/migrations/__utils/util';
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
-import { generateBooleanColumn, generatePrimaryColumn } from './__utils/util';
 
 export class DropMentorReviewChecklistTable1707822958189
   implements MigrationInterface

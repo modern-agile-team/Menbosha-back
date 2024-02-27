@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { UserBadgeRepository } from '../repositories/user-badge.repository';
-import { MentorReviewChecklistCountsService } from 'src/total-count/services/mentor-review-checklist-counts.service';
+import { MentorReviewChecklistCountsService } from '@src/total-count/services/mentor-review-checklist-counts.service';
+import { UserBadgeRepository } from '@src/users/repositories/user-badge.repository';
 
 @Injectable()
 export class UserBadgeService {

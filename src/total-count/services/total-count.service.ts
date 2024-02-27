@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { TotalCountRepository } from '../repositories/total-count.repository';
 import { Cron } from '@nestjs/schedule';
+import { TotalCountRepository } from '@src/total-count/repositories/total-count.repository';
 import { EntityManager } from 'typeorm';
 
 @Injectable()

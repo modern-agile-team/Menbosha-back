@@ -1,7 +1,7 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
-import { HttpExceptionService } from '../services/http-exception.service';
+import { HttpConflictException } from '@src/http-exceptions/exceptions/http-conflict.exception';
+import { HttpExceptionService } from '@src/http-exceptions/services/http-exception.service';
 import { Response } from 'express';
-import { HttpConflictException } from '../exceptions/http-conflict.exception';
 
 @Catch(HttpConflictException)
 export class HttpConflictExceptionFilter

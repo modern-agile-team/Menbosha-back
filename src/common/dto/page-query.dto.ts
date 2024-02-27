@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsPositiveInt } from '@src/common/decorators/validators/is-positive-int.decorator';
 import { IsOptional } from 'class-validator';
-import { IsPositiveInt } from '../decorators/validators/is-positive-int.decorator';
 
 export class PageQueryDto {
   @ApiPropertyOptional({

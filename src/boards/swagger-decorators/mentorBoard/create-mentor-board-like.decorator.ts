@@ -18,7 +18,7 @@ export function ApiCreateMentorBoardLike() {
       description: '멘토 게시판 글 좋아요 생성 성공.',
       schema: {
         properties: {
-          content: {
+          contents: {
             properties: {
               isLike: {
                 example: true,

@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { RequiredLikeColumn } from '../types/like.type';
-import { LIKE_REPOSITORY_TOKEN } from '../constants/like.token';
+import { LIKE_REPOSITORY_TOKEN } from '@src/like/constants/like.token';
+import { RequiredLikeColumn } from '@src/like/types/like.type';
 import {
   DeepPartial,
   DeleteResult,

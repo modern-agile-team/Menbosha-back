@@ -11,7 +11,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ChatImageDto } from '../dto/chat-image.dto';
+import { ChatImageDto } from '@src/chat/dto/chat-image.dto';
 
 export function ApiCreateChatImage() {
   return applyDecorators(
@@ -25,7 +25,7 @@ export function ApiCreateChatImage() {
       description: '채팅 이미지 url 생성 성공',
       schema: {
         properties: {
-          content: {
+          contents: {
             type: 'object',
             $ref: getSchemaPath(ChatImageDto),
           },
@@ -97,7 +97,10 @@ export function ApiCreateChatImage() {
       content: {
         JSON: {
           example: {
-            message: ['해당 채팅방이 없습니다.', '사용자를 찾을 수 없습니다.'],
+            message: [
+              '해당 채팅방이 존재하지 않습니다.',
+              '사용자를 찾을 수 없습니다.',
+            ],
             error: 'Not Found',
             statusCode: 404,
           },

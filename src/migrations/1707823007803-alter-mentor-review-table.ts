@@ -1,5 +1,5 @@
+import { generateBooleanColumn } from '@src/migrations/__utils/util';
 import { MigrationInterface, QueryRunner, TableColumn } from 'typeorm';
-import { generateBooleanColumn } from './__utils/util';
 
 export class AlterMentorReviewTable1707823007803 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {

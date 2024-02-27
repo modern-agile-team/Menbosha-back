@@ -9,8 +9,8 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ChatRoomDto } from '../dto/chat-room.dto';
-import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
+import { ChatRoomDto } from '@src/chat/dto/chat-room.dto';
+import { CreateChatRoomBodyDto } from '@src/chat/dto/create-chat-room-body.dto';
 
 export function ApiCreateChatRoom() {
   return applyDecorators(
@@ -26,7 +26,7 @@ export function ApiCreateChatRoom() {
       description: '성공적으로 채팅방 생성',
       schema: {
         properties: {
-          content: {
+          contents: {
             type: 'object',
             $ref: getSchemaPath(ChatRoomDto),
           },

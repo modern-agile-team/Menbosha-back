@@ -7,7 +7,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ResponseFindChatRoomsPaginationDto } from '../dto/response-find-chat-rooms-pagination.dto';
+import { ResponseFindChatRoomsPaginationDto } from '@src/chat/dto/response-find-chat-rooms-pagination.dto';
 
 export function ApiFindChatRooms() {
   return applyDecorators(
@@ -20,7 +20,7 @@ export function ApiFindChatRooms() {
       status: 200,
       schema: {
         properties: {
-          content: {
+          contents: {
             type: 'object',
             $ref: getSchemaPath(ResponseFindChatRoomsPaginationDto),
           },

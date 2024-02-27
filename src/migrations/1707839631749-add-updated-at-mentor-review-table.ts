@@ -1,5 +1,5 @@
+import { generateUpdatedAtColumn } from '@src/migrations/__utils/util';
 import { MigrationInterface, QueryRunner, TableColumn } from 'typeorm';
-import { generateUpdatedAtColumn } from './__utils/util';
 
 export class AddUpdatedAtMentorReviewTable1707839631749
   implements MigrationInterface

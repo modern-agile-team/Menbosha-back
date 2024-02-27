@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { MentorBoardLike } from 'src/boards/entities/mentor-board-like.entity';
+import { MentorBoardLike } from '@src/boards/entities/mentor-board-like.entity';
 
 export class MentorBoardLikeDto
   implements Pick<MentorBoardLike, 'id' | 'userId' | 'parentId' | 'createdAt'>

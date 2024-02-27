@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from 'src/users/entities/user.entity';
-import { UserImage } from 'src/users/entities/user-image.entity';
-import { UserIntro } from 'src/users/entities/user-intro.entity';
+import { User } from '@src/users/entities/user.entity';
+import { UserImage } from '@src/users/entities/user-image.entity';
+import { UserIntro } from '@src/users/entities/user-intro.entity';
 
 export class SearchAllMentorDto
   implements Pick<User, 'id' | 'name' | 'isMentor'>

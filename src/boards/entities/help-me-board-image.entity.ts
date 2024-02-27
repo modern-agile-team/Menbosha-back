@@ -1,3 +1,4 @@
+import { HelpMeBoard } from '@src/boards/entities/help-me-board.entity';
 import {
   Column,
   Entity,
@@ -5,7 +6,6 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { HelpMeBoard } from './help-me-board.entity';
 
 @Entity({ name: 'help_me_board_image' })
 export class HelpMeBoardImage {

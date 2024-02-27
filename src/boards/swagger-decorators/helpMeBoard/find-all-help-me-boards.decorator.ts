@@ -6,7 +6,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { HelpMeBoardPaginationResponseDto } from 'src/boards/dto/helpMeBoard/help-me-board-pagination-response.dto';
+import { HelpMeBoardPaginationResponseDto } from '@src/boards/dto/helpMeBoard/help-me-board-pagination-response.dto';
 
 export function ApiFindAllHelpMeBoards() {
   return applyDecorators(
@@ -20,7 +20,7 @@ export function ApiFindAllHelpMeBoards() {
       description: '도와주세요 게시판 글 성공적으로 불러옴.',
       schema: {
         properties: {
-          content: {
+          contents: {
             type: 'object',
             $ref: getSchemaPath(HelpMeBoardPaginationResponseDto),
           },

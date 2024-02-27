@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsPositiveInt } from 'src/common/decorators/validators/is-positive-int.decorator';
+import { IsPositiveInt } from '@src/common/decorators/validators/is-positive-int.decorator';
 
 export class ReceivedUserDto {
   @ApiProperty({

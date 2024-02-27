@@ -1,11 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import {
-  DeleteResult,
   EntityManager,
   FindManyOptions,
   FindOneOptions,
+  UpdateResult,
 } from 'typeorm';
-import { User } from '../entities/user.entity';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { Provider } from '@src/auth/enums/provider.enum';
+import { UserInfo } from '@src/auth/interfaces/user-info.interface';
+import { User } from '@src/users/entities/user.entity';
 
 @Injectable()
 export class UserRepository {
@@ -36,56 +39,35 @@ export class UserRepository {
     ).rank;
   }
 
-  async findUser(email: string, provider: string): Promise<User | undefined> {
+  findUser(email: string, provider: Provider): Promise<User | null> {
     return this.entityManager.findOne(User, { where: { email, provider } });
   }
 
-  async createUser(entityManager: EntityManager, userInfo: any): Promise<User> {
-    const user = new User();
-    user.provider = userInfo.provider;
-    user.name = userInfo.nickname;
-    user.email = userInfo.email;
-    user.hopeCategoryId = 1;
-    user.activityCategoryId = 1;
-    user.isMentor = false;
-
-    return entityManager.save(user);
-  }
-
-  async updateUserName(userId: number, name: string): Promise<User> {
-    const user = await this.entityManager.findOne(User, {
-      where: { id: userId },
+  createUser(entityManager: EntityManager, userInfo: UserInfo): Promise<User> {
+    return entityManager.save(User, {
+      ...userInfo,
+      hopeCategoryId: 1,
+      activityCategoryId: 1,
+      isMentor: false,
     });
-
-    if (!user) {
-      throw new NotFoundException('사용자를 찾을 수 없습니다.');
-    }
-
-    user.name = name;
-
-    return this.entityManager.save(user);
   }
 
-  async deleteUser(userId: number): Promise<DeleteResult | undefined> {
-    await this.entityManager.findOne(User, { where: { id: userId } });
-    return await this.entityManager.delete(User, { id: userId });
+  updateUser(
+    userId: number,
+    partialEntity: QueryDeepPartialEntity<User>,
+  ): Promise<UpdateResult> {
+    return this.entityManager.update(User, { id: userId }, partialEntity);
   }
 
-  async findCategoryIdByIsMentors(categoryId: number): Promise<number> {
-    return await this.entityManager.count(User, {
+  countMentorsInCategory(categoryId: number): Promise<number> {
+    return this.entityManager.count(User, {
       where: { isMentor: true, activityCategoryId: categoryId },
     });
   }
 
-  async findIsMentors(): Promise<number> {
-    return await this.entityManager.count(User, {
+  countMentors(): Promise<number> {
+    return this.entityManager.count(User, {
       where: { isMentor: true },
-    });
-  }
-
-  async findOneUser(userId: number): Promise<User> {
-    return await this.entityManager.findOne(User, {
-      where: { id: userId },
     });
   }
 

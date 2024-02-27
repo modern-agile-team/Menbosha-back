@@ -1,14 +1,11 @@
-import { PageQueryDto } from 'src/common/dto/page-query.dto';
-import { User } from '../../users/entities/user.entity';
-import { SortOrder } from 'src/common/constants/sort-order.enum';
+import { PageQueryDto } from '@src/common/dto/page-query.dto';
+import { SortOrder } from '@src/common/constants/sort-order.enum';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { IsPositiveInt } from 'src/common/decorators/validators/is-positive-int.decorator';
-import { MentorOrderField } from '../constants/mentor-order-field.enum';
+import { IsPositiveInt } from '@src/common/decorators/validators/is-positive-int.decorator';
+import { User } from '@src/users/entities/user.entity';
+import { MentorOrderField } from '@src/mentors/constants/mentor-order-field.enum';
 
-/**
- * @todo create provider enum, mentorOrderField
- */
 export class MentorListPageQueryDto
   extends PageQueryDto
   implements Partial<Pick<User, 'id' | 'name' | 'activityCategoryId'>>
@@ -48,10 +45,10 @@ export class MentorListPageQueryDto
 
   @ApiPropertyOptional({
     description: '오름차순 혹은 내림차순',
-    default: SortOrder.Asc,
+    default: SortOrder.ASC,
     enum: SortOrder,
   })
   @IsOptional()
   @IsEnum(SortOrder)
-  sortOrder: SortOrder = SortOrder.Asc;
+  sortOrder: SortOrder = SortOrder.ASC;
 }

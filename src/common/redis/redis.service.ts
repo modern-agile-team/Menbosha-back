@@ -1,7 +1,7 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
+import { Ttl } from '@src/common/redis/ttl.enum';
 import { Cache } from 'cache-manager';
-import { Ttl } from './ttl.enum';
 
 @Injectable()
 export class RedisService {

@@ -1,5 +1,8 @@
+import {
+  generateBooleanColumn,
+  generateCountColumn,
+} from '@src/migrations/__utils/util';
 import { MigrationInterface, QueryRunner, TableColumn } from 'typeorm';
-import { generateBooleanColumn, generateCountColumn } from './__utils/util';
 
 export class AddColumnAtMentorReviewTable1707897149688
   implements MigrationInterface

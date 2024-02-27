@@ -11,26 +11,26 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { UserService } from '../services/user.service';
 import { ApiTags } from '@nestjs/swagger';
-import { GetUserId } from 'src/common/decorators/get-userId.decorator';
-import { ApiGetMyProfile } from '../swagger-decorators/get-my-profile-decorator';
-import { ApiGetMyInfoWithOwner } from '../swagger-decorators/get-my-info-with-owner-decorator';
-import { ApiGetPageNumberByMentor } from '../swagger-decorators/get-mentor-page-decorator';
-import { UserIntroService } from '../services/user-intro-service';
-import { UserIntro } from '../entities/user-intro.entity';
-import { CreateUserIntroDto } from '../dtos/create-user-intro-dto';
-import { ResponseUserIntroDto } from '../dtos/response-user-dto';
-import { UpdateUserIntroDTO } from '../dtos/update-user-intro-dto';
-import { ApiPostUserIntro } from '../swagger-decorators/upload-user-Intro-decorators';
-import { ApiUpdateUserIntro } from '../swagger-decorators/patch-user-intro-decorator';
-import { ApiGetMyRank } from '../swagger-decorators/get-my-rank-decorators';
-import { ApiGetUserInfo } from '../swagger-decorators/get-user-info.decorators';
-import { UserRankingService } from '../services/user-ranking.service';
-import { ApiGetTotalRanking } from '../swagger-decorators/get-total-ranking.decorator';
-import { AccessTokenAuthGuard } from 'src/auth/jwt/jwt-auth.guard';
-import { UserBadgeService } from '../services/user-badge.service';
-import { ApiPostUserBadges } from '../swagger-decorators/get-user-badges-decorator';
+import { GetUserId } from '@src/common/decorators/get-userId.decorator';
+import { AccessTokenAuthGuard } from '@src/auth/jwt/jwt-auth.guard';
+import { CreateUserIntroDto } from '@src/users/dtos/create-user-intro-dto';
+import { ResponseUserIntroDto } from '@src/users/dtos/response-user-dto';
+import { UpdateUserIntroDTO } from '@src/users/dtos/update-user-intro-dto';
+import { UserIntro } from '@src/users/entities/user-intro.entity';
+import { UserBadgeService } from '@src/users/services/user-badge.service';
+import { UserIntroService } from '@src/users/services/user-intro-service';
+import { UserRankingService } from '@src/users/services/user-ranking.service';
+import { UserService } from '@src/users/services/user.service';
+import { ApiGetPageNumberByMentor } from '@src/users/swagger-decorators/get-mentor-page-decorator';
+import { ApiGetMyInfoWithOwner } from '@src/users/swagger-decorators/get-my-info-with-owner-decorator';
+import { ApiGetMyProfile } from '@src/users/swagger-decorators/get-my-profile-decorator';
+import { ApiGetMyRank } from '@src/users/swagger-decorators/get-my-rank-decorators';
+import { ApiGetTotalRanking } from '@src/users/swagger-decorators/get-total-ranking.decorator';
+import { ApiPostUserBadges } from '@src/users/swagger-decorators/get-user-badges-decorator';
+import { ApiGetUserInfo } from '@src/users/swagger-decorators/get-user-info.decorators';
+import { ApiUpdateUserIntro } from '@src/users/swagger-decorators/patch-user-intro-decorator';
+import { ApiPostUserIntro } from '@src/users/swagger-decorators/upload-user-Intro-decorators';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
