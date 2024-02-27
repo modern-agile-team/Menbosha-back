@@ -36,6 +36,20 @@ export class MentorReviewsService {
     const { review, createMentorReviewChecklistRequestBodyDto } =
       createMentorReviewRequestBodyDto;
 
+    let trueCount = 0;
+
+    for (const key in createMentorReviewChecklistRequestBodyDto) {
+      if (createMentorReviewChecklistRequestBodyDto[key]) {
+        trueCount++;
+      }
+
+      if (trueCount > 3) {
+        throw new BadRequestException(
+          "Can't select more than four checklists.",
+        );
+      }
+    }
+
     const existMentor = await this.userService.findOneByOrNotFound({
       select: {
         id: true,
