@@ -17,12 +17,19 @@ import { MentorReviewsPaginationResponseDto } from '@src/mentors/mentor-reviews/
 import { PatchUpdateMentorReviewDto } from '@src/mentors/mentor-reviews/dtos/patch-update-mentor-review.dto';
 import { MentorReview } from '@src/mentors/mentor-reviews/entities/mentor-review.entity';
 import { MentorReviewRepository } from '@src/mentors/mentor-reviews/repositories/mentor-review.repository';
+import { QueryHelper } from '@src/helpers/query.helper';
 @Injectable()
 export class MentorReviewsService {
+  private readonly LIKE_SEARCH_FIELD: readonly (keyof Pick<
+    MentorReview,
+    'review'
+  >)[] = ['review'];
+
   constructor(
     private readonly dataSource: DataSource,
     private readonly mentorReviewRepository: MentorReviewRepository,
     private readonly userService: UserService,
+    private readonly queryHelper: QueryHelper,
   ) {}
   async createMentorReview(
     mentorId: number,
@@ -113,8 +120,20 @@ export class MentorReviewsService {
       },
     });
 
-    const { page, pageSize, id, menteeId, review, orderField, sortOrder } =
+    const { page, pageSize, orderField, sortOrder, ...filter } =
       mentorReviewPageQueryDto;
+
+    filter['mentorId'] = existMentor.id;
+
+    const where = this.queryHelper.buildWherePropForFind(
+      filter,
+      this.LIKE_SEARCH_FIELD,
+    );
+
+    const order = this.queryHelper.buildOrderByPropForFind(
+      orderField,
+      sortOrder,
+    );
 
     const skip = (page - 1) * pageSize;
 
@@ -122,12 +141,8 @@ export class MentorReviewsService {
       await this.mentorReviewRepository.findMentorReviews(
         skip,
         pageSize,
-        id,
-        menteeId,
-        existMentor.id,
-        review,
-        orderField,
-        sortOrder,
+        where,
+        order,
       );
 
     const mentorReviewsItemResponseDto = plainToInstance(

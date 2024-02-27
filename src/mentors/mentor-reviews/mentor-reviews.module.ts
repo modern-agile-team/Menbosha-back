@@ -8,6 +8,7 @@ import { MentorReviewsController } from '@src/mentors/mentor-reviews/controllers
 import { MentorReview } from '@src/mentors/mentor-reviews/entities/mentor-review.entity';
 import { MentorReviewRepository } from '@src/mentors/mentor-reviews/repositories/mentor-review.repository';
 import { MentorReviewsService } from '@src/mentors/mentor-reviews/services/mentor-reviews.service';
+import { QueryHelper } from '@src/helpers/query.helper';
 
 @Module({
   imports: [
@@ -17,6 +18,6 @@ import { MentorReviewsService } from '@src/mentors/mentor-reviews/services/mento
     TotalCountModule,
   ],
   controllers: [MentorReviewsController],
-  providers: [MentorReviewsService, MentorReviewRepository],
+  providers: [MentorReviewsService, MentorReviewRepository, QueryHelper],
 })
 export class MentorReviewsModule {}
