@@ -30,6 +30,16 @@ export class UserService {
     return this.userRepository.findUser(email, provider);
   }
 
+  async findOneByQueryBuilderOrNotFound(userId: number): Promise<User> {
+    const existUser = await this.userRepository.findOneByQueryBuilder(userId);
+
+    if (!existUser) {
+      throw new NotFoundException('해당 유저를 찾지 못했습니다.');
+    }
+
+    return existUser;
+  }
+
   findOne(options: FindOneOptions<User>) {
     return this.userRepository.findOne(options);
   }
