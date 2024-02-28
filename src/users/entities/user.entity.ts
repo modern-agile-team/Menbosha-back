@@ -82,10 +82,20 @@ export class User {
   })
   isMentor: boolean;
 
-  @Column({ name: 'hope_category_list_id' }) //희망 카테고리 id
+  @Column({
+    name: 'hope_category_list_id',
+    default: 1,
+    unsigned: true,
+    nullable: false,
+  }) //희망 카테고리 id
   hopeCategoryId: number;
 
-  @Column({ name: 'activity_category_list_id' })
+  @Column({
+    name: 'activity_category_list_id',
+    default: 1,
+    unsigned: true,
+    nullable: false,
+  })
   activityCategoryId: number;
 
   @Column({ default: 10 })

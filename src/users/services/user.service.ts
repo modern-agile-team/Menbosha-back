@@ -26,8 +26,8 @@ export class UserService {
     return this.userRepository.findAll(options);
   }
 
-  findUser(email: string, provider: Provider) {
-    return this.userRepository.findUser(email, provider);
+  findUser(uniqueId: string, provider: Provider) {
+    return this.userRepository.findUser(uniqueId, provider);
   }
 
   findOne(options: FindOneOptions<User>) {
