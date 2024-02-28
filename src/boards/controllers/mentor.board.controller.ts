@@ -12,6 +12,7 @@ import {
   UsePipes,
   ValidationPipe,
   ClassSerializerInterceptor,
+  Param,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { GetUserId } from '@src/common/decorators/get-userId.decorator';
@@ -38,6 +39,7 @@ import { ApiFindAllMentorBoards } from '@src/boards/swagger-decorators/mentorBoa
 import { ApiGetOneMentorBoard } from '@src/boards/swagger-decorators/mentorBoard/get-one-mentor-board-decorators';
 import { ApiGetPageNumberByMentorBoard } from '@src/boards/swagger-decorators/mentorBoard/get-page-number-mentor-board-decorator';
 import { ApiUpdateMentorBoard } from '@src/boards/swagger-decorators/mentorBoard/patch-mentor-board-decorators';
+import { ParsePositiveIntPipe } from '@src/common/pipes/parse-positive-int.pipe';
 
 /**
  * 추후 리팩토링때
@@ -68,13 +70,13 @@ export class MentorBoardController {
     return await this.mentorBoardService.create(createMentorBoardDto, userId);
   }
 
-  @Post('/images')
+  @Post(':mentorBoardId/images')
   @UseGuards(AccessTokenAuthGuard)
   @UseInterceptors(FilesInterceptor('files', 3))
   @ApiUploadMentorBoardImages()
   uploadImage(
     @GetUserId() userId: number,
-    @Query('mentorBoardId') boardId: number, // Param으로 바꿔서 하기 (URI 컨벤션 이상함)
+    @Param('mentorBoardId', ParsePositiveIntPipe) boardId: number, // Param으로 바꿔서 하기 (URI 컨벤션 이상함)
     @UploadedFiles() files: Express.Multer.File[],
   ): Promise<CreateMentorBoardImageDto[]> {
     return this.boardImagesService.createMentorBoardImages(
