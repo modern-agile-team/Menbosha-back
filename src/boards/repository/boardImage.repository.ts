@@ -22,18 +22,14 @@ export class BoardImageRepository {
     return savedImage;
   }
 
-  async saveMentorBoardImage(
+  saveMentorBoardImage(
     boardImage: CreateMentorBoardImageDto,
   ): Promise<MentorBoardImage> {
-    const newBoardImage = new MentorBoardImage();
-    newBoardImage.mentorBoardId = boardImage.mentorBoardId;
-    newBoardImage.imageUrl = boardImage.imageUrl;
-    const savedImage = await this.entityManager.save(
-      MentorBoardImage,
-      newBoardImage,
-    );
-    return savedImage;
+    return this.entityManager.save(MentorBoardImage, {
+      ...boardImage,
+    });
   }
+
   async getBoardImages(boardId: number): Promise<HelpMeBoardImage[]> {
     return this.entityManager.find(HelpMeBoardImage, {
       where: { helpMeBoardId: boardId },
