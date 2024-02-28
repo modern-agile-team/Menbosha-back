@@ -40,6 +40,13 @@ export class UserService {
     return existUser;
   }
 
+  findOneAndSelectAllByQueryBuilder(email: string, provider: Provider) {
+    return this.userRepository.findOneAndSelectAllByQueryBuilder(
+      email,
+      provider,
+    );
+  }
+
   findOne(options: FindOneOptions<User>) {
     return this.userRepository.findOne(options);
   }
