@@ -1,7 +1,5 @@
-import { EntityManager, FindOneOptions, Like, UpdateResult } from 'typeorm';
-import { SortOrder } from '@src/common/constants/sort-order.enum';
+import { EntityManager, FindOneOptions, UpdateResult } from 'typeorm';
 import { Injectable } from '@nestjs/common';
-import { MentorReviewOrderField } from '@src/mentors/mentor-reviews/constants/mentor-review-order-field.enum';
 import { MentorReviewsItemResponseDto } from '@src/mentors/mentor-reviews/dtos/mentor-reviews-item-response.dto';
 import { MentorReview } from '@src/mentors/mentor-reviews/entities/mentor-review.entity';
 
@@ -25,12 +23,8 @@ export class MentorReviewRepository {
   findMentorReviews(
     skip: number,
     pageSize: number,
-    id: number,
-    menteeId: number,
-    mentorId: number,
-    review: string,
-    orderField: MentorReviewOrderField,
-    sortOrder: SortOrder,
+    where: Record<string, any>,
+    order: Record<string, any>,
   ): Promise<[MentorReviewsItemResponseDto[], number]> {
     return this.entityManager.getRepository(MentorReview).findAndCount({
       select: {
@@ -58,24 +52,18 @@ export class MentorReviewRepository {
         isInformative: true,
         isBad: true,
         isStuffy: true,
+        isUnderstandWell: true,
         createdAt: true,
         updatedAt: true,
       },
-      where: {
-        mentorId,
-        ...(id ? { id } : {}),
-        ...(menteeId ? { menteeId } : {}),
-        ...(review ? { review: Like(`%${review}%`) } : {}),
-      },
+      where,
       relations: {
         mentee: {
           userImage: true,
           userIntro: true,
         },
       },
-      order: {
-        [orderField]: sortOrder,
-      },
+      order,
       skip,
       take: pageSize,
     });

@@ -64,6 +64,7 @@ export function ApiCreateMentorReview() {
                   'createMentorReviewChecklistRequestBodyDto.isInformative must be a boolean value',
                   'createMentorReviewChecklistRequestBodyDto.isBad must be a boolean value',
                   'createMentorReviewChecklistRequestBodyDto.isStuffy must be a boolean value',
+                  "Can't select more than four checklists.",
                   'property [허용하지 않은 데이터] should not exist',
                 ],
                 error: 'Bad Request',
