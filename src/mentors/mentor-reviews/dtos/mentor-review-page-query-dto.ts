@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
-import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
 import { PageQueryDto } from '@src/common/dto/page-query.dto';
 import { SortOrder } from '@src/common/constants/sort-order.enum';
 import { IsPositiveInt } from '@src/common/decorators/validators/is-positive-int.decorator';
@@ -109,7 +109,7 @@ export class MentorReviewPageQueryDto extends PageQueryDto {
     description: '리뷰 내용 필터링',
   })
   @IsOptional()
-  @IsString()
+  @IsNotEmpty()
   review?: string;
 
   @ApiPropertyOptional({

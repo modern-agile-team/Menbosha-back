@@ -5,7 +5,7 @@ import { PageQueryDto } from '@src/common/dto/page-query.dto';
 import { ReportOrderField } from '@src/reports/constants/report-order-field.enum';
 import { ReportType } from '@src/reports/constants/report-type.enum';
 import { REPORT_REASON_LENGTH } from '@src/reports/constants/report.constant';
-import { IsOptional, IsString, Length, IsEnum } from 'class-validator';
+import { IsOptional, Length, IsEnum } from 'class-validator';
 
 export class ReportPageQueryDto extends PageQueryDto {
   @ApiPropertyOptional({
@@ -46,7 +46,6 @@ export class ReportPageQueryDto extends PageQueryDto {
     maxLength: REPORT_REASON_LENGTH.MAX,
   })
   @IsOptional()
-  @IsString()
   @Length(REPORT_REASON_LENGTH.MIN, REPORT_REASON_LENGTH.MAX)
   reason?: string;
 
