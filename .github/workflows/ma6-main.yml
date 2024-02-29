@@ -48,5 +48,4 @@ jobs:
       - name: Docker run
         run: |
           docker pull ${{ secrets.DOCKER_IMAGE_NAME }}:latest
-          docker-compose down
-          docker-compose up --force-recreate --build -d
+          docker restart ${{ secrets.DOCKER_IMAGE_NAME }}:latest
