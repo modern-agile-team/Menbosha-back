@@ -47,6 +47,8 @@ jobs:
 
       - name: Docker run
         run: |
+          docker stop ${{ secrets.DOCKER_CONTAINER_NAME }}
+          docker rm ${{ secrets.DOCKER_CONTAINER_NAME }}
+          docker rmi ${{ secrets.DOCKER_IMAGE_NAME }}:latest
           docker pull ${{ secrets.DOCKER_IMAGE_NAME }}:latest
-          docker-compose down
-          docker-compose up --force-recreate --build -d
+          docker run -d --name ${{ secrets.DOCKER_CONTAINER_NAME }} ${{ secrets.DOCKER_IMAGE_NAME }}:latest
