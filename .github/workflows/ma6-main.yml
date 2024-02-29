@@ -47,5 +47,8 @@ jobs:
 
       - name: Docker run
         run: |
+          docker stop ${{ secrets.DOCKER_CONTAINER_NAME }}
+          docker rm ${{ secrets.DOCKER_CONTAINER_NAME }}
+          docker rmi ${{ secrets.DOCKER_IMAGE_NAME }}:latest
           docker pull ${{ secrets.DOCKER_IMAGE_NAME }}:latest
-          docker restart ${{ secrets.DOCKER_IMAGE_NAME }}:latest
+          docker run -d --name ${{ secrets.DOCKER_CONTAINER_NAME }} ${{ secrets.DOCKER_IMAGE_NAME }}:latest
