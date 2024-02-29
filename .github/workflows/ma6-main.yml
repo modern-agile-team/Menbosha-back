@@ -45,14 +45,13 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Load environment variables from .env #  .env 불러오기 (docker-compose가 아닌 docker로 실행시키기 위해)
-        run: |
-          export $(egrep -v '^#' .env | xargs)
-
       - name: Docker run
         run: |
           docker stop ${{ secrets.DOCKER_CONTAINER_NAME }}
           docker rm ${{ secrets.DOCKER_CONTAINER_NAME }}
           docker rmi ${{ secrets.DOCKER_IMAGE_NAME }}:latest
           docker pull ${{ secrets.DOCKER_IMAGE_NAME }}:latest
-          docker run -d --name ${{ secrets.DOCKER_CONTAINER_NAME }} ${{ secrets.DOCKER_IMAGE_NAME }}:latest
+
+      - name: Restart a container in Docker Compose
+        run: |
+          docker-compose restart ${{ secrets.DOCKER_SERVICES_NAME }}
