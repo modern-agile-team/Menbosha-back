@@ -65,7 +65,7 @@ export function ApiPatchUpdateMentorReview() {
                 message: [
                   'mentorReviewChecklist must be a non-empty object',
                   'At least one update field must exist.',
-                  'review must be a string',
+                  'review should not be empty',
                   'mentorReviewChecklist.isGoodWork must be a boolean value',
                   'mentorReviewChecklist.isClear must be a boolean value',
                   'mentorReviewChecklist.isQuick must be a boolean value',
