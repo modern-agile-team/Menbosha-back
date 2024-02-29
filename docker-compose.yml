@@ -21,5 +21,13 @@ services:
       - ${REDIS_BINDING_PORT}:${REDIS_PORT}
     restart: always
 
+  nginx-certbot:
+    image: 2swo/back-nginx-certbot
+    ports:
+      - '80:80'
+      - '443:443'
+    env_file:
+      - .env
+
 volumes:
   redis_data:

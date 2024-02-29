@@ -169,6 +169,7 @@ export class UserBadgeService {
 
       return [userBadges, { acquiredBadges }];
     }
+
     //새로 획득한 뱃지가 없을 경우 기존의 userBadge 리턴
     return userBadges;
   }
