@@ -47,10 +47,8 @@ export class BannedUsersService {
       );
     }
 
-    const existTargetUser = await this.userService.findOneByOrNotFound({
-      select: ['id', 'role'],
-      where: { id: userId, status: UserStatus.ACTIVE },
-    });
+    const existTargetUser =
+      await this.userService.findOneByQueryBuilderOrNotFound(userId);
 
     if (existTargetUser.role === UserRole.ADMIN) {
       throw new HttpForbiddenException({
@@ -58,9 +56,10 @@ export class BannedUsersService {
       });
     }
 
-    const existBannedUser = await this.findOneByUserId(existTargetUser.id);
-
-    if (existBannedUser?.endAt > new Date()) {
+    if (
+      existTargetUser.banned[0]?.endAt > new Date() &&
+      existTargetUser.status === UserStatus.INACTIVE
+    ) {
       throw new ConflictException('user has already been banned.');
     }
 

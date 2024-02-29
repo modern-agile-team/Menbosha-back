@@ -69,4 +69,65 @@ export class UserRepository {
   findOne(options: FindOneOptions<User>) {
     return this.entityManager.findOne(User, options);
   }
+
+  findOneByQueryBuilder(userId: number): Promise<User> {
+    return this.entityManager
+      .getRepository(User)
+      .createQueryBuilder('user')
+      .select([
+        'user.id',
+        'user.role',
+        'user.status',
+        'banned.id',
+        'banned.endAt',
+      ])
+      .leftJoin(
+        'user.banned',
+        'banned',
+        'banned.id = (SELECT id FROM banned_user WHERE banned_user_id = user.id ORDER BY id DESC LIMIT 1)',
+      )
+      .where('user.id = :userId', { userId })
+      .getOne();
+  }
+
+  findOneAndSelectAllByQueryBuilder(email: string, provider: Provider) {
+    return this.entityManager
+      .getRepository(User)
+      .createQueryBuilder('user')
+      .select([
+        'user.id',
+        'user.provider',
+        'user.name',
+        'user.email',
+        'user.rank',
+        'user.phone',
+        'user.hopeCategoryId',
+        'user.activityCategoryId',
+        'user.status',
+        'user.deletedAt',
+        'user.createdAt',
+        'user.updatedAt',
+        'user.uniqueId',
+        'user.isMentor',
+        'user.role',
+        'banned.id',
+        'banned.reason',
+        'banned.bannedUserId',
+        'banned.bannedAt',
+        'banned.endAt',
+      ])
+      .leftJoin(
+        'user.banned',
+        'banned',
+        'banned.id = (SELECT id FROM banned_user WHERE banned_user_id = user.id ORDER BY id DESC LIMIT 1)',
+      )
+      .setFindOptions({
+        where: {
+          email,
+          provider,
+        },
+      })
+      .withDeleted()
+      .getOne();
+  }
 }

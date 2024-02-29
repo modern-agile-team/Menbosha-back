@@ -15,7 +15,6 @@ import { UserInfo } from '@src/auth/interfaces/user-info.interface';
 import { Provider } from '@src/auth/enums/provider.enum';
 import { TokenService } from '@src/auth/services/token.service';
 import { AuthServiceInterface } from '@src/auth/interfaces/auth-service.interface';
-import { BannedUsersService } from '@src/admins/banned-user/services/banned-users.service';
 import { BannedUserException } from '@src/http-exceptions/exceptions/banned-user.exception';
 import { AUTH_ERROR_CODE } from '@src/constants/error/auth/auth-error-code.constant';
 import { BannedUserErrorResponseDto } from '@src/admins/banned-user/dtos/banned-user-error-response.dto';
@@ -29,7 +28,6 @@ export class AuthService implements AuthServiceInterface {
     private readonly userImageService: UserImageService,
     private readonly tokenService: TokenService,
     private readonly totalCountService: TotalCountService,
-    private readonly bannedUsersService: BannedUsersService,
     private readonly dataSource: DataSource,
   ) {}
 
@@ -153,10 +151,11 @@ export class AuthService implements AuthServiceInterface {
         email,
       };
 
-      const user = await this.userService.findOne({
-        where: { email, provider },
-        withDeleted: true,
-      });
+      const { banned, ...user } =
+        await this.userService.findOneAndSelectAllByQueryBuilder(
+          userInfo.email,
+          userInfo.provider,
+        );
 
       /**
        * @todo 추후 기획에 따라 유저를 restore하는 방식을 정해야 함.
@@ -181,24 +180,20 @@ export class AuthService implements AuthServiceInterface {
       }
 
       if (!user?.deletedAt && user?.status === UserStatus.INACTIVE) {
-        const existBannedUser = await this.bannedUsersService.findOneByUserId(
-          user.id,
-        );
-
-        if (!existBannedUser) {
+        if (!banned[0]) {
           throw new InternalServerErrorException(
             'User disabled for unknown reason.',
           );
         }
 
-        if (existBannedUser.endAt > new Date()) {
+        if (banned[0].endAt > new Date()) {
           throw new BannedUserException(
             { code: AUTH_ERROR_CODE.BANNED_USER },
-            { ...new BannedUserErrorResponseDto(existBannedUser) },
+            { ...new BannedUserErrorResponseDto(banned[0]) },
           );
         }
 
-        if (existBannedUser.endAt <= new Date()) {
+        if (banned[0].endAt <= new Date()) {
           user.status = UserStatus.ACTIVE;
 
           const updateResult = await this.userService.updateUser(user.id, {
