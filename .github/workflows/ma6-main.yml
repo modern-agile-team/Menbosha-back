@@ -52,6 +52,6 @@ jobs:
           docker rmi ${{ secrets.DOCKER_IMAGE_NAME }}:latest
           docker pull ${{ secrets.DOCKER_IMAGE_NAME }}:latest
 
-      - name: Restart a container in Docker Compose
+      - name: Restart the specific service in Docker Compose
         run: |
-          docker-compose restart ${{ secrets.DOCKER_SERVICES_NAME }}
+          docker-compose up -d ${{ secrets.DOCKER_SERVICES_NAME }}
