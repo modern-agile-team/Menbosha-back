@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
 import { MentorBoardOrderField } from '@src/boards/constants/mentor-board-order-field.enum';
 import { PageQueryDto } from '@src/common/dto/page-query.dto';
 import { IsPositiveInt } from '@src/common/decorators/validators/is-positive-int.decorator';
@@ -29,14 +29,14 @@ export class MentorBoardPageQueryDto extends PageQueryDto {
     description: '제목 필터링',
   })
   @IsOptional()
-  @IsString()
+  @IsNotEmpty()
   head?: string;
 
   @ApiPropertyOptional({
     description: '본문 필터링',
   })
   @IsOptional()
-  @IsString()
+  @IsNotEmpty()
   body?: string;
 
   @ApiProperty({

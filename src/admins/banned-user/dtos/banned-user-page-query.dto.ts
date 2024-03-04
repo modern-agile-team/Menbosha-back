@@ -4,7 +4,7 @@ import { BANNED_USER_REASON_LENGTH } from '@src/admins/banned-user/constants/ban
 import { SortOrder } from '@src/common/constants/sort-order.enum';
 import { IsPositiveInt } from '@src/common/decorators/validators/is-positive-int.decorator';
 import { PageQueryDto } from '@src/common/dto/page-query.dto';
-import { IsEnum, IsOptional, IsString, Length } from 'class-validator';
+import { IsEnum, IsOptional, Length } from 'class-validator';
 
 export class BannedUserPageQueryDto extends PageQueryDto {
   @ApiPropertyOptional({
@@ -37,7 +37,6 @@ export class BannedUserPageQueryDto extends PageQueryDto {
     maxLength: BANNED_USER_REASON_LENGTH.MAX,
   })
   @IsOptional()
-  @IsString()
   @Length(BANNED_USER_REASON_LENGTH.MIN, BANNED_USER_REASON_LENGTH.MAX)
   reason?: string;
 

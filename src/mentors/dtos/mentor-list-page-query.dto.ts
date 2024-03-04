@@ -1,7 +1,7 @@
 import { PageQueryDto } from '@src/common/dto/page-query.dto';
 import { SortOrder } from '@src/common/constants/sort-order.enum';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
 import { IsPositiveInt } from '@src/common/decorators/validators/is-positive-int.decorator';
 import { User } from '@src/users/entities/user.entity';
 import { MentorOrderField } from '@src/mentors/constants/mentor-order-field.enum';
@@ -22,7 +22,7 @@ export class MentorListPageQueryDto
     description: '멘토 이름 필터링',
   })
   @IsOptional()
-  @IsString()
+  @IsNotEmpty()
   name?: string;
 
   @ApiPropertyOptional({

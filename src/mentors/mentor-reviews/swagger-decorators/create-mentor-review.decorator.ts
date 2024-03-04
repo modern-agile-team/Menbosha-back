@@ -54,7 +54,7 @@ export function ApiCreateMentorReview() {
               value: {
                 message: [
                   'createMentorReviewChecklistRequestBodyDto must be a non-empty object',
-                  'review must be a string',
+                  'review should not be empty',
                   'createMentorReviewChecklistRequestBodyDto.isGoodWork must be a boolean value',
                   'createMentorReviewChecklistRequestBodyDto.isClear must be a boolean value',
                   'createMentorReviewChecklistRequestBodyDto.isQuick must be a boolean value',
