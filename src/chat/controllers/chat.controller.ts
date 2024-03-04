@@ -103,6 +103,7 @@ export class ChatController {
    *
    * @param roomId
    * @returns find one chat room or fail
+   * @deprecated 삭제 예정
    */
   @ApiFindOneChatRoom()
   @Get(':roomId')

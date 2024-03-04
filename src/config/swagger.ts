@@ -4,8 +4,15 @@ import {
   SwaggerCustomOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
+import { config } from 'dotenv';
+
+config();
 
 export function setupSwagger(app: INestApplication): void {
+  if (process.env.NODE_ENV === 'production') {
+    return;
+  }
+
   const config = new DocumentBuilder()
     .setTitle('Menbosha API')
     .setDescription('모던애자일 6기 멘보샤 프로젝트 API 문서')

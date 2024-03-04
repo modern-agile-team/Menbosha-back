@@ -18,8 +18,16 @@ import { LoginChatRoomsDto } from '@src/chat/dto/login-chat-rooms.dto';
 import { PostChatDto } from '@src/chat/dto/post-chat.dto';
 import { WebSocketExceptionFilter } from '@src/chat/exceptions/filters/websocket-exception.filter';
 import { SocketException } from '@src/chat/exceptions/socket.exception';
-
-@WebSocketGateway({ cors: true })
+import { config } from 'dotenv';
+config();
+@WebSocketGateway({
+  cors: {
+    origin:
+      process.env.NODE_ENV === 'production'
+        ? [process.env.FRONT_DOMAIN, 'http://localhost:3000']
+        : 'http://localhost:3000',
+  },
+})
 @UseFilters(WebSocketExceptionFilter)
 @UsePipes(ValidationPipe)
 export class EventsGateway

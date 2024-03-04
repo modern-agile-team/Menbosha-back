@@ -15,6 +15,7 @@ export function ApiFindOneChatRoom() {
     ApiOperation({
       summary: '채팅룸 단일 조회',
       description: 'Param - roomId',
+      deprecated: true,
     }),
     ApiResponse({
       status: 200,
