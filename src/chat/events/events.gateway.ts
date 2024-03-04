@@ -19,13 +19,27 @@ import { PostChatDto } from '@src/chat/dto/post-chat.dto';
 import { WebSocketExceptionFilter } from '@src/chat/exceptions/filters/websocket-exception.filter';
 import { SocketException } from '@src/chat/exceptions/socket.exception';
 import { config } from 'dotenv';
+
 config();
+
+/**
+ * 마지막 배포 단계가 되면 production 환경은 로컬에서의 요청은 아예 허용하지 않음. 오직 프론트의 https 적용된 프론트 도메인만 허용.
+ * 추후 development 환경의 서버를 새로 개설해야 함.
+ * staging server 까지 따로 열 계획은 없기 때문에 환경 자체는 최대한 운영 서버 환경과 거의 100% 비슷할 정도로 환경을 맞춰야 함.
+ * development 환경의 허용 도메인은 development 환경의 프론트 서버 도메인 및 로컬에서의 요청 허용
+ * 추후 프론트의 admin 전용 서버가 열리면 production 환경에서 프론트의 admin 서버 도메인도 허용(아마 development 환경에서도)
+ */
 @WebSocketGateway({
   cors: {
     origin:
       process.env.NODE_ENV === 'production'
-        ? [process.env.FRONT_DOMAIN, 'http://localhost:3000']
-        : 'http://localhost:3000',
+        ? [process.env.FRONT_PRODUCTION_DOMAIN, process.env.FRONT_LOCAL_DOMAIN]
+        : 'development'
+          ? [
+              process.env.FRONT_DEVELOPMENT_DOMAIN,
+              process.env.FRONT_LOCAL_DOMAIN,
+            ]
+          : true, // 또는 특정 도메인을 설정
   },
 })
 @UseFilters(WebSocketExceptionFilter)
