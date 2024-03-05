@@ -151,50 +151,23 @@ export class AuthService implements AuthServiceInterface {
         email,
       };
 
-      const { banned, ...user } =
-        await this.userService.findOneAndSelectAllByQueryBuilder(
-          userInfo.email,
-          userInfo.provider,
-        );
+      const user = await this.userService.findOneAndSelectAllByQueryBuilder(
+        userInfo.email,
+        userInfo.provider,
+      );
 
-      /**
-       * @todo 추후 기획에 따라 유저를 restore하는 방식을 정해야 함.
-       * 현재 - 탈퇴 후 다시 로그인 하면 자동 복원.
-       * 방법 1. NotFound 에러를 던짐.(문의를 통해서만 복구 가능. 근데 현재 기획 상 별도의 문의 페이지가 없음.)
-       * 방법 2. 탈퇴된 계정 전용 페이지를 만듬. 복구요청(별도의 api 만들기) 혹은 그대로 사이트 나가기
-       * 방법 3. 자동 복원(현재)
-       */
-      if (user?.deletedAt && user?.status === UserStatus.INACTIVE) {
-        user.status = UserStatus.ACTIVE;
-        user.deletedAt = null;
-
-        const updateResult = await this.userService.updateUser(user.id, {
-          ...user,
-        });
-
-        if (!updateResult.affected) {
-          throw new InternalServerErrorException(
-            'Unknown server error during user sign-in.',
-          );
-        }
-      }
-
-      if (!user?.deletedAt && user?.status === UserStatus.INACTIVE) {
-        if (!banned[0]) {
-          throw new InternalServerErrorException(
-            'User disabled for unknown reason.',
-          );
-        }
-
-        if (banned[0].endAt > new Date()) {
-          throw new BannedUserException(
-            { code: AUTH_ERROR_CODE.BANNED_USER },
-            { ...new BannedUserErrorResponseDto(banned[0]) },
-          );
-        }
-
-        if (banned[0].endAt <= new Date()) {
+      if (user) {
+        const { deletedAt, status, banned } = user;
+        /**
+         * @todo 추후 기획에 따라 유저를 restore하는 방식을 정해야 함.
+         * 현재 - 탈퇴 후 다시 로그인 하면 자동 복원.
+         * 방법 1. NotFound 에러를 던짐.(문의를 통해서만 복구 가능. 근데 현재 기획 상 별도의 문의 페이지가 없음.)
+         * 방법 2. 탈퇴된 계정 전용 페이지를 만듬. 복구요청(별도의 api 만들기) 혹은 그대로 사이트 나가기
+         * 방법 3. 자동 복원(현재)
+         */
+        if (deletedAt && status === UserStatus.INACTIVE) {
           user.status = UserStatus.ACTIVE;
+          user.deletedAt = null;
 
           const updateResult = await this.userService.updateUser(user.id, {
             ...user,
@@ -206,9 +179,36 @@ export class AuthService implements AuthServiceInterface {
             );
           }
         }
-      }
 
-      if (user) {
+        if (!deletedAt && status === UserStatus.INACTIVE) {
+          if (!banned[0]) {
+            throw new InternalServerErrorException(
+              'User disabled for unknown reason.',
+            );
+          }
+
+          if (banned[0].endAt > new Date()) {
+            throw new BannedUserException(
+              { code: AUTH_ERROR_CODE.BANNED_USER },
+              { ...new BannedUserErrorResponseDto(banned[0]) },
+            );
+          }
+
+          if (banned[0].endAt <= new Date()) {
+            user.status = UserStatus.ACTIVE;
+
+            const updateResult = await this.userService.updateUser(user.id, {
+              ...user,
+            });
+
+            if (!updateResult.affected) {
+              throw new InternalServerErrorException(
+                'Unknown server error during user sign-in.',
+              );
+            }
+          }
+        }
+
         const userId = user.id;
 
         await this.userService.updateUser(userId, { name });
