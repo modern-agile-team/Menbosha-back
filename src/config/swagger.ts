@@ -9,9 +9,9 @@ import { config } from 'dotenv';
 config();
 
 export function setupSwagger(app: INestApplication): void {
-  if (process.env.NODE_ENV === 'production') {
-    return;
-  }
+  // if (process.env.NODE_ENV === 'production') {
+  //   return;
+  // }
 
   const config = new DocumentBuilder()
     .setTitle('Menbosha API')
