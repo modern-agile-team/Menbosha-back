@@ -12,6 +12,7 @@ import { UserBadgeResponseDTO } from '@src/users/dtos/get-user-badge.dto';
 import { UserImageRepository } from '@src/users/repositories/user-image.repository';
 import { UserRepository } from '@src/users/repositories/user.repository';
 import { User } from '@src/users/entities/user.entity';
+import { TotalCountService } from '@src/total-count/services/total-count.service';
 
 @Injectable()
 export class UserService {
@@ -20,6 +21,7 @@ export class UserService {
     private readonly userImageRepository: UserImageRepository,
     private readonly userBadgeRepository: UserBadgeRepository,
     private readonly userIntroRepository: UserIntroRepository,
+    private readonly totalCountService: TotalCountService,
   ) {}
 
   findAll(options: FindManyOptions<User>) {
@@ -106,8 +108,10 @@ export class UserService {
       UserBadgeResponseDTO,
       await this.userBadgeRepository.getUserBadge(userId),
     );
+    const { mentorBoardCount, reviewCount } =
+      await this.totalCountService.getMentorBoardAndReviewCount(userId);
 
-    return { ...userInfo, image, intro, badge };
+    return { ...userInfo, image, intro, badge, mentorBoardCount, reviewCount };
   }
 
   async getMyInfoWithOwner(userId: number, targetId: number) {

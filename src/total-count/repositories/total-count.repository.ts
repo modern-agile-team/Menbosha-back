@@ -19,6 +19,13 @@ export class TotalCountRepository {
     });
   }
 
+  getMentorBoardAndReviewCount(userId: number) {
+    return this.entityManager.findOne(TotalCount, {
+      where: { userId },
+      select: ['mentorBoardCount', 'reviewCount'],
+    });
+  }
+
   async clear7DaysCount() {
     return await this.entityManager.update(
       TotalCount,
