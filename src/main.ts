@@ -55,9 +55,9 @@ async function bootstrap() {
     .build();
 
   const asyncApiDocument = AsyncApiModule.createDocument(app, asyncApiOptions);
-  if (process.env.NODE_ENV !== 'production') {
-    await AsyncApiModule.setup('asyncapi', app, asyncApiDocument);
-  }
+  // if (process.env.NODE_ENV !== 'production') {
+  await AsyncApiModule.setup('asyncapi', app, asyncApiDocument);
+  // }
   app.useLogger(logger);
 
   app.useGlobalFilters(
