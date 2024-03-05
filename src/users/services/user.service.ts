@@ -93,25 +93,8 @@ export class UserService {
     return { rank, badge };
   }
 
-  async getUserInfo(userId: number) {
-    const userInfo = plainToInstance(
-      MyProfileResponseDTO,
-      await this.userRepository.getUser(userId),
-    );
-    const image = (await this.userImageRepository.findUserImage(userId))
-      .imageUrl;
-    const intro = plainToInstance(
-      MyIntroDto,
-      await this.userIntroRepository.getUserIntro(userId),
-    )[0];
-    const badge = plainToInstance(
-      UserBadgeResponseDTO,
-      await this.userBadgeRepository.getUserBadge(userId),
-    );
-    const { mentorBoardCount, reviewCount } =
-      await this.totalCountService.getMentorBoardAndReviewCount(userId);
-
-    return { ...userInfo, image, intro, badge, mentorBoardCount, reviewCount };
+  getUserInfo(userId: number) {
+    return this.userRepository.getUserInfo(userId);
   }
 
   async getMyInfoWithOwner(userId: number, targetId: number) {

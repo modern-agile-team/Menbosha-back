@@ -30,6 +30,39 @@ export class UserRepository {
     return user;
   }
 
+  async getUserInfo(userId: number) {
+    return this.entityManager
+      .getRepository(User)
+      .createQueryBuilder('user')
+      .leftJoin('user.userImage', 'userImage')
+      .leftJoin('user.userIntro', 'userIntro')
+      .leftJoin('user.userBadge', 'userBadge')
+      .leftJoin('user.totalCount', 'totalCount')
+      .select([
+        'user.id',
+        'user.name',
+        'user.rank',
+        'user.phone',
+        'user.hopeCategoryId',
+        'user.activityCategoryId',
+        'user.createdAt',
+        'user.updatedAt',
+        'user.isMentor',
+        'userBadge.badgeId',
+        'userImage.imageUrl',
+        'userIntro.shortIntro',
+        'userIntro.career',
+        'userIntro.customCategory',
+        'userIntro.detail',
+        'userIntro.portfolio',
+        'userIntro.sns',
+        'totalCount.mentorBoardCount',
+        'totalCount.reviewCount',
+      ])
+      .where('user.id = :userId', { userId })
+      .getOne();
+  }
+
   async getUserRank(userId: number): Promise<number> {
     return (
       await this.entityManager.findOne(User, {

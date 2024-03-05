@@ -59,7 +59,7 @@ export class UserController {
 
   @ApiGetUserInfo()
   @Get('info')
-  async getUserInfo(@Query('userId') userId: number) {
+  getUserInfo(@Query('userId') userId: number) {
     return this.userService.getUserInfo(userId);
   }
 
