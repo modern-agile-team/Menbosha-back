@@ -1,0 +1,20 @@
+name: pull-request-reminder-action
+on:
+  schedule:
+    # Every day KST 10, 15, 19hours during working hours, send notification
+    # - cron: '0 1,6,10 * * *'
+    - cron: '* * * * *'
+
+jobs:
+  pull_request_reminder_action:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: rrgks6221/pr-notification-bot/@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          MESSENGER_TYPE: ${{ secrets.PR_BOT_MESSENGER_TYPE }}
+          OWNER: ${{ secrets.PR_BOT_OWNER }}
+          REPOS: ${{ secrets.PR_BOT_REPOS }}
+          WEBHOOK_URL: ${{ secrets.PR_BOT_WEBHOOK_URL }}
+          MESSENGER_GITHUB_MAP: ${{ secrets.PR_BOT_MESSENGER_GITHUB_MAP }}
