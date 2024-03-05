@@ -49,6 +49,7 @@ export class UserRepository {
         'user.updatedAt',
         'user.isMentor',
         'userBadge.badgeId',
+        'userBadge.createdAt',
         'userImage.imageUrl',
         'userIntro.shortIntro',
         'userIntro.career',
