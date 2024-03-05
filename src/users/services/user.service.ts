@@ -70,7 +70,7 @@ export class UserService {
   async getMyProfile(userId: number) {
     const userInfo = plainToInstance(
       MyProfileResponseDTO,
-      await this.userRepository.getUserInfo(userId),
+      await this.userRepository.getUser(userId),
     );
     const intro = plainToInstance(
       MyIntroDto,
@@ -96,7 +96,7 @@ export class UserService {
   async getUserInfo(userId: number) {
     const userInfo = plainToInstance(
       MyProfileResponseDTO,
-      await this.userRepository.getUserInfo(userId),
+      await this.userRepository.getUser(userId),
     );
     const image = (await this.userImageRepository.findUserImage(userId))
       .imageUrl;
@@ -116,7 +116,7 @@ export class UserService {
 
   async getMyInfoWithOwner(userId: number, targetId: number) {
     const { name, email, role, provider } =
-      await this.userRepository.getUserInfo(userId);
+      await this.userRepository.getUser(userId);
     const userImage = (await this.userImageRepository.findUserImage(userId))
       .imageUrl;
     return {

@@ -18,7 +18,7 @@ export class UserRepository {
     return this.entityManager.getRepository(User).find(options);
   }
 
-  async getUserInfo(userId: number): Promise<User> {
+  async getUser(userId: number): Promise<User> {
     const user = await this.entityManager.findOne(User, {
       where: { id: userId },
     });
