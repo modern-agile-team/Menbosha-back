@@ -86,5 +86,6 @@ export const TypeORMconfig: TypeOrmModuleOptions = {
   ], // 여기에 엔티티들을 추가해야 합니다.
   subscribers: ['dist/**/subscribers/*{.ts,.js}'],
   timezone: '+00:00',
-  synchronize: process.env.NODE_ENV === 'true',
+  synchronize: false, // DB 동기화 여부 설정
+  logging: false, //DB 로깅 여부 설정
 };
