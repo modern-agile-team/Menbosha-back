@@ -18,16 +18,10 @@ export class UserRepository {
     return this.entityManager.getRepository(User).find(options);
   }
 
-  async getUser(userId: number): Promise<User> {
-    const user = await this.entityManager.findOne(User, {
+  getUser(userId: number): Promise<User> {
+    return this.entityManager.findOne(User, {
       where: { id: userId },
     });
-
-    if (!user) {
-      throw new NotFoundException('사용자를 찾을 수 없습니다.');
-    }
-
-    return user;
   }
 
   getUserInfo(userId: number) {
