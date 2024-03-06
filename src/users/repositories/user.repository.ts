@@ -30,7 +30,7 @@ export class UserRepository {
     return user;
   }
 
-  async getUserInfo(userId: number) {
+  getUserInfo(userId: number) {
     return this.entityManager
       .getRepository(User)
       .createQueryBuilder('user')
