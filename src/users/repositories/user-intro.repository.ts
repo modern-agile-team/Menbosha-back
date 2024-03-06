@@ -9,6 +9,15 @@ import { EntityManager } from 'typeorm';
 export class UserIntroRepository {
   constructor(private readonly entityManager: EntityManager) {}
 
+  async createUserIntroRow(
+    entityManager: EntityManager,
+    userId: number,
+  ): Promise<UserIntro> {
+    const userIntro = new UserIntro();
+    userIntro.userId = userId;
+    return await entityManager.save(UserIntro, userIntro);
+  }
+
   async getUserIntro(userId: number) {
     return await this.entityManager.find(UserIntro, { where: { userId } });
   }

@@ -18,6 +18,7 @@ import { AuthServiceInterface } from '@src/auth/interfaces/auth-service.interfac
 import { BannedUserException } from '@src/http-exceptions/exceptions/banned-user.exception';
 import { AUTH_ERROR_CODE } from '@src/constants/error/auth/auth-error-code.constant';
 import { BannedUserErrorResponseDto } from '@src/admins/banned-user/dtos/banned-user-error-response.dto';
+import { UserIntroService } from '@src/users/services/user-intro-service';
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ export class AuthService implements AuthServiceInterface {
     private readonly tokenService: TokenService,
     private readonly totalCountService: TotalCountService,
     private readonly dataSource: DataSource,
+    private readonly userIntroService: UserIntroService,
   ) {}
 
   async login(authorizeCode: string, provider: Provider) {
@@ -269,6 +271,7 @@ export class AuthService implements AuthServiceInterface {
             profileImage,
           );
         }
+        await this.userIntroService.createUserIntroRow(entityManager, userId);
         await this.totalCountService.createTotalCount(entityManager, userId);
         await this.totalCountService.createMentorReviewChecklistCount(
           entityManager,
