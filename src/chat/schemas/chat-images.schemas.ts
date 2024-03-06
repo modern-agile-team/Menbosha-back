@@ -4,7 +4,7 @@ import * as mongoose from 'mongoose';
 
 const options: SchemaOptions = {
   collection: 'chat_images',
-  timestamps: true,
+  timestamps: { createdAt: true, updatedAt: false },
 };
 
 @Schema(options)
