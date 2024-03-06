@@ -34,10 +34,15 @@ async function bootstrap() {
      */
     origin:
       process.env.NODE_ENV === 'production'
-        ? [process.env.FRONT_PRODUCTION_DOMAIN, process.env.FRONT_LOCAL_DOMAIN]
+        ? [
+            process.env.FRONT_PRODUCTION_DOMAIN,
+            process.env.FRONT_PRODUCTION_WWW_DOMAIN,
+            process.env.FRONT_LOCAL_DOMAIN,
+          ]
         : 'development'
           ? [
               process.env.FRONT_DEVELOPMENT_DOMAIN,
+              process.env.FRONT_DEVELOPMENT_WWW_DOMAIN,
               process.env.FRONT_LOCAL_DOMAIN,
             ]
           : true, // 또는 특정 도메인을 설정
