@@ -13,25 +13,28 @@ export function ApiGetUserInfo() {
       content: {
         JSON: {
           example: {
-            id: 24,
-            name: '박준혁',
-            email: 'pjh_2004@naver.com',
+            id: 2,
+            name: '이재진',
             isMentor: true,
-            hopeCategoryId: 3,
-            activityCategoryId: 3,
+            hopeCategoryId: 1,
+            activityCategoryId: 1,
             rank: 10,
             phone: '',
-            image:
-              'https://menbosha-s3.s3.ap-northeast-2.amazonaws.com/UserImages/24_1704421233846.jpeg',
-            intro: {
-              shortIntro: null,
-              career: '발로란트 최대 티어 불멸',
-              customCategory: null,
-              detail: null,
-              portfolio: null,
-              sns: null,
+            createdAt: '2024-02-28T05:12:03.000Z',
+            updatedAt: '2024-02-29T07:45:16.000Z',
+            userImage: {
+              imageUrl:
+                'https://phinf.pstatic.net/contact/20230313_71/1678704142906wkazc_JPEG/E2B77116-D2F9-4CCC-A177-A357FF611682.jpg',
             },
-            badge: [
+            userIntro: {
+              shortIntro: '나를 간단하게 소개해봐요.',
+              career: '나를 어필할만한 경력을 작성해주세요.',
+              customCategory: '나만의 카테고리를 작성해주세요.',
+              detail: '내가 어떤 사람인지 자세하게 작성해주세요.',
+              portfolio: '나를 소개할 수 있는 링크가 있다면 추가해주세요.',
+              sns: 'SNS 계정의 링크를 추가해주세요.',
+            },
+            userBadge: [
               {
                 badgeId: 1,
                 createdAt: '2023-12-12T19:59:18.000Z',
@@ -41,6 +44,10 @@ export function ApiGetUserInfo() {
                 createdAt: '2023-12-12T19:59:18.000Z',
               },
             ],
+            totalCount: {
+              mentorBoardCount: 9,
+              reviewCount: 8,
+            },
           },
         },
       },
