@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager, MoreThanOrEqual } from 'typeorm';
-import { User } from '../entities/user.entity';
-import { TotalCount } from 'src/total-count/entities/total-count.entity';
-import { UserRanking } from '../entities/user-ranking.entity';
-import { UserIntro } from '../entities/user-intro.entity';
-import { UserImage } from '../entities/user-image.entity';
+import { TotalCount } from '@src/total-count/entities/total-count.entity';
+import { UserImage } from '@src/users/entities/user-image.entity';
+import { UserIntro } from '@src/users/entities/user-intro.entity';
+import { UserRanking } from '@src/users/entities/user-ranking.entity';
+import { User } from '@src/users/entities/user.entity';
 
 @Injectable()
 export class UserRankingRepository {
@@ -20,8 +20,8 @@ export class UserRankingRepository {
         'userRanking.userId as userId',
         'userRanking.name as `name`',
         'userRanking.rank as `rank`',
-        'userRanking.mainField as mainField',
-        'userRanking.introduce as introduce',
+        'userRanking.shortIntro as shortIntro',
+        'userRanking.customCategory as customCategory',
         'userRanking.career as career',
         'userRanking.activityCategoryId as activityCategoryId',
         'userImage.imageUrl as imageUrl',
@@ -86,13 +86,21 @@ export class UserRankingRepository {
         activityCategoryId: user.activityCategoryId,
         name: user.name,
         rank: user.rank,
-        countReview: totalCount.reviewCount,
+        reviewCount: totalCount.reviewCount,
         customCategory: userIntro.customCategory,
         career: userIntro.career,
         shortIntro: userIntro.shortIntro,
       })
       .where('userId = :userId', { userId })
       .execute();
+  }
+
+  async findUserIdsByUserRanking() {
+    return await this.entityManager
+      .createQueryBuilder(UserRanking, 'userRanking')
+      .select('userRanking.userId')
+      .orderBy('userRanking.rank', 'DESC')
+      .getMany();
   }
 
   async clearUserRanking() {

@@ -1,7 +1,8 @@
-import { User } from 'src/users/entities/user.entity';
+import { User } from '@src/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   Index,
   JoinColumn,
@@ -10,9 +11,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { CategoryList } from 'src/category/entity/category-list.entity';
-import { MentorBoardLike } from './mentor-board-like.entity';
-import { MentorBoardImage } from './mentor-board-image.entity';
+import { CategoryList } from '@src/category/entity/category-list.entity';
+import { MentorBoardImage } from '@src/boards/entities/mentor-board-image.entity';
+import { MentorBoardLike } from '@src/boards/entities/mentor-board-like.entity';
 
 @Entity({
   name: 'mentor_board',
@@ -56,6 +57,13 @@ export class MentorBoard {
     comment: '인기 게시글 선정 일자',
   })
   popularAt: Date | null;
+
+  @DeleteDateColumn({
+    name: 'deleted_at',
+    nullable: true,
+    comment: '삭제 일자',
+  })
+  deletedAt: Date | null;
 
   @Column({ name: 'category_list_id' })
   categoryId: number;

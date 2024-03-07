@@ -1,5 +1,3 @@
-import { ChatRoomDto } from './chat-room.dto';
-
 export class ChatRoomPaginateResultDto<ChatRoomDto> {
   docs: ChatRoomDto[];
   totalDocs: number;

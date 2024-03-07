@@ -54,16 +54,14 @@ export function ApiNewAccessToken() {
               value: { statusCode: 401, message: 'jwt expired' },
               description: '만료된 토큰인 경우',
             },
+            'token not found in redis': {
+              value: {
+                statusCode: 401,
+                message: 'token not found in redis',
+              },
+              description: '리프레시 토큰이 Redis에 없는 경우',
+            },
           },
-        },
-      },
-    }),
-    ApiResponse({
-      status: 404,
-      description: '리프레시 토큰을 DB에서 찾을 수 없는 경우',
-      content: {
-        JSON: {
-          example: { statusCode: 404, message: '토큰을 찾을 수 없습니다.' },
         },
       },
     }),

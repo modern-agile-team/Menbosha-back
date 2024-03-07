@@ -9,34 +9,54 @@ import {
   Query,
   UploadedFiles,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
+  Param,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
-import { HelpMeBoardService } from '../services/help.me.board.service';
-import { BoardImagesService } from '../services/BoardImage.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { CreateHelpMeBoardImageDto } from '../dto/helpMeBoard/create.board-image.dto';
-import { ApiUploadHelpMeBoardImages } from '../swagger-decorators/helpMeBoard/add-help-me-board-images-decorator';
 import { ApiTags } from '@nestjs/swagger';
-import { ApiUpdateHelpMeBoardImage } from '../swagger-decorators/helpMeBoard/patch-help-me-board-images-decorators';
-import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
-import { GetUserId } from 'src/common/decorators/get-userId.decorator';
-import { ApiAddHelpMeBoard } from '../swagger-decorators/helpMeBoard/add-help-me-board-decorator';
-import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/create.help.me.board.dto';
-import { HelpMeBoard } from '../entities/help-me-board.entity';
-import { PageByHelpMeBoardResponseDTO } from '../dto/helpMeBoard/response.help.me.board.dto';
-import { JwtOptionalGuard } from 'src/config/guards/jwt-optional.guard';
-import { oneHelpMeBoardResponseDTO } from '../dto/helpMeBoard/one.response.help.me.board.dto';
-import { ApiGetOneHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-one-help-me-board.dto';
-import { ApiUpdateHelpMeBoard } from '../swagger-decorators/helpMeBoard/patch-help-me-board.decorator';
-import { ApiGetPageHelpMeBoards } from '../swagger-decorators/helpMeBoard/get-page-help-me-board.decorator';
-import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dto';
-import { HelpMeBoardResponseDTO } from '../dto/helpMeBoard/update.help.me.board.response.dto';
-import { ApiDeleteHelpMeBoard } from '../swagger-decorators/helpMeBoard/delete-help-me-board-decorator';
-import { ApiGetPageNumberByHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-board-page-number.decorator';
-import { PullingUpHelpMeBoardResponseDTO } from '../dto/helpMeBoard/pulling.up.response.dto';
-import { ApiGetPullingUpHelpMeBoard } from '../swagger-decorators/helpMeBoard/get-pulling-up-help-me-board-decorator';
-import { ApiPullingUpHelpMeBoard } from '../swagger-decorators/helpMeBoard/pulling-up-help-me-board.decorator';
+import { GetUserId } from '@src/common/decorators/get-userId.decorator';
+import { HelpYouCommentPageQueryDto } from '@src/comments/dto/help-you-comment-page-query.dto';
+import { HelpYouCommentPaginationResponseDto } from '@src/comments/dto/help-you-comment-pagination-response.dto';
+import { ApiFindAllHelpYouComments } from '@src/comments/swagger-decorators/find-all-help-you-comments.decorator';
+import { ParsePositiveIntPipe } from '@src/common/pipes/parse-positive-int.pipe';
+import { SuccessResponseInterceptor } from '@src/common/interceptors/success-response.interceptor';
+import {
+  AccessTokenAuthGuard,
+  AccessTokenOptionalAuthGuard,
+} from '@src/auth/jwt/jwt-auth.guard';
+import { CreateHelpMeBoardImageDto } from '@src/boards/dto/helpMeBoard/create.board-image.dto';
+import { CreateHelpMeBoardDto } from '@src/boards/dto/helpMeBoard/create.help.me.board.dto';
+import { HelpMeBoardPageQueryDto } from '@src/boards/dto/helpMeBoard/help-me-board-page-query.dto';
+import { HelpMeBoardPaginationResponseDto } from '@src/boards/dto/helpMeBoard/help-me-board-pagination-response.dto';
+import { oneHelpMeBoardResponseDTO } from '@src/boards/dto/helpMeBoard/one.response.help.me.board.dto';
+import { UpdateHelpMeBoardDto } from '@src/boards/dto/helpMeBoard/update.help.me.board.dto';
+import { HelpMeBoardResponseDTO } from '@src/boards/dto/helpMeBoard/update.help.me.board.response.dto';
+import { HelpMeBoard } from '@src/boards/entities/help-me-board.entity';
+import { BoardImagesService } from '@src/boards/services/BoardImage.service';
+import { HelpMeBoardService } from '@src/boards/services/help.me.board.service';
+import { ApiAddHelpMeBoard } from '@src/boards/swagger-decorators/helpMeBoard/add-help-me-board-decorator';
+import { ApiUploadHelpMeBoardImages } from '@src/boards/swagger-decorators/helpMeBoard/add-help-me-board-images-decorator';
+import { ApiDeleteHelpMeBoard } from '@src/boards/swagger-decorators/helpMeBoard/delete-help-me-board-decorator';
+import { ApiFindAllHelpMeBoards } from '@src/boards/swagger-decorators/helpMeBoard/find-all-help-me-boards.decorator';
+import { ApiGetPageNumberByHelpMeBoard } from '@src/boards/swagger-decorators/helpMeBoard/get-board-page-number.decorator';
+import { ApiGetOneHelpMeBoard } from '@src/boards/swagger-decorators/helpMeBoard/get-one-help-me-board.dto';
+import { ApiUpdateHelpMeBoardImage } from '@src/boards/swagger-decorators/helpMeBoard/patch-help-me-board-images-decorators';
+import { ApiUpdateHelpMeBoard } from '@src/boards/swagger-decorators/helpMeBoard/patch-help-me-board.decorator';
+import { ApiPullingUpHelpMeBoard } from '@src/boards/swagger-decorators/helpMeBoard/pulling-up-help-me-board.decorator';
 
-@Controller('help-me-board')
+/**
+ * 팀원과 상의되면 주석처리된 옵션도 걸어줌.
+ */
+@UsePipes(
+  new ValidationPipe({
+    transform: true,
+    whitelist: true,
+    forbidNonWhitelisted: true,
+  }),
+)
+@Controller('help-me-boards')
 @ApiTags('Help-me-board API')
 export class HelpMeBoardController {
   constructor(
@@ -45,7 +65,7 @@ export class HelpMeBoardController {
   ) {}
 
   @Post('')
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiAddHelpMeBoard()
   create(
     @GetUserId() userId: number,
@@ -55,7 +75,7 @@ export class HelpMeBoardController {
   }
 
   @Post('/images')
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @UseInterceptors(FilesInterceptor('files', 3))
   @ApiUploadHelpMeBoardImages()
   uploadImage(
@@ -70,32 +90,47 @@ export class HelpMeBoardController {
     );
   }
 
-  // --- 이 기능은 아직 프론트와 상의중인 기능입니다 ---
-  @Get('')
-  @ApiGetPageHelpMeBoards()
-  findPageBoards(
-    @Query('page') page = 1,
-    @Query('categoryId') categoryId: number,
-  ): Promise<{ data: PageByHelpMeBoardResponseDTO[] }> {
-    return this.helpMeBoardService.findPagedHelpMeBoards(page, categoryId);
-  }
-
+  /**
+   * @deprecated 추후 클라이언트 로직이 변경됨에 따라 사라질 api
+   */
   @Get('/page')
   @ApiGetPageNumberByHelpMeBoard()
   countPageBoards(@Query('categoryId') categoryId: number) {
     return this.helpMeBoardService.countPagedHelpMeBoards(categoryId);
   }
 
-  @Get('/pulling-up') //끌어올린 게시물 보여주기
-  @ApiGetPullingUpHelpMeBoard()
-  latestHelpMeBoard(
-    @Query('categoryId') categoryId: number,
-  ): Promise<{ data: PullingUpHelpMeBoardResponseDTO[] }> {
-    return this.helpMeBoardService.latestHelpMeBoards(categoryId);
+  @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
+  @Get()
+  @ApiFindAllHelpMeBoards()
+  findAllHelpMeBoard(
+    @Query() helpMeBoardPageQueryDto: HelpMeBoardPageQueryDto,
+  ): Promise<HelpMeBoardPaginationResponseDto> {
+    return this.helpMeBoardService.findAllHelpMeBoard(helpMeBoardPageQueryDto);
+  }
+
+  /**
+   * @todo 도와줄게요 댓글 컨트롤러의 prefix때문에 restful하게 api path를 짤 수가 없음.
+   * 추후 prefix 수정 후 comment 컨트롤러 쪽으로 분리
+   */
+  @ApiTags('help-you-comment API')
+  @Get(':helpMeBoardId/help-you-comments')
+  @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
+  @UseGuards(AccessTokenOptionalAuthGuard)
+  @ApiFindAllHelpYouComments()
+  findAllHelpYouComments(
+    @GetUserId() userId: number,
+    @Param('helpMeBoardId', ParsePositiveIntPipe) helpMeBoardId: number,
+    @Query() helpYouCommentPageQueryDto: HelpYouCommentPageQueryDto,
+  ): Promise<HelpYouCommentPaginationResponseDto> {
+    return this.helpMeBoardService.findAllHelpYouComments(
+      userId,
+      helpMeBoardId,
+      helpYouCommentPageQueryDto,
+    );
   }
 
   @Get('/unit') //하나의 게시판 불러오기
-  @UseGuards(JwtOptionalGuard)
+  @UseGuards(AccessTokenOptionalAuthGuard)
   @ApiGetOneHelpMeBoard()
   findOne(
     @Query('boardId') boardId: number,
@@ -105,7 +140,7 @@ export class HelpMeBoardController {
   }
 
   @Patch('')
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiUpdateHelpMeBoard()
   editBoard(
     @GetUserId() userId: number,
@@ -117,7 +152,7 @@ export class HelpMeBoardController {
 
   @Patch('/pulling-up')
   @ApiPullingUpHelpMeBoard()
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   pullingUpHelpMeBoard(
     @GetUserId() userId: number,
     @Query('helpMeBoardId') boardId: number,
@@ -126,7 +161,7 @@ export class HelpMeBoardController {
   }
 
   @Patch('/images')
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiUpdateHelpMeBoardImage()
   @UseInterceptors(FilesInterceptor('files', 3))
   async editBoardImages(
@@ -144,7 +179,7 @@ export class HelpMeBoardController {
   }
 
   @Delete('')
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiDeleteHelpMeBoard()
   deleteBoard(
     @Query('helpMeBoardId') boardId: number,

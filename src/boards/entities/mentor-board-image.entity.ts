@@ -1,3 +1,4 @@
+import { MentorBoard } from '@src/boards/entities/mentor-board.entity';
 import {
   Column,
   Entity,
@@ -5,7 +6,6 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { MentorBoard } from './mentor-board.entity';
 
 @Entity({ name: 'mentor_board_image' })
 export class MentorBoardImage {

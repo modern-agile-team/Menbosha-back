@@ -1,5 +1,6 @@
+import { UserRole } from '@src/users/constants/user-role.enum';
+import { UserInfoDto } from '@src/users/dtos/user-info.dto';
 import { Exclude } from 'class-transformer';
-import { UserInfoDto } from './user-info.dto';
 
 export class MyProfileResponseDTO extends UserInfoDto {
   constructor(myProfileResponseDto: Partial<MyProfileResponseDTO> = {}) {
@@ -7,5 +8,5 @@ export class MyProfileResponseDTO extends UserInfoDto {
   }
 
   @Exclude()
-  admin: boolean;
+  role: UserRole;
 }

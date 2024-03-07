@@ -1,0 +1,4 @@
+export const ADMIN_ERROR_CODE = {
+  ADMIN_ONLY_ACCESS: 9001,
+  DENIED_FOR_ADMINS: 9002,
+} as const;

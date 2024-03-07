@@ -1,33 +1,48 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { TokenRepository } from '../repositories/token.repository';
-import * as jwt from 'jsonwebtoken';
 import axios from 'axios';
-import { RedisService } from 'src/common/redis/redis.service';
+import { JwtService } from '@nestjs/jwt';
+import { RedisService } from '@src/common/redis/redis.service';
+import { Ttl } from '@src/common/redis/ttl.enum';
+import { TokenPayload } from '@src/auth/interfaces/token-payload.interface';
+import { TokenRepository } from '@src/auth/repositories/token.repository';
 
 @Injectable()
 export class TokenService {
   constructor(
     private readonly tokenRepository: TokenRepository,
+    private readonly jwtService: JwtService,
     private readonly redisService: RedisService,
   ) {}
 
   async getUserTokens(userId: number) {
-    const getUserTokens = await this.tokenRepository.getUserTokens(userId);
-    if (getUserTokens.length <= 0) {
+    const getUserTokens = await this.tokenRepository.getUserToken(userId);
+    if (!getUserTokens) {
       throw new HttpException('토큰을 찾을 수 없습니다.', HttpStatus.NOT_FOUND);
     }
-    return getUserTokens[0];
+    return getUserTokens;
   }
 
   async saveTokens(
     userId: number,
+    accessToken: string,
     refreshToken: string,
     socialAccessToken: string,
     socialRefreshToken: string,
   ) {
-    const tokens = await this.tokenRepository.getUserTokens(userId);
+    await this.redisService.setToken(
+      String(userId) + '-accessToken',
+      accessToken,
+      Ttl.accessToken,
+    );
+    await this.redisService.setToken(
+      String(userId) + '-refreshToken',
+      refreshToken,
+      Ttl.refreshToken,
+    );
 
-    if (tokens.length > 0) {
+    const tokens = await this.tokenRepository.getUserToken(userId);
+
+    if (tokens) {
       return await this.tokenRepository.updateTokens(
         userId,
         refreshToken,
@@ -115,6 +130,10 @@ export class TokenService {
 
   async deleteTokens(userId: number) {
     try {
+      await this.redisService.delTokens([
+        `${userId}-accessToken`,
+        `${userId}-refreshToken`,
+      ]);
       await this.tokenRepository.deleteTokens(userId);
 
       return { message: '토큰 삭제 성공' };
@@ -123,80 +142,38 @@ export class TokenService {
     }
   }
 
-  async verifyToken(token: string) {
-    try {
-      const jwtSecretKey = process.env.JWT_SECRET_KEY;
-      const userId = jwt.verify(token, jwtSecretKey)['userId'];
-      const tokenType = jwt.verify(token, jwtSecretKey)['sub'];
-      if (tokenType === 'refreshToken') {
-        const rrt = await this.redisService.getToken(String(userId)); // RedisRefreshToken
-
-        if (token !== rrt) {
-          throw new HttpException(
-            '토큰을 찾을 수 없습니다.',
-            HttpStatus.NOT_FOUND,
-          );
-        }
-      }
-      return { message: '유효한 토큰입니다.' };
-    } catch (error) {
-      if (
-        error.message == 'jwt expired' ||
-        error.message == 'invalid signature'
-      ) {
-        throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
-      } else if (
-        error.message == 'invalid token' ||
-        error.message == 'jwt must be provided'
-      ) {
-        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-      } else {
-        console.log(error);
-        throw new HttpException('jwt error', HttpStatus.BAD_REQUEST);
-      }
-    }
-  }
-
-  async decodeToken(token: string) {
-    await this.verifyToken(token);
-    const payload = jwt.decode(token);
-    const userId = payload['userId'];
-    return userId;
-  }
-
-  async createAccessToken(userId: number) {
-    const jwtSecretKey = process.env.JWT_SECRET_KEY;
-    const payload = {
+  generateAccessToken(userId: number) {
+    const payload: TokenPayload = {
       sub: 'accessToken',
       userId,
-      // exp: Math.floor(Date.now() / 1000) + 60 * 60, // 1시간
-      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30, // 30일 (개발용)
     };
 
-    const accessToken = jwt.sign(payload, jwtSecretKey);
-
-    return accessToken;
+    return this.jwtService.sign(payload, {
+      expiresIn: '6h',
+      secret: process.env.JWT_ACCESSTOKEN_SECRET_KEY,
+    });
   }
 
-  async createRefreshToken(userId: number) {
-    const jwtSecretKey = process.env.JWT_SECRET_KEY;
-    const payload = {
+  async generateNewAccessToken(userId: number) {
+    const newAccessToken = this.generateAccessToken(userId);
+    await this.redisService.setToken(
+      String(userId) + '-accessToken',
+      newAccessToken,
+      Ttl.accessToken,
+    );
+
+    return { accessToken: newAccessToken };
+  }
+
+  generateRefreshToken(userId: number) {
+    const payload: TokenPayload = {
       sub: 'refreshToken',
       userId,
-      // exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, // 7일
-      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30 * 3, // 90일 (개발용)
     };
-    const refreshToken = jwt.sign(payload, jwtSecretKey);
 
-    return refreshToken;
-  }
-
-  async newAccessToken(refreshToken: string) {
-    const jwtSecretKey = process.env.JWT_SECRET_KEY;
-    const payload = jwt.verify(refreshToken, jwtSecretKey);
-
-    const userId = payload['userId'];
-    const newAccessToken = await this.createAccessToken(userId);
-    return newAccessToken;
+    return this.jwtService.sign(payload, {
+      expiresIn: '7d',
+      secret: process.env.JWT_REFRESHTOKEN_SECRET_KEY,
+    });
   }
 }

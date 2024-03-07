@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { CreateHelpMeBoardImageDto } from '@src/boards/dto/helpMeBoard/create.board-image.dto';
+import { CreateMentorBoardImageDto } from '@src/boards/dto/mentorBoard/create.mentor.board.image.dto';
+import { HelpMeBoardImage } from '@src/boards/entities/help-me-board-image.entity';
+import { MentorBoardImage } from '@src/boards/entities/mentor-board-image.entity';
 import { EntityManager } from 'typeorm';
-import { HelpMeBoardImage } from '../entities/help-me-board-image.entity';
-import { CreateHelpMeBoardImageDto } from '../dto/helpMeBoard/create.board-image.dto';
-import { CreateMentorBoardImageDto } from '../dto/mentorBoard/create.mentor.board.image.dto';
-import { MentorBoardImage } from '../entities/mentor-board-image.entity';
 
 @Injectable()
 export class BoardImageRepository {
@@ -22,18 +22,14 @@ export class BoardImageRepository {
     return savedImage;
   }
 
-  async saveMentorBoardImage(
+  saveMentorBoardImage(
     boardImage: CreateMentorBoardImageDto,
   ): Promise<MentorBoardImage> {
-    const newBoardImage = new MentorBoardImage();
-    newBoardImage.mentorBoardId = boardImage.mentorBoardId;
-    newBoardImage.imageUrl = boardImage.imageUrl;
-    const savedImage = await this.entityManager.save(
-      MentorBoardImage,
-      newBoardImage,
-    );
-    return savedImage;
+    return this.entityManager.save(MentorBoardImage, {
+      ...boardImage,
+    });
   }
+
   async getBoardImages(boardId: number): Promise<HelpMeBoardImage[]> {
     return this.entityManager.find(HelpMeBoardImage, {
       where: { helpMeBoardId: boardId },

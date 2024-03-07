@@ -1,11 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { RequiredLikeColumn } from '../types/like.type';
-import { LIKE_REPOSITORY_TOKEN } from '../constants/like.token';
+import { LIKE_REPOSITORY_TOKEN } from '@src/like/constants/like.token';
+import { RequiredLikeColumn } from '@src/like/types/like.type';
 import {
   DeepPartial,
   DeleteResult,
   EntityManager,
   FindManyOptions,
+  FindOneOptions,
   FindOptionsWhere,
   Repository,
 } from 'typeorm';
@@ -17,11 +18,19 @@ export class LikesRepository<E extends RequiredLikeColumn> {
     private readonly LikeRepository: Repository<E>,
   ) {}
 
-  isExistLike(parentId: number, userId: number) {
+  isExistLike(parentId: number, userId: number): Promise<boolean> {
     return this.LikeRepository.exists({
-      parentId,
-      userId,
+      where: {
+        parentId,
+        userId,
+      },
     } as FindManyOptions<E>);
+  }
+
+  isExistLikeBy(id: number): Promise<boolean> {
+    return this.LikeRepository.existsBy({
+      id,
+    } as FindOptionsWhere<E>);
   }
 
   createLike(parentId: number, userId: number): Promise<E> {
@@ -44,6 +53,10 @@ export class LikesRepository<E extends RequiredLikeColumn> {
 
   findLikes(options: FindManyOptions<E>): Promise<E[]> {
     return this.LikeRepository.find({ options } as FindManyOptions<E>);
+  }
+
+  findOneLike(options: FindOneOptions<E>): Promise<E> {
+    return this.LikeRepository.findOne(options);
   }
 
   async deleteLike(parentId: number, userId: number): Promise<void> {

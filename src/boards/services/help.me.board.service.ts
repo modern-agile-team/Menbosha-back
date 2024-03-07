@@ -3,18 +3,26 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { HelpMeBoardRepository } from '../repository/help.me.board.repository';
-import { oneHelpMeBoardResponseDTO } from '../dto/helpMeBoard/one.response.help.me.board.dto';
-import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/create.help.me.board.dto';
-import { HelpMeBoard } from '../entities/help-me-board.entity';
-import { PageByHelpMeBoardResponseDTO } from '../dto/helpMeBoard/response.help.me.board.dto';
-import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dto';
-import { HelpMeBoardResponseDTO } from '../dto/helpMeBoard/update.help.me.board.response.dto';
-import { PullingUpHelpMeBoardResponseDTO } from '../dto/helpMeBoard/pulling.up.response.dto';
+import { CategoryService } from '@src/category/services/category.service';
+import { HelpYouCommentPageQueryDto } from '@src/comments/dto/help-you-comment-page-query.dto';
+import { HelpYouCommentWithUserAndUserImageDto } from '@src/comments/dto/help-you-comment-with-user-and-user-image.dto';
+import { HelpYouCommentPaginationResponseDto } from '@src/comments/dto/help-you-comment-pagination-response.dto';
+import { CreateHelpMeBoardDto } from '@src/boards/dto/helpMeBoard/create.help.me.board.dto';
+import { HelpMeBoardPageQueryDto } from '@src/boards/dto/helpMeBoard/help-me-board-page-query.dto';
+import { HelpMeBoardPaginationResponseDto } from '@src/boards/dto/helpMeBoard/help-me-board-pagination-response.dto';
+import { HelpMeBoardWithUserAndImagesDto } from '@src/boards/dto/helpMeBoard/help-me-board-with-user-and-images.dto';
+import { oneHelpMeBoardResponseDTO } from '@src/boards/dto/helpMeBoard/one.response.help.me.board.dto';
+import { UpdateHelpMeBoardDto } from '@src/boards/dto/helpMeBoard/update.help.me.board.dto';
+import { HelpMeBoardResponseDTO } from '@src/boards/dto/helpMeBoard/update.help.me.board.response.dto';
+import { HelpMeBoard } from '@src/boards/entities/help-me-board.entity';
+import { HelpMeBoardRepository } from '@src/boards/repository/help.me.board.repository';
 
 @Injectable()
 export class HelpMeBoardService {
-  constructor(private helpMeBoardRepository: HelpMeBoardRepository) {}
+  constructor(
+    private readonly helpMeBoardRepository: HelpMeBoardRepository,
+    private readonly categoryService: CategoryService,
+  ) {}
   async create(
     boardData: CreateHelpMeBoardDto,
     userId: number,
@@ -36,43 +44,79 @@ export class HelpMeBoardService {
     return { total, totalPage };
   }
 
-  // -----이 기능은 프론트와 상의중인 기능입니다 -----
-  async findPagedHelpMeBoards(
-    page: number,
-    categoryId: number,
-  ): Promise<{ data: PageByHelpMeBoardResponseDTO[] }> {
-    const limit = 10;
-    const skip = (page - 1) * limit;
-    const boards = categoryId // 예외처리 - categoryId가 들어올 경우
-      ? await this.helpMeBoardRepository.findPagedBoardsByCategoryId(
-          skip,
-          limit,
-          categoryId,
-        )
-      : await this.helpMeBoardRepository.findPageByHelpMeBoards(skip, limit);
+  async findAllHelpMeBoard(
+    helpMeBoardPageQueryDto: HelpMeBoardPageQueryDto,
+  ): Promise<HelpMeBoardPaginationResponseDto> {
+    const { page, pageSize, orderField, sortOrder, ...filter } =
+      helpMeBoardPageQueryDto;
 
-    const boardResponse: PageByHelpMeBoardResponseDTO[] = await Promise.all(
-      boards.map(async (board) => {
-        return {
-          id: board.id,
-          head: board.head,
-          body: board.body.substring(0, 30),
-          createdAt: board.createdAt,
-          updatedAt: board.updatedAt,
-          category: board.categoryId,
-          user: {
-            name: board.user.name,
-            userImage: board.user.userImage ? board.user.userImage : [],
-          },
-          helpMeBoardImages: (board.helpMeBoardImages || []).map((image) => ({
-            id: image.id,
-            imageUrl: image.imageUrl,
-          })),
-        };
-      }),
+    const category = await this.categoryService.findOneCategoryOrNotFound(
+      filter.categoryId,
     );
 
-    return { data: boardResponse };
+    filter.categoryId = category.id;
+
+    const skip = (page - 1) * pageSize;
+
+    const [helpMeBoards, totalCount] =
+      await this.helpMeBoardRepository.findAllHelpMeBoardsByQueryBuilder(
+        skip,
+        pageSize,
+        orderField,
+        sortOrder,
+        filter,
+      );
+
+    const helpMeBoardWithUserAndImagesDtos = helpMeBoards.map((helpMeBoard) => {
+      return new HelpMeBoardWithUserAndImagesDto(helpMeBoard);
+    });
+
+    return new HelpMeBoardPaginationResponseDto(
+      helpMeBoardWithUserAndImagesDtos,
+      totalCount,
+      page,
+      pageSize,
+    );
+  }
+
+  async findAllHelpYouComments(
+    myId: number,
+    helpMeBoardId: number,
+    helpYouCommentPageQueryDto: HelpYouCommentPageQueryDto,
+  ): Promise<HelpYouCommentPaginationResponseDto> {
+    const helpMeBoard =
+      await this.helpMeBoardRepository.findOneHelpMeBoardBy(helpMeBoardId);
+
+    if (!helpMeBoard) {
+      throw new NotFoundException('해당 글이 존재하지 않습니다.');
+    }
+
+    const { page, pageSize, orderField, sortOrder, ...filter } =
+      helpYouCommentPageQueryDto;
+
+    const skip = (page - 1) * pageSize;
+
+    const [helpYouComments, totalCount] =
+      await this.helpMeBoardRepository.findAllHelpYouCommentsByQueryBuilder(
+        helpMeBoard.id,
+        skip,
+        pageSize,
+        orderField,
+        sortOrder,
+        filter,
+      );
+
+    const helpYouCommentsWithUserAndUserImageDto = helpYouComments.map(
+      (helpYouComment) =>
+        new HelpYouCommentWithUserAndUserImageDto(helpYouComment, myId),
+    );
+
+    return new HelpYouCommentPaginationResponseDto(
+      helpYouCommentsWithUserAndUserImageDto,
+      totalCount,
+      page,
+      pageSize,
+    );
   }
 
   async findOneHelpMeBoard(
@@ -101,41 +145,6 @@ export class HelpMeBoardService {
       })),
       unitOwner: unitOwner,
     };
-  }
-
-  async latestHelpMeBoards(categoryId: number) {
-    const limit = 8;
-    const boards = categoryId
-      ? await this.helpMeBoardRepository.findLatestBoardsByCategoryId(
-          limit,
-          categoryId,
-        )
-      : await this.helpMeBoardRepository.findLatestBoards(limit);
-    if (!boards) {
-      throw new NotFoundException('게시물을 찾을 수 없습니다');
-    }
-    const pullingUpBoardsResponse: PullingUpHelpMeBoardResponseDTO[] =
-      await Promise.all(
-        boards.map(async (board) => {
-          return {
-            id: board.id,
-            head: board.head,
-            body: board.body.substring(0, 30),
-            pullingUp: board.pullingUp,
-            category: board.categoryId,
-            user: {
-              name: board.user.name,
-              userImage: board.user.userImage ? board.user.userImage : [],
-            },
-            helpMeBoardImages: (board.helpMeBoardImages || []).map((image) => ({
-              id: image.id,
-              imageUrl: image.imageUrl,
-            })),
-          };
-        }),
-      );
-
-    return { data: pullingUpBoardsResponse };
   }
 
   async updateBoard(

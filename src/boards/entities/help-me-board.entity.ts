@@ -1,8 +1,8 @@
-import { User } from 'src/users/entities/user.entity';
-import { HelpMeBoardImage } from './help-me-board-image.entity';
+import { User } from '@src/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   Index,
   JoinColumn,
@@ -11,7 +11,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { CategoryList } from 'src/category/entity/category-list.entity';
+import { CategoryList } from '@src/category/entity/category-list.entity';
+import { HelpMeBoardImage } from '@src/boards/entities/help-me-board-image.entity';
 
 @Entity({
   name: 'help_me_board',
@@ -51,6 +52,13 @@ export class HelpMeBoard {
 
   @Column({ name: 'pulling_up', nullable: true, comment: '끌어올리기 된 일자' })
   pullingUp: Date | null;
+
+  @DeleteDateColumn({
+    name: 'deleted_at',
+    nullable: true,
+    comment: '삭제 일자',
+  })
+  deletedAt: Date | null;
 
   @Column({ name: 'category_list_id' })
   categoryId: number;

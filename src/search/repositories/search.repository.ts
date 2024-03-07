@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { HelpMeBoardImage } from 'src/boards/entities/help-me-board-image.entity';
-import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
-import { User } from 'src/users/entities/user.entity';
+import { HelpMeBoardImage } from '@src/boards/entities/help-me-board-image.entity';
+import { HelpMeBoard } from '@src/boards/entities/help-me-board.entity';
+import { SearchAllHelpMeBoardDto } from '@src/search/dtos/search-all-help-me-board.dto';
+import { SearchAllMentorDto } from '@src/search/dtos/search-all-mentor.dto';
+import { User } from '@src/users/entities/user.entity';
 import { EntityManager } from 'typeorm';
-import { SearchAllHelpMeBoardDto } from '../dtos/search-all-help-me-board.dto';
-import { SearchAllMentorDto } from '../dtos/search-all-mentor.dto';
 
 /**
  * @todo 나중에 setParameter, forEach를 통해서 코드를 간소화 할 수 있을 것 같음
@@ -104,8 +104,8 @@ export class SearchRepository {
           'user.name',
           'user.isMentor',
           'userImage.imageUrl',
-          'userIntro.mainField',
-          'userIntro.introduce',
+          'userIntro.customCategory',
+          'userIntro.shortIntro',
         ])
         .where('MATCH(name) AGAINST (:searchQuery IN BOOLEAN MODE)', {
           searchQuery,

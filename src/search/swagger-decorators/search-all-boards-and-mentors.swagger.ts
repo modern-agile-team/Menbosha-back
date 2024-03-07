@@ -6,8 +6,8 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { SearchAllHelpMeBoardDto } from '../dtos/search-all-help-me-board.dto';
-import { SearchAllMentorDto } from '../dtos/search-all-mentor.dto';
+import { SearchAllHelpMeBoardDto } from '@src/search/dtos/search-all-help-me-board.dto';
+import { SearchAllMentorDto } from '@src/search/dtos/search-all-mentor.dto';
 
 export function ApiSearchAllBoardsAndMentors() {
   return applyDecorators(
@@ -51,6 +51,7 @@ export function ApiSearchAllBoardsAndMentors() {
           example: {
             message: [
               'page must not be less than 1',
+              'pageSize must not be less than 1',
               'searchQuery must be longer than or equal to 2 characters',
             ],
             error: 'Bad Request',

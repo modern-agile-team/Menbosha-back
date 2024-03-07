@@ -1,21 +1,19 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { HelpYouComment } from './entities/help-you-comment.entity';
-import { CommentsController } from './controllers/comments.controller';
-import { CommentsService } from './services/comments.services';
-import { TokenService } from 'src/auth/services/token.service';
-import { CommentsRepository } from './repository/comments.repository';
-import { TokenRepository } from 'src/auth/repositories/token.repository';
-import { RedisModule } from 'src/common/redis/redis.module';
+import { RedisModule } from '@src/common/redis/redis.module';
+import { AuthModule } from '@src/auth/auth.module';
+import { CommentsController } from '@src/comments/controllers/comments.controller';
+import { HelpYouComment } from '@src/comments/entities/help-you-comment.entity';
+import { CommentsRepository } from '@src/comments/repository/comments.repository';
+import { CommentsService } from '@src/comments/services/comments.services';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([HelpYouComment]), RedisModule],
-  controllers: [CommentsController],
-  providers: [
-    CommentsService,
-    CommentsRepository,
-    TokenService,
-    TokenRepository,
+  imports: [
+    TypeOrmModule.forFeature([HelpYouComment]),
+    RedisModule,
+    AuthModule,
   ],
+  controllers: [CommentsController],
+  providers: [CommentsService, CommentsRepository],
 })
 export class CommentModule {}

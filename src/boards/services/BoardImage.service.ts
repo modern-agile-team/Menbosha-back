@@ -1,15 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { BoardImageRepository } from '../repository/boardImage.repository';
-import { S3Service } from '../../common/s3/s3.service';
-import { CreateHelpMeBoardImageDto } from '../dto/helpMeBoard/create.board-image.dto';
-import { HelpMeBoardImage } from '../entities/help-me-board-image.entity';
-import { CreateMentorBoardImageDto } from '../dto/mentorBoard/create.mentor.board.image.dto';
+import { CreateHelpMeBoardImageDto } from '@src/boards/dto/helpMeBoard/create.board-image.dto';
+import { CreateMentorBoardImageDto } from '@src/boards/dto/mentorBoard/create.mentor.board.image.dto';
+import { HelpMeBoardImage } from '@src/boards/entities/help-me-board-image.entity';
+import { BoardImageRepository } from '@src/boards/repository/boardImage.repository';
+import { MentorBoardService } from '@src/boards/services/mentor.board.service';
+import { S3Service } from '@src/common/s3/s3.service';
 
 @Injectable()
 export class BoardImagesService {
   constructor(
     private readonly s3Service: S3Service,
     private readonly boardImageRepository: BoardImageRepository,
+    private readonly mentorBoardService: MentorBoardService,
   ) {}
 
   async createHelpMeBoardImages(
@@ -39,6 +41,12 @@ export class BoardImagesService {
     files: Express.Multer.File[],
     userId: number,
   ): Promise<CreateMentorBoardImageDto[]> {
+    const existMentorBoard = await this.mentorBoardService.findOneByOrNotFound({
+      where: {
+        id: boardId,
+      },
+    });
+
     const savedImagesArray: CreateMentorBoardImageDto[] = [];
     for (const file of files) {
       const uploadedImage = await this.s3Service.uploadImage(
@@ -47,12 +55,14 @@ export class BoardImagesService {
         'MentorBoardImages',
       );
       const mentorBoardImage = new CreateMentorBoardImageDto();
-      mentorBoardImage.mentorBoardId = boardId;
+      mentorBoardImage.mentorBoardId = existMentorBoard.id;
       mentorBoardImage.imageUrl = uploadedImage.url;
+
       const savedImage =
         await this.boardImageRepository.saveMentorBoardImage(mentorBoardImage);
       savedImagesArray.push(savedImage);
     }
+
     return savedImagesArray;
   }
 

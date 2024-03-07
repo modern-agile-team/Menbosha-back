@@ -6,9 +6,9 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { COMMON_ERROR_CODE } from 'src/constants/error/common/common-error-code.constant';
-import { HttpInternalServerErrorException } from '../exceptions/http-internal-server-error.exception';
-import { HttpExceptionService } from '../services/http-exception.service';
+import { COMMON_ERROR_CODE } from '@src/constants/error/common/common-error-code.constant';
+import { HttpExceptionService } from '@src/http-exceptions/services/http-exception.service';
+import { HttpInternalServerErrorException } from '@src/http-exceptions/exceptions/http-internal-server-error.exception';
 
 /**
  * 다른 exception filter 가 잡지않는 exception 을 잡는 필터

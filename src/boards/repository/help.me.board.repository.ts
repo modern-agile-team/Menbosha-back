@@ -1,12 +1,26 @@
 import { EntityManager } from 'typeorm';
 import { Injectable } from '@nestjs/common';
-import { CreateHelpMeBoardDto } from '../dto/helpMeBoard/create.help.me.board.dto';
-import { HelpMeBoard } from '../entities/help-me-board.entity';
-import { UpdateHelpMeBoardDto } from '../dto/helpMeBoard/update.help.me.board.dto';
+import { SortOrder } from '@src/common/constants/sort-order.enum';
+import { QueryBuilderHelper } from '@src/helpers/query-builder.helper';
+import { HelpYouCommentOrderField } from '@src/comments/constants/help-you-comment-order-field.enum';
+import { HelpYouComment } from '@src/comments/entities/help-you-comment.entity';
+import { HelpMeBoardOrderField } from '@src/boards/constants/help-me-board-order-field.enum';
+import { CreateHelpMeBoardDto } from '@src/boards/dto/helpMeBoard/create.help.me.board.dto';
+import { HelpMeBoardDto } from '@src/boards/dto/helpMeBoard/help-me-board.dto';
+import { UpdateHelpMeBoardDto } from '@src/boards/dto/helpMeBoard/update.help.me.board.dto';
+import { HelpMeBoard } from '@src/boards/entities/help-me-board.entity';
 
 @Injectable()
 export class HelpMeBoardRepository {
-  constructor(private readonly entityManager: EntityManager) {}
+  private readonly FULL_TEXT_SEARCH_FIELD: readonly (keyof Pick<
+    HelpMeBoardDto,
+    'head' | 'body'
+  >)[] = ['head', 'body'];
+
+  constructor(
+    private readonly entityManager: EntityManager,
+    private readonly queryBuilderHelper: QueryBuilderHelper,
+  ) {}
 
   async createBoard(
     boardData: CreateHelpMeBoardDto,
@@ -30,28 +44,10 @@ export class HelpMeBoardRepository {
     return this.entityManager.count(HelpMeBoard);
   }
 
-  async findPagedBoardsByCategoryId(
-    skip: number,
-    limit: number,
-    categoryId: number,
-  ): Promise<HelpMeBoard[]> {
-    return await this.entityManager.find(HelpMeBoard, {
-      relations: ['user', 'user.userImage', 'helpMeBoardImages'],
-      where: { categoryId },
-      skip: skip,
-      take: limit,
-    });
-  }
-
-  async findPageByHelpMeBoards(
-    skip: number,
-    limit: number,
-  ): Promise<HelpMeBoard[]> {
-    return await this.entityManager.find(HelpMeBoard, {
-      relations: ['user', 'user.userImage', 'helpMeBoardImages'],
-      skip: skip,
-      take: limit,
-    });
+  findOneHelpMeBoardBy(helpMeBoardId: number) {
+    return this.entityManager
+      .getRepository(HelpMeBoard)
+      .findOneBy({ id: helpMeBoardId });
   }
 
   async findHelpMeBoardById(id: number): Promise<HelpMeBoard> {
@@ -61,24 +57,107 @@ export class HelpMeBoardRepository {
     });
   }
 
-  async findLatestBoardsByCategoryId(
-    limit: number,
-    categoryId: number,
-  ): Promise<HelpMeBoard[]> {
-    return await this.entityManager.find(HelpMeBoard, {
-      relations: ['user', 'user.userImage', 'helpMeBoardImages'],
-      where: { categoryId: categoryId },
-      order: { pullingUp: 'DESC' },
-      take: limit,
-    });
+  findAllHelpMeBoardsByQueryBuilder(
+    skip: number,
+    pageSize: number,
+    orderField: HelpMeBoardOrderField,
+    sortOrder: SortOrder,
+    filter: {
+      id?: number;
+      userId?: number;
+      head?: string;
+      body?: string;
+      categoryId: number;
+      loadOnlyPullingUp: boolean;
+    },
+  ) {
+    const queryBuilder = this.entityManager
+      .getRepository(HelpMeBoard)
+      .createQueryBuilder('helpMeBoard')
+      .leftJoin(
+        'helpMeBoard.helpMeBoardImages',
+        'helpMeBoardImages',
+        'helpMeBoardImages.id = (SELECT id FROM help_me_board_image WHERE help_me_board_id = helpMeBoard.id ORDER BY id DESC LIMIT 1)',
+      )
+      .innerJoin('helpMeBoard.user', 'user')
+      .innerJoin('user.userImage', 'userImage')
+      .select([
+        'helpMeBoard.id',
+        'helpMeBoard.userId',
+        'helpMeBoard.head',
+        'helpMeBoard.body',
+        'helpMeBoard.categoryId',
+        'helpMeBoard.createdAt',
+        'helpMeBoard.updatedAt',
+        'helpMeBoard.pullingUp',
+        'user.name',
+        'userImage.imageUrl',
+        'helpMeBoardImages.id',
+        'helpMeBoardImages.imageUrl',
+      ]);
+
+    this.queryBuilderHelper.buildWherePropForFind(
+      queryBuilder,
+      filter,
+      'helpMeBoard',
+      this.FULL_TEXT_SEARCH_FIELD,
+    );
+
+    this.queryBuilderHelper.buildOrderByPropForFind(
+      queryBuilder,
+      'helpMeBoard',
+      orderField,
+      sortOrder,
+    );
+
+    return queryBuilder.skip(skip).take(pageSize).getManyAndCount();
   }
 
-  async findLatestBoards(limit: number): Promise<HelpMeBoard[]> {
-    return await this.entityManager.find(HelpMeBoard, {
-      relations: ['user', 'user.userImage', 'helpMeBoardImages'],
-      order: { pullingUp: 'DESC' },
-      take: limit,
-    });
+  findAllHelpYouCommentsByQueryBuilder(
+    helpMeBoardId: number,
+    skip: number,
+    pageSize: number,
+    orderField: HelpYouCommentOrderField,
+    sortOrder: SortOrder,
+    filter: {
+      id?: number;
+      userId?: number;
+    },
+  ) {
+    const queryBuilder = this.entityManager
+      .getRepository(HelpYouComment)
+      .createQueryBuilder('helpYouComment')
+      .innerJoin('helpYouComment.user', 'user')
+      .innerJoin('user.userImage', 'userImage')
+      .leftJoin('user.userIntro', 'userIntro')
+      .select([
+        'helpYouComment.id',
+        'helpYouComment.userId',
+        'helpYouComment.helpMeBoardId',
+        'helpYouComment.createdAt',
+        'user.name',
+        'user.rank',
+        'user.activityCategoryId',
+        'userImage.imageUrl',
+        'userIntro.shortIntro',
+        'userIntro.career',
+      ])
+      .where({ helpMeBoardId });
+
+    this.queryBuilderHelper.buildWherePropForFind(
+      queryBuilder,
+      filter,
+      'helpYouComment',
+    );
+
+    this.queryBuilderHelper.buildOrderByPropForFind(
+      queryBuilder,
+      'helpYouComment',
+      orderField,
+      sortOrder,
+    );
+
+    return queryBuilder.skip(skip).take(pageSize).getManyAndCount();
   }
 
   async pullingUpHelpMeBoard(board: HelpMeBoard): Promise<void> {

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { SearchRepository } from '../repositories/search.repository';
-import { SearchAllPageSizeDto } from '../dtos/search-all-page-size.dto';
+import { SearchAllBoardsAndMentorsQueryDto } from '@src/search/dtos/search-all-boards-and-mentors-query.dto';
+import { SearchAllHelpMeBoardDto } from '@src/search/dtos/search-all-help-me-board.dto';
+import { SearchAllMentorDto } from '@src/search/dtos/search-all-mentor.dto';
+import { SearchAllPageSizeDto } from '@src/search/dtos/search-all-page-size.dto';
+import { SearchRepository } from '@src/search/repositories/search.repository';
 import { plainToInstance } from 'class-transformer';
-import { SearchAllBoardsAndMentorsQueryDto } from '../dtos/search-all-boards-and-mentors-query.dto';
-import { SearchAllHelpMeBoardDto } from '../dtos/search-all-help-me-board.dto';
-import { SearchAllMentorDto } from '../dtos/search-all-mentor.dto';
 
 @Injectable()
 export class SearchService {

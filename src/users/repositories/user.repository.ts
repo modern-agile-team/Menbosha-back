@@ -1,11 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import {
-  DeleteResult,
   EntityManager,
   FindManyOptions,
   FindOneOptions,
+  UpdateResult,
 } from 'typeorm';
-import { User } from '../entities/user.entity';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { Provider } from '@src/auth/enums/provider.enum';
+import { UserInfo } from '@src/auth/interfaces/user-info.interface';
+import { User } from '@src/users/entities/user.entity';
 
 @Injectable()
 export class UserRepository {
@@ -15,16 +18,44 @@ export class UserRepository {
     return this.entityManager.getRepository(User).find(options);
   }
 
-  async getUserInfo(userId: number): Promise<User> {
-    const user = await this.entityManager.findOne(User, {
+  getUser(userId: number): Promise<User> {
+    return this.entityManager.findOne(User, {
       where: { id: userId },
     });
+  }
 
-    if (!user) {
-      throw new NotFoundException('사용자를 찾을 수 없습니다.');
-    }
-
-    return user;
+  getUserInfo(userId: number) {
+    return this.entityManager
+      .getRepository(User)
+      .createQueryBuilder('user')
+      .leftJoin('user.userImage', 'userImage')
+      .leftJoin('user.userIntro', 'userIntro')
+      .leftJoin('user.userBadge', 'userBadge')
+      .leftJoin('user.totalCount', 'totalCount')
+      .select([
+        'user.id',
+        'user.name',
+        'user.rank',
+        'user.phone',
+        'user.hopeCategoryId',
+        'user.activityCategoryId',
+        'user.createdAt',
+        'user.updatedAt',
+        'user.isMentor',
+        'userBadge.badgeId',
+        'userBadge.createdAt',
+        'userImage.imageUrl',
+        'userIntro.shortIntro',
+        'userIntro.career',
+        'userIntro.customCategory',
+        'userIntro.detail',
+        'userIntro.portfolio',
+        'userIntro.sns',
+        'totalCount.mentorBoardCount',
+        'totalCount.reviewCount',
+      ])
+      .where('user.id = :userId', { userId })
+      .getOne();
   }
 
   async getUserRank(userId: number): Promise<number> {
@@ -36,81 +67,95 @@ export class UserRepository {
     ).rank;
   }
 
-  async findUser(email: string, provider: string): Promise<User | undefined> {
-    return this.entityManager.findOne(User, { where: { email, provider } });
+  findUser(uniqueId: string, provider: Provider): Promise<User | null> {
+    return this.entityManager.findOne(User, { where: { uniqueId, provider } });
   }
 
-  async createUser(userInfo: any): Promise<User> {
-    const user = new User();
-    user.provider = userInfo.provider;
-    user.name = userInfo.nickname;
-    user.email = userInfo.email;
-    user.hopeCategoryId = 1;
-    user.activityCategoryId = 1;
-    user.isMentor = false;
-
-    return this.entityManager.save(user);
+  createUser(entityManager: EntityManager, userInfo: UserInfo): Promise<User> {
+    return entityManager.save(User, { ...userInfo });
   }
 
-  async updateUserName(userId: number, name: string): Promise<User> {
-    const user = await this.entityManager.findOne(User, {
-      where: { id: userId },
-    });
-
-    if (!user) {
-      throw new NotFoundException('사용자를 찾을 수 없습니다.');
-    }
-
-    user.name = name;
-
-    return this.entityManager.save(user);
+  updateUser(
+    userId: number,
+    partialEntity: QueryDeepPartialEntity<User>,
+  ): Promise<UpdateResult> {
+    return this.entityManager.update(User, { id: userId }, partialEntity);
   }
 
-  async deleteUser(userId: number): Promise<DeleteResult | undefined> {
-    await this.entityManager.findOne(User, { where: { id: userId } });
-    return await this.entityManager.delete(User, { id: userId });
-  }
-
-  async findCategoryIdByMentors(
-    skip: number,
-    limit: number,
-    activityCategoryId: number,
-  ): Promise<User[]> {
-    return await this.entityManager.find(User, {
-      relations: ['userImage', 'userIntro', 'totalCount'],
-      where: { activityCategoryId },
-      skip: skip,
-      take: limit,
-    });
-  }
-
-  async findPageByMentors(skip: number, limit: number): Promise<User[]> {
-    return await this.entityManager.find(User, {
-      relations: ['userImage', 'userIntro', 'totalCount'],
-      skip: skip,
-      take: limit,
-    });
-  }
-
-  async findCategoryIdByIsMentors(categoryId: number): Promise<number> {
-    return await this.entityManager.count(User, {
+  countMentorsInCategory(categoryId: number): Promise<number> {
+    return this.entityManager.count(User, {
       where: { isMentor: true, activityCategoryId: categoryId },
     });
   }
 
-  async findIsMentors(): Promise<number> {
-    return await this.entityManager.count(User, {
+  countMentors(): Promise<number> {
+    return this.entityManager.count(User, {
       where: { isMentor: true },
-    });
-  }
-
-  async findOneUser(userId: number): Promise<User> {
-    return await this.entityManager.findOne(User, {
-      where: { id: userId },
     });
   }
 
   findOne(options: FindOneOptions<User>) {
     return this.entityManager.findOne(User, options);
+  }
+
+  findOneByQueryBuilder(userId: number): Promise<User> {
+    return this.entityManager
+      .getRepository(User)
+      .createQueryBuilder('user')
+      .select([
+        'user.id',
+        'user.role',
+        'user.status',
+        'banned.id',
+        'banned.endAt',
+      ])
+      .leftJoin(
+        'user.banned',
+        'banned',
+        'banned.id = (SELECT id FROM banned_user WHERE banned_user_id = user.id ORDER BY id DESC LIMIT 1)',
+      )
+      .where('user.id = :userId', { userId })
+      .getOne();
+  }
+
+  findOneAndSelectAllByQueryBuilder(email: string, provider: Provider) {
+    return this.entityManager
+      .getRepository(User)
+      .createQueryBuilder('user')
+      .select([
+        'user.id',
+        'user.provider',
+        'user.name',
+        'user.email',
+        'user.rank',
+        'user.phone',
+        'user.hopeCategoryId',
+        'user.activityCategoryId',
+        'user.status',
+        'user.deletedAt',
+        'user.createdAt',
+        'user.updatedAt',
+        'user.uniqueId',
+        'user.isMentor',
+        'user.role',
+        'banned.id',
+        'banned.reason',
+        'banned.bannedUserId',
+        'banned.bannedAt',
+        'banned.endAt',
+      ])
+      .leftJoin(
+        'user.banned',
+        'banned',
+        'banned.id = (SELECT id FROM banned_user WHERE banned_user_id = user.id ORDER BY id DESC LIMIT 1)',
+      )
+      .setFindOptions({
+        where: {
+          email,
+          provider,
+        },
+      })
+      .withDeleted()
+      .getOne();
   }
 }

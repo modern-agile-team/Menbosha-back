@@ -18,6 +18,7 @@ CMD ["npm", "run", "start:prod"]
 # 애플리케이션을 실행할 포트
 EXPOSE 3000
 
+######################### Redis ##############################
 
 # # redis 이미지 사용
 # FROM redis:6.2.6-alpine AS redis
@@ -28,8 +29,33 @@ EXPOSE 3000
 # # redis.conf 파일을 이미지에 복사
 # COPY redis.conf /usr/local/etc/redis/redis.conf
 
+# # redis.conf에서 쓰는 외부 acl파일(접근허용관련) 컨테이너 내부에 추가
+# COPY users.acl /usr/local/etc/redis/users.acl
+
 # # redis 실행
 # CMD [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
 
 # # redis를 실행할 포트
 # EXPOSE 6379
+
+######################### nginx-certbot ##############################
+
+# #nginx 이미지 사용
+# FROM nginx:latest
+
+# #nignx와 certbot 설치
+# RUN apt-get update && apt-get install -y certbot python3-certbot-nginx
+
+# #nginx.conf(설정파일 복사)
+# COPY nginx.conf /etc/nginx/nginx.conf
+
+# #port
+# EXPOSE 80
+# EXPOSE 443
+
+# #entrypoint.sh 복사, 권한부여
+# COPY entrypoint.sh /entrypoint.sh
+# RUN chmod +x /entrypoint.sh
+
+# #컨테이너가 실행될 때 entrypoint.sh 실행
+# CMD ["/entrypoint.sh"]

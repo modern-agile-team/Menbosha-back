@@ -1,13 +1,20 @@
 import { Injectable } from '@nestjs/common';
+import { CreateUserIntroDto } from '@src/users/dtos/create-user-intro-dto';
+import { UpdateUserIntroDTO } from '@src/users/dtos/update-user-intro-dto';
+import { UserIntro } from '@src/users/entities/user-intro.entity';
+import { User } from '@src/users/entities/user.entity';
 import { EntityManager } from 'typeorm';
-import { UserIntro } from '../entities/user-intro.entity';
-import { UpdateUserIntroDTO } from '../dtos/update-user-intro-dto';
-import { CreateUserIntroDto } from '../dtos/create-user-intro-dto';
-import { User } from '../entities/user.entity';
 
 @Injectable()
 export class UserIntroRepository {
   constructor(private readonly entityManager: EntityManager) {}
+
+  createUserIntroRow(
+    entityManager: EntityManager,
+    userId: number,
+  ): Promise<UserIntro> {
+    return entityManager.save(UserIntro, { userId });
+  }
 
   async getUserIntro(userId: number) {
     return await this.entityManager.find(UserIntro, { where: { userId } });

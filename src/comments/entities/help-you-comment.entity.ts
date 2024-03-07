@@ -1,9 +1,9 @@
-import { HelpMeBoard } from 'src/boards/entities/help-me-board.entity';
-import { User } from 'src/users/entities/user.entity';
+import { HelpMeBoard } from '@src/boards/entities/help-me-board.entity';
+import { User } from '@src/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
-  // DeleteDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -41,6 +41,10 @@ export class HelpYouComment {
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  // @DeleteDateColumn({ name: 'deleted_at' })
-  // deletedAt: Date;
+  @DeleteDateColumn({
+    name: 'deleted_at',
+    nullable: true,
+    comment: '삭제 일자',
+  })
+  deletedAt: Date | null;
 }

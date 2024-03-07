@@ -1,17 +1,23 @@
 import { Module } from '@nestjs/common';
-import { ChatController } from './controllers/chat.controller';
-import { ChatService } from './services/chat.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ChatRooms, ChatRoomsSchema } from './schemas/chat-rooms.schemas';
-import { ChatImages, ChatImagesSchema } from './schemas/chat-images.schemas';
-import { S3Module } from 'src/common/s3/s3.module';
-import { ChatRepository } from './repositories/chat.repository';
-import { NotificationService } from './services/notification.service';
-import { EventsGateway } from './events/events.gateway';
-import { AuthModule } from 'src/auth/auth.module';
-import { UserModule } from 'src/users/user.module';
+import { S3Module } from '@src/common/s3/s3.module';
+import { AuthModule } from '@src/auth/auth.module';
+import { UserModule } from '@src/users/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '@src/users/entities/user.entity';
+import { ChatController } from '@src/chat/controllers/chat.controller';
+import { EventsGateway } from '@src/chat/events/events.gateway';
+import { ChatRepository } from '@src/chat/repositories/chat.repository';
+import {
+  ChatImages,
+  ChatImagesSchema,
+} from '@src/chat/schemas/chat-images.schemas';
+import {
+  ChatRooms,
+  ChatRoomsSchema,
+} from '@src/chat/schemas/chat-rooms.schemas';
+import { ChatService } from '@src/chat/services/chat.service';
+import { NotificationService } from '@src/chat/services/notification.service';
 
 @Module({
   imports: [

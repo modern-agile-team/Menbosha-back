@@ -7,4 +7,5 @@ export enum MentorBoardOrderField {
   updatedAt = 'updatedAt',
   categoryListId = 'categoryId',
   popularAt = 'popularAt',
+  random = 'RAND()',
 }

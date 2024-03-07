@@ -8,13 +8,26 @@ services:
       - .env
     restart: always
     environment:
-      - TZ=Asia/Seoul
+      TZ: Asia/Seoul
 
   redis:
     image: 2swo/redis
-    command: redis-server --port 6379
+    volumes:
+      - redis_data:/usr/local/etc/redis
+    command: sh -c "redis-server /usr/local/etc/redis/redis.conf"
     env_file:
       - .env
     ports:
-      - 6379:6379
+      - ${REDIS_BINDING_PORT}:${REDIS_PORT}
     restart: always
+
+  nginx-certbot:
+    image: 2swo/back-nginx-certbot
+    ports:
+      - '80:80'
+      - '443:443'
+    env_file:
+      - .env
+
+volumes:
+  redis_data:

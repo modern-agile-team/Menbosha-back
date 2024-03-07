@@ -1,16 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { MentorBoard } from 'src/boards/entities/mentor-board.entity';
+import { MentorBoard } from '@src/boards/entities/mentor-board.entity';
 
 export class MentorBoardDto
   implements
     Omit<
       MentorBoard,
-      | 'user'
-      | 'categoryList'
-      | 'mentorBoardHotPost'
-      | 'mentorBoardImages'
-      | 'mentorBoardLikes'
+      'user' | 'categoryList' | 'mentorBoardImages' | 'mentorBoardLikes'
     >
 {
   @ApiProperty({ description: '멘토 게시판 글 고유 id', format: 'integer' })
@@ -37,6 +33,9 @@ export class MentorBoardDto
 
   @Exclude()
   popularAt: Date | null;
+
+  @Exclude()
+  deletedAt: Date | null;
 
   @ApiProperty({ description: '멘토 게시판 글 카테고리 고유 id' })
   categoryId: number;

@@ -1,12 +1,13 @@
+import { BadgeList } from '@src/common/entity/badge-list.entity';
+import { User } from '@src/users/entities/user.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from './user.entity';
-import { BadgeList } from '../../common/entity/badge-list.entity';
 
 @Entity({ name: 'user_badge' })
 export class UserBadge {
@@ -19,7 +20,7 @@ export class UserBadge {
   @Column({ name: 'badge_id' })
   badgeId: number;
 
-  @Column({ name: 'created_at' })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
   @ManyToOne(() => User, (userId: User) => userId.id, {

@@ -8,7 +8,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
+import { AggregateChatRoomForChatsDto } from '@src/chat/dto/aggregate-chat-room-for-chats.dto';
 
 export function ApiFindChats() {
   return applyDecorators(
@@ -21,7 +21,7 @@ export function ApiFindChats() {
         '성공적으로 채팅방 채팅 조회 및 읽지 않았던 채팅들 seenUsers에 myId 추가 및 pagination함. 20개씩 잘라서 가져옴.',
       schema: {
         properties: {
-          content: {
+          contents: {
             type: 'object',
             $ref: getSchemaPath(AggregateChatRoomForChatsDto),
           },
@@ -98,7 +98,10 @@ export function ApiFindChats() {
       content: {
         JSON: {
           example: {
-            message: ['해당 채팅방이 없습니다.', '사용자를 찾을 수 없습니다.'],
+            message: [
+              '해당 채팅방이 존재하지 않습니다.',
+              '사용자를 찾을 수 없습니다.',
+            ],
             error: 'Not Found',
             statusCode: 404,
           },

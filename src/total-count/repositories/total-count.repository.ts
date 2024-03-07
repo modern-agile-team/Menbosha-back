@@ -1,35 +1,29 @@
 import { Injectable } from '@nestjs/common';
+import { TotalCount } from '@src/total-count/entities/total-count.entity';
 import { EntityManager } from 'typeorm';
-import { TotalCount } from '../entities/total-count.entity';
-import { Type } from '../enums/type.enum';
-import { Action } from '../enums/action.enum';
 
 @Injectable()
 export class TotalCountRepository {
   constructor(private readonly entityManager: EntityManager) {}
 
-  async createTotalCount(userId: number) {
-    await this.entityManager.insert('total_count', { userId });
+  async createTotalCount(entityManager: EntityManager, userId: number) {
+    await entityManager.insert('total_count', { userId });
   }
 
-  async counting(userId: number, type: Type, action: Action) {
-    if (action === Action.Increment) {
-      await this.entityManager.increment(TotalCount, { userId }, type, 1);
-      await this.entityManager.increment(
-        TotalCount,
-        { userId },
-        `${type}InSevenDays`,
-        1,
-      );
-    } else {
-      await this.entityManager.decrement(TotalCount, { userId }, type, 1);
-      await this.entityManager.decrement(
-        TotalCount,
-        { userId },
-        `${type}InSevenDays`,
-        1,
-      );
-    }
+  async createMentorReviewChecklistCount(
+    entityManager: EntityManager,
+    userId: number,
+  ) {
+    await entityManager.insert('mentor_review_checklist_count', {
+      userId,
+    });
+  }
+
+  getMentorBoardAndReviewCount(userId: number) {
+    return this.entityManager.findOne(TotalCount, {
+      where: { userId },
+      select: ['mentorBoardCount', 'reviewCount'],
+    });
   }
 
   async clear7DaysCount() {

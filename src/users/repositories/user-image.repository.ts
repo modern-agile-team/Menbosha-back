@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { UserImage } from '@src/users/entities/user-image.entity';
 import { EntityManager } from 'typeorm';
-import { UserImage } from '../entities/user-image.entity';
 
 @Injectable()
 export class UserImageRepository {
   constructor(private readonly entityManager: EntityManager) {}
 
-  async checkUserImage(userId: number): Promise<UserImage> {
+  async findUserImage(userId: number): Promise<UserImage> {
     const userImage = await this.entityManager.findOne(UserImage, {
       where: { userId },
     });
@@ -17,15 +17,19 @@ export class UserImageRepository {
     return userImage;
   }
 
-  async uploadUserImage(userId: number, imageUrl: string): Promise<UserImage> {
+  async uploadUserImageWithEntityManager(
+    entityManager: EntityManager,
+    userId: number,
+    imageUrl: string,
+  ): Promise<UserImage> {
     const userImage = new UserImage();
     userImage.userId = userId;
     userImage.imageUrl = imageUrl;
 
-    return await this.entityManager.save(userImage);
+    return entityManager.save(userImage);
   }
 
-  async updateUserImage(
+  async updateUserImageByUrl(
     userId: number,
     newImageUrl: string,
   ): Promise<UserImage | null> {

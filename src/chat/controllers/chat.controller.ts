@@ -16,32 +16,31 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ChatService } from '../services/chat.service';
 import { ApiTags } from '@nestjs/swagger';
 import mongoose from 'mongoose';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ParseObjectIdPipe } from '../pipes/parse-object-id.pipe';
-import { ApiCreateChatRoom } from '../swagger-decorators/create-chat-room.decorator';
-import { ApiLeaveChatRoom } from '../swagger-decorators/leave-chat-room.decorator';
-// import { ApiGetChatUnreadCounts } from '../swagger-decorators/get-chat-unread-counts.decorator';
-import { GetUserId } from 'src/common/decorators/get-userId.decorator';
-import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
-import { ApiCreateChatImage } from '../swagger-decorators/create-chat-image.decorators';
-import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
-import { ChatRoomDto } from '../dto/chat-room.dto';
-import { ApiFindChatRooms } from '../swagger-decorators/find-chat-rooms.decorator';
+import { GetUserId } from '@src/common/decorators/get-userId.decorator';
+import { SuccessResponseInterceptor } from '@src/common/interceptors/success-response.interceptor';
 import { Observable } from 'rxjs';
-import { ApiFindChatNotificationSse } from '../swagger-decorators/find-chat-notification-Sse.decorator';
-import { CreateChatRoomBodyDto } from '../dto/create-chat-room-body.dto';
-import { PageQueryDto } from 'src/common/dto/page-query.dto';
-import { AggregateChatRoomForChatsDto } from '../dto/aggregate-chat-room-for-chats.dto';
-import { ChatImageDto } from '../dto/chat-image.dto';
-import { ResponseFindChatRoomsPaginationDto } from '../dto/response-find-chat-rooms-pagination.dto';
-import { ApiDeleteChat } from '../swagger-decorators/delete-chat.decorator';
-import { ApiFindOneChatRoomByUserId } from '../swagger-decorators/find-one-chat-room-by-user-id.decorator';
-import { ApiFindOneChatRoom } from '../swagger-decorators/find-one-chat-room.decorator';
-import { ApiFindChats } from '../swagger-decorators/find-chats.decorator';
-import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
+import { PageQueryDto } from '@src/common/dto/page-query.dto';
+import { ParsePositiveIntPipe } from '@src/common/pipes/parse-positive-int.pipe';
+import { AccessTokenAuthGuard } from '@src/auth/jwt/jwt-auth.guard';
+import { AggregateChatRoomForChatsDto } from '@src/chat/dto/aggregate-chat-room-for-chats.dto';
+import { ChatImageDto } from '@src/chat/dto/chat-image.dto';
+import { ChatRoomDto } from '@src/chat/dto/chat-room.dto';
+import { CreateChatRoomBodyDto } from '@src/chat/dto/create-chat-room-body.dto';
+import { ResponseFindChatRoomsPaginationDto } from '@src/chat/dto/response-find-chat-rooms-pagination.dto';
+import { ParseObjectIdPipe } from '@src/chat/pipes/parse-object-id.pipe';
+import { ChatService } from '@src/chat/services/chat.service';
+import { ApiCreateChatImage } from '@src/chat/swagger-decorators/create-chat-image.decorators';
+import { ApiCreateChatRoom } from '@src/chat/swagger-decorators/create-chat-room.decorator';
+import { ApiDeleteChat } from '@src/chat/swagger-decorators/delete-chat.decorator';
+import { ApiFindChatNotificationSse } from '@src/chat/swagger-decorators/find-chat-notification-Sse.decorator';
+import { ApiFindChatRooms } from '@src/chat/swagger-decorators/find-chat-rooms.decorator';
+import { ApiFindChats } from '@src/chat/swagger-decorators/find-chats.decorator';
+import { ApiFindOneChatRoomByUserId } from '@src/chat/swagger-decorators/find-one-chat-room-by-user-id.decorator';
+import { ApiFindOneChatRoom } from '@src/chat/swagger-decorators/find-one-chat-room.decorator';
+import { ApiLeaveChatRoom } from '@src/chat/swagger-decorators/leave-chat-room.decorator';
 @ApiTags('CHAT')
 @UsePipes(
   new ValidationPipe({
@@ -61,7 +60,7 @@ export class ChatController {
    * @returns
    * @todo 추후 다른 기능들에서도 호출이 필요할 경우 service코드에 별도의 비즈니스 로직 추가
    */
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiFindChatNotificationSse()
   @Sse('listener')
   notificationListener(@GetUserId() userId: number): Observable<string> {
@@ -73,7 +72,7 @@ export class ChatController {
    * @param userId
    * @returns find all chat rooms with mapped user
    */
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiFindChatRooms()
   @Get()
   findAllChatRoomsWithUserAndChat(
@@ -90,7 +89,7 @@ export class ChatController {
    *
    * @deprecated 삭제 예정
    */
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiFindOneChatRoomByUserId()
   @Get('check')
   findOneChatRoomByUserIds(
@@ -104,6 +103,7 @@ export class ChatController {
    *
    * @param roomId
    * @returns find one chat room or fail
+   * @deprecated 삭제 예정
    */
   @ApiFindOneChatRoom()
   @Get(':roomId')
@@ -119,7 +119,7 @@ export class ChatController {
    * @param createChatRoomBodyDto
    * @returns 채팅방 생성
    */
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiCreateChatRoom()
   @Post()
   createChatRoom(
@@ -135,14 +135,14 @@ export class ChatController {
    * @param roomId
    * @returns 채팅창 나가기
    */
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiLeaveChatRoom()
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':roomId')
   leaveChatRoom(
     @GetUserId() userId: number,
     @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  ): Promise<void> {
+  ) {
     return this.chatService.leaveChatRoom(userId, roomId);
   }
 
@@ -152,7 +152,7 @@ export class ChatController {
    * @param roomId
    * @returns chatRoom
    */
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiFindChats()
   @Get(':roomId/chat')
   findAllChats(
@@ -163,7 +163,7 @@ export class ChatController {
     return this.chatService.findAllChats(userId, roomId, pageQueryDto);
   }
 
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiCreateChatImage()
   @Post(':roomId/chat/image')
   @UseInterceptors(FileInterceptor('file'))
@@ -175,7 +175,7 @@ export class ChatController {
     return this.chatService.createChatImage(roomId, userId, file);
   }
 
-  @UseGuards(JwtAccessTokenGuard)
+  @UseGuards(AccessTokenAuthGuard)
   @ApiDeleteChat()
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':roomId/chat/:chatId')
@@ -186,13 +186,4 @@ export class ChatController {
   ) {
     return this.chatService.deleteChat(userId, roomId, chatId);
   }
-
-  // @ApiGetChatUnreadCounts()
-  // @Get(':roomId/chat/unReads')
-  //  getUnreadCounts(
-  //   @Param('roomId', ParseObjectIdPipe) roomId: mongoose.Types.ObjectId,
-  //   @Query('after', ParseIntPipe) after: number,
-  // ) {
-  //   return this.chatService.getUnreadCounts(roomId, after);
-  // }
 }

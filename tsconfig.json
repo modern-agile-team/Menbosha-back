@@ -14,8 +14,11 @@
     "skipLibCheck": true,
     "strictNullChecks": false,
     "noImplicitAny": false,
+    "paths": {
+      "@src/*": ["./src/*"],
+    },
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false,
-  },
+    "noFallthroughCasesInSwitch": false
+  }
 }

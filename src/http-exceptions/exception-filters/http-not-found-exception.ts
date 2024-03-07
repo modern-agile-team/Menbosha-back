@@ -1,7 +1,7 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
-import { HttpExceptionService } from '../services/http-exception.service';
+import { HttpNotFoundException } from '@src/http-exceptions/exceptions/http-not-found.exception';
+import { HttpExceptionService } from '@src/http-exceptions/services/http-exception.service';
 import { Response } from 'express';
-import { HttpNotFoundException } from '../exceptions/http-not-found.exception';
 
 @Catch(HttpNotFoundException)
 export class HttpNotFoundExceptionFilter

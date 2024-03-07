@@ -3,9 +3,14 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { RequiredLikeColumn } from '../types/like.type';
-import { DeleteResult, EntityManager, FindManyOptions } from 'typeorm';
-import { LikesRepository } from '../repositories/likes.repository';
+import { LikesRepository } from '@src/like/repositories/likes.repository';
+import { RequiredLikeColumn } from '@src/like/types/like.type';
+import {
+  DeleteResult,
+  EntityManager,
+  FindManyOptions,
+  FindOneOptions,
+} from 'typeorm';
 
 @Injectable()
 export class LikesService<E extends RequiredLikeColumn> {
@@ -38,6 +43,18 @@ export class LikesService<E extends RequiredLikeColumn> {
 
   findLikes(options: FindManyOptions<E>): Promise<E[]> {
     return this.likesRepository.findLikes(options);
+  }
+
+  findOneLike(options: FindOneOptions<E>): Promise<E> {
+    return this.likesRepository.findOneLike(options);
+  }
+
+  isExistLike(parentId: number, userId: number) {
+    return this.likesRepository.isExistLike(parentId, userId);
+  }
+
+  isExistLikeBy(id: number) {
+    return this.likesRepository.isExistLikeBy(id);
   }
 
   async deleteLike(parentId: number, userId: number): Promise<void> {

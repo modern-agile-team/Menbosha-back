@@ -10,15 +10,15 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { SuccessResponseInterceptor } from 'src/common/interceptors/success-response.interceptor';
-import { MentorBoardLikeService } from '../services/mentor-board-likes.service';
-import { JwtAccessTokenGuard } from 'src/config/guards/jwt-access-token.guard';
-import { GetUserId } from 'src/common/decorators/get-userId.decorator';
-import { ApiCreateMentorBoardLike } from '../swagger-decorators/mentorBoard/create-mentor-board-like.decorator';
-import { ApiDeleteMentorBoardLike } from '../swagger-decorators/mentorBoard/delete-mentor-board-like.decorator';
-import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
+import { SuccessResponseInterceptor } from '@src/common/interceptors/success-response.interceptor';
+import { GetUserId } from '@src/common/decorators/get-userId.decorator';
+import { ParsePositiveIntPipe } from '@src/common/pipes/parse-positive-int.pipe';
+import { AccessTokenAuthGuard } from '@src/auth/jwt/jwt-auth.guard';
+import { MentorBoardLikeService } from '@src/boards/services/mentor-board-likes.service';
+import { ApiCreateMentorBoardLike } from '@src/boards/swagger-decorators/mentorBoard/create-mentor-board-like.decorator';
+import { ApiDeleteMentorBoardLike } from '@src/boards/swagger-decorators/mentorBoard/delete-mentor-board-like.decorator';
 
-@ApiTags('mentor-board-likes')
+@ApiTags('mentor-board-like')
 @UsePipes(
   new ValidationPipe({
     transform: true,
@@ -27,15 +27,15 @@ import { ParsePositiveIntPipe } from 'src/common/pipes/parse-positive-int.pipe';
   }),
 )
 @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
-@Controller('mentor-board')
+@Controller('mentor-boards/:mentorBoardId')
 export class MentorBoardLikeController {
   constructor(
     private readonly mentorBoardSLikeService: MentorBoardLikeService,
   ) {}
 
   @ApiCreateMentorBoardLike()
-  @UseGuards(JwtAccessTokenGuard)
-  @Post(':mentorBoardId/like')
+  @UseGuards(AccessTokenAuthGuard)
+  @Post('likes')
   async createMentorBoardLike(
     @GetUserId() userId: number,
     @Param('mentorBoardId', ParsePositiveIntPipe) mentorBoardId: number,
@@ -48,8 +48,8 @@ export class MentorBoardLikeController {
   }
 
   @ApiDeleteMentorBoardLike()
-  @UseGuards(JwtAccessTokenGuard)
-  @Delete(':mentorBoardId/like')
+  @UseGuards(AccessTokenAuthGuard)
+  @Delete('likes')
   deleteMentorBoardLike(
     @GetUserId() userId: number,
     @Param('mentorBoardId', ParsePositiveIntPipe) mentorBoardId: number,

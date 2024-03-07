@@ -6,7 +6,7 @@ import {
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { SearchAllPageSizeDto } from '../dtos/search-all-page-size.dto';
+import { SearchAllPageSizeDto } from '@src/search/dtos/search-all-page-size.dto';
 
 export function ApiSearchAllBoardsAndMentorsForPageSize() {
   return applyDecorators(

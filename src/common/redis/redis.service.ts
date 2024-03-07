@@ -1,5 +1,6 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
+import { Ttl } from '@src/common/redis/ttl.enum';
 import { Cache } from 'cache-manager';
 
 @Injectable()
@@ -8,11 +9,15 @@ export class RedisService {
   getToken(userId: string): Promise<string | undefined | null> {
     return this.cacheManager.get<string>(userId); // ? Retrieve data from the cache
   }
-  async setToken(userId: string, token: string) {
-    await this.cacheManager.set(userId, token, 604800); //  ? Set data in the cache for 7 days
+  async setToken(key: string, token: string, ttl: Ttl) {
+    await this.cacheManager.set(key, token, { ttl }); // ? Save data to the cache
   }
 
-  async delToken(userId: string) {
-    await this.cacheManager.del(userId); // ? Delete data from the cache
+  async delToken(key: string) {
+    await this.cacheManager.del(key); // ? Delete data from the cache
+  }
+
+  async delTokens(keys: string[]) {
+    await this.cacheManager.store.del(keys);
   }
 }
