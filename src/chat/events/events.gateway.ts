@@ -30,17 +30,20 @@ config();
  * 추후 프론트의 admin 전용 서버가 열리면 production 환경에서 프론트의 admin 서버 도메인도 허용(아마 development 환경에서도)
  */
 @WebSocketGateway({
-  cors: {
-    origin:
-      process.env.NODE_ENV === 'production'
-        ? [process.env.FRONT_PRODUCTION_DOMAIN, process.env.FRONT_LOCAL_DOMAIN]
-        : 'development'
-          ? [
-              process.env.FRONT_DEVELOPMENT_DOMAIN,
-              process.env.FRONT_LOCAL_DOMAIN,
-            ]
-          : true, // 또는 특정 도메인을 설정
-  },
+  origin:
+    process.env.NODE_ENV === 'production'
+      ? [
+          process.env.FRONT_PRODUCTION_DOMAIN,
+          process.env.FRONT_PRODUCTION_WWW_DOMAIN,
+          process.env.FRONT_LOCAL_DOMAIN,
+        ]
+      : 'development'
+        ? [
+            process.env.FRONT_DEVELOPMENT_DOMAIN,
+            process.env.FRONT_DEVELOPMENT_WWW_DOMAIN,
+            process.env.FRONT_LOCAL_DOMAIN,
+          ]
+        : true, // 또는 특정 도메인을 설정
 })
 @UseFilters(WebSocketExceptionFilter)
 @UsePipes(ValidationPipe)
