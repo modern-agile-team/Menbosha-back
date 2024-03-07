@@ -20,7 +20,8 @@ export class CookieInterceptor implements NestInterceptor {
           response.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             sameSite: 'lax',
-            domain: 'menbosha.kr',
+            domain: '.menbosha.kr',
+            secure: true,
             maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
           });
         }
