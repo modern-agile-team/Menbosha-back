@@ -85,6 +85,23 @@ export class MentorBoardController {
       userId,
     );
   }
+  @Patch('/images')
+  @UseGuards(AccessTokenAuthGuard)
+  // @ApiUpdateHelpMeBoardImage()
+  @UseInterceptors(FilesInterceptor('files', 3))
+  async editBoardImages(
+    @GetUserId() userId: number,
+    @Query('mentorBoardId') boardId: number,
+    @Query('deleteImageUrl') deleteImageUrl: string[],
+    @UploadedFiles() files: Express.Multer.File[],
+  ) {
+    return await this.boardImagesService.updateMentorBoardImages(
+      boardId,
+      files,
+      userId,
+      deleteImageUrl,
+    );
+  }
 
   @ApiFindAllMentorBoards()
   @Get()
