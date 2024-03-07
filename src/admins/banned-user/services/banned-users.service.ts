@@ -15,12 +15,12 @@ import { ADMIN_ERROR_CODE } from '@src/constants/error/admin/admin-error-code.co
 import { HttpForbiddenException } from '@src/http-exceptions/exceptions/http-forbidden.exception';
 import { UserRole } from '@src/users/constants/user-role.enum';
 import { BannedUserPageQueryDto } from '@src/admins/banned-user/dtos/banned-user-page-query.dto';
-import { BannedUser } from '@src/admins/banned-user/entities/banned-user.entity';
 import { QueryHelper } from '@src/helpers/query.helper';
 import { plainToInstance } from 'class-transformer';
 import { BannedUsersItemDto } from '@src/admins/banned-user/dtos/banned-users-item.dto';
 import { BannedUsersPaginationResponseDto } from '@src/admins/banned-user/dtos/banned-users-pagination-response.dto';
 import { SortOrder } from '@src/common/constants/sort-order.enum';
+import { BannedUser } from '@src/entities/BannedUser';
 
 @Injectable()
 export class BannedUsersService {

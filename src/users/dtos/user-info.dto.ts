@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { UserStatus } from '@src/users/constants/user-status.enum';
 import { UserProvider } from '@src/auth/enums/user-provider.enum';
 import { UserRole } from '@src/users/constants/user-role.enum';
-import { User } from '@src/users/entities/user.entity';
+import { User } from '@src/entities/User';
 
 export class UserInfoDto
   implements
@@ -11,13 +11,13 @@ export class UserInfoDto
       User,
       | 'userImage'
       | 'userIntro'
-      | 'mentor'
-      | 'mentee'
-      | 'mentorBoard'
-      | 'helpMeBoard'
-      | 'userBadge'
+      | 'mentorBoards'
+      | 'helpMeBoards'
+      | 'helpYouComments'
+      | 'userBadges'
       | 'token'
-      | 'categoryList'
+      | 'activityCategory'
+      | 'hopeCategory'
       | 'totalCount'
       | 'mentorBoardLikes'
       | 'userRanking'
@@ -26,8 +26,9 @@ export class UserInfoDto
       | 'banned'
       | 'bans'
       | 'reported'
-      | 'bannedUser'
       | 'uniqueId'
+      | 'reviewed'
+      | 'reviews'
     >
 {
   @ApiProperty({
@@ -73,8 +74,9 @@ export class UserInfoDto
 
   @ApiProperty({
     description: '휴대폰 인증 여부',
+    nullable: true,
   })
-  phone: string;
+  phone: string | null;
 
   @ApiProperty({
     description: '정보 제공자',

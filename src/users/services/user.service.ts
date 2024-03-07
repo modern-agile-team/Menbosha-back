@@ -11,7 +11,7 @@ import { MyProfileResponseDTO } from '@src/users/dtos/get-my-profile.dto';
 import { UserBadgeResponseDTO } from '@src/users/dtos/get-user-badge.dto';
 import { UserImageRepository } from '@src/users/repositories/user-image.repository';
 import { UserRepository } from '@src/users/repositories/user.repository';
-import { User } from '@src/users/entities/user.entity';
+import { User } from '@src/entities/User';
 
 @Injectable()
 export class UserService {
@@ -85,7 +85,7 @@ export class UserService {
     const rank = await this.userRepository.getUserRank(userId);
     const badge = plainToInstance(
       UserBadgeResponseDTO,
-      await this.userBadgeRepository.getUserBadge(userId),
+      await this.userBadgeRepository.getUserBadges(userId),
     );
 
     return { rank, badge };
@@ -104,7 +104,7 @@ export class UserService {
     )[0];
     const badge = plainToInstance(
       UserBadgeResponseDTO,
-      await this.userBadgeRepository.getUserBadge(userId),
+      await this.userBadgeRepository.getUserBadges(userId),
     );
 
     return { ...userInfo, image, intro, badge };

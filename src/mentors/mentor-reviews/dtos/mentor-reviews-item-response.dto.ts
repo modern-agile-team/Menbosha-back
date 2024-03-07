@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { UserImage } from '@src/entities/UserImage';
+import { UserIntro } from '@src/entities/UserIntro';
 import { MentorReviewDto } from '@src/mentors/mentor-reviews/dtos/mentor-review.dto';
 import { UserInfoDto } from '@src/users/dtos/user-info.dto';
-import { UserImage } from '@src/users/entities/user-image.entity';
-import { UserIntro } from '@src/users/entities/user-intro.entity';
 import { Exclude } from 'class-transformer';
 
 class UserImageDto implements Pick<UserImage, 'imageUrl'> {

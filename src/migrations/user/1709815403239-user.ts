@@ -1,4 +1,4 @@
-import { Provider } from '@src/auth/enums/user-provider.enum';
+import { UserProvider } from '@src/auth/enums/user-provider.enum';
 import {
   generatePrimaryColumn,
   generateCreatedAtColumn,
@@ -35,7 +35,7 @@ export class User1709815403239 implements MigrationInterface {
           new TableColumn({
             name: 'provider',
             type: 'enum',
-            enum: [Provider.Google, Provider.Kakao, Provider.Naver],
+            enum: [UserProvider.Google, UserProvider.Kakao, UserProvider.Naver],
             isNullable: false,
             comment: '유저 제공자',
           }),

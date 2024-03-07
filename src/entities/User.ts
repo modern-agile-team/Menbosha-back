@@ -25,9 +25,9 @@ import { UserImage } from './UserImage';
 import { UserIntro } from './UserIntro';
 import { UserRanking } from './UserRanking';
 import { UserStatus } from '@src/users/constants/user-status.enum';
-import { BooleanTransformer } from '@src/common/entity/transformers/boolean.transformer';
 import { UserRole } from '@src/users/constants/user-role.enum';
 import { UserProvider } from '@src/auth/enums/user-provider.enum';
+import { BooleanTransformer } from '@src/entities/transformers/boolean.transformer';
 
 @Index('FK_user_activity_category_id', ['activityCategoryId'], {})
 @Index('FK_user_hope_category_id', ['hopeCategoryId'], {})

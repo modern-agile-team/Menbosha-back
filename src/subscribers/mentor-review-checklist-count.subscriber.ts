@@ -1,6 +1,6 @@
+import { MentorReview } from '@src/entities/MentorReview';
+import { MentorReviewChecklistCount } from '@src/entities/MentorReviewChecklistCount';
 import { isNotEmptyObject } from 'class-validator';
-import { MentorReview } from '@src/mentors/mentor-reviews/entities/mentor-review.entity';
-import { MentorReviewChecklistCount } from '@src/total-count/entities/mentor-review-checklist-count.entity';
 import {
   EntitySubscriberInterface,
   EventSubscriber,

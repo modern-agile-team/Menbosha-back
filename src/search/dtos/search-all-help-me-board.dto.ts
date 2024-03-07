@@ -1,19 +1,20 @@
-import { HelpMeBoard } from '@src/boards/entities/help-me-board.entity';
-import { CategoryList } from '@src/category/entity/category-list.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { SearchUserDto } from '@src/search/dtos/search-user-dto';
+import { HelpMeBoard } from '@src/entities/HelpMeBoard';
+import { Category } from '@src/entities/Category';
 
 export class SearchAllHelpMeBoardDto
   implements
     Omit<
       HelpMeBoard,
-      | 'categoryList'
+      | 'category'
       | 'categoryId'
       | 'updatedAt'
       | 'user'
       | 'userId'
       | 'helpMeBoardImages'
+      | 'helpYouComments'
       | 'pullingUp'
     >
 {
@@ -69,7 +70,7 @@ export class SearchAllHelpMeBoardDto
       },
     },
   })
-  categoryList: Pick<CategoryList, 'categoryName'>;
+  category: Pick<Category, 'name'>;
 
   @ApiProperty({
     description: '끌어 올려진 시간',
@@ -88,6 +89,6 @@ export class SearchAllHelpMeBoardDto
     this.createdAt = searchAllHelpMeBoardsDto.createdAt;
     this.user = searchAllHelpMeBoardsDto.user;
     this.helpMeBoardImages = searchAllHelpMeBoardsDto.helpMeBoardImages;
-    this.categoryList = searchAllHelpMeBoardsDto.categoryList;
+    this.category = searchAllHelpMeBoardsDto.category;
   }
 }

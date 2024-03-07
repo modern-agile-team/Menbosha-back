@@ -1,4 +1,4 @@
-import { Category } from '@src/category/entity/category-list.entity';
+import { Category } from '@src/entities/Category';
 import { generatePrimaryColumn } from '@src/migrations/__utils/util';
 import { MigrationInterface, QueryRunner, Table, TableColumn } from 'typeorm';
 

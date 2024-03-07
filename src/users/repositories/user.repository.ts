@@ -8,7 +8,7 @@ import {
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { UserProvider } from '@src/auth/enums/user-provider.enum';
 import { UserInfo } from '@src/auth/interfaces/user-info.interface';
-import { User } from '@src/users/entities/user.entity';
+import { User } from '@src/entities/User';
 
 @Injectable()
 export class UserRepository {

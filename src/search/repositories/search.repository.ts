@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { HelpMeBoardImage } from '@src/boards/entities/help-me-board-image.entity';
-import { HelpMeBoard } from '@src/boards/entities/help-me-board.entity';
+import { HelpMeBoard } from '@src/entities/HelpMeBoard';
+import { HelpMeBoardImage } from '@src/entities/HelpMeBoardImage';
+import { User } from '@src/entities/User';
 import { SearchAllHelpMeBoardDto } from '@src/search/dtos/search-all-help-me-board.dto';
 import { SearchAllMentorDto } from '@src/search/dtos/search-all-mentor.dto';
-import { User } from '@src/users/entities/user.entity';
 import { EntityManager } from 'typeorm';
 
 /**

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { TotalCount } from '@src/total-count/entities/total-count.entity';
+import { TotalCount } from '@src/entities/TotalCount';
 import { EntityManager } from 'typeorm';
 
 @Injectable()

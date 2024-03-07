@@ -9,7 +9,7 @@ import {
 import { MentorBoard } from './MentorBoard';
 import { User } from './User';
 
-@Index('FK_mentor_board_like_mentor_board_id', ['mentorBoardId'], {})
+@Index('FK_mentor_board_like_mentor_board_id', ['parentId'], {})
 @Index('FK_mentor_board_like_user_id', ['userId'], {})
 @Entity('mentor_board_like', { schema: 'ma6_menbosha_db' })
 export class MentorBoardLike {
@@ -29,7 +29,7 @@ export class MentorBoardLike {
     comment: '멘토 게시글 고유 ID',
     unsigned: true,
   })
-  mentorBoardId: number;
+  parentId: number;
 
   @Column('timestamp', {
     name: 'created_at',

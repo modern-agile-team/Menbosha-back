@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserIntro } from '@src/users/entities/user-intro.entity';
+import { UserIntro } from '@src/entities/UserIntro';
 import { Exclude } from 'class-transformer';
 
 export class MyIntroDto implements Omit<UserIntro, 'user'> {

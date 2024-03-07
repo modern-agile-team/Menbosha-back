@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Token } from '@src/auth/entities/token.entity';
+import { Token } from '@src/entities/Token';
 import { DeleteResult, EntityManager, UpdateResult } from 'typeorm';
 
 @Injectable()

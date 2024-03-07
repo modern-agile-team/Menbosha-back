@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './User';
+import { ReportType } from '@src/reports/constants/report-type.enum';
 
 @Index('FK_report_report_user_id', ['reportUserId'], {})
 @Index('FK_report_reported_user_id', ['reportedUserId'], {})
@@ -38,16 +39,9 @@ export class Report {
   @Column('enum', {
     name: 'type',
     comment: '신고 타입',
-    enum: [
-      '증오발언 및 혐오표현 게시글',
-      '불법성 게시글 및 불법 촬영물',
-      '홍보성 게시글',
-    ],
+    enum: ReportType,
   })
-  type:
-    | '증오발언 및 혐오표현 게시글'
-    | '불법성 게시글 및 불법 촬영물'
-    | '홍보성 게시글';
+  type: ReportType;
 
   @Column('varchar', { name: 'reason', comment: '신고 상세 사유', length: 200 })
   reason: string;

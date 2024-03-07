@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './User';
-import { BooleanTransformer } from '@src/common/entity/transformers/boolean.transformer';
+import { BooleanTransformer } from '@src/entities/transformers/boolean.transformer';
 
 @Index('FK_mentor_review_mentee_id', ['menteeId'], {})
 @Index('FK_mentor_review_mentor_id', ['mentorId'], {})

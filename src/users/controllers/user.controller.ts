@@ -17,7 +17,6 @@ import { AccessTokenAuthGuard } from '@src/auth/jwt/jwt-auth.guard';
 import { CreateUserIntroDto } from '@src/users/dtos/create-user-intro-dto';
 import { ResponseUserIntroDto } from '@src/users/dtos/response-user-dto';
 import { UpdateUserIntroDTO } from '@src/users/dtos/update-user-intro-dto';
-import { UserIntro } from '@src/users/entities/user-intro.entity';
 import { UserBadgeService } from '@src/users/services/user-badge.service';
 import { UserIntroService } from '@src/users/services/user-intro-service';
 import { UserRankingService } from '@src/users/services/user-ranking.service';
@@ -31,6 +30,7 @@ import { ApiPostUserBadges } from '@src/users/swagger-decorators/get-user-badges
 import { ApiGetUserInfo } from '@src/users/swagger-decorators/get-user-info.decorators';
 import { ApiUpdateUserIntro } from '@src/users/swagger-decorators/patch-user-intro-decorator';
 import { ApiPostUserIntro } from '@src/users/swagger-decorators/upload-user-Intro-decorators';
+import { UserIntro } from '@src/entities/UserIntro';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)

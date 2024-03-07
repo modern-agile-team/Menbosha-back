@@ -1,4 +1,4 @@
-import { Badge } from '@src/common/entity/badge.entity';
+import { Badge } from '@src/entities/Badge';
 import { generatePrimaryColumn } from '@src/migrations/__utils/util';
 import { MigrationInterface, QueryRunner, Table, TableColumn } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
