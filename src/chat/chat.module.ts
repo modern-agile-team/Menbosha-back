@@ -3,8 +3,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { S3Module } from '@src/common/s3/s3.module';
 import { AuthModule } from '@src/auth/auth.module';
 import { UserModule } from '@src/users/user.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from '@src/users/entities/user.entity';
 import { ChatController } from '@src/chat/controllers/chat.controller';
 import { EventsGateway } from '@src/chat/events/events.gateway';
 import { ChatRepository } from '@src/chat/repositories/chat.repository';
@@ -25,7 +23,6 @@ import { NotificationService } from '@src/chat/services/notification.service';
       { name: ChatRooms.name, schema: ChatRoomsSchema },
       { name: ChatImages.name, schema: ChatImagesSchema },
     ]),
-    TypeOrmModule.forFeature([User]),
     S3Module,
     AuthModule,
     UserModule,

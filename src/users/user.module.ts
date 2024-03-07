@@ -5,7 +5,6 @@ import { AuthModule } from '@src/auth/auth.module';
 import { TotalCountModule } from '@src/total-count/total-count.module';
 import { UserImageController } from '@src/users/controllers/user-image.controller';
 import { UserController } from '@src/users/controllers/user.controller';
-import { User } from '@src/users/entities/user.entity';
 import { UserBadgeRepository } from '@src/users/repositories/user-badge.repository';
 import { UserImageRepository } from '@src/users/repositories/user-image.repository';
 import { UserIntroRepository } from '@src/users/repositories/user-intro.repository';
@@ -16,6 +15,7 @@ import { UserImageService } from '@src/users/services/user-image.service';
 import { UserIntroService } from '@src/users/services/user-intro-service';
 import { UserRankingService } from '@src/users/services/user-ranking.service';
 import { UserService } from '@src/users/services/user.service';
+import { User } from '@src/entities/User';
 
 @Module({
   imports: [

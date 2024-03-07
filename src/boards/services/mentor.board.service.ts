@@ -12,9 +12,9 @@ import { MentorBoardWithUserAndImageDto } from '@src/boards/dto/mentorBoard/ment
 import { oneMentorBoardResponseDTO } from '@src/boards/dto/mentorBoard/one.response.mentor.boards.dto';
 import { UpdateMentorBoardDto } from '@src/boards/dto/mentorBoard/update.mentor.board.dto';
 import { MentorBoardResponseDTO } from '@src/boards/dto/mentorBoard/update.mentor.board.response.dto';
-import { MentorBoard } from '@src/boards/entities/mentor-board.entity';
 import { MentorBoardLikeRepository } from '@src/boards/repository/mentor.board.likes.repository';
 import { MentorBoardRepository } from '@src/boards/repository/mentor.boards.repository';
+import { MentorBoard } from '@src/entities/MentorBoard';
 
 @Injectable()
 export class MentorBoardService {

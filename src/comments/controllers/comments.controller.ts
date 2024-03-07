@@ -1,18 +1,11 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Query,
-  Delete,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Post, Query, Delete, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { GetUserId } from '@src/common/decorators/get-userId.decorator';
 import { AccessTokenAuthGuard } from '@src/auth/jwt/jwt-auth.guard';
-import { CreateCommentDto } from '@src/comments/dto/create-comment-dto';
 import { CommentsService } from '@src/comments/services/comments.services';
 import { ApiDeleteComment } from '@src/comments/swagger-decorators/delete-comment-decorator';
 import { ApiAddHelpComment } from '@src/comments/swagger-decorators/post-help-you-comment-decorator';
+import { HelpYouComment } from '@src/entities/HelpYouComment';
 
 @Controller('help-you-comments')
 @ApiTags('help-you-comment API')
@@ -25,9 +18,8 @@ export class CommentsController {
   async createComment(
     @GetUserId() userId: number,
     @Query('helpMeBoardId') boardId: number,
-    @Body() createCommentDto: CreateCommentDto,
-  ): Promise<CreateCommentDto> {
-    return await this.commentsService.create(createCommentDto, userId, boardId);
+  ): Promise<HelpYouComment> {
+    return await this.commentsService.create(userId, boardId);
   }
 
   @Delete('')
