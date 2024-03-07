@@ -36,7 +36,8 @@ export class UserRanking1709815481669 implements MigrationInterface {
           }),
           new TableColumn({
             name: 'rank',
-            type: 'int',
+            type: 'smallint',
+            length: '3',
             unsigned: true,
             isNullable: true,
             comment: '유저 랭크',

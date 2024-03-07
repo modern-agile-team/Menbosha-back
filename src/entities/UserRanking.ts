@@ -55,7 +55,7 @@ export class UserRanking {
   })
   career: string | null;
 
-  @Column('int', {
+  @Column('smallint', {
     name: 'rank',
     nullable: true,
     comment: '유저 랭크',
