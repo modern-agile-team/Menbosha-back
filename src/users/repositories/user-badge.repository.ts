@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { Badge } from '@src/entities/Badge';
+import { UserBadge } from '@src/entities/UserBadge';
 import { EntityManager } from 'typeorm';
-import { BadgeList } from '@src/common/entity/badge.entity';
-import { UserBadge } from '@src/users/entities/user-badge.entity';
 
 @Injectable()
 export class UserBadgeRepository {
   constructor(private readonly entityManager: EntityManager) {}
 
-  async getUserBadge(userId: number) {
+  async getUserBadges(userId: number) {
     return await this.entityManager.find(UserBadge, { where: { userId } });
   }
 
@@ -17,8 +17,8 @@ export class UserBadgeRepository {
     });
   }
 
-  async getBadgeList() {
-    return await this.entityManager.find(BadgeList);
+  async getBadges() {
+    return await this.entityManager.find(Badge);
   }
 
   async createNewBadges(newBadges: UserBadge[]): Promise<UserBadge[]> {

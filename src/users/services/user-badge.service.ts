@@ -23,7 +23,7 @@ export class UserBadgeService {
       );
 
     // 3.뱃지 리스트 DB 정보 불러오기
-    const badgeList = await this.userBadgeRepository.getBadgeList();
+    const badgeList = await this.userBadgeRepository.getBadges();
     const newBadges = [];
 
     //아래 switch 문 각자의 역할별로 나누기
