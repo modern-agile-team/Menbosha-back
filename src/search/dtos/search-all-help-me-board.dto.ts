@@ -3,6 +3,7 @@ import { Exclude } from 'class-transformer';
 import { SearchUserDto } from '@src/search/dtos/search-user-dto';
 import { HelpMeBoard } from '@src/entities/HelpMeBoard';
 import { Category } from '@src/entities/Category';
+import { HELP_ME_BOARD_HEAD_LENGTH } from '@src/boards/constants/help-me-board/help-me-board.constant';
 
 export class SearchAllHelpMeBoardDto
   implements
@@ -26,6 +27,8 @@ export class SearchAllHelpMeBoardDto
 
   @ApiProperty({
     description: '도와주세요 게시글 제목',
+    minLength: HELP_ME_BOARD_HEAD_LENGTH.MIN,
+    maxLength: HELP_ME_BOARD_HEAD_LENGTH.MAX,
   })
   head: string;
 
