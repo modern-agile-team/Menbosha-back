@@ -15,6 +15,53 @@ export const generatePrimaryColumn = (
   };
 };
 
+export const generateUserIdColumn = (
+  comment: string = '유저 고유 ID',
+): TableColumnOptions => {
+  return {
+    name: 'user_id',
+    type: 'int',
+    unsigned: true,
+    isNullable: false,
+    comment,
+  };
+};
+
+export const generateCategoryIdColumn = (
+  comment: string = '카테고리 고유 ID',
+): TableColumnOptions => {
+  return {
+    name: 'category_id',
+    type: 'int',
+    unsigned: true,
+    isNullable: false,
+    comment,
+  };
+};
+
+export const generateHeadColumn = (
+  comment: string = '게시글 제목',
+): TableColumnOptions => {
+  return {
+    name: 'head',
+    type: 'varchar',
+    length: '30',
+    isNullable: false,
+    comment,
+  };
+};
+
+export const generateBodyColumn = (
+  comment: string = '게시글 본문',
+): TableColumnOptions => {
+  return {
+    name: 'body',
+    type: 'text',
+    isNullable: false,
+    comment,
+  };
+};
+
 export const generateBooleanColumn = (
   name: string,
   comment: string,
