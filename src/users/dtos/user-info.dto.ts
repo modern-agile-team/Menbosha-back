@@ -1,7 +1,7 @@
 import { Exclude } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserStatus } from '@src/users/constants/user-status.enum';
-import { Provider } from '@src/auth/enums/provider.enum';
+import { UserProvider } from '@src/auth/enums/user-provider.enum';
 import { UserRole } from '@src/users/constants/user-role.enum';
 import { User } from '@src/users/entities/user.entity';
 
@@ -80,7 +80,7 @@ export class UserInfoDto
     description: '정보 제공자',
   })
   @Exclude()
-  provider: Provider;
+  provider: UserProvider;
 
   @Exclude()
   status: UserStatus;
