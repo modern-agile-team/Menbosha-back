@@ -21,6 +21,10 @@ export class TotalCountService {
     );
   }
 
+  getMentorBoardAndReviewCount(userId: number) {
+    return this.totalCountRepository.getMentorBoardAndReviewCount(userId);
+  }
+
   @Cron('0 0 9 * * 1') // 매주 월요일 오전 9시에 실행
   async clear7DaysCount() {
     const clear = await this.totalCountRepository.clear7DaysCount();
