@@ -5,6 +5,6 @@ export enum HelpMeBoardOrderField {
   body = 'body',
   createdAt = 'createdAt',
   updatedAt = 'updatedAt',
-  categoryListId = 'categoryId',
+  categoryId = 'categoryId',
   pullingUp = 'pullingUp',
 }

@@ -64,7 +64,7 @@ export class SearchAllHelpMeBoardDto
     description: '카테고리 리스트',
     type: 'object',
     properties: {
-      categoryName: {
+      name: {
         description: '카테고리의 이름',
         type: 'string',
       },

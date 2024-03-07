@@ -32,7 +32,7 @@ export class MentorReviewChecklistCountSubscriber
       .getRepository(MentorReviewChecklistCount)
       .createQueryBuilder('mentorReviewChecklistCount')
       .update({ ...incrementColumns })
-      .where({ userId: event.entity.mentorId })
+      .where({ mentorId: event.entity.mentorId })
       .execute();
   }
 
@@ -71,7 +71,7 @@ export class MentorReviewChecklistCountSubscriber
         .getRepository(MentorReviewChecklistCount)
         .createQueryBuilder('mentorReviewChecklistCount')
         .update(incrementColumns)
-        .where({ userId: entity.mentorId })
+        .where({ mentorId: entity.mentorId })
         .execute();
     }
   }
@@ -91,7 +91,7 @@ export class MentorReviewChecklistCountSubscriber
       .getRepository(MentorReviewChecklistCount)
       .createQueryBuilder('mentorReviewChecklistCount')
       .update({ ...incrementColumns })
-      .where({ userId: this.loadedEntity.mentorId })
+      .where({ mentorId: this.loadedEntity.mentorId })
       .execute();
   }
 }
