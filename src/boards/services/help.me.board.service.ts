@@ -16,6 +16,7 @@ import { UpdateHelpMeBoardDto } from '@src/boards/dto/helpMeBoard/update.help.me
 import { HelpMeBoardResponseDTO } from '@src/boards/dto/helpMeBoard/update.help.me.board.response.dto';
 import { HelpMeBoardRepository } from '@src/boards/repository/help.me.board.repository';
 import { HelpMeBoard } from '@src/entities/HelpMeBoard';
+import { HelpMeBoardDto } from '@src/boards/dto/helpMeBoard/help-me-board.dto';
 
 @Injectable()
 export class HelpMeBoardService {
@@ -145,6 +146,17 @@ export class HelpMeBoardService {
       })),
       unitOwner: unitOwner,
     };
+  }
+
+  async findOneOrFail(helpMeBoardId: number) {
+    const existHelpMeBoard =
+      await this.helpMeBoardRepository.findOneHelpMeBoardBy(helpMeBoardId);
+
+    if (!existHelpMeBoard) {
+      throw new NotFoundException('해당 도와주세요 게시글을 찾을 수 없습니다.');
+    }
+
+    return new HelpMeBoardDto(existHelpMeBoard);
   }
 
   async updateBoard(

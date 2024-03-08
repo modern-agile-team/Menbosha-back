@@ -55,6 +55,7 @@ import { MentorBoardLike } from '@src/entities/MentorBoardLike';
     MentorBoardLikeRepository,
     QueryBuilderHelper,
   ],
+  exports: [HelpMeBoardService],
 })
 @Module({})
 export class BoardsModule {}
