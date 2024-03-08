@@ -45,7 +45,7 @@ export const generateHeadColumn = (
   return {
     name: 'head',
     type: 'varchar',
-    length: '30',
+    length: '50',
     isNullable: false,
     comment,
   };

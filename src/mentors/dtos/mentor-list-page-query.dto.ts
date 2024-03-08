@@ -1,10 +1,11 @@
 import { PageQueryDto } from '@src/common/dto/page-query.dto';
 import { SortOrder } from '@src/common/constants/sort-order.enum';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsEnum, IsOptional, Length } from 'class-validator';
 import { IsPositiveInt } from '@src/common/decorators/validators/is-positive-int.decorator';
 import { MentorOrderField } from '@src/mentors/constants/mentor-order-field.enum';
 import { User } from '@src/entities/User';
+import { USER_NAME_LENGTH } from '@src/users/constants/user.constant';
 
 export class MentorListPageQueryDto
   extends PageQueryDto
@@ -20,9 +21,11 @@ export class MentorListPageQueryDto
 
   @ApiPropertyOptional({
     description: '멘토 이름 필터링',
+    minLength: USER_NAME_LENGTH.MIN,
+    maxLength: USER_NAME_LENGTH.MAX,
   })
   @IsOptional()
-  @IsNotEmpty()
+  @Length(USER_NAME_LENGTH.MIN, USER_NAME_LENGTH.MAX)
   name?: string;
 
   @ApiPropertyOptional({

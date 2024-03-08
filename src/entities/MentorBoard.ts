@@ -40,7 +40,7 @@ export class MentorBoard {
   })
   categoryId: number;
 
-  @Column('varchar', { name: 'head', comment: '멘토 게시글 제목', length: 30 })
+  @Column('varchar', { name: 'head', comment: '멘토 게시글 제목', length: 50 })
   head: string;
 
   @Column('text', { name: 'body', comment: '멘토 게시글 본문' })

@@ -1,12 +1,19 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-import { IsBoolean, IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
-import { MentorBoardOrderField } from '@src/boards/constants/mentor-board-order-field.enum';
+import {
+  IsBoolean,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  Length,
+} from 'class-validator';
+import { MentorBoardOrderField } from '@src/boards/constants/mentor-board/mentor-board-order-field.enum';
 import { PageQueryDto } from '@src/common/dto/page-query.dto';
 import { IsPositiveInt } from '@src/common/decorators/validators/is-positive-int.decorator';
 import { SortOrder } from '@src/common/constants/sort-order.enum';
 import { Transform } from 'class-transformer';
 import { stringToBoolean } from '@src/common/decorators/transformer/string-to-boolean.transformer';
+import { MENTOR_BOARD_HEAD_LENGTH } from '@src/boards/constants/mentor-board/mentor-board.constant';
 
 export class MentorBoardPageQueryDto extends PageQueryDto {
   @ApiPropertyOptional({
@@ -27,9 +34,11 @@ export class MentorBoardPageQueryDto extends PageQueryDto {
 
   @ApiPropertyOptional({
     description: '제목 필터링',
+    minLength: MENTOR_BOARD_HEAD_LENGTH.MIN,
+    maxLength: MENTOR_BOARD_HEAD_LENGTH.MAX,
   })
   @IsOptional()
-  @IsNotEmpty()
+  @Length(MENTOR_BOARD_HEAD_LENGTH.MIN, MENTOR_BOARD_HEAD_LENGTH.MAX)
   head?: string;
 
   @ApiPropertyOptional({

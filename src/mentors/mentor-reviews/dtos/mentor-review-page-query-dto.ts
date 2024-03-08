@@ -1,17 +1,19 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
-import { IsBoolean, IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsBoolean, IsEnum, IsOptional, Length } from 'class-validator';
 import { PageQueryDto } from '@src/common/dto/page-query.dto';
 import { SortOrder } from '@src/common/constants/sort-order.enum';
 import { IsPositiveInt } from '@src/common/decorators/validators/is-positive-int.decorator';
 import { MentorReviewOrderField } from '@src/mentors/mentor-reviews/constants/mentor-review-order-field.enum';
 import { Transform } from 'class-transformer';
 import { stringToBoolean } from '@src/common/decorators/transformer/string-to-boolean.transformer';
+import { MENTOR_REVIEW_REVIEW_LENGTH } from '@src/mentors/mentor-reviews/constants/mentor-review.constant';
 
 export class MentorReviewPageQueryDto extends PageQueryDto {
   @ApiPropertyOptional({
     description: '리뷰 고유 ID 필터링',
     format: 'integer',
+    minimum: 1,
   })
   @IsOptional()
   @IsPositiveInt()
@@ -20,6 +22,7 @@ export class MentorReviewPageQueryDto extends PageQueryDto {
   @ApiPropertyOptional({
     description: '멘티 고유 ID 필터링',
     format: 'integer',
+    minimum: 1,
   })
   @IsOptional()
   @IsPositiveInt()
@@ -107,9 +110,11 @@ export class MentorReviewPageQueryDto extends PageQueryDto {
 
   @ApiPropertyOptional({
     description: '리뷰 내용 필터링',
+    minLength: MENTOR_REVIEW_REVIEW_LENGTH.MIN,
+    maxLength: MENTOR_REVIEW_REVIEW_LENGTH.MAX,
   })
   @IsOptional()
-  @IsNotEmpty()
+  @Length(MENTOR_REVIEW_REVIEW_LENGTH.MIN, MENTOR_REVIEW_REVIEW_LENGTH.MAX)
   review?: string;
 
   @ApiPropertyOptional({

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { MentorReview } from '@src/entities/MentorReview';
+import { MENTOR_REVIEW_REVIEW_LENGTH } from '@src/mentors/mentor-reviews/constants/mentor-review.constant';
 import { Exclude } from 'class-transformer';
 
 export class MentorReviewDto
@@ -30,6 +31,8 @@ export class MentorReviewDto
     description: '멘티가 작성한 리뷰',
     nullable: true,
     type: () => String,
+    minLength: MENTOR_REVIEW_REVIEW_LENGTH.MIN,
+    maxLength: MENTOR_REVIEW_REVIEW_LENGTH.MAX,
   })
   review: string | null;
 
