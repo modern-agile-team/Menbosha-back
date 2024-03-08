@@ -13,6 +13,8 @@ import {
   ValidationPipe,
   ClassSerializerInterceptor,
   Param,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { GetUserId } from '@src/common/decorators/get-userId.decorator';
@@ -129,12 +131,13 @@ export class MentorBoardController {
   }
 
   @Delete('')
+  @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(AccessTokenAuthGuard)
   @ApiDeleteMentorBoard()
   deleteBoard(
-    @Query('mentorBoardId') mentorBoardId: number,
+    @Query('mentorBoardId', ParsePositiveIntPipe) mentorBoardId: number,
     @GetUserId() userId: number,
   ) {
-    this.mentorBoardService.deleteBoard(mentorBoardId, userId);
+    return this.mentorBoardService.deleteBoard(mentorBoardId, userId);
   }
 }
