@@ -8,7 +8,7 @@ export class TotalCountRepository {
   constructor(private readonly entityManager: EntityManager) {}
 
   async createTotalCount(entityManager: EntityManager, userId: number) {
-    await entityManager.insert('total_count', { userId });
+    await entityManager.insert(TotalCount, { userId });
   }
 
   async createMentorReviewChecklistCount(
