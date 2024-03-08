@@ -13,6 +13,8 @@ import {
   ValidationPipe,
   Param,
   ClassSerializerInterceptor,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiTags } from '@nestjs/swagger';
@@ -179,12 +181,13 @@ export class HelpMeBoardController {
   }
 
   @Delete('')
+  @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(AccessTokenAuthGuard)
   @ApiDeleteHelpMeBoard()
   deleteBoard(
     @Query('helpMeBoardId', ParsePositiveIntPipe) boardId: number,
     @GetUserId() userId: number,
   ) {
-    this.helpMeBoardService.deleteBoard(boardId, userId);
+    return this.helpMeBoardService.deleteBoard(boardId, userId);
   }
 }
