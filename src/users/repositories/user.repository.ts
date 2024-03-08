@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
   EntityManager,
   FindManyOptions,
@@ -30,7 +30,7 @@ export class UserRepository {
       .createQueryBuilder('user')
       .leftJoin('user.userImage', 'userImage')
       .leftJoin('user.userIntro', 'userIntro')
-      .leftJoin('user.userBadge', 'userBadge')
+      .leftJoin('user.userBadges', 'userBadges')
       .leftJoin('user.totalCount', 'totalCount')
       .select([
         'user.id',
@@ -42,8 +42,8 @@ export class UserRepository {
         'user.createdAt',
         'user.updatedAt',
         'user.isMentor',
-        'userBadge.badgeId',
-        'userBadge.createdAt',
+        'userBadges.badgeId',
+        'userBadges.createdAt',
         'userImage.imageUrl',
         'userIntro.shortIntro',
         'userIntro.career',
