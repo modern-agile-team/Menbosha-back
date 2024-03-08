@@ -30,8 +30,8 @@ import { ApiPostUserBadges } from '@src/users/swagger-decorators/get-user-badges
 import { ApiGetUserInfo } from '@src/users/swagger-decorators/get-user-info.decorators';
 import { ApiUpdateUserIntro } from '@src/users/swagger-decorators/patch-user-intro-decorator';
 import { ApiPostUserIntro } from '@src/users/swagger-decorators/upload-user-Intro-decorators';
-import { ParsePositiveIntPipe } from '@src/common/pipes/parse-positive-int.pipe';
 import { UserIntro } from '@src/entities/UserIntro';
+import { ParsePositiveIntPipe } from '@src/common/pipes/parse-positive-int.pipe';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
