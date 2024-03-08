@@ -55,6 +55,7 @@ import { S3Service } from '@src/common/s3/s3.service';
     MentorBoardLikeRepository,
     QueryBuilderHelper,
   ],
+  exports: [HelpMeBoardService],
 })
 @Module({})
 export class BoardsModule {}
