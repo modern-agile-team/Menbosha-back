@@ -1,4 +1,4 @@
-import { EntityManager } from 'typeorm';
+import { DeleteResult, EntityManager } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { SortOrder } from '@src/common/constants/sort-order.enum';
 import { QueryBuilderHelper } from '@src/helpers/query-builder.helper';
@@ -169,7 +169,9 @@ export class HelpMeBoardRepository {
     return await this.entityManager.save(HelpMeBoard, boardData);
   }
 
-  async deleteBoard(board: HelpMeBoard): Promise<void> {
-    await this.entityManager.remove(HelpMeBoard, board);
+  deleteBoard(boardId: number): Promise<DeleteResult> {
+    return this.entityManager
+      .getRepository(HelpMeBoard)
+      .delete({ id: boardId });
   }
 }
