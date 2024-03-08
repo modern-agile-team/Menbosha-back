@@ -6,12 +6,14 @@ import { CommentsController } from '@src/comments/controllers/comments.controlle
 import { HelpYouComment } from '@src/comments/entities/help-you-comment.entity';
 import { CommentsRepository } from '@src/comments/repository/comments.repository';
 import { CommentsService } from '@src/comments/services/comments.services';
+import { BoardsModule } from '@src/boards/boards.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([HelpYouComment]),
     RedisModule,
     AuthModule,
+    BoardsModule,
   ],
   controllers: [CommentsController],
   providers: [CommentsService, CommentsRepository],
