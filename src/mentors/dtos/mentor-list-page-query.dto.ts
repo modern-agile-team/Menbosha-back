@@ -3,8 +3,8 @@ import { SortOrder } from '@src/common/constants/sort-order.enum';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
 import { IsPositiveInt } from '@src/common/decorators/validators/is-positive-int.decorator';
-import { User } from '@src/users/entities/user.entity';
 import { MentorOrderField } from '@src/mentors/constants/mentor-order-field.enum';
+import { User } from '@src/entities/User';
 
 export class MentorListPageQueryDto
   extends PageQueryDto

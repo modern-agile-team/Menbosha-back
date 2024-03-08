@@ -28,7 +28,7 @@ import { ApiNaverLogin } from '@src/auth/swagger-decorators/naver-login.decorato
 import { ApiNaverLogout } from '@src/auth/swagger-decorators/naver-logout.decorator';
 import { ApiNaverUnlink } from '@src/auth/swagger-decorators/naver-unlink.decorator';
 import { ApiNewAccessToken } from '@src/auth/swagger-decorators/new-access-token.decorator';
-import { Provider } from '@src/auth/enums/provider.enum';
+import { UserProvider } from '@src/auth/enums/user-provider.enum';
 import { AuthService } from '@src/auth/services/auth.service';
 
 @Controller('auth')
@@ -48,7 +48,7 @@ export class AuthController {
       throw new BadRequestException('인가코드가 없습니다.');
     }
 
-    return this.authService.login(code, Provider.Naver);
+    return this.authService.login(code, UserProvider.Naver);
   }
 
   @ApiKakaoLogin()
@@ -59,7 +59,7 @@ export class AuthController {
       throw new BadRequestException('인가코드가 없습니다.');
     }
 
-    return this.authService.login(code, Provider.Kakao);
+    return this.authService.login(code, UserProvider.Kakao);
   }
 
   @ApiGoogleLogin()
@@ -70,7 +70,7 @@ export class AuthController {
       throw new BadRequestException('인가코드가 없습니다.');
     }
 
-    return this.authService.login(code, Provider.Google);
+    return this.authService.login(code, UserProvider.Google);
   }
 
   @ApiNewAccessToken()
@@ -102,7 +102,7 @@ export class AuthController {
     await this.tokenService.deleteTokens(userId);
 
     return this.authService.unlink(
-      Provider.Kakao,
+      UserProvider.Kakao,
       socialAccessToken,
       socialRefreshToken,
     );
@@ -125,7 +125,7 @@ export class AuthController {
     await this.tokenService.deleteTokens(userId);
 
     return this.authService.unlink(
-      Provider.Naver,
+      UserProvider.Naver,
       socialAccessToken,
       socialRefreshToken,
     );
@@ -146,7 +146,7 @@ export class AuthController {
 
     await this.tokenService.deleteTokens(userId);
 
-    return this.authService.unlink(Provider.Google, socialAccessToken);
+    return this.authService.unlink(UserProvider.Google, socialAccessToken);
   }
 
   @ApiDeleteAccount()

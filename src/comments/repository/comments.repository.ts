@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { HelpYouComment } from '@src/comments/entities/help-you-comment.entity';
+import { HelpYouComment } from '@src/entities/HelpYouComment';
 import { EntityManager } from 'typeorm';
 
 @Injectable()

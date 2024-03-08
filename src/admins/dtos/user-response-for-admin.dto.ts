@@ -1,5 +1,5 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { Provider } from '@src/auth/enums/provider.enum';
+import { UserProvider } from '@src/auth/enums/user-provider.enum';
 import { UserStatus } from '@src/users/constants/user-status.enum';
 import { UserInfoDto } from '@src/users/dtos/user-info.dto';
 
@@ -17,9 +17,9 @@ export class UserResponseForAdminDto extends OmitType(UserInfoDto, [
 
   @ApiProperty({
     description: '유저 정보 제공자',
-    enum: Provider,
+    enum: UserProvider,
   })
-  provider: Provider;
+  provider: UserProvider;
 
   @ApiProperty({
     description: '유저 상태',

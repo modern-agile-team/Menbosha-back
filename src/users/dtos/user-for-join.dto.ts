@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { User } from '@src/entities/User';
 import { ResponseUserImageDto } from '@src/users/dtos/response-user-image.dto';
-import { User } from '@src/users/entities/user.entity';
 
 export class UserForJoinDto implements Pick<User, 'name'> {
   @ApiProperty({

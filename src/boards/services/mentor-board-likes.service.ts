@@ -5,8 +5,8 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { MentorBoardLikeDto } from '@src/boards/dto/mentorBoard/mentor-board-like.dto';
-import { MentorBoardLike } from '@src/boards/entities/mentor-board-like.entity';
 import { MentorBoardService } from '@src/boards/services/mentor.board.service';
+import { MentorBoardLike } from '@src/entities/MentorBoardLike';
 import { LikesService } from '@src/like/services/likes.service';
 import { DataSource } from 'typeorm';
 @Injectable()

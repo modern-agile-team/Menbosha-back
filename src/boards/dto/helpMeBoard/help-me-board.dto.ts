@@ -1,9 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { HelpMeBoard } from '@src/entities/HelpMeBoard';
 import { Exclude } from 'class-transformer';
-import { HelpMeBoard } from '@src/boards/entities/help-me-board.entity';
 
 export class HelpMeBoardDto
-  implements Omit<HelpMeBoard, 'user' | 'categoryList' | 'helpMeBoardImages'>
+  implements
+    Omit<
+      HelpMeBoard,
+      'user' | 'category' | 'helpMeBoardImages' | 'helpYouComments'
+    >
 {
   @ApiProperty({
     description: '도와주세요 게시판 글 고유 id',

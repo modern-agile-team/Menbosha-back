@@ -1,5 +1,5 @@
-import { HelpYouComment } from '@src/comments/entities/help-you-comment.entity';
-import { TotalCount } from '@src/total-count/entities/total-count.entity';
+import { HelpYouComment } from '@src/entities/HelpYouComment';
+import { TotalCount } from '@src/entities/TotalCount';
 import {
   EntitySubscriberInterface,
   EventSubscriber,

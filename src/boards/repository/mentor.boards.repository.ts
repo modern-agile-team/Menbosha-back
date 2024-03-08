@@ -12,7 +12,7 @@ import { MentorBoardOrderField } from '@src/boards/constants/mentor-board-order-
 import { CreateMentorBoardDto } from '@src/boards/dto/mentorBoard/create.mentor.board.dto';
 import { MentorBoardDto } from '@src/boards/dto/mentorBoard/mentor-board.dto';
 import { UpdateMentorBoardDto } from '@src/boards/dto/mentorBoard/update.mentor.board.dto';
-import { MentorBoard } from '@src/boards/entities/mentor-board.entity';
+import { MentorBoard } from '@src/entities/MentorBoard';
 
 @Injectable()
 export class MentorBoardRepository {

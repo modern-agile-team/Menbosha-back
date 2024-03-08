@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { MentorReviewChecklistCount } from '@src/total-count/entities/mentor-review-checklist-count.entity';
+import { MentorReviewChecklistCount } from '@src/entities/MentorReviewChecklistCount';
+import { Exclude } from 'class-transformer';
 
 export class MentorReviewChecklistCountDto
-  implements Omit<MentorReviewChecklistCount, 'user'>
+  implements Omit<MentorReviewChecklistCount, 'mentor'>
 {
   @ApiProperty({
     description: '멘토 리뷰 체크리스트 카운트 고유 ID',
@@ -12,11 +13,11 @@ export class MentorReviewChecklistCountDto
   id: number;
 
   @ApiProperty({
-    description: '멘토 리뷰 체크리스트 카운트 유저 고유 ID',
+    description: '멘토 리뷰 체크리스트 카운트 멘토 고유 ID',
     format: 'integer',
     minimum: 1,
   })
-  userId: number;
+  mentorId: number;
 
   @ApiProperty({
     description: '잘가르쳐요 카운트',
@@ -92,6 +93,9 @@ export class MentorReviewChecklistCountDto
     description: '생성일자',
   })
   createdAt: Date;
+
+  @Exclude()
+  deletedAt: Date | null;
 
   constructor(mentorReviewChecklistCountDto: MentorReviewChecklistCountDto) {
     Object.assign(this, mentorReviewChecklistCountDto);

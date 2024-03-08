@@ -3,17 +3,16 @@ import { Injectable } from '@nestjs/common';
 import { SortOrder } from '@src/common/constants/sort-order.enum';
 import { QueryBuilderHelper } from '@src/helpers/query-builder.helper';
 import { HelpYouCommentOrderField } from '@src/comments/constants/help-you-comment-order-field.enum';
-import { HelpYouComment } from '@src/comments/entities/help-you-comment.entity';
 import { HelpMeBoardOrderField } from '@src/boards/constants/help-me-board-order-field.enum';
 import { CreateHelpMeBoardDto } from '@src/boards/dto/helpMeBoard/create.help.me.board.dto';
-import { HelpMeBoardDto } from '@src/boards/dto/helpMeBoard/help-me-board.dto';
 import { UpdateHelpMeBoardDto } from '@src/boards/dto/helpMeBoard/update.help.me.board.dto';
-import { HelpMeBoard } from '@src/boards/entities/help-me-board.entity';
+import { HelpMeBoard } from '@src/entities/HelpMeBoard';
+import { HelpYouComment } from '@src/entities/HelpYouComment';
 
 @Injectable()
 export class HelpMeBoardRepository {
   private readonly FULL_TEXT_SEARCH_FIELD: readonly (keyof Pick<
-    HelpMeBoardDto,
+    HelpMeBoard,
     'head' | 'body'
   >)[] = ['head', 'body'];
 
