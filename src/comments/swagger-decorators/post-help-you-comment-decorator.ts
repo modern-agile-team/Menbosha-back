@@ -1,11 +1,12 @@
 import { applyDecorators } from '@nestjs/common';
 import {
   ApiBearerAuth,
-  ApiBody,
+  ApiExtraModels,
   ApiOperation,
-  ApiQuery,
   ApiResponse,
+  getSchemaPath,
 } from '@nestjs/swagger';
+import { HelpYouCommentDto } from '@src/comments/dto/help-you-comment.dto';
 
 export function ApiAddHelpComment() {
   return applyDecorators(
@@ -14,18 +15,10 @@ export function ApiAddHelpComment() {
       description: '도와줄게요 댓글을 생성하는 API',
     }),
     ApiResponse({
-      status: 200,
+      status: 201,
       description: '성공적으로 댓글을 생성한 경우',
-      content: {
-        JSON: {
-          example: {
-            content: '댓글 1차시도',
-            userId: '작성한 userId가 넘어옵니다',
-            boardId: '작성한 보드의 boardId가 넘어옵니다',
-            id: '댓글 고유 id',
-            createAt: '작성한 시간이 넘어옵니다',
-          },
-        },
+      schema: {
+        $ref: getSchemaPath(HelpYouCommentDto),
       },
     }),
     ApiResponse({
@@ -89,20 +82,6 @@ export function ApiAddHelpComment() {
       },
     }),
     ApiBearerAuth('access-token'),
-    ApiQuery({
-      name: 'helpMeBoardId',
-      description: '댓글을 추가할 보드의 ID',
-    }),
-    ApiBody({
-      schema: {
-        type: 'object',
-        properties: {
-          content: { type: 'string' },
-        },
-        example: {
-          content: '추가할 댓글 입력입니다.',
-        },
-      },
-    }),
+    ApiExtraModels(HelpYouCommentDto),
   );
 }

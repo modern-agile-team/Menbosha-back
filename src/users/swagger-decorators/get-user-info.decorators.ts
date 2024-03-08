@@ -34,7 +34,7 @@ export function ApiGetUserInfo() {
               portfolio: '나를 소개할 수 있는 링크가 있다면 추가해주세요.',
               sns: 'SNS 계정의 링크를 추가해주세요.',
             },
-            userBadge: [
+            userBadges: [
               {
                 badgeId: 1,
                 createdAt: '2023-12-12T19:59:18.000Z',
