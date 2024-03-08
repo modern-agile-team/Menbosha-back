@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCommentDto } from '@src/comments/dto/create-comment-dto';
 import { HelpYouComment } from '@src/comments/entities/help-you-comment.entity';
 import { EntityManager } from 'typeorm';
 
@@ -7,17 +6,15 @@ import { EntityManager } from 'typeorm';
 export class CommentsRepository {
   constructor(private readonly entityManager: EntityManager) {}
 
-  async createComment(
-    commentData: CreateCommentDto,
+  createComment(
     userId: number,
-    boardId: number,
+    helpMeBoardId: number,
   ): Promise<HelpYouComment> {
-    const comment = new HelpYouComment();
-    comment.content = commentData.content;
-    comment.userId = userId;
-    comment.helpMeBoardId = boardId;
-    return await this.entityManager.save(HelpYouComment, comment);
-    // 이부분 return 나중에 dto로 변경하기
+    const helpYouComment = this.entityManager
+      .getRepository(HelpYouComment)
+      .create({ userId, helpMeBoardId });
+
+    return this.entityManager.save(HelpYouComment, helpYouComment);
   }
 
   // async findCommentsByBoardId(boardId: number): Promise<HelpYouComment[]> {
@@ -36,13 +33,19 @@ export class CommentsRepository {
     });
   }
 
-  async findCommentByUserId(
+  findOneCommentByUserId(
     userId: number,
-    boardId: number,
+    helpMeBoardId: number,
   ): Promise<HelpYouComment> {
-    return await this.entityManager.findOne(HelpYouComment, {
-      where: { userId: userId, helpMeBoardId: boardId },
+    return this.entityManager.findOne(HelpYouComment, {
+      where: { userId, helpMeBoardId },
     });
+  }
+
+  isExistComment(userId: number, helpMeBoardId: number): Promise<boolean> {
+    return this.entityManager
+      .getRepository(HelpYouComment)
+      .existsBy({ userId, helpMeBoardId });
   }
 
   async findOneComment(id: number): Promise<HelpYouComment> {

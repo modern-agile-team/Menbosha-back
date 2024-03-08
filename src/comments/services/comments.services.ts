@@ -4,32 +4,43 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateCommentDto } from '@src/comments/dto/create-comment-dto';
+import { HelpMeBoardService } from '@src/boards/services/help.me.board.service';
+import { HelpYouCommentDto } from '@src/comments/dto/help-you-comment.dto';
 import { CommentsRepository } from '@src/comments/repository/comments.repository';
 // import { UpdateCommentDto } from '@src/dto/update-comment-dto';
 
 @Injectable()
 export class CommentsService {
-  constructor(private commentRepository: CommentsRepository) {}
+  constructor(
+    private readonly commentRepository: CommentsRepository,
+    private readonly helpMeBoardService: HelpMeBoardService,
+  ) {}
 
-  async create(
-    commentData: CreateCommentDto,
-    userId: number,
-    boardId: number,
-  ): Promise<CreateCommentDto> {
-    const myComment = await this.commentRepository.findCommentByUserId(
+  async create(userId: number, boardId: number): Promise<HelpYouCommentDto> {
+    const existHelpMeBoard =
+      await this.helpMeBoardService.findOneOrFail(boardId);
+
+    if (existHelpMeBoard.userId === userId) {
+      throw new ForbiddenException(
+        '본인의 도와주세요 게시글에는 댓글을 달 수 없습니다.',
+      );
+    }
+
+    const isExistComment = await this.commentRepository.isExistComment(
       userId,
-      boardId,
+      existHelpMeBoard.id,
     );
 
-    if (myComment) {
+    if (isExistComment) {
       throw new ConflictException('이미 게시물에 댓글을 작성했습니다.');
     }
-    return await this.commentRepository.createComment(
-      commentData,
+
+    const helpYouComment = await this.commentRepository.createComment(
       userId,
       boardId,
     );
+
+    return new HelpYouCommentDto(helpYouComment);
   }
 
   async deleteComment(commentId: number, userId: number): Promise<void> {
