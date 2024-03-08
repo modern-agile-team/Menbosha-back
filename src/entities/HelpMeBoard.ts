@@ -43,7 +43,7 @@ export class HelpMeBoard {
   @Column('varchar', {
     name: 'head',
     comment: '도와주세요 게시글 제목',
-    length: 30,
+    length: 50,
   })
   head: string;
 
