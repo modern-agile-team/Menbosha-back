@@ -1,7 +1,7 @@
 import { EntityManager, FindOneOptions, UpdateResult } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { MentorReviewsItemResponseDto } from '@src/mentors/mentor-reviews/dtos/mentor-reviews-item-response.dto';
-import { MentorReview } from '@src/mentors/mentor-reviews/entities/mentor-review.entity';
+import { MentorReview } from '@src/entities/MentorReview';
 
 @Injectable()
 export class MentorReviewRepository {

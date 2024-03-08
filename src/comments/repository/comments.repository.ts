@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCommentDto } from '@src/comments/dto/create-comment-dto';
-import { HelpYouComment } from '@src/comments/entities/help-you-comment.entity';
+import { HelpYouComment } from '@src/entities/HelpYouComment';
 import { EntityManager } from 'typeorm';
 
 @Injectable()
@@ -8,12 +7,10 @@ export class CommentsRepository {
   constructor(private readonly entityManager: EntityManager) {}
 
   async createComment(
-    commentData: CreateCommentDto,
     userId: number,
     boardId: number,
   ): Promise<HelpYouComment> {
     const comment = new HelpYouComment();
-    comment.content = commentData.content;
     comment.userId = userId;
     comment.helpMeBoardId = boardId;
     return await this.entityManager.save(HelpYouComment, comment);

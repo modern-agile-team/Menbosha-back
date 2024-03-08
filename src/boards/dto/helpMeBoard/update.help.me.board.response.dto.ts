@@ -1,4 +1,4 @@
-import { UserImage } from '@src/users/entities/user-image.entity';
+import { UserImage } from '@src/entities/UserImage';
 
 export class HelpMeBoardResponseDTO {
   id: number;

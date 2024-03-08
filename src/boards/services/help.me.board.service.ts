@@ -14,8 +14,8 @@ import { HelpMeBoardWithUserAndImagesDto } from '@src/boards/dto/helpMeBoard/hel
 import { oneHelpMeBoardResponseDTO } from '@src/boards/dto/helpMeBoard/one.response.help.me.board.dto';
 import { UpdateHelpMeBoardDto } from '@src/boards/dto/helpMeBoard/update.help.me.board.dto';
 import { HelpMeBoardResponseDTO } from '@src/boards/dto/helpMeBoard/update.help.me.board.response.dto';
-import { HelpMeBoard } from '@src/boards/entities/help-me-board.entity';
 import { HelpMeBoardRepository } from '@src/boards/repository/help.me.board.repository';
+import { HelpMeBoard } from '@src/entities/HelpMeBoard';
 
 @Injectable()
 export class HelpMeBoardService {

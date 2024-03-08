@@ -4,19 +4,15 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateCommentDto } from '@src/comments/dto/create-comment-dto';
 import { CommentsRepository } from '@src/comments/repository/comments.repository';
+import { HelpYouComment } from '@src/entities/HelpYouComment';
 // import { UpdateCommentDto } from '@src/dto/update-comment-dto';
 
 @Injectable()
 export class CommentsService {
   constructor(private commentRepository: CommentsRepository) {}
 
-  async create(
-    commentData: CreateCommentDto,
-    userId: number,
-    boardId: number,
-  ): Promise<CreateCommentDto> {
+  async create(userId: number, boardId: number): Promise<HelpYouComment> {
     const myComment = await this.commentRepository.findCommentByUserId(
       userId,
       boardId,
@@ -25,11 +21,7 @@ export class CommentsService {
     if (myComment) {
       throw new ConflictException('이미 게시물에 댓글을 작성했습니다.');
     }
-    return await this.commentRepository.createComment(
-      commentData,
-      userId,
-      boardId,
-    );
+    return await this.commentRepository.createComment(userId, boardId);
   }
 
   async deleteComment(commentId: number, userId: number): Promise<void> {

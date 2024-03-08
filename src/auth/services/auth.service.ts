@@ -12,7 +12,7 @@ import { UserService } from '@src/users/services/user.service';
 import { UserImageService } from '@src/users/services/user-image.service';
 import { UserStatus } from '@src/users/constants/user-status.enum';
 import { UserInfo } from '@src/auth/interfaces/user-info.interface';
-import { Provider } from '@src/auth/enums/provider.enum';
+import { UserProvider } from '@src/auth/enums/user-provider.enum';
 import { TokenService } from '@src/auth/services/token.service';
 import { AuthServiceInterface } from '@src/auth/interfaces/auth-service.interface';
 import { BannedUserException } from '@src/http-exceptions/exceptions/banned-user.exception';
@@ -33,7 +33,7 @@ export class AuthService implements AuthServiceInterface {
     private readonly userIntroService: UserIntroService,
   ) {}
 
-  async login(authorizeCode: string, provider: Provider) {
+  async login(authorizeCode: string, provider: UserProvider) {
     try {
       let tokenUrl: string,
         tokenHeader: object,
@@ -41,7 +41,7 @@ export class AuthService implements AuthServiceInterface {
         userInfoUrl: string,
         userInfoHeader: object;
 
-      if (provider === Provider.Naver) {
+      if (provider === UserProvider.Naver) {
         // 네이버 토큰 발급
         tokenUrl = 'https://nid.naver.com/oauth2.0/token';
         tokenHeader = {
@@ -57,7 +57,7 @@ export class AuthService implements AuthServiceInterface {
           state: 'test',
           redirect_uri: process.env.NAVER_REDIRECT_URI,
         };
-      } else if (provider === Provider.Kakao) {
+      } else if (provider === UserProvider.Kakao) {
         // 카카오 토큰 발급
         tokenUrl = 'https://kauth.kakao.com/oauth/token';
         tokenHeader = {
@@ -71,7 +71,7 @@ export class AuthService implements AuthServiceInterface {
           redirect_uri: process.env.KAKAO_REDIRECT_URI,
           code: authorizeCode,
         };
-      } else if (provider === Provider.Google) {
+      } else if (provider === UserProvider.Google) {
         // 구글 토큰 발급
         tokenUrl = 'https://oauth2.googleapis.com/token';
         tokenHeader = {
@@ -93,7 +93,7 @@ export class AuthService implements AuthServiceInterface {
       const socialAccessToken = token.access_token;
       const socialRefreshToken = token.refresh_token;
 
-      if (provider === Provider.Naver) {
+      if (provider === UserProvider.Naver) {
         // 네이버 로그인 사용자 정보 조회
         userInfoUrl = 'https://openapi.naver.com/v1/nid/me';
         userInfoHeader = {
@@ -101,7 +101,7 @@ export class AuthService implements AuthServiceInterface {
             Authorization: `Bearer ${socialAccessToken}`,
           },
         };
-      } else if (provider === Provider.Kakao) {
+      } else if (provider === UserProvider.Kakao) {
         // 카카오 로그인 사용자 정보 조회
         userInfoUrl = 'https://kapi.kakao.com/v2/user/me';
         userInfoHeader = {
@@ -110,7 +110,7 @@ export class AuthService implements AuthServiceInterface {
             'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
           },
         };
-      } else if (provider === Provider.Google) {
+      } else if (provider === UserProvider.Google) {
         // 구글 로그인 사용자 정보 조회
         userInfoUrl = 'https://www.googleapis.com/oauth2/v2/userinfo';
         userInfoHeader = {
@@ -129,17 +129,17 @@ export class AuthService implements AuthServiceInterface {
       let profileImage = null;
       let uniqueId = null;
 
-      if (provider === Provider.Naver) {
+      if (provider === UserProvider.Naver) {
         name = socialUserInfo.response.nickname; // 네이버 닉네임
         email = socialUserInfo.response.email; // 네이버 이메일
         profileImage = socialUserInfo.response.profile_image; // 네이버 프로필 이미지
         uniqueId = socialUserInfo.response.id; // 네이버 고유 아이디
-      } else if (provider === Provider.Kakao) {
+      } else if (provider === UserProvider.Kakao) {
         name = socialUserInfo.kakao_account.profile.nickname; // 카카오 닉네임
         email = socialUserInfo.kakao_account.email; // 카카오 이메일
         profileImage = socialUserInfo.kakao_account.profile.profile_image_url; // 카카오 프로필 이미지
         uniqueId = socialUserInfo.id; // 카카오 고유 아이디
-      } else if (provider === Provider.Google) {
+      } else if (provider === UserProvider.Google) {
         name = socialUserInfo.name; // Google 닉네임
         email = socialUserInfo.email; // Google 이메일
         profileImage = socialUserInfo.picture; // Google 프로필 이미지
@@ -354,7 +354,7 @@ export class AuthService implements AuthServiceInterface {
   }
 
   async unlink(
-    provider: Provider,
+    provider: UserProvider,
     accessToken: string,
     refreshToken?: string,
   ): Promise<object> {
@@ -364,7 +364,7 @@ export class AuthService implements AuthServiceInterface {
         unlinkHeader: object,
         unlinkBody: object;
 
-      if (provider === Provider.Kakao) {
+      if (provider === UserProvider.Kakao) {
         checkValidAccessToken =
           await this.tokenService.checkValidKakaoToken(accessToken);
 
@@ -380,7 +380,7 @@ export class AuthService implements AuthServiceInterface {
           },
         };
         unlinkBody = {};
-      } else if (provider === Provider.Naver) {
+      } else if (provider === UserProvider.Naver) {
         checkValidAccessToken =
           await this.tokenService.checkValidNaverToken(accessToken);
 
@@ -401,7 +401,7 @@ export class AuthService implements AuthServiceInterface {
           grant_type: 'delete',
           service_provider: 'NAVER',
         };
-      } else if (provider === Provider.Google) {
+      } else if (provider === UserProvider.Google) {
         unlinkUrl = `https://accounts.google.com/o/oauth2/revoke?token=${accessToken}`;
         unlinkHeader = {};
         unlinkBody = {};

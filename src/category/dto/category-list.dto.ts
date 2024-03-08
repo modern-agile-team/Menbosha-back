@@ -1,9 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CategoryList } from '@src/category/entity/category-list.entity';
+import { Category } from '@src/entities/Category';
 
-export class CategoryListDto
-  implements Pick<CategoryList, 'id' | 'categoryName'>
-{
+export class CategoryDto implements Pick<Category, 'id' | 'name'> {
   @ApiProperty({
     description: '카테고리 고유 ID',
     format: 'integer',
@@ -13,9 +11,9 @@ export class CategoryListDto
   @ApiProperty({
     description: '카테고리 이름',
   })
-  categoryName: string;
+  name: string;
 
-  constructor(categoryListDto: CategoryListDto) {
-    Object.assign(this, categoryListDto);
+  constructor(categoryDto: CategoryDto) {
+    Object.assign(this, categoryDto);
   }
 }

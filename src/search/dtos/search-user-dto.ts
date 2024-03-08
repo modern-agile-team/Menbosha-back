@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserImage } from '@src/users/entities/user-image.entity';
-import { User } from '@src/users/entities/user.entity';
+import { User } from '@src/entities/User';
+import { UserImage } from '@src/entities/UserImage';
 
 export class SearchUserDto implements Pick<User, 'id' | 'name'> {
   @ApiProperty({

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '@src/users/entities/user.entity';
+import { User } from '@src/entities/User';
 
 export class ChatUserDto implements Pick<User, 'name'> {
   @ApiProperty({
