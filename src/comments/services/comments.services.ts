@@ -18,7 +18,7 @@ export class CommentsService {
 
   async create(userId: number, boardId: number): Promise<HelpYouCommentDto> {
     const existHelpMeBoard =
-      await this.helpMeBoardService.findOneOrFail(boardId);
+      await this.helpMeBoardService.findOneOrNotFound(boardId);
 
     if (existHelpMeBoard.userId === userId) {
       throw new ForbiddenException(
