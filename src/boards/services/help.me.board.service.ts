@@ -149,7 +149,7 @@ export class HelpMeBoardService {
     };
   }
 
-  async findOneOrFail(helpMeBoardId: number) {
+  async findOneOrNotFound(helpMeBoardId: number) {
     const existHelpMeBoard =
       await this.helpMeBoardRepository.findOneHelpMeBoardBy(helpMeBoardId);
 
@@ -210,21 +210,22 @@ export class HelpMeBoardService {
     return '끌어올리기가 완료되었습니다.';
   }
 
-  async deleteBoard(boardId: number, userId: number): Promise<number> {
-    const board = await this.findOneOrFail(boardId);
+  async deleteBoard(boardId: number, userId: number): Promise<HelpMeBoardDto> {
+    const existHelpMeBoard = await this.findOneOrNotFound(boardId);
 
-    if (board.userId !== userId) {
+    if (existHelpMeBoard.userId !== userId) {
       throw new ForbiddenException('사용자가 작성한 게시물이 아닙니다');
     }
 
-    const deleteResult = await this.helpMeBoardRepository.deleteBoard(board.id);
+    const deletedHelpMeBoard =
+      await this.helpMeBoardRepository.deleteBoard(existHelpMeBoard);
 
-    if (!deleteResult.affected) {
+    if (!deletedHelpMeBoard) {
       throw new InternalServerErrorException(
         '도와주세요 게시글 삭제 중 서버 에러 발생',
       );
     }
 
-    return deleteResult.affected;
+    return new HelpMeBoardDto(deletedHelpMeBoard);
   }
 }
