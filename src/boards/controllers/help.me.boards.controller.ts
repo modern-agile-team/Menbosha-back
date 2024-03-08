@@ -182,7 +182,7 @@ export class HelpMeBoardController {
   @UseGuards(AccessTokenAuthGuard)
   @ApiDeleteHelpMeBoard()
   deleteBoard(
-    @Query('helpMeBoardId') boardId: number,
+    @Query('helpMeBoardId', ParsePositiveIntPipe) boardId: number,
     @GetUserId() userId: number,
   ) {
     this.helpMeBoardService.deleteBoard(boardId, userId);
