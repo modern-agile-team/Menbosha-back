@@ -1,6 +1,7 @@
 import {
   ForbiddenException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { CategoryService } from '@src/category/services/category.service';
@@ -209,17 +210,21 @@ export class HelpMeBoardService {
     return '끌어올리기가 완료되었습니다.';
   }
 
-  async deleteBoard(boardId: number, userId: number): Promise<void> {
-    const board = await this.helpMeBoardRepository.findHelpMeBoardById(boardId);
-
-    if (!board) {
-      throw new NotFoundException('게시물을 찾을 수 없습니다');
-    }
+  async deleteBoard(boardId: number, userId: number): Promise<number> {
+    const board = await this.findOneOrFail(boardId);
 
     if (board.userId !== userId) {
       throw new ForbiddenException('사용자가 작성한 게시물이 아닙니다');
     }
 
-    await this.helpMeBoardRepository.deleteBoard(board);
+    const deleteResult = await this.helpMeBoardRepository.deleteBoard(board.id);
+
+    if (!deleteResult.affected) {
+      throw new InternalServerErrorException(
+        '도와주세요 게시글 삭제 중 서버 에러 발생',
+      );
+    }
+
+    return deleteResult.affected;
   }
 }
