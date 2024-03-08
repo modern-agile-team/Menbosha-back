@@ -34,4 +34,8 @@ export class HelpYouCommentDto
 
   @Exclude()
   deletedAt: Date | null;
+
+  constructor(helpYouCommentDto: HelpYouCommentDto) {
+    Object.assign(this, helpYouCommentDto);
+  }
 }
