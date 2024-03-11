@@ -10,8 +10,8 @@ export class CreateBannedUserBodyDto
 {
   @ApiProperty({
     description: '정지 사유',
-    minLength: 1,
-    maxLength: 255,
+    minLength: BANNED_USER_REASON_LENGTH.MIN,
+    maxLength: BANNED_USER_REASON_LENGTH.MAX,
   })
   @Length(BANNED_USER_REASON_LENGTH.MIN, BANNED_USER_REASON_LENGTH.MAX)
   reason: string;

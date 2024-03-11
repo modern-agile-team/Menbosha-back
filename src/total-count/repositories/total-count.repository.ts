@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { MentorReviewChecklistCount } from '@src/entities/MentorReviewChecklistCount';
 import { TotalCount } from '@src/entities/TotalCount';
 import { EntityManager } from 'typeorm';
 
@@ -7,15 +8,15 @@ export class TotalCountRepository {
   constructor(private readonly entityManager: EntityManager) {}
 
   async createTotalCount(entityManager: EntityManager, userId: number) {
-    await entityManager.insert('total_count', { userId });
+    await entityManager.insert(TotalCount, { userId });
   }
 
   async createMentorReviewChecklistCount(
     entityManager: EntityManager,
-    userId: number,
+    mentorId: number,
   ) {
-    await entityManager.insert('mentor_review_checklist_count', {
-      userId,
+    await entityManager.insert(MentorReviewChecklistCount, {
+      mentorId,
     });
   }
 

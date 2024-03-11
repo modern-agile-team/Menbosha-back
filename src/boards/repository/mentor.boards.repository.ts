@@ -8,7 +8,7 @@ import { Injectable } from '@nestjs/common';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { QueryBuilderHelper } from '@src/helpers/query-builder.helper';
 import { SortOrder } from '@src/common/constants/sort-order.enum';
-import { MentorBoardOrderField } from '@src/boards/constants/mentor-board-order-field.enum';
+import { MentorBoardOrderField } from '@src/boards/constants/mentor-board/mentor-board-order-field.enum';
 import { CreateMentorBoardDto } from '@src/boards/dto/mentorBoard/create.mentor.board.dto';
 import { MentorBoardDto } from '@src/boards/dto/mentorBoard/mentor-board.dto';
 import { UpdateMentorBoardDto } from '@src/boards/dto/mentorBoard/update.mentor.board.dto';

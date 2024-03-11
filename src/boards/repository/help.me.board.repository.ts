@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { SortOrder } from '@src/common/constants/sort-order.enum';
 import { QueryBuilderHelper } from '@src/helpers/query-builder.helper';
 import { HelpYouCommentOrderField } from '@src/comments/constants/help-you-comment-order-field.enum';
-import { HelpMeBoardOrderField } from '@src/boards/constants/help-me-board-order-field.enum';
+import { HelpMeBoardOrderField } from '@src/boards/constants/help-me-board/help-me-board-order-field.enum';
 import { CreateHelpMeBoardDto } from '@src/boards/dto/helpMeBoard/create.help.me.board.dto';
 import { UpdateHelpMeBoardDto } from '@src/boards/dto/helpMeBoard/update.help.me.board.dto';
 import { HelpMeBoard } from '@src/entities/HelpMeBoard';

@@ -2,6 +2,7 @@ import { ApiProperty, PickType } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { UserForJoinDto } from '@src/users/dtos/user-for-join.dto';
 import { UserIntroResponseDto } from '@src/mentors/dtos/user-intro-response.dto';
+import { USER_NAME_LENGTH } from '@src/users/constants/user.constant';
 
 export class UserWithImageAndIntroDto extends PickType(UserForJoinDto, [
   'userImage',
@@ -14,6 +15,8 @@ export class UserWithImageAndIntroDto extends PickType(UserForJoinDto, [
 
   @ApiProperty({
     description: '유저 이름',
+    minLength: USER_NAME_LENGTH.MIN,
+    maxLength: USER_NAME_LENGTH.MAX,
   })
   name: string;
 
@@ -22,6 +25,7 @@ export class UserWithImageAndIntroDto extends PickType(UserForJoinDto, [
 
   @ApiProperty({
     description: '유저 랭크',
+    format: 'integer',
   })
   rank: number;
 
@@ -32,11 +36,13 @@ export class UserWithImageAndIntroDto extends PickType(UserForJoinDto, [
 
   @ApiProperty({
     description: '멘토 리뷰 후기 당한 개수',
+    format: 'integer',
   })
   mentorReviewCount: number;
 
   @ApiProperty({
     description: '멘토 게시판 글쓴 갯수',
+    format: 'integer',
   })
   mentorBoardCount: number;
 

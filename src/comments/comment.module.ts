@@ -5,6 +5,7 @@ import { AuthModule } from '@src/auth/auth.module';
 import { CommentsController } from '@src/comments/controllers/comments.controller';
 import { CommentsRepository } from '@src/comments/repository/comments.repository';
 import { CommentsService } from '@src/comments/services/comments.services';
+import { BoardsModule } from '@src/boards/boards.module';
 import { HelpYouComment } from '@src/entities/HelpYouComment';
 import { BoardsModule } from '@src/boards/boards.module';
 
