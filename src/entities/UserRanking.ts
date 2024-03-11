@@ -1,3 +1,5 @@
+import { Category } from '@src/entities/Category';
+import { User } from '@src/entities/User';
 import {
   Column,
   DeleteDateColumn,
@@ -8,12 +10,10 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Category } from './Category';
-import { User } from './User';
 
 @Index('FK_user_ranking_activity_category_id', ['activityCategoryId'], {})
 @Index('UQ_user_ranking_user_id', ['userId'], { unique: true })
-@Entity('user_ranking', { schema: 'ma6_menbosha_db' })
+@Entity('user_ranking')
 export class UserRanking {
   @PrimaryGeneratedColumn({
     type: 'int',

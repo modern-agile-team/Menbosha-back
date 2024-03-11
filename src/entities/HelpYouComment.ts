@@ -1,3 +1,5 @@
+import { HelpMeBoard } from '@src/entities/HelpMeBoard';
+import { User } from '@src/entities/User';
 import {
   Column,
   DeleteDateColumn,
@@ -7,12 +9,10 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { HelpMeBoard } from './HelpMeBoard';
-import { User } from './User';
 
 @Index('FK_help_you_comment_help_me_board_id', ['helpMeBoardId'], {})
 @Index('FK_help_you_comment_user_id', ['userId'], {})
-@Entity('help_you_comment', { schema: 'ma6_menbosha_db' })
+@Entity('help_you_comment')
 export class HelpYouComment {
   @PrimaryGeneratedColumn({
     type: 'int',

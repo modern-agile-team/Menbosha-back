@@ -37,7 +37,7 @@ export class Badge1709815357848 implements MigrationInterface {
     };
 
     await queryRunner.manager
-      .getRepository(Badge)
+      .getRepository('badge')
       .upsert(
         [
           nameMemoFactory('친절한 멘토씨', '친절해요', 5),

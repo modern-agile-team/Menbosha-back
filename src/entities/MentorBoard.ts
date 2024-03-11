@@ -1,3 +1,7 @@
+import { Category } from '@src/entities/Category';
+import { MentorBoardImage } from '@src/entities/MentorBoardImage';
+import { MentorBoardLike } from '@src/entities/MentorBoardLike';
+import { User } from '@src/entities/User';
 import {
   Column,
   DeleteDateColumn,
@@ -8,15 +12,11 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Category } from './Category';
-import { User } from './User';
-import { MentorBoardImage } from './MentorBoardImage';
-import { MentorBoardLike } from './MentorBoardLike';
 
 @Index('FK_mentor_board_category_id', ['categoryId'], {})
 @Index('FK_mentor_board_user_id', ['userId'], {})
 @Index('IDX_fulltext_head_body', ['head', 'body'], { fulltext: true })
-@Entity('mentor_board', { schema: 'ma6_menbosha_db' })
+@Entity('mentor_board')
 export class MentorBoard {
   @PrimaryGeneratedColumn({
     type: 'int',

@@ -1,10 +1,10 @@
+import { HelpMeBoard } from '@src/entities/HelpMeBoard';
+import { MentorBoard } from '@src/entities/MentorBoard';
+import { User } from '@src/entities/User';
+import { UserRanking } from '@src/entities/UserRanking';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { HelpMeBoard } from './HelpMeBoard';
-import { MentorBoard } from './MentorBoard';
-import { User } from './User';
-import { UserRanking } from './UserRanking';
 
-@Entity('category', { schema: 'ma6_menbosha_db' })
+@Entity('category')
 export class Category {
   @PrimaryGeneratedColumn({
     type: 'int',

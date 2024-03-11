@@ -1,7 +1,7 @@
+import { UserBadge } from '@src/entities/UserBadge';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { UserBadge } from './UserBadge';
 
-@Entity('badge', { schema: 'ma6_menbosha_db' })
+@Entity('badge')
 export class Badge {
   @PrimaryGeneratedColumn({
     type: 'int',

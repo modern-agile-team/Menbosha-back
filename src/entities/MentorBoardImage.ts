@@ -1,3 +1,4 @@
+import { MentorBoard } from '@src/entities/MentorBoard';
 import {
   Column,
   Entity,
@@ -6,10 +7,9 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { MentorBoard } from './MentorBoard';
 
 @Index('FK_mentor_board_image_mentor_board_id', ['mentorBoardId'], {})
-@Entity('mentor_board_image', { schema: 'ma6_menbosha_db' })
+@Entity('mentor_board_image')
 export class MentorBoardImage {
   @PrimaryGeneratedColumn({
     type: 'int',

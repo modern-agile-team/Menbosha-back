@@ -1,3 +1,5 @@
+import { Badge } from '@src/entities/Badge';
+import { User } from '@src/entities/User';
 import {
   Column,
   Entity,
@@ -6,12 +8,10 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Badge } from './Badge';
-import { User } from './User';
 
 @Index('FK_user_badge_badge_id', ['badgeId'], {})
 @Index('FK_user_badge_user_id', ['userId'], {})
-@Entity('user_badge', { schema: 'ma6_menbosha_db' })
+@Entity('user_badge')
 export class UserBadge {
   @PrimaryGeneratedColumn({
     type: 'int',
