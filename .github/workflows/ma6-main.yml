@@ -35,9 +35,10 @@ jobs:
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_IMAGE_NAME }}:latest
 
-  deploy:
+  deploy-develop:
+    if: github.ref == 'refs/heads/develop'
     needs: build
-    runs-on: ${{ github.ref == 'refs/heads/develop' && 'self-hosted, development' || 'self-hosted' }} # runner로 ec2 연결
+    runs-on: [self-hosted, development'] # runner로 ec2 연결
 
     steps:
       - name: Login to Docker Hub #docker hub 로그인
