@@ -1,3 +1,4 @@
+import { User } from '@src/entities/User';
 import {
   Column,
   Entity,
@@ -6,11 +7,10 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from './User';
 
 @Index('fk_banned_user_ban_user_id', ['banUserId'], {})
 @Index('fk_banned_user_banned_user_id', ['bannedUserId'], {})
-@Entity('banned_user', { schema: 'ma6_menbosha_db' })
+@Entity('banned_user')
 export class BannedUser {
   @PrimaryGeneratedColumn({
     type: 'int',

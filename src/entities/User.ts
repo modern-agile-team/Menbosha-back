@@ -9,31 +9,31 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { BannedUser } from './BannedUser';
-import { HelpMeBoard } from './HelpMeBoard';
-import { HelpYouComment } from './HelpYouComment';
-import { MentorBoard } from './MentorBoard';
-import { MentorBoardLike } from './MentorBoardLike';
-import { MentorReview } from './MentorReview';
-import { MentorReviewChecklistCount } from './MentorReviewChecklistCount';
-import { Report } from './Report';
-import { Token } from './Token';
-import { TotalCount } from './TotalCount';
-import { Category } from './Category';
-import { UserBadge } from './UserBadge';
-import { UserImage } from './UserImage';
-import { UserIntro } from './UserIntro';
-import { UserRanking } from './UserRanking';
 import { UserStatus } from '@src/users/constants/user-status.enum';
 import { UserRole } from '@src/users/constants/user-role.enum';
 import { UserProvider } from '@src/auth/enums/user-provider.enum';
 import { BooleanTransformer } from '@src/entities/transformers/boolean.transformer';
+import { BannedUser } from '@src/entities/BannedUser';
+import { Category } from '@src/entities/Category';
+import { HelpMeBoard } from '@src/entities/HelpMeBoard';
+import { HelpYouComment } from '@src/entities/HelpYouComment';
+import { MentorBoard } from '@src/entities/MentorBoard';
+import { MentorBoardLike } from '@src/entities/MentorBoardLike';
+import { MentorReview } from '@src/entities/MentorReview';
+import { MentorReviewChecklistCount } from '@src/entities/MentorReviewChecklistCount';
+import { TotalCount } from '@src/entities/TotalCount';
+import { UserBadge } from '@src/entities/UserBadge';
+import { UserImage } from '@src/entities/UserImage';
+import { UserIntro } from '@src/entities/UserIntro';
+import { UserRanking } from '@src/entities/UserRanking';
+import { Report } from '@src/entities/Report';
+import { Token } from '@src/entities/Token';
 
 @Index('FK_user_activity_category_id', ['activityCategoryId'], {})
 @Index('FK_user_hope_category_id', ['hopeCategoryId'], {})
 @Index('IDX_fulltext_name', ['name'], { fulltext: true })
 @Index('UQ_user_unique_id', ['uniqueId'], { unique: true })
-@Entity('user', { schema: 'ma6_menbosha_db' })
+@Entity('user')
 export class User {
   @PrimaryGeneratedColumn({
     type: 'int',

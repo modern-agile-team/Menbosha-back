@@ -1,3 +1,4 @@
+import { User } from '@src/entities/User';
 import {
   Column,
   DeleteDateColumn,
@@ -7,10 +8,9 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from './User';
 
 @Index('UQ_total_count_user_id', ['userId'], { unique: true })
-@Entity('total_count', { schema: 'ma6_menbosha_db' })
+@Entity('total_count')
 export class TotalCount {
   @PrimaryGeneratedColumn({
     type: 'int',

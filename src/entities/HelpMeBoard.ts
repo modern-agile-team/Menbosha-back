@@ -1,3 +1,7 @@
+import { Category } from '@src/entities/Category';
+import { HelpMeBoardImage } from '@src/entities/HelpMeBoardImage';
+import { HelpYouComment } from '@src/entities/HelpYouComment';
+import { User } from '@src/entities/User';
 import {
   Column,
   DeleteDateColumn,
@@ -8,15 +12,11 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Category } from './Category';
-import { User } from './User';
-import { HelpMeBoardImage } from './HelpMeBoardImage';
-import { HelpYouComment } from './HelpYouComment';
 
 @Index('FK_help_me_board_category_id', ['categoryId'], {})
 @Index('FK_help_me_board_user_id', ['userId'], {})
 @Index('IDX_fulltext_head_body', ['head', 'body'], { fulltext: true })
-@Entity('help_me_board', { schema: 'ma6_menbosha_db' })
+@Entity('help_me_board')
 export class HelpMeBoard {
   @PrimaryGeneratedColumn({
     type: 'int',

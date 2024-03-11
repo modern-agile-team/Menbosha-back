@@ -1,3 +1,4 @@
+import { User } from '@src/entities/User';
 import {
   Column,
   DeleteDateColumn,
@@ -7,12 +8,11 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from './User';
 
 @Index('UQ_mentor_review_checklist_count_mentor_id', ['mentorId'], {
   unique: true,
 })
-@Entity('mentor_review_checklist_count', { schema: 'ma6_menbosha_db' })
+@Entity('mentor_review_checklist_count')
 export class MentorReviewChecklistCount {
   @PrimaryGeneratedColumn({
     type: 'int',

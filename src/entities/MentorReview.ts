@@ -7,12 +7,12 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from './User';
 import { BooleanTransformer } from '@src/entities/transformers/boolean.transformer';
+import { User } from '@src/entities/User';
 
 @Index('FK_mentor_review_mentee_id', ['menteeId'], {})
 @Index('FK_mentor_review_mentor_id', ['mentorId'], {})
-@Entity('mentor_review', { schema: 'ma6_menbosha_db' })
+@Entity('mentor_review')
 export class MentorReview {
   @PrimaryGeneratedColumn({
     type: 'int',

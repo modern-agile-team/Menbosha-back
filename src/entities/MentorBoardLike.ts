@@ -1,3 +1,5 @@
+import { MentorBoard } from '@src/entities/MentorBoard';
+import { User } from '@src/entities/User';
 import {
   Column,
   Entity,
@@ -6,12 +8,10 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { MentorBoard } from './MentorBoard';
-import { User } from './User';
 
 @Index('FK_mentor_board_like_mentor_board_id', ['parentId'], {})
 @Index('FK_mentor_board_like_user_id', ['userId'], {})
-@Entity('mentor_board_like', { schema: 'ma6_menbosha_db' })
+@Entity('mentor_board_like')
 export class MentorBoardLike {
   @PrimaryGeneratedColumn({
     type: 'int',

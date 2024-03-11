@@ -1,3 +1,4 @@
+import { HelpMeBoard } from '@src/entities/HelpMeBoard';
 import {
   Column,
   Entity,
@@ -6,10 +7,9 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { HelpMeBoard } from './HelpMeBoard';
 
 @Index('FK_help_me_board_image_help_me_board_id', ['helpMeBoardId'], {})
-@Entity('help_me_board_image', { schema: 'ma6_menbosha_db' })
+@Entity('help_me_board_image')
 export class HelpMeBoardImage {
   @PrimaryGeneratedColumn({
     type: 'int',

@@ -7,12 +7,12 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from './User';
 import { ReportType } from '@src/reports/constants/report-type.enum';
+import { User } from '@src/entities/User';
 
 @Index('FK_report_report_user_id', ['reportUserId'], {})
 @Index('FK_report_reported_user_id', ['reportedUserId'], {})
-@Entity('report', { schema: 'ma6_menbosha_db' })
+@Entity('report')
 export class Report {
   @PrimaryGeneratedColumn({
     type: 'int',

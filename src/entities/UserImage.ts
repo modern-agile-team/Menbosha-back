@@ -1,3 +1,4 @@
+import { User } from '@src/entities/User';
 import {
   Column,
   Entity,
@@ -6,10 +7,9 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from './User';
 
 @Index('UQ_user_image_user_id', ['userId'], { unique: true })
-@Entity('user_image', { schema: 'ma6_menbosha_db' })
+@Entity('user_image')
 export class UserImage {
   @PrimaryGeneratedColumn({
     type: 'int',
