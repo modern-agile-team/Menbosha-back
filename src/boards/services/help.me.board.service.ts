@@ -18,7 +18,6 @@ import { HelpMeBoardResponseDTO } from '@src/boards/dto/helpMeBoard/update.help.
 import { HelpMeBoardRepository } from '@src/boards/repository/help.me.board.repository';
 import { HelpMeBoardDto } from '@src/boards/dto/helpMeBoard/help-me-board.dto';
 import { HelpMeBoard } from '@src/entities/HelpMeBoard';
-import { HelpMeBoardDto } from '@src/boards/dto/helpMeBoard/help-me-board.dto';
 
 @Injectable()
 export class HelpMeBoardService {
