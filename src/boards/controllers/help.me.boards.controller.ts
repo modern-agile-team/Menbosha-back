@@ -74,13 +74,13 @@ export class HelpMeBoardController {
     return this.helpMeBoardService.create(createHelpMeBoardDto, userId);
   }
 
-  @Post('/images')
+  @Post(':helpMeBoardId/images')
   @UseGuards(AccessTokenAuthGuard)
   @UseInterceptors(FilesInterceptor('files', 3))
   @ApiUploadHelpMeBoardImages()
   uploadImage(
     @GetUserId() userId: number,
-    @Query('helpMeBoardId') boardId: number,
+    @Param('helpMeBoardId', ParsePositiveIntPipe) boardId: number,
     @UploadedFiles() files: Express.Multer.File[],
   ): Promise<CreateHelpMeBoardImageDto[]> {
     return this.boardImagesService.createHelpMeBoardImages(
