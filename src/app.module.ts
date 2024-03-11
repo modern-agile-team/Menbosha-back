@@ -56,7 +56,7 @@ import { UserModule } from '@src/users/user.module';
 })
 export class AppModule implements NestModule {
   private readonly isDev: boolean =
-    process.env.NODE_ENV === 'dev' ? true : false;
+    process.env.NODE_ENV === 'production' ? false : true;
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');
     mongoose.set('debug', this.isDev);
