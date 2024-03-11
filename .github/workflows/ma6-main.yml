@@ -36,7 +36,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: self-hosted # runner로 ec2 연결
+    runs-on: [self-hosted, development] # runner로 ec2 연결
 
     steps:
       - name: Login to Docker Hub #docker hub 로그인
@@ -92,7 +92,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: [self-hosted, development] # runner로 ec2 연결
+    runs-on: self-hosted # runner로 ec2 연결
 
     steps:
       - name: Login to Docker Hub #docker hub 로그인
