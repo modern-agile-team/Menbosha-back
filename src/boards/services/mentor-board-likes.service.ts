@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { MentorBoardLikeDto } from '@src/boards/dto/mentorBoard/mentor-board-like.dto';
 import { MentorBoardService } from '@src/boards/services/mentor.board.service';
+import { MentorBoard } from '@src/entities/MentorBoard';
 import { MentorBoardLike } from '@src/entities/MentorBoardLike';
 import { LikesService } from '@src/like/services/likes.service';
 import { DataSource } from 'typeorm';
@@ -21,7 +22,7 @@ export class MentorBoardLikeService {
     mentorBoardId: number,
     userId: number,
   ): Promise<MentorBoardLikeDto> {
-    const existBoard = await this.mentorBoardService.findOneByOrNotFound({
+    const existBoard = (await this.mentorBoardService.findOneByOrNotFound({
       select: {
         id: true,
         userId: true,
@@ -33,7 +34,7 @@ export class MentorBoardLikeService {
       },
       where: { id: mentorBoardId },
       relations: ['mentorBoardLikes'],
-    });
+    })) as MentorBoard;
 
     if (existBoard.userId === userId) {
       throw new ForbiddenException(

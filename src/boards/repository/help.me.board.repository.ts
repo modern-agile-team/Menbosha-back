@@ -8,6 +8,7 @@ import { CreateHelpMeBoardDto } from '@src/boards/dto/helpMeBoard/create.help.me
 import { UpdateHelpMeBoardDto } from '@src/boards/dto/helpMeBoard/update.help.me.board.dto';
 import { HelpMeBoard } from '@src/entities/HelpMeBoard';
 import { HelpYouComment } from '@src/entities/HelpYouComment';
+import { HelpMeBoardDto } from '@src/boards/dto/helpMeBoard/help-me-board.dto';
 
 @Injectable()
 export class HelpMeBoardRepository {
@@ -169,7 +170,11 @@ export class HelpMeBoardRepository {
     return await this.entityManager.save(HelpMeBoard, boardData);
   }
 
-  async deleteBoard(board: HelpMeBoard): Promise<void> {
-    await this.entityManager.remove(HelpMeBoard, board);
+  deleteBoard(helpMeBoardDto: HelpMeBoardDto): Promise<HelpMeBoard> {
+    const helpMeBoardRepository = this.entityManager.getRepository(HelpMeBoard);
+
+    const helpMeBoard = helpMeBoardRepository.create({ ...helpMeBoardDto });
+
+    return helpMeBoardRepository.remove(helpMeBoard);
   }
 }

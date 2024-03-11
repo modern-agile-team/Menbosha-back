@@ -135,7 +135,11 @@ export class MentorBoardRepository {
       .update(criteria, partialEntity);
   }
 
-  async deleteBoard(board: MentorBoard): Promise<void> {
-    await this.entityManager.remove(MentorBoard, board);
+  deleteBoard(mentorBoardDto: MentorBoardDto): Promise<MentorBoard> {
+    const mentorBoardRepository = this.entityManager.getRepository(MentorBoard);
+
+    const mentorBoard = mentorBoardRepository.create({ ...mentorBoardDto });
+
+    return mentorBoardRepository.remove(mentorBoard);
   }
 }

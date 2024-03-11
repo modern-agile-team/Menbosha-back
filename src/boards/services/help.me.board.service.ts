@@ -1,6 +1,7 @@
 import {
   ForbiddenException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { CategoryService } from '@src/category/services/category.service';
@@ -17,6 +18,7 @@ import { HelpMeBoardResponseDTO } from '@src/boards/dto/helpMeBoard/update.help.
 import { HelpMeBoardRepository } from '@src/boards/repository/help.me.board.repository';
 import { HelpMeBoardDto } from '@src/boards/dto/helpMeBoard/help-me-board.dto';
 import { HelpMeBoard } from '@src/entities/HelpMeBoard';
+import { HelpMeBoardDto } from '@src/boards/dto/helpMeBoard/help-me-board.dto';
 
 @Injectable()
 export class HelpMeBoardService {
@@ -148,7 +150,7 @@ export class HelpMeBoardService {
     };
   }
 
-  async findOneOrFail(helpMeBoardId: number) {
+  async findOneOrNotFound(helpMeBoardId: number) {
     const existHelpMeBoard =
       await this.helpMeBoardRepository.findOneHelpMeBoardBy(helpMeBoardId);
 
@@ -209,17 +211,22 @@ export class HelpMeBoardService {
     return '끌어올리기가 완료되었습니다.';
   }
 
-  async deleteBoard(boardId: number, userId: number): Promise<void> {
-    const board = await this.helpMeBoardRepository.findHelpMeBoardById(boardId);
+  async deleteBoard(boardId: number, userId: number): Promise<HelpMeBoardDto> {
+    const existHelpMeBoard = await this.findOneOrNotFound(boardId);
 
-    if (!board) {
-      throw new NotFoundException('게시물을 찾을 수 없습니다');
-    }
-
-    if (board.userId !== userId) {
+    if (existHelpMeBoard.userId !== userId) {
       throw new ForbiddenException('사용자가 작성한 게시물이 아닙니다');
     }
 
-    await this.helpMeBoardRepository.deleteBoard(board);
+    const deletedHelpMeBoard =
+      await this.helpMeBoardRepository.deleteBoard(existHelpMeBoard);
+
+    if (!deletedHelpMeBoard) {
+      throw new InternalServerErrorException(
+        '도와주세요 게시글 삭제 중 서버 에러 발생',
+      );
+    }
+
+    return new HelpMeBoardDto(deletedHelpMeBoard);
   }
 }
