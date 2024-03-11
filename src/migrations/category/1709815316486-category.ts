@@ -1,4 +1,3 @@
-import { Category } from '@src/entities/Category';
 import { generatePrimaryColumn } from '@src/migrations/__utils/util';
 import { MigrationInterface, QueryRunner, Table, TableColumn } from 'typeorm';
 
@@ -20,7 +19,7 @@ export class Category1709815316486 implements MigrationInterface {
       }),
     );
 
-    await queryRunner.manager.getRepository(Category).upsert(
+    await queryRunner.manager.getRepository('category').upsert(
       [
         {
           name: '전체',
