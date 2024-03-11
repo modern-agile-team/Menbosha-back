@@ -1,0 +1,47 @@
+[
+    {
+      "color": "002AE5",
+      "name": "Deploy",
+      "description": "배포 관련 작업"
+    },
+    {
+      "color": "F7DE00",
+      "name": "Setting",
+      "description": "설정 관련 작업"
+    },
+    {
+      "color": "CC3D10",
+      "name": "Bugfix",
+      "description": "버그 수정"
+    },
+    {
+      "color": "8B97E4",
+      "name": "Delete",
+      "description": "코드 삭제"
+    },
+    {
+      "color": "F3D197",
+      "name": "Doc",
+      "description": "문서 작업"
+    },
+    {
+      "color": "331AE4",
+      "name": "Feat",
+      "description": "새로운 기능 추가"
+    },
+    {
+      "color": "2AC582",
+      "name": "Modify",
+      "description": "코드 수정(기능상의 수정이 있는 경우)"
+    },
+    {
+      "color": "A9362A",
+      "name": "Refactor",
+      "description": "코드 수정(기능상의 수정이 없는 경우)"
+    },
+    {
+      "color": "EAEA38",
+      "name": "Test",
+      "description": "테스트코드 관련 작업"
+    }
+  ]

@@ -1,0 +1,33 @@
+version: '3'
+services:
+  ma6-main:
+    image: 2swo/ma6-menbosha-back
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+    restart: always
+    environment:
+      TZ: Asia/Seoul
+
+  redis:
+    image: 2swo/redis
+    volumes:
+      - redis_data:/usr/local/etc/redis
+    command: sh -c "redis-server /usr/local/etc/redis/redis.conf"
+    env_file:
+      - .env
+    ports:
+      - ${REDIS_BINDING_PORT}:${REDIS_PORT}
+    restart: always
+
+  nginx-certbot:
+    image: 2swo/back-nginx-certbot
+    ports:
+      - '80:80'
+      - '443:443'
+    env_file:
+      - .env
+
+volumes:
+  redis_data:
