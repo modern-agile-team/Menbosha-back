@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - main
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
@@ -36,7 +37,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: self-hosted # runner로 ec2 연결
+    runs-on: ${{ github.ref == 'refs/heads/develop' && 'self-hosted, development' || 'self-hosted' }} # runner로 ec2 연결
 
     steps:
       - name: Login to Docker Hub #docker hub 로그인
