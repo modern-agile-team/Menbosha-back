@@ -36,7 +36,11 @@ import { UserModule } from '@src/users/user.module';
       isGlobal: true,
       envFilePath: '.env', // .env 파일 경로 설정
     }),
-    MongooseModule.forRoot(process.env.MONGO_URI),
+    MongooseModule.forRoot(
+      process.env.NODE_ENV === 'production'
+        ? process.env.MONGO_URI
+        : process.env.MONGO_URI_DEV,
+    ),
     ScheduleModule.forRoot(),
     ChatModule,
     S3Module,
