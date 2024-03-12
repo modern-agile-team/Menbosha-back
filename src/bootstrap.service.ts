@@ -36,23 +36,23 @@ export class BootstrapService {
   setCors(app: INestApplication) {
     const appConfigService = app.get<AppConfigService>(AppConfigService);
 
-    const isProduction = appConfigService.isProduction();
-    const isDevelopment = appConfigService.isDevelopment();
+    let allowOrigin: string[] | true;
 
-    const productionDomain = appConfigService.getList(
-      ...[
-        ENV_KEY.FRONT_PRODUCTION_DOMAIN,
-        ENV_KEY.FRONT_PRODUCTION_WWW_DOMAIN,
-        ENV_KEY.FRONT_LOCAL_DOMAIN,
-      ],
-    ) as string[];
-    const developmentDomain = appConfigService.getList(
-      ...[
-        ENV_KEY.FRONT_DEVELOPMENT_DOMAIN,
-        ENV_KEY.FRONT_DEVELOPMENT_WWW_DOMAIN,
-        ENV_KEY.FRONT_LOCAL_DOMAIN,
-      ],
-    ) as string[];
+    if (appConfigService.isProduction()) {
+      allowOrigin = appConfigService.getList(
+        ...[
+          ENV_KEY.FRONT_PRODUCTION_DOMAIN,
+          ENV_KEY.FRONT_PRODUCTION_WWW_DOMAIN,
+          ENV_KEY.FRONT_LOCAL_DOMAIN,
+        ],
+      ) as string[];
+    }
+
+    if (appConfigService.isDevelopment()) {
+      allowOrigin = appConfigService.getList(
+        ...[ENV_KEY.FRONT_DEVELOPMENT_DOMAIN, ENV_KEY.FRONT_LOCAL_DOMAIN],
+      ) as string[];
+    }
 
     app.enableCors({
       /**
@@ -62,12 +62,7 @@ export class BootstrapService {
        * development 환경의 허용 도메인은 development 환경의 프론트 서버 도메인 및 로컬에서의 요청 허용
        * 추후 프론트의 admin 전용 서버가 열리면 production 환경에서 프론트의 admin 서버 도메인도 허용(아마 development 환경에서도)
        */
-      origin: isProduction
-        ? productionDomain
-        : isDevelopment
-          ? developmentDomain
-          : true,
-
+      origin: allowOrigin || true,
       methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
       credentials: true,
       optionsSuccessStatus: HttpStatus.NO_CONTENT,
