@@ -57,7 +57,6 @@ import * as Joi from 'joi';
         [ENV_KEY.FRONT_LOCAL_DOMAIN]: Joi.string().required(),
       }),
       isGlobal: true,
-      cache: true,
     }),
   ],
   providers: [AppConfigService],
