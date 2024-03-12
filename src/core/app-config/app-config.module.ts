@@ -53,7 +53,6 @@ import * as Joi from 'joi';
         [ENV_KEY.FRONT_PRODUCTION_DOMAIN]: Joi.string().required(),
         [ENV_KEY.FRONT_PRODUCTION_WWW_DOMAIN]: Joi.string().required(),
         [ENV_KEY.FRONT_DEVELOPMENT_DOMAIN]: Joi.string().required(),
-        [ENV_KEY.FRONT_DEVELOPMENT_WWW_DOMAIN]: Joi.string().required(),
         [ENV_KEY.FRONT_LOCAL_DOMAIN]: Joi.string().required(),
       }),
       isGlobal: true,

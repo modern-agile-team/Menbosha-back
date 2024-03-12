@@ -41,7 +41,6 @@ config();
         : 'development'
           ? [
               process.env.FRONT_DEVELOPMENT_DOMAIN,
-              process.env.FRONT_DEVELOPMENT_WWW_DOMAIN,
               process.env.FRONT_LOCAL_DOMAIN,
             ]
           : true,
