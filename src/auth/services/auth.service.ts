@@ -4,7 +4,6 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import * as dotenv from 'dotenv';
 import axios from 'axios';
 import { TotalCountService } from '@src/total-count/services/total-count.service';
 import { DataSource } from 'typeorm';
@@ -19,8 +18,8 @@ import { BannedUserException } from '@src/http-exceptions/exceptions/banned-user
 import { AUTH_ERROR_CODE } from '@src/constants/error/auth/auth-error-code.constant';
 import { BannedUserErrorResponseDto } from '@src/admins/banned-user/dtos/banned-user-error-response.dto';
 import { UserIntroService } from '@src/users/services/user-intro-service';
-
-dotenv.config();
+import { AppConfigService } from '@src/core/app-config/services/app-config.service';
+import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
 
 @Injectable()
 export class AuthService implements AuthServiceInterface {
@@ -31,6 +30,7 @@ export class AuthService implements AuthServiceInterface {
     private readonly totalCountService: TotalCountService,
     private readonly dataSource: DataSource,
     private readonly userIntroService: UserIntroService,
+    private readonly appConfigService: AppConfigService,
   ) {}
 
   async login(authorizeCode: string, provider: UserProvider) {
@@ -51,11 +51,15 @@ export class AuthService implements AuthServiceInterface {
         };
         tokenBody = {
           grant_type: 'authorization_code',
-          client_id: process.env.NAVER_CLIENT_ID,
-          client_secret: process.env.NAVER_CLIENT_SECRET,
+          client_id: this.appConfigService.get<string>(ENV_KEY.NAVER_CLIENT_ID),
+          client_secret: this.appConfigService.get<string>(
+            ENV_KEY.NAVER_CLIENT_SECRET,
+          ),
           code: authorizeCode,
           state: 'test',
-          redirect_uri: process.env.NAVER_REDIRECT_URI,
+          redirect_uri: this.appConfigService.get<string>(
+            ENV_KEY.NAVER_REDIRECT_URI,
+          ),
         };
       } else if (provider === UserProvider.Kakao) {
         // 카카오 토큰 발급
@@ -67,8 +71,10 @@ export class AuthService implements AuthServiceInterface {
         };
         tokenBody = {
           grant_type: 'authorization_code',
-          client_id: process.env.KAKAO_CLIENT_ID,
-          redirect_uri: process.env.KAKAO_REDIRECT_URI,
+          client_id: this.appConfigService.get<string>(ENV_KEY.KAKAO_CLIENT_ID),
+          redirect_uri: this.appConfigService.get<string>(
+            ENV_KEY.KAKAO_REDIRECT_URI,
+          ),
           code: authorizeCode,
         };
       } else if (provider === UserProvider.Google) {
@@ -81,10 +87,16 @@ export class AuthService implements AuthServiceInterface {
         };
         tokenBody = {
           grant_type: 'authorization_code',
-          client_id: process.env.GOOGLE_CLIENT_ID,
-          client_secret: process.env.GOOGLE_CLIENT_SECRET,
+          client_id: this.appConfigService.get<string>(
+            ENV_KEY.GOOGLE_CLIENT_ID,
+          ),
+          client_secret: this.appConfigService.get<string>(
+            ENV_KEY.GOOGLE_CLIENT_SECRET,
+          ),
           code: authorizeCode,
-          redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+          redirect_uri: this.appConfigService.get<string>(
+            ENV_KEY.GOOGLE_REDIRECT_URI,
+          ),
         };
       }
 
@@ -221,7 +233,10 @@ export class AuthService implements AuthServiceInterface {
         const imageProviderInDbImageUrl =
           imageUrlParts[imageUrlParts.length - 3];
 
-        if (imageProviderInDbImageUrl !== process.env.AWS_S3_URL) {
+        if (
+          imageProviderInDbImageUrl !==
+          this.appConfigService.get<string>(ENV_KEY.AWS_S3_URL)
+        ) {
           // S3에 업로드된 이미지가 아닌 경우
           await this.userImageService.updateUserImageByUrl(
             userId,
@@ -262,7 +277,7 @@ export class AuthService implements AuthServiceInterface {
           await this.userImageService.uploadUserImageWithEntityManager(
             entityManager,
             userId,
-            process.env.DEFAULT_USER_IMAGE,
+            this.appConfigService.get<string>(ENV_KEY.DEFAULT_USER_IMAGE),
           );
         } else {
           await this.userImageService.uploadUserImageWithEntityManager(
@@ -396,8 +411,10 @@ export class AuthService implements AuthServiceInterface {
           },
         };
         unlinkBody = {
-          client_id: process.env.NAVER_CLIENT_ID,
-          client_secret: process.env.NAVER_CLIENT_SECRET,
+          client_id: this.appConfigService.get<string>(ENV_KEY.NAVER_CLIENT_ID),
+          client_secret: this.appConfigService.get<string>(
+            ENV_KEY.NAVER_CLIENT_SECRET,
+          ),
           grant_type: 'delete',
           service_provider: 'NAVER',
         };
