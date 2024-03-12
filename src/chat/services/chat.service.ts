@@ -9,7 +9,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import * as mongoose from 'mongoose';
-import { S3Service } from '@src/common/s3/s3.service';
+import { S3Service } from '@src/common/s3/services/s3.service';
 import { Observable, Subject, catchError, map } from 'rxjs';
 import { In } from 'typeorm';
 import { UserService } from '@src/users/services/user.service';
