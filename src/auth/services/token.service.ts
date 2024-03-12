@@ -1,10 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { JwtService } from '@nestjs/jwt';
-import { RedisService } from '@src/common/redis/redis.service';
-import { Ttl } from '@src/common/redis/ttl.enum';
+import { RedisService } from '@src/common/redis/services/redis.service';
+import { Ttl } from '@src/common/redis/constants/ttl.enum';
 import { TokenPayload } from '@src/auth/interfaces/token-payload.interface';
 import { TokenRepository } from '@src/auth/repositories/token.repository';
+import { AppConfigService } from '@src/core/app-config/services/app-config.service';
+import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
 
 @Injectable()
 export class TokenService {
@@ -12,6 +14,7 @@ export class TokenService {
     private readonly tokenRepository: TokenRepository,
     private readonly jwtService: JwtService,
     private readonly redisService: RedisService,
+    private readonly appConfigService: AppConfigService,
   ) {}
 
   async getUserTokens(userId: number) {
@@ -87,7 +90,7 @@ export class TokenService {
       };
       const kakaoTokenData = {
         grant_type: 'refresh_token',
-        client_id: process.env.KAKAO_CLIENT_ID,
+        client_id: this.appConfigService.get<string>(ENV_KEY.KAKAO_CLIENT_ID),
         refresh_token: refreshToken,
       };
 
@@ -116,8 +119,10 @@ export class TokenService {
       const naverTokenUrl = 'https://nid.naver.com/oauth2.0/token';
       const naverTokenData = {
         grant_type: 'refresh_token',
-        client_id: process.env.NAVER_CLIENT_ID,
-        client_secret: process.env.NAVER_CLIENT_SECRET,
+        client_id: this.appConfigService.get<string>(ENV_KEY.NAVER_CLIENT_ID),
+        client_secret: this.appConfigService.get<string>(
+          ENV_KEY.NAVER_CLIENT_SECRET,
+        ),
         refresh_token: refreshToken,
       };
 
@@ -150,7 +155,9 @@ export class TokenService {
 
     return this.jwtService.sign(payload, {
       expiresIn: '6h',
-      secret: process.env.JWT_ACCESSTOKEN_SECRET_KEY,
+      secret: this.appConfigService.get<string>(
+        ENV_KEY.JWT_ACCESS_TOKEN_SECRET_KEY,
+      ),
     });
   }
 
@@ -173,7 +180,9 @@ export class TokenService {
 
     return this.jwtService.sign(payload, {
       expiresIn: '7d',
-      secret: process.env.JWT_REFRESHTOKEN_SECRET_KEY,
+      secret: this.appConfigService.get<string>(
+        ENV_KEY.JWT_REFRESH_TOKEN_SECRET_KEY,
+      ),
     });
   }
 }
