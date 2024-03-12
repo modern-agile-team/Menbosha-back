@@ -8,7 +8,7 @@ import * as Joi from 'joi';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['.env', '.*.env'],
+      envFilePath: ['.*.env'],
       validationSchema: Joi.object({
         [ENV_KEY.PORT]: Joi.number().default(3000),
         [ENV_KEY.NODE_ENV]: Joi.string()
@@ -57,6 +57,7 @@ import * as Joi from 'joi';
         [ENV_KEY.FRONT_LOCAL_DOMAIN]: Joi.string().required(),
       }),
       isGlobal: true,
+      cache: true,
     }),
   ],
   providers: [AppConfigService],
