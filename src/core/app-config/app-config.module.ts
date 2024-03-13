@@ -8,7 +8,7 @@ import * as Joi from 'joi';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.*.env',
+      envFilePath: ['.env.local', '.env.development', '.env.production'],
       validationSchema: Joi.object({
         [ENV_KEY.PORT]: Joi.number().default(3000),
         [ENV_KEY.NODE_ENV]: Joi.string()
