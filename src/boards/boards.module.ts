@@ -17,12 +17,12 @@ import { BoardImagesService } from '@src/boards/services/BoardImage.service';
 import { HelpMeBoardService } from '@src/boards/services/help.me.board.service';
 import { MentorBoardLikeService } from '@src/boards/services/mentor-board-likes.service';
 import { MentorBoardService } from '@src/boards/services/mentor.board.service';
-import { S3Service } from '@src/common/s3/s3.service';
 import { MentorBoardImage } from '@src/entities/MentorBoardImage';
 import { HelpMeBoard } from '@src/entities/HelpMeBoard';
 import { HelpMeBoardImage } from '@src/entities/HelpMeBoardImage';
 import { MentorBoard } from '@src/entities/MentorBoard';
 import { MentorBoardLike } from '@src/entities/MentorBoardLike';
+import { S3Module } from '@src/common/s3/s3.module';
 
 @Module({
   imports: [
@@ -37,6 +37,7 @@ import { MentorBoardLike } from '@src/entities/MentorBoardLike';
     LikesModule.forFeature(MentorBoardLike),
     CategoryModule,
     TotalCountModule,
+    S3Module,
   ],
   controllers: [
     MentorBoardController,
@@ -48,7 +49,6 @@ import { MentorBoardLike } from '@src/entities/MentorBoardLike';
     MentorBoardService,
     MentorBoardLikeService,
     BoardImagesService,
-    S3Service,
     BoardImageRepository,
     HelpMeBoardRepository,
     MentorBoardRepository,
