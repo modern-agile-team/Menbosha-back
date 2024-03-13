@@ -121,7 +121,7 @@ dist
 .vscode-test
 .vscode
 
-#DS_STORE
+# DS_STORE
 **.DS_Store
 
 # yarn v2
@@ -130,3 +130,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# redis
+dump.rdb
