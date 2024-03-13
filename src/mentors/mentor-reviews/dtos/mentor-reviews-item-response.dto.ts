@@ -1,8 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { UserImage } from '@src/entities/UserImage';
+import { UserIntro } from '@src/entities/UserIntro';
+import { MENTOR_REVIEW_REVIEW_LENGTH } from '@src/mentors/mentor-reviews/constants/mentor-review.constant';
 import { MentorReviewDto } from '@src/mentors/mentor-reviews/dtos/mentor-review.dto';
+import {
+  USER_CAREER_LENGTH,
+  USER_CUSTOM_CATEGORY_LENGTH,
+  USER_NAME_LENGTH,
+  USER_SHORT_INTRO_LENGTH,
+} from '@src/users/constants/user.constant';
 import { UserInfoDto } from '@src/users/dtos/user-info.dto';
-import { UserImage } from '@src/users/entities/user-image.entity';
-import { UserIntro } from '@src/users/entities/user-intro.entity';
 import { Exclude } from 'class-transformer';
 
 class UserImageDto implements Pick<UserImage, 'imageUrl'> {
@@ -17,16 +24,22 @@ class UserIntroDto
 {
   @ApiProperty({
     description: '커스텀 카테고리',
+    minLength: USER_CUSTOM_CATEGORY_LENGTH.MIN,
+    maxLength: USER_CUSTOM_CATEGORY_LENGTH.MAX,
   })
   customCategory: string;
 
   @ApiProperty({
     description: '유저 커리어',
+    minLength: USER_CAREER_LENGTH.MIN,
+    maxLength: USER_CAREER_LENGTH.MAX,
   })
   career: string;
 
   @ApiProperty({
     description: '멘토 소개',
+    minLength: USER_SHORT_INTRO_LENGTH.MIN,
+    maxLength: USER_SHORT_INTRO_LENGTH.MAX,
   })
   shortIntro: string;
 }
@@ -40,16 +53,19 @@ class Mentee implements Pick<UserInfoDto, 'id' | 'name' | 'rank'> {
 
   @ApiProperty({
     description: '유저 이름',
+    minLength: USER_NAME_LENGTH.MIN,
+    maxLength: USER_NAME_LENGTH.MAX,
   })
   name: string;
 
   @ApiProperty({
     description: '유저 랭크',
+    format: 'integer',
   })
   rank: number;
 
   @ApiProperty({
-    description: '유저 랭크',
+    description: '유저 이미지 객체',
   })
   userImage: UserImageDto;
 
@@ -80,6 +96,8 @@ export class MentorReviewsItemResponseDto
     description: '멘티가 작성한 리뷰',
     nullable: true,
     type: () => String,
+    minLength: MENTOR_REVIEW_REVIEW_LENGTH.MIN,
+    maxLength: MENTOR_REVIEW_REVIEW_LENGTH.MAX,
   })
   review: string | null;
 

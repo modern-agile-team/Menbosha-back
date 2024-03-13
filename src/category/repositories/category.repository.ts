@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CategoryList } from '@src/category/entity/category-list.entity';
+import { Category } from '@src/entities/Category';
 import { EntityManager } from 'typeorm';
 
 @Injectable()
@@ -8,7 +8,7 @@ export class CategoryRepository {
 
   findOneCategoryOrNotFound(categoryId: number) {
     return this.entityManager
-      .getRepository(CategoryList)
+      .getRepository(Category)
       .findOneBy({ id: categoryId });
   }
 }

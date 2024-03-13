@@ -1,8 +1,8 @@
-import { Provider } from '@src/auth/enums/provider.enum';
+import { UserProvider } from '@src/auth/enums/user-provider.enum';
 
 export interface UserInfo {
   uniqueId: string;
-  provider: Provider;
+  provider: UserProvider;
   name: string;
   email: string;
 }

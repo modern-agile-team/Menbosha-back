@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '@src/users/entities/user.entity';
-import { UserImage } from '@src/users/entities/user-image.entity';
-import { UserIntro } from '@src/users/entities/user-intro.entity';
+import { User } from '@src/entities/User';
+import { UserImage } from '@src/entities/UserImage';
+import { UserIntro } from '@src/entities/UserIntro';
+import { USER_NAME_LENGTH } from '@src/users/constants/user.constant';
 
 export class SearchAllMentorDto
   implements Pick<User, 'id' | 'name' | 'isMentor'>
@@ -13,6 +14,8 @@ export class SearchAllMentorDto
 
   @ApiProperty({
     description: '멘토 유저 이름',
+    minLength: USER_NAME_LENGTH.MIN,
+    maxLength: USER_NAME_LENGTH.MAX,
   })
   name: string;
 

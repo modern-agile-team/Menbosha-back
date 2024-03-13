@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
   EntityManager,
   FindManyOptions,
@@ -6,9 +6,9 @@ import {
   UpdateResult,
 } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { Provider } from '@src/auth/enums/provider.enum';
+import { UserProvider } from '@src/auth/enums/user-provider.enum';
 import { UserInfo } from '@src/auth/interfaces/user-info.interface';
-import { User } from '@src/users/entities/user.entity';
+import { User } from '@src/entities/User';
 
 @Injectable()
 export class UserRepository {
@@ -30,7 +30,7 @@ export class UserRepository {
       .createQueryBuilder('user')
       .leftJoin('user.userImage', 'userImage')
       .leftJoin('user.userIntro', 'userIntro')
-      .leftJoin('user.userBadge', 'userBadge')
+      .leftJoin('user.userBadges', 'userBadges')
       .leftJoin('user.totalCount', 'totalCount')
       .select([
         'user.id',
@@ -42,8 +42,8 @@ export class UserRepository {
         'user.createdAt',
         'user.updatedAt',
         'user.isMentor',
-        'userBadge.badgeId',
-        'userBadge.createdAt',
+        'userBadges.badgeId',
+        'userBadges.createdAt',
         'userImage.imageUrl',
         'userIntro.shortIntro',
         'userIntro.career',
@@ -67,7 +67,7 @@ export class UserRepository {
     ).rank;
   }
 
-  findUser(uniqueId: string, provider: Provider): Promise<User | null> {
+  findUser(uniqueId: string, provider: UserProvider): Promise<User | null> {
     return this.entityManager.findOne(User, { where: { uniqueId, provider } });
   }
 
@@ -118,7 +118,7 @@ export class UserRepository {
       .getOne();
   }
 
-  findOneAndSelectAllByQueryBuilder(email: string, provider: Provider) {
+  findOneAndSelectAllByQueryBuilder(email: string, provider: UserProvider) {
     return this.entityManager
       .getRepository(User)
       .createQueryBuilder('user')

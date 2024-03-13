@@ -15,9 +15,9 @@ import { MentorReviewDto } from '@src/mentors/mentor-reviews/dtos/mentor-review.
 import { MentorReviewsItemResponseDto } from '@src/mentors/mentor-reviews/dtos/mentor-reviews-item-response.dto';
 import { MentorReviewsPaginationResponseDto } from '@src/mentors/mentor-reviews/dtos/mentor-reviews-pagination-response.dto';
 import { PatchUpdateMentorReviewDto } from '@src/mentors/mentor-reviews/dtos/patch-update-mentor-review.dto';
-import { MentorReview } from '@src/mentors/mentor-reviews/entities/mentor-review.entity';
 import { MentorReviewRepository } from '@src/mentors/mentor-reviews/repositories/mentor-review.repository';
 import { QueryHelper } from '@src/helpers/query.helper';
+import { MentorReview } from '@src/entities/MentorReview';
 @Injectable()
 export class MentorReviewsService {
   private readonly LIKE_SEARCH_FIELD: readonly (keyof Pick<
@@ -65,6 +65,35 @@ export class MentorReviewsService {
         id: mentorId,
       },
     });
+
+    const today = new Date();
+    const todayStart = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+    );
+    const todayEnd = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() + 1,
+      0,
+      0,
+      0,
+      -1,
+    );
+
+    const existReview = await this.mentorReviewRepository.findOneTodayReview(
+      existMentor.id,
+      menteeId,
+      todayStart,
+      todayEnd,
+    );
+
+    if (existReview) {
+      throw new ForbiddenException(
+        'A review for this mentor has already been submitted. Please try again tomorrow.',
+      );
+    }
 
     const queryRunner = this.dataSource.createQueryRunner();
 

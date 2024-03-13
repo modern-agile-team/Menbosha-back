@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { HelpMeBoardImage } from '@src/boards/entities/help-me-board-image.entity';
-import { HelpMeBoard } from '@src/boards/entities/help-me-board.entity';
+import { HelpMeBoard } from '@src/entities/HelpMeBoard';
+import { User } from '@src/entities/User';
 import { SearchAllHelpMeBoardDto } from '@src/search/dtos/search-all-help-me-board.dto';
 import { SearchAllMentorDto } from '@src/search/dtos/search-all-mentor.dto';
-import { User } from '@src/users/entities/user.entity';
 import { EntityManager } from 'typeorm';
 
 /**
@@ -68,7 +67,7 @@ export class SearchRepository {
         .innerJoin('helpMeBoard.user', 'user')
         .innerJoin('user.userImage', 'userImage')
         .leftJoin('helpMeBoard.helpMeBoardImages', 'helpMeBoardImages')
-        .innerJoin('helpMeBoard.categoryList', 'categoryList')
+        .innerJoin('helpMeBoard.category', 'category')
         .select([
           'helpMeBoard.id',
           'helpMeBoard.head',
@@ -78,7 +77,7 @@ export class SearchRepository {
           'user.id',
           'user.name',
           'userImage.imageUrl',
-          'categoryList.categoryName',
+          'category.name',
         ])
         .where(`MATCH(head) AGAINST (:searchQuery IN BOOLEAN MODE)`, {
           searchQuery,
@@ -116,256 +115,5 @@ export class SearchRepository {
         .limit(10)
         .getMany(),
     ]);
-  }
-
-  async searchBoardsByHead(
-    category: string,
-    searchQuery: string,
-    skip: number,
-    take: number,
-  ) {
-    const boardRepository = this.entityManager.getRepository(HelpMeBoard);
-
-    if (category === '전체') {
-      return boardRepository
-        .createQueryBuilder('board')
-        .where(`MATCH(head) AGAINST (:searchQuery IN BOOLEAN MODE)`, {
-          searchQuery,
-        })
-        .leftJoinAndMapMany(
-          'board.user',
-          User,
-          'user',
-          'user.id = board.userId',
-        )
-        .leftJoinAndSelect('user.userImage', 'userImage')
-        .leftJoinAndMapMany(
-          'board.boardImages',
-          HelpMeBoardImage,
-          'boardImages',
-          'boardImages.boardId = board.id',
-        )
-        .select([
-          'board.id',
-          'board.head',
-          'board.body',
-          'board.createAt',
-          'board.updateAt',
-          'user.name',
-          'userImage.id',
-          'userImage.userId',
-          'userImage.imageUrl',
-          'boardImages.id',
-          'boardImages.imageUrl',
-        ])
-        .skip(skip)
-        .take(take)
-        .getManyAndCount();
-    }
-    return boardRepository
-      .createQueryBuilder('board')
-      .where(`MATCH(head) AGAINST (:searchQuery IN BOOLEAN MODE)`, {
-        searchQuery,
-      })
-      .andWhere('board.main_category = :category', { category })
-      .leftJoinAndMapMany('board.user', User, 'user', 'user.id = board.userId')
-      .leftJoinAndSelect('user.userImage', 'userImage')
-      .leftJoinAndMapMany(
-        'board.boardImages',
-        HelpMeBoardImage,
-        'boardImages',
-        'boardImages.boardId = board.id',
-      )
-      .select([
-        'board.id',
-        'board.head',
-        'board.body',
-        'board.createAt',
-        'board.updateAt',
-        'user.name',
-        'userImage.id',
-        'userImage.userId',
-        'userImage.imageUrl',
-        'boardImages.id',
-        'boardImages.imageUrl',
-      ])
-      .skip(skip)
-      .take(take)
-      .getManyAndCount();
-  }
-
-  async searchBoardsByBody(
-    category: string,
-    searchQuery: string,
-    skip: number,
-    take: number,
-  ) {
-    const boardRepository = this.entityManager.getRepository(HelpMeBoard);
-
-    if (category === '전체') {
-      return boardRepository
-        .createQueryBuilder('board')
-        .where(`MATCH(body) AGAINST (:searchQuery IN BOOLEAN MODE)`, {
-          searchQuery,
-        })
-        .leftJoinAndMapMany(
-          'board.user',
-          User,
-          'user',
-          'user.id = board.userId',
-        )
-        .leftJoinAndSelect('user.userImage', 'userImage')
-        .leftJoinAndMapMany(
-          'board.boardImages',
-          HelpMeBoardImage,
-          'boardImages',
-          'boardImages.boardId = board.id',
-        )
-        .select([
-          'board.id',
-          'board.head',
-          'board.body',
-          'board.createAt',
-          'board.updateAt',
-          'user.name',
-          'userImage.id',
-          'userImage.userId',
-          'userImage.imageUrl',
-          'boardImages.id',
-          'boardImages.imageUrl',
-        ])
-        .skip(skip)
-        .take(take)
-        .getManyAndCount();
-    }
-    return boardRepository
-      .createQueryBuilder('board')
-      .where(`MATCH(body) AGAINST (:searchQuery IN BOOLEAN MODE)`, {
-        searchQuery,
-      })
-      .andWhere('board.main_category = :category', { category })
-      .leftJoinAndMapMany('board.user', User, 'user', 'user.id = board.userId')
-      .leftJoinAndSelect('user.userImage', 'userImage')
-      .leftJoinAndMapMany(
-        'board.boardImages',
-        HelpMeBoardImage,
-        'boardImages',
-        'boardImages.boardId = board.id',
-      )
-      .select([
-        'board.id',
-        'board.head',
-        'board.body',
-        'board.createAt',
-        'board.updateAt',
-        'user.name',
-        'userImage.id',
-        'userImage.userId',
-        'userImage.imageUrl',
-        'boardImages.id',
-        'boardImages.imageUrl',
-      ])
-      .skip(skip)
-      .take(take)
-      .getManyAndCount();
-  }
-
-  async findUserId(searchQuery: string) {
-    const returnedUsers = await this.entityManager
-      .createQueryBuilder(User, 'user')
-      .where(`MATCH(name) AGAINST (:searchQuery IN BOOLEAN MODE)`, {
-        searchQuery,
-      })
-      .select(['user.id'])
-      .getMany();
-
-    if (returnedUsers.length) return returnedUsers;
-  }
-
-  async searchBoardsByUserName(
-    category: string,
-    returnedUsers: User[],
-    skip: number,
-    take: number,
-  ) {
-    if (category === '전체') {
-      return this.entityManager
-        .createQueryBuilder(HelpMeBoard, 'board')
-        .leftJoinAndMapMany(
-          'board.user',
-          User,
-          'user',
-          'user.id = board.userId',
-        )
-        .leftJoinAndSelect('user.userImage', 'userImage')
-        .leftJoinAndMapMany(
-          'board.boardImages',
-          HelpMeBoardImage,
-          'boardImages',
-          'boardImages.boardId = board.id',
-        )
-        .select([
-          'board.id',
-          'board.head',
-          'board.body',
-          'board.createAt',
-          'board.updateAt',
-          'user.name',
-          'userImage.id',
-          'userImage.userId',
-          'userImage.imageUrl',
-          'boardImages.id',
-          'boardImages.imageUrl',
-        ])
-        .where('board.userId IN (:...userId)', {
-          userId: returnedUsers.map((user) => user.id),
-        })
-        .skip(skip)
-        .take(take)
-        .getManyAndCount();
-    }
-
-    return this.entityManager
-      .createQueryBuilder(HelpMeBoard, 'board')
-      .leftJoinAndMapMany('board.user', User, 'user', 'user.id = board.userId')
-      .leftJoinAndSelect('user.userImage', 'userImage')
-      .leftJoinAndMapMany(
-        'board.boardImages',
-        HelpMeBoardImage,
-        'boardImages',
-        'boardImages.boardId = board.id',
-      )
-      .select([
-        'board.id',
-        'board.head',
-        'board.body',
-        'board.createAt',
-        'board.updateAt',
-        'user.name',
-        'userImage.id',
-        'userImage.userId',
-        'userImage.imageUrl',
-        'boardImages.id',
-        'boardImages.imageUrl',
-      ])
-      .where('board.userId IN (:...userId)', {
-        userId: returnedUsers.map((user) => user.id),
-      })
-      .andWhere('board.main_category = :category', { category })
-      .skip(skip)
-      .take(take)
-      .getManyAndCount();
-  }
-
-  async searchUsersByName(searchQuery: string) {
-    const userRepository = this.entityManager.getRepository(User);
-
-    return userRepository
-      .createQueryBuilder()
-      .select()
-      .where(`MATCH(name) AGAINST (:searchQuery)`, {
-        searchQuery,
-      })
-      .getMany();
   }
 }

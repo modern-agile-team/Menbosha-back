@@ -1,8 +1,9 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsOptional, ValidateNested } from 'class-validator';
+import { IsOptional, Length, ValidateNested } from 'class-validator';
 import { IsNotEmptyObjectAndAllFalse } from '@src/common/decorators/validators/is-not-empty-object-and-all-false.decorator';
 import { CreateMentorReviewChecklistRequestBodyDto } from '@src/mentors/mentor-reviews/dtos/create-mentor-review-checklist-request-body.dto';
+import { MENTOR_REVIEW_REVIEW_LENGTH } from '@src/mentors/mentor-reviews/constants/mentor-review.constant';
 
 export class PatchUpdateMentorReviewDto {
   @ApiPropertyOptional({
@@ -17,8 +18,10 @@ export class PatchUpdateMentorReviewDto {
 
   @ApiPropertyOptional({
     description: '멘토 리뷰 내용',
+    minLength: MENTOR_REVIEW_REVIEW_LENGTH.MIN,
+    maxLength: MENTOR_REVIEW_REVIEW_LENGTH.MAX,
   })
   @IsOptional()
-  @IsNotEmpty()
+  @Length(MENTOR_REVIEW_REVIEW_LENGTH.MIN, MENTOR_REVIEW_REVIEW_LENGTH.MAX)
   review?: string;
 }

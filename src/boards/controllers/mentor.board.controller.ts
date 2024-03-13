@@ -13,6 +13,8 @@ import {
   ValidationPipe,
   ClassSerializerInterceptor,
   Param,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { GetUserId } from '@src/common/decorators/get-userId.decorator';
@@ -29,7 +31,6 @@ import { MentorBoardPaginationResponseDto } from '@src/boards/dto/mentorBoard/me
 import { oneMentorBoardResponseDTO } from '@src/boards/dto/mentorBoard/one.response.mentor.boards.dto';
 import { UpdateMentorBoardDto } from '@src/boards/dto/mentorBoard/update.mentor.board.dto';
 import { MentorBoardResponseDTO } from '@src/boards/dto/mentorBoard/update.mentor.board.response.dto';
-import { MentorBoard } from '@src/boards/entities/mentor-board.entity';
 import { BoardImagesService } from '@src/boards/services/BoardImage.service';
 import { MentorBoardService } from '@src/boards/services/mentor.board.service';
 import { ApiAddMentorBoard } from '@src/boards/swagger-decorators/mentorBoard/add-mentor-board-decorators';
@@ -40,6 +41,7 @@ import { ApiGetOneMentorBoard } from '@src/boards/swagger-decorators/mentorBoard
 import { ApiGetPageNumberByMentorBoard } from '@src/boards/swagger-decorators/mentorBoard/get-page-number-mentor-board-decorator';
 import { ApiUpdateMentorBoard } from '@src/boards/swagger-decorators/mentorBoard/patch-mentor-board-decorators';
 import { ParsePositiveIntPipe } from '@src/common/pipes/parse-positive-int.pipe';
+import { MentorBoard } from '@src/entities/MentorBoard';
 
 /**
  * 추후 리팩토링때
@@ -146,12 +148,13 @@ export class MentorBoardController {
   }
 
   @Delete('')
+  @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(AccessTokenAuthGuard)
   @ApiDeleteMentorBoard()
   deleteBoard(
-    @Query('mentorBoardId') mentorBoardId: number,
+    @Query('mentorBoardId', ParsePositiveIntPipe) mentorBoardId: number,
     @GetUserId() userId: number,
   ) {
-    this.mentorBoardService.deleteBoard(mentorBoardId, userId);
+    return this.mentorBoardService.deleteBoard(mentorBoardId, userId);
   }
 }

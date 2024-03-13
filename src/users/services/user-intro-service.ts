@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { UserIntro } from '@src/entities/UserIntro';
 import { CreateUserIntroDto } from '@src/users/dtos/create-user-intro-dto';
 import { ResponseUserIntroDto } from '@src/users/dtos/response-user-dto';
 import { UpdateUserIntroDTO } from '@src/users/dtos/update-user-intro-dto';
-import { UserIntro } from '@src/users/entities/user-intro.entity';
 import { UserIntroRepository } from '@src/users/repositories/user-intro.repository';
 import { EntityManager } from 'typeorm';
 

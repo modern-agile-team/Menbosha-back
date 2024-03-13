@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserImage } from '@src/users/entities/user-image.entity';
-import { User } from '@src/users/entities/user.entity';
+import { User } from '@src/entities/User';
+import { UserImage } from '@src/entities/UserImage';
+import { USER_NAME_LENGTH } from '@src/users/constants/user.constant';
 
 export class SearchUserDto implements Pick<User, 'id' | 'name'> {
   @ApiProperty({
@@ -11,6 +12,8 @@ export class SearchUserDto implements Pick<User, 'id' | 'name'> {
 
   @ApiProperty({
     description: '작성자 이름',
+    minLength: USER_NAME_LENGTH.MIN,
+    maxLength: USER_NAME_LENGTH.MAX,
   })
   name: string;
 

@@ -1,6 +1,7 @@
 import {
   ForbiddenException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { FindOneOptions } from 'typeorm';
@@ -12,9 +13,10 @@ import { MentorBoardWithUserAndImageDto } from '@src/boards/dto/mentorBoard/ment
 import { oneMentorBoardResponseDTO } from '@src/boards/dto/mentorBoard/one.response.mentor.boards.dto';
 import { UpdateMentorBoardDto } from '@src/boards/dto/mentorBoard/update.mentor.board.dto';
 import { MentorBoardResponseDTO } from '@src/boards/dto/mentorBoard/update.mentor.board.response.dto';
-import { MentorBoard } from '@src/boards/entities/mentor-board.entity';
 import { MentorBoardLikeRepository } from '@src/boards/repository/mentor.board.likes.repository';
 import { MentorBoardRepository } from '@src/boards/repository/mentor.boards.repository';
+import { MentorBoard } from '@src/entities/MentorBoard';
+import { MentorBoardDto } from '@src/boards/dto/mentorBoard/mentor-board.dto';
 
 @Injectable()
 export class MentorBoardService {
@@ -81,7 +83,7 @@ export class MentorBoardService {
 
   async findOneByOrNotFound(
     options: FindOneOptions<MentorBoard>,
-  ): Promise<MentorBoard> {
+  ): Promise<MentorBoardDto> {
     const existMentorBoard =
       await this.mentorBoardRepository.findOneMentorBoard(options);
 
@@ -89,7 +91,7 @@ export class MentorBoardService {
       throw new NotFoundException('게시물을 찾을 수 없습니다.');
     }
 
-    return existMentorBoard;
+    return new MentorBoardDto({ ...existMentorBoard });
   }
 
   async findOneMentorBoard(
@@ -163,18 +165,27 @@ export class MentorBoardService {
     };
   }
 
-  async deleteBoard(mentorBoardId: number, userId: number): Promise<void> {
-    const board =
-      await this.mentorBoardRepository.findMentorBoardById(mentorBoardId);
+  async deleteBoard(
+    mentorBoardId: number,
+    userId: number,
+  ): Promise<MentorBoardDto> {
+    const existMentorBoard = await this.findOneByOrNotFound({
+      where: { id: mentorBoardId },
+    });
 
-    if (!board) {
-      throw new NotFoundException('존재하지 않는 게시물입니다.');
-    }
-
-    if (board.userId !== userId) {
+    if (existMentorBoard.userId !== userId) {
       throw new ForbiddenException('작성한 게시물이 아닙니다.');
     }
 
-    await this.mentorBoardRepository.deleteBoard(board);
+    const deletedMentorBoard =
+      await this.mentorBoardRepository.deleteBoard(existMentorBoard);
+
+    if (!deletedMentorBoard) {
+      throw new InternalServerErrorException(
+        '멘토 게시글 삭제 중 서버 에러 발생',
+      );
+    }
+
+    return new MentorBoardDto(deletedMentorBoard);
   }
 }

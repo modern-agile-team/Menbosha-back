@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum } from 'class-validator';
 import { UserStatus } from '@src/users/constants/user-status.enum';
-import { User } from '@src/users/entities/user.entity';
+import { User } from '@src/entities/User';
 
 export class PutUpdateUserForAdminDto implements Pick<User, 'status'> {
   @ApiProperty({

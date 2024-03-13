@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { HelpYouComment } from '@src/comments/entities/help-you-comment.entity';
+import { HelpYouComment } from '@src/entities/HelpYouComment';
 import { Exclude } from 'class-transformer';
 
 export class HelpYouCommentDto
@@ -34,4 +34,8 @@ export class HelpYouCommentDto
 
   @Exclude()
   deletedAt: Date | null;
+
+  constructor(helpYouCommentDto: HelpYouCommentDto) {
+    Object.assign(this, helpYouCommentDto);
+  }
 }
