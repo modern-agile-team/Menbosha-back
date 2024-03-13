@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { TotalCount } from '@src/entities/TotalCount';
+import { User } from '@src/entities/User';
+import { UserImage } from '@src/entities/UserImage';
+import { UserIntro } from '@src/entities/UserIntro';
+import { UserRanking } from '@src/entities/UserRanking';
 import { EntityManager, MoreThanOrEqual } from 'typeorm';
-import { TotalCount } from '@src/total-count/entities/total-count.entity';
-import { UserImage } from '@src/users/entities/user-image.entity';
-import { UserIntro } from '@src/users/entities/user-intro.entity';
-import { UserRanking } from '@src/users/entities/user-ranking.entity';
-import { User } from '@src/users/entities/user.entity';
 
 @Injectable()
 export class UserRankingRepository {

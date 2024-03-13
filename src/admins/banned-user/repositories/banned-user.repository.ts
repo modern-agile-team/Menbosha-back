@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBannedUserBodyDto } from '@src/admins/banned-user/dtos/create-banned-user-body.dto';
-import { BannedUser } from '@src/admins/banned-user/entities/banned-user.entity';
+import { BannedUser } from '@src/entities/BannedUser';
 import { EntityManager, FindOneOptions } from 'typeorm';
 
 @Injectable()

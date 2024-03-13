@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { MentorReview } from '@src/mentors/mentor-reviews/entities/mentor-review.entity';
+import { MentorReview } from '@src/entities/MentorReview';
 import { IsBoolean, IsOptional } from 'class-validator';
 
 export class CreateMentorReviewChecklistRequestBodyDto

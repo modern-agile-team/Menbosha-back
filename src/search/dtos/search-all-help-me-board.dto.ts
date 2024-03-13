@@ -1,19 +1,21 @@
-import { HelpMeBoard } from '@src/boards/entities/help-me-board.entity';
-import { CategoryList } from '@src/category/entity/category-list.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { SearchUserDto } from '@src/search/dtos/search-user-dto';
+import { HelpMeBoard } from '@src/entities/HelpMeBoard';
+import { Category } from '@src/entities/Category';
+import { HELP_ME_BOARD_HEAD_LENGTH } from '@src/boards/constants/help-me-board/help-me-board.constant';
 
 export class SearchAllHelpMeBoardDto
   implements
     Omit<
       HelpMeBoard,
-      | 'categoryList'
+      | 'category'
       | 'categoryId'
       | 'updatedAt'
       | 'user'
       | 'userId'
       | 'helpMeBoardImages'
+      | 'helpYouComments'
       | 'pullingUp'
     >
 {
@@ -25,6 +27,8 @@ export class SearchAllHelpMeBoardDto
 
   @ApiProperty({
     description: '도와주세요 게시글 제목',
+    minLength: HELP_ME_BOARD_HEAD_LENGTH.MIN,
+    maxLength: HELP_ME_BOARD_HEAD_LENGTH.MAX,
   })
   head: string;
 
@@ -63,13 +67,13 @@ export class SearchAllHelpMeBoardDto
     description: '카테고리 리스트',
     type: 'object',
     properties: {
-      categoryName: {
+      name: {
         description: '카테고리의 이름',
         type: 'string',
       },
     },
   })
-  categoryList: Pick<CategoryList, 'categoryName'>;
+  category: Pick<Category, 'name'>;
 
   @ApiProperty({
     description: '끌어 올려진 시간',
@@ -88,6 +92,6 @@ export class SearchAllHelpMeBoardDto
     this.createdAt = searchAllHelpMeBoardsDto.createdAt;
     this.user = searchAllHelpMeBoardsDto.user;
     this.helpMeBoardImages = searchAllHelpMeBoardsDto.helpMeBoardImages;
-    this.categoryList = searchAllHelpMeBoardsDto.categoryList;
+    this.category = searchAllHelpMeBoardsDto.category;
   }
 }

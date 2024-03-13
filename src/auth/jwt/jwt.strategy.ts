@@ -1,19 +1,26 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { RedisService } from '@src/common/redis/redis.service';
+import { RedisService } from '@src/common/redis/services/redis.service';
 import { TokenPayload } from '@src/auth/interfaces/token-payload.interface';
+import { AppConfigService } from '@src/core/app-config/services/app-config.service';
+import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
 
 @Injectable()
 export class AccessTokenStrategy extends PassportStrategy(
   Strategy,
   'accessToken',
 ) {
-  constructor(private readonly redisService: RedisService) {
+  constructor(
+    private readonly redisService: RedisService,
+    private readonly appConfigService: AppConfigService,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: process.env.JWT_ACCESSTOKEN_SECRET_KEY,
+      secretOrKey: appConfigService.get<string>(
+        ENV_KEY.JWT_ACCESS_TOKEN_SECRET_KEY,
+      ),
       passReqToCallback: true,
     });
   }
@@ -48,11 +55,16 @@ export class RefreshTokenStrategy extends PassportStrategy(
   Strategy,
   'refreshToken',
 ) {
-  constructor(private readonly redisService: RedisService) {
+  constructor(
+    private readonly redisService: RedisService,
+    private readonly appConfigService: AppConfigService,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: process.env.JWT_REFRESHTOKEN_SECRET_KEY,
+      secretOrKey: appConfigService.get<string>(
+        ENV_KEY.JWT_REFRESH_TOKEN_SECRET_KEY,
+      ),
       passReqToCallback: true,
     });
   }

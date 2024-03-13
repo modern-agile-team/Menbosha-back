@@ -1,9 +1,9 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { MentorBoardImage } from '@src/boards/entities/mentor-board-image.entity';
 import { Exclude } from 'class-transformer';
 import { UserForJoinDto } from '@src/users/dtos/user-for-join.dto';
 import { MentorBoardDto } from '@src/boards/dto/mentorBoard/mentor-board.dto';
 import { MentorBoardLikeDto } from '@src/boards/dto/mentorBoard/mentor-board-like.dto';
+import { MentorBoardImage } from '@src/entities/MentorBoardImage';
 
 export class MentorBoardWithUserAndImageDto extends PickType(MentorBoardDto, [
   'id',
@@ -49,6 +49,7 @@ export class MentorBoardWithUserAndImageDto extends PickType(MentorBoardDto, [
 
     this.body = mentorBoardWithUserAndImageDto.body.substring(0, 30);
     this.likeCount = mentorBoardWithUserAndImageDto.mentorBoardLikes.length;
+
     mentorBoardImages.length
       ? (this.imageUrl = mentorBoardImages[0].imageUrl)
       : (this.imageUrl = null);

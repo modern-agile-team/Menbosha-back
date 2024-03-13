@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { HelpMeBoardImage } from '@src/boards/entities/help-me-board-image.entity';
+import { HelpMeBoardImage } from '@src/entities/HelpMeBoardImage';
 
 export class SearchHelpMeBoardImageDto
   implements Pick<HelpMeBoardImage, 'imageUrl'>

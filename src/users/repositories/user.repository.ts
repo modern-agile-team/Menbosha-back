@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
   EntityManager,
   FindManyOptions,
@@ -6,9 +6,9 @@ import {
   UpdateResult,
 } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { Provider } from '@src/auth/enums/provider.enum';
+import { UserProvider } from '@src/auth/enums/user-provider.enum';
 import { UserInfo } from '@src/auth/interfaces/user-info.interface';
-import { User } from '@src/users/entities/user.entity';
+import { User } from '@src/entities/User';
 
 @Injectable()
 export class UserRepository {
@@ -18,16 +18,44 @@ export class UserRepository {
     return this.entityManager.getRepository(User).find(options);
   }
 
-  async getUserInfo(userId: number): Promise<User> {
-    const user = await this.entityManager.findOne(User, {
+  getUser(userId: number): Promise<User> {
+    return this.entityManager.findOne(User, {
       where: { id: userId },
     });
+  }
 
-    if (!user) {
-      throw new NotFoundException('사용자를 찾을 수 없습니다.');
-    }
-
-    return user;
+  getUserInfo(userId: number) {
+    return this.entityManager
+      .getRepository(User)
+      .createQueryBuilder('user')
+      .leftJoin('user.userImage', 'userImage')
+      .leftJoin('user.userIntro', 'userIntro')
+      .leftJoin('user.userBadges', 'userBadges')
+      .leftJoin('user.totalCount', 'totalCount')
+      .select([
+        'user.id',
+        'user.name',
+        'user.rank',
+        'user.phone',
+        'user.hopeCategoryId',
+        'user.activityCategoryId',
+        'user.createdAt',
+        'user.updatedAt',
+        'user.isMentor',
+        'userBadges.badgeId',
+        'userBadges.createdAt',
+        'userImage.imageUrl',
+        'userIntro.shortIntro',
+        'userIntro.career',
+        'userIntro.customCategory',
+        'userIntro.detail',
+        'userIntro.portfolio',
+        'userIntro.sns',
+        'totalCount.mentorBoardCount',
+        'totalCount.reviewCount',
+      ])
+      .where('user.id = :userId', { userId })
+      .getOne();
   }
 
   async getUserRank(userId: number): Promise<number> {
@@ -39,7 +67,7 @@ export class UserRepository {
     ).rank;
   }
 
-  findUser(uniqueId: string, provider: Provider): Promise<User | null> {
+  findUser(uniqueId: string, provider: UserProvider): Promise<User | null> {
     return this.entityManager.findOne(User, { where: { uniqueId, provider } });
   }
 
@@ -90,7 +118,7 @@ export class UserRepository {
       .getOne();
   }
 
-  findOneAndSelectAllByQueryBuilder(email: string, provider: Provider) {
+  findOneAndSelectAllByQueryBuilder(email: string, provider: UserProvider) {
     return this.entityManager
       .getRepository(User)
       .createQueryBuilder('user')

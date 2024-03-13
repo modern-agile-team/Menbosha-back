@@ -1,12 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { MENTOR_BOARD_HEAD_LENGTH } from '@src/boards/constants/mentor-board/mentor-board.constant';
+import { MentorBoard } from '@src/entities/MentorBoard';
 import { Exclude } from 'class-transformer';
-import { MentorBoard } from '@src/boards/entities/mentor-board.entity';
 
 export class MentorBoardDto
   implements
     Omit<
       MentorBoard,
-      'user' | 'categoryList' | 'mentorBoardImages' | 'mentorBoardLikes'
+      'user' | 'category' | 'mentorBoardImages' | 'mentorBoardLikes'
     >
 {
   @ApiProperty({ description: '멘토 게시판 글 고유 id', format: 'integer' })
@@ -19,7 +20,11 @@ export class MentorBoardDto
   })
   userId: number;
 
-  @ApiProperty({ description: '멘토 게시판 글 제목' })
+  @ApiProperty({
+    description: '멘토 게시판 글 제목',
+    minLength: MENTOR_BOARD_HEAD_LENGTH.MIN,
+    maxLength: MENTOR_BOARD_HEAD_LENGTH.MAX,
+  })
   head: string;
 
   @ApiProperty({ description: '멘토 게시판 글 내용' })

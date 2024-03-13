@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { EntityManager, FindManyOptions, FindOneOptions } from 'typeorm';
 import { plainToInstance } from 'class-transformer';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { Provider } from '@src/auth/enums/provider.enum';
+import { UserProvider } from '@src/auth/enums/user-provider.enum';
 import { UserInfo } from '@src/auth/interfaces/user-info.interface';
 import { UserBadgeRepository } from '@src/users/repositories/user-badge.repository';
 import { UserIntroRepository } from '@src/users/repositories/user-intro.repository';
@@ -11,7 +11,7 @@ import { MyProfileResponseDTO } from '@src/users/dtos/get-my-profile.dto';
 import { UserBadgeResponseDTO } from '@src/users/dtos/get-user-badge.dto';
 import { UserImageRepository } from '@src/users/repositories/user-image.repository';
 import { UserRepository } from '@src/users/repositories/user.repository';
-import { User } from '@src/users/entities/user.entity';
+import { User } from '@src/entities/User';
 
 @Injectable()
 export class UserService {
@@ -26,7 +26,7 @@ export class UserService {
     return this.userRepository.findAll(options);
   }
 
-  findUser(uniqueId: string, provider: Provider) {
+  findUser(uniqueId: string, provider: UserProvider) {
     return this.userRepository.findUser(uniqueId, provider);
   }
 
@@ -40,7 +40,7 @@ export class UserService {
     return existUser;
   }
 
-  findOneAndSelectAllByQueryBuilder(email: string, provider: Provider) {
+  findOneAndSelectAllByQueryBuilder(email: string, provider: UserProvider) {
     return this.userRepository.findOneAndSelectAllByQueryBuilder(
       email,
       provider,
@@ -68,7 +68,7 @@ export class UserService {
   async getMyProfile(userId: number) {
     const userInfo = plainToInstance(
       MyProfileResponseDTO,
-      await this.userRepository.getUserInfo(userId),
+      await this.userRepository.getUser(userId),
     );
     const intro = plainToInstance(
       MyIntroDto,
@@ -85,34 +85,19 @@ export class UserService {
     const rank = await this.userRepository.getUserRank(userId);
     const badge = plainToInstance(
       UserBadgeResponseDTO,
-      await this.userBadgeRepository.getUserBadge(userId),
+      await this.userBadgeRepository.getUserBadges(userId),
     );
 
     return { rank, badge };
   }
 
-  async getUserInfo(userId: number) {
-    const userInfo = plainToInstance(
-      MyProfileResponseDTO,
-      await this.userRepository.getUserInfo(userId),
-    );
-    const image = (await this.userImageRepository.findUserImage(userId))
-      .imageUrl;
-    const intro = plainToInstance(
-      MyIntroDto,
-      await this.userIntroRepository.getUserIntro(userId),
-    )[0];
-    const badge = plainToInstance(
-      UserBadgeResponseDTO,
-      await this.userBadgeRepository.getUserBadge(userId),
-    );
-
-    return { ...userInfo, image, intro, badge };
+  getUserInfo(userId: number) {
+    return this.userRepository.getUserInfo(userId);
   }
 
   async getMyInfoWithOwner(userId: number, targetId: number) {
     const { name, email, role, provider } =
-      await this.userRepository.getUserInfo(userId);
+      await this.userRepository.getUser(userId);
     const userImage = (await this.userImageRepository.findUserImage(userId))
       .imageUrl;
     return {

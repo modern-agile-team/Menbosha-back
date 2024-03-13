@@ -1,9 +1,10 @@
+import { UserProvider } from '@src/auth/enums/user-provider.enum';
 import { UserRole } from '@src/users/constants/user-role.enum';
-import { IsBoolean, IsEmail, IsString } from 'class-validator';
+import { IsBoolean, IsEmail, IsEnum, IsString } from 'class-validator';
 
 export class CreateUserDto {
-  @IsString()
-  readonly provider: string;
+  @IsEnum(UserProvider)
+  readonly provider: UserProvider;
 
   @IsString()
   readonly name: string;

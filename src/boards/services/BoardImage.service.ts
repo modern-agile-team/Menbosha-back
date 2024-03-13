@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CreateHelpMeBoardImageDto } from '@src/boards/dto/helpMeBoard/create.board-image.dto';
 import { CreateMentorBoardImageDto } from '@src/boards/dto/mentorBoard/create.mentor.board.image.dto';
-import { HelpMeBoardImage } from '@src/boards/entities/help-me-board-image.entity';
 import { BoardImageRepository } from '@src/boards/repository/boardImage.repository';
 import { MentorBoardService } from '@src/boards/services/mentor.board.service';
-import { S3Service } from '@src/common/s3/s3.service';
+import { S3Service } from '@src/common/s3/services/s3.service';
+import { HelpMeBoardImage } from '@src/entities/HelpMeBoardImage';
 
 @Injectable()
 export class BoardImagesService {

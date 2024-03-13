@@ -13,6 +13,8 @@ import {
   ValidationPipe,
   Param,
   ClassSerializerInterceptor,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiTags } from '@nestjs/swagger';
@@ -33,7 +35,6 @@ import { HelpMeBoardPaginationResponseDto } from '@src/boards/dto/helpMeBoard/he
 import { oneHelpMeBoardResponseDTO } from '@src/boards/dto/helpMeBoard/one.response.help.me.board.dto';
 import { UpdateHelpMeBoardDto } from '@src/boards/dto/helpMeBoard/update.help.me.board.dto';
 import { HelpMeBoardResponseDTO } from '@src/boards/dto/helpMeBoard/update.help.me.board.response.dto';
-import { HelpMeBoard } from '@src/boards/entities/help-me-board.entity';
 import { BoardImagesService } from '@src/boards/services/BoardImage.service';
 import { HelpMeBoardService } from '@src/boards/services/help.me.board.service';
 import { ApiAddHelpMeBoard } from '@src/boards/swagger-decorators/helpMeBoard/add-help-me-board-decorator';
@@ -45,6 +46,7 @@ import { ApiGetOneHelpMeBoard } from '@src/boards/swagger-decorators/helpMeBoard
 import { ApiUpdateHelpMeBoardImage } from '@src/boards/swagger-decorators/helpMeBoard/patch-help-me-board-images-decorators';
 import { ApiUpdateHelpMeBoard } from '@src/boards/swagger-decorators/helpMeBoard/patch-help-me-board.decorator';
 import { ApiPullingUpHelpMeBoard } from '@src/boards/swagger-decorators/helpMeBoard/pulling-up-help-me-board.decorator';
+import { HelpMeBoard } from '@src/entities/HelpMeBoard';
 
 /**
  * 팀원과 상의되면 주석처리된 옵션도 걸어줌.
@@ -179,12 +181,13 @@ export class HelpMeBoardController {
   }
 
   @Delete('')
+  @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(AccessTokenAuthGuard)
   @ApiDeleteHelpMeBoard()
   deleteBoard(
-    @Query('helpMeBoardId') boardId: number,
+    @Query('helpMeBoardId', ParsePositiveIntPipe) boardId: number,
     @GetUserId() userId: number,
   ) {
-    this.helpMeBoardService.deleteBoard(boardId, userId);
+    return this.helpMeBoardService.deleteBoard(boardId, userId);
   }
 }
