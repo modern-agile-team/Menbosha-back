@@ -1,6 +1,6 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
-import { Ttl } from '@src/common/redis/ttl.enum';
+import { Ttl } from '@src/common/redis/constants/ttl.enum';
 import { Cache } from 'cache-manager';
 
 @Injectable()

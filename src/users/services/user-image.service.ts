@@ -1,17 +1,17 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { S3Service } from '@src/common/s3/s3.service';
+import { S3Service } from '@src/common/s3/services/s3.service';
+import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
+import { AppConfigService } from '@src/core/app-config/services/app-config.service';
 import { UserImage } from '@src/entities/UserImage';
 import { UserImageRepository } from '@src/users/repositories/user-image.repository';
-import * as dotenv from 'dotenv';
 import { EntityManager } from 'typeorm';
-
-dotenv.config();
 
 @Injectable()
 export class UserImageService {
   constructor(
     private readonly s3Service: S3Service,
     private readonly userImageRepository: UserImageRepository,
+    private readonly appConfigService: AppConfigService,
   ) {}
 
   findUserImage(userId: number): Promise<UserImage> {
@@ -54,7 +54,7 @@ export class UserImageService {
       const dbImageUrl = imageUrlParts[imageUrlParts.length - 3]; // 이미지 제공자 이름
 
       if (
-        dbImageUrl === process.env.AWS_S3_URL &&
+        dbImageUrl === this.appConfigService.get<string>(ENV_KEY.AWS_S3_URL) &&
         imageKey !== 'default_user_image.png'
       ) {
         // S3에 업로드된 이미지이고, 기본 이미지가 아닌 경우

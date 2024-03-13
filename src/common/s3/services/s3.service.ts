@@ -1,25 +1,29 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import {
   DeleteObjectCommand,
   DeleteObjectsCommand,
   S3,
 } from '@aws-sdk/client-s3';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
-import * as dotenv from 'dotenv';
-
-dotenv.config();
+import { S3_CLIENT_TOKEN } from '@src/common/s3/constants/s3-client.token';
+import { AppConfigService } from '@src/core/app-config/services/app-config.service';
+import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
 
 @Injectable()
 export class S3Service {
-  private s3 = new S3({
-    credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    },
-    region: process.env.AWS_S3_REGION,
-  });
+  private readonly S3_BUCKET: string = this.appConfigService.get<string>(
+    ENV_KEY.AWS_S3_BUCKET,
+  );
+  private readonly S3_REGION: string = this.appConfigService.get<string>(
+    ENV_KEY.AWS_S3_REGION,
+  );
+  private readonly S3_ADDRESS: string = `https://${this.S3_BUCKET}.s3.${this.S3_REGION}.amazonaws.com/`;
 
-  private readonly S3_ADDRESS = `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/`;
+  constructor(
+    @Inject(S3_CLIENT_TOKEN)
+    private readonly s3: S3,
+    private readonly appConfigService: AppConfigService,
+  ) {}
 
   async uploadImage(
     file,
@@ -33,7 +37,7 @@ export class S3Service {
       await this.s3.send(
         new PutObjectCommand({
           ACL: 'public-read',
-          Bucket: process.env.AWS_S3_BUCKET,
+          Bucket: this.S3_BUCKET,
           Key: filename,
           Body: file.buffer,
           ContentType: 'image/jpeg',
@@ -51,7 +55,7 @@ export class S3Service {
 
   async deleteImage(key: string): Promise<boolean> {
     const params = {
-      Bucket: process.env.AWS_S3_BUCKET,
+      Bucket: this.S3_BUCKET,
       Key: key,
     };
 
@@ -66,7 +70,7 @@ export class S3Service {
 
   async deleteImagesWithPrefix(prefix: string): Promise<boolean> {
     const listParams = {
-      Bucket: process.env.AWS_S3_BUCKET,
+      Bucket: this.S3_BUCKET,
       Prefix: prefix,
     };
 
@@ -78,7 +82,7 @@ export class S3Service {
         }));
 
         const deleteParams = {
-          Bucket: process.env.AWS_S3_BUCKET,
+          Bucket: this.S3_BUCKET,
           Delete: { Objects: objectsToDelete },
         };
 

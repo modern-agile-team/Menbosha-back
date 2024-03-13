@@ -73,6 +73,24 @@ export class MentorReviewRepository {
     return this.entityManager.getRepository(MentorReview).findOne(options);
   }
 
+  findOneTodayReview(
+    mentorId: number,
+    menteeId: number,
+    todayStart: Date,
+    todayEnd: Date,
+  ): Promise<MentorReview> {
+    return this.entityManager
+      .getRepository(MentorReview)
+      .createQueryBuilder('mentorReview')
+      .where('mentorReview.mentorId = :mentorId', { mentorId })
+      .andWhere('mentorReview.menteeId = :menteeId', { menteeId })
+      .andWhere('mentorReview.createdAt BETWEEN :todayStart AND :todayEnd', {
+        todayStart,
+        todayEnd,
+      })
+      .getOne();
+  }
+
   updateMentorReview(
     reviewId: number,
     mentorId: number,

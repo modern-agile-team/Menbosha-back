@@ -35,6 +35,43 @@ jobs:
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_IMAGE_NAME }}:latest
 
+  build-notify-slack:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Slack Notification
+        id: slack-notification
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "channel": "${{ secrets.SLACK_BACKEND_CHANNEL_ID }}",
+              "attachments": [
+                {
+                  "color": "${{ job.status == 'success' && '#36a64f' || job.status == 'failure' && '#ff0000' || '#fffff' }}",
+                  "title": "${{ github.repository }}",
+                  "title_link": "https://github.com/${{ github.repository }}",
+                  "text": "${{ job.status == 'success' && 'GitHub Action Build 성공' || job.status == 'failure' && 'GitHub Action Build 실패 :x:' || '' }}",
+                  "fields": [
+                    {
+                      "title": "Repository",
+                      "value": "${{ github.repository }}",
+                      "short": true
+                    },
+                    {
+                      "title": "Tag",
+                      "value": "${{ github.ref_name }}",
+                      "short": true
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.DEV_DEPLOY_SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          
   deploy-develop:
     if: github.ref == 'refs/heads/develop'
     needs: build
@@ -57,6 +94,43 @@ jobs:
       - name: Restart the specific service in Docker Compose
         run: |
           docker-compose up -d ${{ secrets.DOCKER_SERVICES_NAME }}
+  
+  deploy-notify-slack-develop:
+    needs: deploy-develop
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Slack Notification
+        id: slack-notification
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "channel": "${{ secrets.SLACK_BACKEND_CHANNEL_ID }}",
+              "attachments": [
+                {
+                  "color": "${{ job.status == 'success' && '#36a64f' || job.status == 'failure' && '#ff0000' || '#fffff' }}",
+                  "title": "${{ github.repository }}",
+                  "title_link": "https://github.com/${{ github.repository }}",
+                  "text": "${{ job.status == 'success' && 'GitHub Action Develop Deploy 성공' || job.status == 'failure' && 'GitHub Action Develop Deploy 실패 :x:' || '' }}",
+                  "fields": [
+                    {
+                      "title": "Repository",
+                      "value": "${{ github.repository }}",
+                      "short": true
+                    },
+                    {
+                      "title": "Tag",
+                      "value": "${{ github.ref_name }}",
+                      "short": true
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.DEV_DEPLOY_SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
   deploy-main:
     if: github.ref == 'refs/heads/main'
@@ -80,3 +154,41 @@ jobs:
       - name: Restart the specific service in Docker Compose
         run: |
           docker-compose up -d ${{ secrets.DOCKER_SERVICES_NAME }}
+  
+  deploy-notify-slack-main:
+    needs: deploy-main
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Slack Notification
+        id: slack-notification
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "channel": "${{ secrets.SLACK_BACKEND_CHANNEL_ID }}",
+              "attachments": [
+                {
+                  "color": "${{ job.status == 'success' && '#36a64f' || job.status == 'failure' && '#ff0000' || '#fffff' }}",
+                  "title": "${{ github.repository }}",
+                  "title_link": "https://github.com/${{ github.repository }}",
+                  "text": "${{ job.status == 'success' && 'GitHub Action Main Deploy 성공' || job.status == 'failure' && 'GitHub Action Main Deploy 실패 :x:' || '' }}",
+                  "fields": [
+                    {
+                      "title": "Repository",
+                      "value": "${{ github.repository }}",
+                      "short": true
+                    },
+                    {
+                      "title": "Tag",
+                      "value": "${{ github.ref_name }}",
+                      "short": true
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.DEV_DEPLOY_SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+

@@ -66,6 +66,35 @@ export class MentorReviewsService {
       },
     });
 
+    const today = new Date();
+    const todayStart = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+    );
+    const todayEnd = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() + 1,
+      0,
+      0,
+      0,
+      -1,
+    );
+
+    const existReview = await this.mentorReviewRepository.findOneTodayReview(
+      existMentor.id,
+      menteeId,
+      todayStart,
+      todayEnd,
+    );
+
+    if (existReview) {
+      throw new ForbiddenException(
+        'A review for this mentor has already been submitted. Please try again tomorrow.',
+      );
+    }
+
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();

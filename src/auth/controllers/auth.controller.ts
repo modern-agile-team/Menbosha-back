@@ -8,7 +8,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { S3Service } from '@src/common/s3/s3.service';
+import { S3Service } from '@src/common/s3/services/s3.service';
 import { ApiTags } from '@nestjs/swagger';
 import { GetUserId } from '@src/common/decorators/get-userId.decorator';
 import { CookieInterceptor } from '@src/common/interceptors/cookie.interceptor';

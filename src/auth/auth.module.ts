@@ -12,8 +12,9 @@ import {
 import { TokenRepository } from '@src/auth/repositories/token.repository';
 import { AuthService } from '@src/auth/services/auth.service';
 import { TokenService } from '@src/auth/services/token.service';
-import { S3Service } from '@src/common/s3/s3.service';
 import { BannedUserModule } from '@src/admins/banned-user/banned-users.module';
+import { JwtModuleOptionsFactory } from '@src/auth/jwt/factories/jwt-module-options.factory';
+import { S3Module } from '@src/common/s3/s3.module';
 
 @Module({
   imports: [
@@ -21,19 +22,19 @@ import { BannedUserModule } from '@src/admins/banned-user/banned-users.module';
     RedisModule,
     TotalCountModule,
     PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET_KEY,
-      signOptions: { expiresIn: '60s' },
+    JwtModule.registerAsync({
+      useClass: JwtModuleOptionsFactory,
     }),
     BannedUserModule,
+    S3Module,
   ],
   exports: [TokenService, TokenRepository],
   controllers: [AuthController],
   providers: [
+    JwtModuleOptionsFactory,
     AuthService,
     TokenService,
     TokenRepository,
-    S3Service,
     AccessTokenStrategy,
     RefreshTokenStrategy,
   ],
