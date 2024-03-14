@@ -184,7 +184,8 @@ export class AuthService implements AuthServiceInterface {
           user.deletedAt = null;
 
           const updateResult = await this.userService.updateUser(user.id, {
-            ...user,
+            status: user.status,
+            deletedAt: user.deletedAt,
           });
 
           if (!updateResult.affected) {
