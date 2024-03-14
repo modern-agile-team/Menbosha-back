@@ -180,11 +180,9 @@ export class AuthService implements AuthServiceInterface {
          * 방법 3. 자동 복원(현재)
          */
         if (deletedAt && status === UserStatus.INACTIVE) {
-          user.status = UserStatus.ACTIVE;
-          user.deletedAt = null;
-
           const updateResult = await this.userService.updateUser(user.id, {
-            ...user,
+            status: UserStatus.ACTIVE,
+            deletedAt: null,
           });
 
           if (!updateResult.affected) {
