@@ -15,7 +15,8 @@ services:
       - redis_data:/usr/local/etc/redis
     command: sh -c "redis-server /usr/local/etc/redis/redis.conf"
     env_file:
-      - .env
+      - .env.development
+      # - .env.production (베포 ec2에서의 설정입니다)
     ports:
       - ${REDIS_BINDING_PORT}:${REDIS_PORT}
     restart: always
