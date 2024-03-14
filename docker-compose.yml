@@ -18,7 +18,7 @@ services:
       - .env.development
       # - .env.production (베포 ec2에서의 설정입니다)
     ports:
-      - ${REDIS_BINDING_PORT}:${REDIS_PORT}
+      - '6379:6379'
     restart: always
 
   nginx-certbot:
