@@ -437,6 +437,7 @@ export class AuthService implements AuthServiceInterface {
   }
 
   async accountDelete(userId: number) {
+    await this.tokenService.deleteTokens(userId);
     const deleteUser = await this.userService.updateUser(userId, {
       deletedAt: new Date(),
       status: UserStatus.INACTIVE,
