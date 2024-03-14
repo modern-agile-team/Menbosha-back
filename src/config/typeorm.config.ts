@@ -1,8 +1,9 @@
 import { config } from 'dotenv';
 import { DataSource } from 'typeorm';
 
-// .env 파일 로드
-config();
+config({ path: '.env.production' });
+config({ path: '.env.development', override: true });
+config({ path: '.env.local', override: true });
 
 export default new DataSource({
   type: 'mysql',

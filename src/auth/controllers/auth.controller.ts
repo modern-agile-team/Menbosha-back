@@ -99,8 +99,6 @@ export class AuthController {
     const { socialAccessToken, socialRefreshToken } =
       await this.tokenService.getUserTokens(userId);
 
-    await this.tokenService.deleteTokens(userId);
-
     return this.authService.unlink(
       UserProvider.Kakao,
       socialAccessToken,
@@ -122,8 +120,6 @@ export class AuthController {
     const { socialAccessToken, socialRefreshToken } =
       await this.tokenService.getUserTokens(userId);
 
-    await this.tokenService.deleteTokens(userId);
-
     return this.authService.unlink(
       UserProvider.Naver,
       socialAccessToken,
@@ -143,8 +139,6 @@ export class AuthController {
   @Post('google/unlink')
   async googleUnlink(@GetUserId() userId: number) {
     const { socialAccessToken } = await this.tokenService.getUserTokens(userId);
-
-    await this.tokenService.deleteTokens(userId);
 
     return this.authService.unlink(UserProvider.Google, socialAccessToken);
   }

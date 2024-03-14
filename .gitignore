@@ -73,11 +73,9 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variable files
-.env
-.env.development.local
-.env.test.local
-.env.production.local
 .env.local
+.env.development
+.env.production
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -123,7 +121,7 @@ dist
 .vscode-test
 .vscode
 
-#DS_STORE
+# DS_STORE
 **.DS_Store
 
 # yarn v2
@@ -132,3 +130,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# redis
+dump.rdb
