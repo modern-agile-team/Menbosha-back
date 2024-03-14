@@ -20,7 +20,9 @@ import { WebSocketExceptionFilter } from '@src/chat/exceptions/filters/websocket
 import { SocketException } from '@src/chat/exceptions/socket.exception';
 import { config } from 'dotenv';
 
-config();
+config({ path: '.env.production' });
+config({ path: '.env.development', override: true });
+config({ path: '.env.local', override: true });
 
 /**
  * 마지막 배포 단계가 되면 production 환경은 로컬에서의 요청은 아예 허용하지 않음. 오직 프론트의 https 적용된 프론트 도메인만 허용.
@@ -38,7 +40,7 @@ config();
             process.env.FRONT_PRODUCTION_WWW_DOMAIN,
             process.env.FRONT_LOCAL_DOMAIN,
           ]
-        : 'development'
+        : process.env.NODE_ENV === 'development'
           ? [
               process.env.FRONT_DEVELOPMENT_DOMAIN,
               process.env.FRONT_LOCAL_DOMAIN,
