@@ -15,8 +15,7 @@ services:
       - redis_data:/usr/local/etc/redis
     command: sh -c "redis-server /usr/local/etc/redis/redis.conf"
     env_file:
-      - .env.development
-      # - .env.production (베포 ec2에서의 설정입니다)
+      - .redis.env
     ports:
       - '6379:6379'
     restart: always
@@ -27,7 +26,7 @@ services:
       - '80:80'
       - '443:443'
     env_file:
-      - .env
+      - .nginx-certbot.env
 
 volumes:
   redis_data:
