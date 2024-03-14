@@ -5,10 +5,9 @@ services:
     ports:
       - '3000:3000'
     env_file:
-      - .env
+      - .env.development
+      # - .env.production (베포 ec2에서의 설정입니다)
     restart: always
-    environment:
-      TZ: Asia/Seoul
 
   redis:
     image: 2swo/redis
