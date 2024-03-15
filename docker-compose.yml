@@ -15,7 +15,7 @@ services:
       - redis_data:/usr/local/etc/redis
     command: sh -c "redis-server /usr/local/etc/redis/redis.conf"
     env_file:
-      - .redis.env
+      - .env.redis
     ports:
       - '6379:6379'
     restart: always
@@ -26,7 +26,20 @@ services:
       - '80:80'
       - '443:443'
     env_file:
-      - .nginx-certbot.env
+      - .env.nginx-certbot
+
+  # mysql 이미지는 따로 dockerfile로 빌드되진 않습니다.
+  # version과 port,env파일명,command 참고하시면 될 것 같습니다.
+  # development_db:
+  #   image: mysql:8.0.36
+  #   restart: unless-stopped
+  #   ports:
+  #     - '3306:3306'
+  #   env_file:
+  #     - .env.mysql
+  #   command:
+  #     - --character-set-server=utf8mb4
+  #     - --collation-server=utf8mb4_unicode_ci
 
 volumes:
   redis_data:
