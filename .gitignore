@@ -78,6 +78,7 @@ web_modules/
 .env.production
 .env.redis
 .env.nginx-certbot
+.env.mysql
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
