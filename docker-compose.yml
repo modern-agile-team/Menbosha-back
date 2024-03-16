@@ -41,6 +41,5 @@ services:
   #     - --character-set-server=utf8mb4
   #     - --collation-server=utf8mb4_unicode_ci
 
-# ㅓㅁㅇ나롸ㅓㅁ농라ㅣ;ㅁ너ㅣㅇ럼ㄴ;ㅣㅏㅇㄹ
 volumes:
   redis_data:
