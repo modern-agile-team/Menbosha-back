@@ -20,6 +20,7 @@ import { BannedUserErrorResponseDto } from '@src/admins/banned-user/dtos/banned-
 import { UserIntroService } from '@src/users/services/user-intro-service';
 import { AppConfigService } from '@src/core/app-config/services/app-config.service';
 import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
+import { ChatService } from '@src/chat/services/chat.service';
 
 @Injectable()
 export class AuthService implements AuthServiceInterface {
@@ -31,6 +32,7 @@ export class AuthService implements AuthServiceInterface {
     private readonly dataSource: DataSource,
     private readonly userIntroService: UserIntroService,
     private readonly appConfigService: AppConfigService,
+    private readonly chatService: ChatService,
   ) {}
 
   async login(authorizeCode: string, provider: UserProvider) {
@@ -180,11 +182,9 @@ export class AuthService implements AuthServiceInterface {
          * 방법 3. 자동 복원(현재)
          */
         if (deletedAt && status === UserStatus.INACTIVE) {
-          user.status = UserStatus.ACTIVE;
-          user.deletedAt = null;
-
           const updateResult = await this.userService.updateUser(user.id, {
-            ...user,
+            status: UserStatus.ACTIVE,
+            deletedAt: null,
           });
 
           if (!updateResult.affected) {
@@ -437,6 +437,7 @@ export class AuthService implements AuthServiceInterface {
   }
 
   async accountDelete(userId: number) {
+    await this.tokenService.deleteTokens(userId);
     const deleteUser = await this.userService.updateUser(userId, {
       deletedAt: new Date(),
       status: UserStatus.INACTIVE,
@@ -447,6 +448,9 @@ export class AuthService implements AuthServiceInterface {
         HttpStatus.NOT_FOUND,
       );
     }
+
+    await this.chatService.leaveChatRooms(userId);
+
     return { message: '사용자 계정 삭제가 완료되었습니다.' };
   }
 }
