@@ -112,9 +112,12 @@ export class BoardImagesService {
   ): Promise<any> {
     const existingImages = // boardId에 해당하는 이미지url을 DB에서 불러옵니다.
       await this.boardImageRepository.getMentorBoardImages(boardId);
+    console.log(existingImages);
+
     const imagesToDelete = existingImages.filter(
       (image) => deleteImageUrl.includes(image.imageUrl), // 불러온 이미지들과 param값 비교
     );
+
     await this.deleteMentorBoardImages(imagesToDelete); //이미지 삭제처리
 
     // 여기서부터 새로운 이미지 추가

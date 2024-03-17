@@ -42,6 +42,7 @@ import { ApiGetPageNumberByMentorBoard } from '@src/boards/swagger-decorators/me
 import { ApiUpdateMentorBoard } from '@src/boards/swagger-decorators/mentorBoard/patch-mentor-board-decorators';
 import { ParsePositiveIntPipe } from '@src/common/pipes/parse-positive-int.pipe';
 import { MentorBoard } from '@src/entities/MentorBoard';
+import { ApiUpdateMentorBoardImage } from '../swagger-decorators/mentorBoard/patch-mentor-board-images-decorators';
 
 /**
  * 추후 리팩토링때
@@ -89,7 +90,7 @@ export class MentorBoardController {
   }
   @Patch('/images')
   @UseGuards(AccessTokenAuthGuard)
-  // @ApiUpdateHelpMeBoardImage()
+  @ApiUpdateMentorBoardImage()
   @UseInterceptors(FilesInterceptor('files', 3))
   async editBoardImages(
     @GetUserId() userId: number,
