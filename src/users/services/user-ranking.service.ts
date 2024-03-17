@@ -144,6 +144,6 @@ export class UserRankingService {
 
     const newRank = await this.userRepository.updateMyRank(userId, rank);
 
-    return [{ myRank: myRank }, { newRank: newRank }];
+    return { myRank: myRank, newRank: newRank };
   }
 }
