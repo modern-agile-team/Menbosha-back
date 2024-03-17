@@ -1,6 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiOperation,
   ApiParam,
   ApiResponse,
@@ -80,5 +81,16 @@ export function ApiUpdateMentorBoardImage() {
     }),
     ApiBearerAuth('access-token'),
     ApiParam({ name: 'mentorBoardId', example: 1 }),
+    ApiBody({
+      schema: {
+        type: 'form-data',
+        properties: {
+          files: { type: 'file' },
+        },
+        example: {
+          files: '고양이.png',
+        },
+      },
+    }),
   );
 }
