@@ -38,4 +38,10 @@ export class TotalCountService {
 
     console.log('7일 카운트 초기화 성공');
   }
+
+  getMentorBoardAndReviewAndBadgeCount(userId: number) {
+    return this.totalCountRepository.getMentorBoardAndReivewAndBadgeCount(
+      userId,
+    );
+  }
 }

@@ -110,4 +110,8 @@ export class UserRankingRepository {
       .from(UserRanking)
       .execute();
   }
+
+  async getMyRank(userId: number) {
+    return await this.entityManager.find(UserRanking, { where: { userId } });
+  }
 }

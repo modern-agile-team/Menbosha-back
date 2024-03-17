@@ -1,13 +1,15 @@
 import { Cron } from '@nestjs/schedule';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserRankingRepository } from '@src/users/repositories/user-ranking.repository';
-import { MentorReviewChecklistCount } from '@src/entities/MentorReviewChecklistCount';
+import { MentorReviewChecklistCountsService } from '@src/total-count/services/mentor-review-checklist-counts.service';
+import { TotalCountService } from '@src/total-count/services/total-count.service';
 
 @Injectable()
 export class UserRankingService {
   constructor(
     private readonly userRankingRepository: UserRankingRepository,
-    private readonly mentorReviewCountService: MentorReviewChecklistCount,
+    private readonly mentorReviewCountService: MentorReviewChecklistCountsService,
+    private readonly totalCountService: TotalCountService,
   ) {}
 
   async getUserRanking() {
@@ -111,5 +113,34 @@ export class UserRankingService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  async checkUserRank(userId: number): Promise<any> {
+    // 내 랭크 확인하고, 내 리뷰 카운트 정보 불러오기.
+    // 카운트에 따른 +- 로직 수행하기
+
+    // 1. 내 랭크 확인
+    const myRank = await this.userRankingRepository.getMyRank(userId);
+
+    // 2. 유저의 리뷰 카운트 불러오기
+    const mentorReviewCount =
+      await this.mentorReviewCountService.findOneMentorReviewChecklistCountOrFail(
+        userId,
+      );
+    const totalCount = await this.
+
+    //3. 유저 리뷰 카운트에 따라 랭크 +- 점수부여
+    const score =
+      mentorReviewCount.isGoodWorkCount * 1 +
+      mentorReviewCount.isClearCount * 1 +
+      mentorReviewCount.isQuickCount * 1 +
+      mentorReviewCount.isAccurateCount * 1 +
+      mentorReviewCount.isKindnessCount * 1 +
+      mentorReviewCount.isInformativeCount * 1 +
+      mentorReviewCount.isUnderstandWellCount * 1 -
+      mentorReviewCount.isBadCount * 5 -
+      mentorReviewCount.isStuffyCount * 5;
+
+    return [myRank];
   }
 }
