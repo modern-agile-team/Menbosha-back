@@ -12,22 +12,27 @@ export class BoardImageRepository {
   async saveHelpMeBoardImage(
     boardImage: CreateHelpMeBoardImageDto,
   ): Promise<HelpMeBoardImage> {
-    const newBoardImage = new HelpMeBoardImage();
-    newBoardImage.helpMeBoardId = boardImage.helpMeBoardId;
-    newBoardImage.imageUrl = boardImage.imageUrl;
+    const newHelpMeBoardImage = new HelpMeBoardImage();
+    newHelpMeBoardImage.helpMeBoardId = boardImage.helpMeBoardId;
+    newHelpMeBoardImage.imageUrl = boardImage.imageUrl;
     const savedImage = await this.entityManager.save(
       HelpMeBoardImage,
-      newBoardImage,
+      newHelpMeBoardImage,
     );
     return savedImage;
   }
 
-  saveMentorBoardImage(
+  async saveMentorBoardImage(
     boardImage: CreateMentorBoardImageDto,
   ): Promise<MentorBoardImage> {
-    return this.entityManager.save(MentorBoardImage, {
-      ...boardImage,
-    });
+    const newMentorBoardImage = new MentorBoardImage();
+    newMentorBoardImage.mentorBoardId = boardImage.mentorBoardId;
+    newMentorBoardImage.imageUrl = boardImage.imageUrl;
+    const savedImage = await this.entityManager.save(
+      MentorBoardImage,
+      newMentorBoardImage,
+    );
+    return savedImage;
   }
 
   async getHelpMeBoardImages(boardId: number): Promise<HelpMeBoardImage[]> {

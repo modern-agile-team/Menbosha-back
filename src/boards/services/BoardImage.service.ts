@@ -5,6 +5,7 @@ import { BoardImageRepository } from '@src/boards/repository/boardImage.reposito
 import { MentorBoardService } from '@src/boards/services/mentor.board.service';
 import { S3Service } from '@src/common/s3/services/s3.service';
 import { HelpMeBoardImage } from '@src/entities/HelpMeBoardImage';
+import { MentorBoardImage } from '@src/entities/MentorBoardImage';
 
 @Injectable()
 export class BoardImagesService {
