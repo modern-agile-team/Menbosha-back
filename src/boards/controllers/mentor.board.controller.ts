@@ -88,13 +88,13 @@ export class MentorBoardController {
       userId,
     );
   }
-  @Patch('/images')
+  @Patch(':mentorBoardId/images')
   @UseGuards(AccessTokenAuthGuard)
   @ApiUpdateMentorBoardImage()
   @UseInterceptors(FilesInterceptor('files', 3))
   async editBoardImages(
     @GetUserId() userId: number,
-    @Query('mentorBoardId') boardId: number,
+    @Param('mentorBoardId') boardId: number,
     @Query('deleteImageUrl') deleteImageUrl: string[],
     @UploadedFiles() files: Express.Multer.File[],
   ) {
