@@ -1,7 +1,6 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { S3Module } from '@src/common/s3/s3.module';
-import { AuthModule } from '@src/auth/auth.module';
 import { UserModule } from '@src/users/user.module';
 import { ChatController } from '@src/chat/controllers/chat.controller';
 import { EventsGateway } from '@src/chat/events/events.gateway';
@@ -24,10 +23,10 @@ import { NotificationService } from '@src/chat/services/notification.service';
       { name: ChatImages.name, schema: ChatImagesSchema },
     ]),
     S3Module,
-    AuthModule,
-    UserModule,
+    forwardRef(() => UserModule),
   ],
   controllers: [ChatController],
   providers: [ChatService, ChatRepository, NotificationService, EventsGateway],
+  exports: [ChatService],
 })
 export class ChatModule {}

@@ -52,7 +52,7 @@ import { ApiLeaveChatRoom } from '@src/chat/swagger-decorators/leave-chat-room.d
 @UseInterceptors(SuccessResponseInterceptor, ClassSerializerInterceptor)
 @Controller('chat-room')
 export class ChatController {
-  constructor(private chatService: ChatService) {}
+  constructor(private readonly chatService: ChatService) {}
 
   /**
    *

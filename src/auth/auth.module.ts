@@ -15,6 +15,7 @@ import { TokenService } from '@src/auth/services/token.service';
 import { BannedUserModule } from '@src/admins/banned-user/banned-users.module';
 import { JwtModuleOptionsFactory } from '@src/auth/jwt/factories/jwt-module-options.factory';
 import { S3Module } from '@src/common/s3/s3.module';
+import { ChatModule } from '@src/chat/chat.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { S3Module } from '@src/common/s3/s3.module';
     }),
     BannedUserModule,
     S3Module,
+    ChatModule,
   ],
   exports: [TokenService, TokenRepository],
   controllers: [AuthController],

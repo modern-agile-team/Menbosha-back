@@ -137,9 +137,14 @@ export class ChatService {
       throw new ForbiddenException('본인과 채팅방을 생성할 수 없습니다.');
     }
 
+    const existReceiver = await this.userService.findOneByOrNotFound({
+      select: ['id'],
+      where: { id: receiverId },
+    });
+
     const existChatRoom = await this.chatRepository.findOneChatRoom({
       $and: [
-        { originalMembers: { $all: [myId, receiverId] } },
+        { originalMembers: { $all: [myId, existReceiver.id] } },
         { deletedAt: null },
         { chatRoomType: chatRoomType },
       ],
@@ -147,8 +152,8 @@ export class ChatService {
 
     if (!existChatRoom) {
       const returnedChatRoom = await this.chatRepository.createChatRoom({
-        originalMembers: [myId, receiverId],
-        chatMembers: [myId, receiverId],
+        originalMembers: [myId, existReceiver.id],
+        chatMembers: [myId, existReceiver.id],
         chatRoomType: chatRoomType,
       });
 
@@ -157,14 +162,14 @@ export class ChatService {
 
     const { chatMembers, _id } = existChatRoom;
 
-    const pushUserId = chatMembers.includes(myId) ? receiverId : myId;
+    const pushUserId = chatMembers.includes(myId) ? existReceiver.id : myId;
 
     if (chatMembers.length === 2) {
       return new ChatRoomDto(existChatRoom);
     }
 
     const updateWriteOpResult = await this.chatRepository.updateOneChatRoom(
-      { _id: _id },
+      { _id },
       {
         $push: { chatMembers: pushUserId },
       },
@@ -202,6 +207,15 @@ export class ChatService {
         $pull: { chatMembers: myId },
         deletedAt: existChatRoom.chatMembers.length === 1 ? new Date() : null,
       },
+    );
+  }
+
+  leaveChatRooms(userId: number) {
+    return this.chatRepository.updateManyChatRoom(
+      {
+        chatMembers: { $in: userId },
+      },
+      { $pull: { chatMembers: userId } },
     );
   }
 
