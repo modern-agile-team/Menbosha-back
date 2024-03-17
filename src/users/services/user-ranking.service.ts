@@ -1,10 +1,14 @@
 import { Cron } from '@nestjs/schedule';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserRankingRepository } from '@src/users/repositories/user-ranking.repository';
+import { MentorReviewChecklistCount } from '@src/entities/MentorReviewChecklistCount';
 
 @Injectable()
 export class UserRankingService {
-  constructor(private readonly userRankingRepository: UserRankingRepository) {}
+  constructor(
+    private readonly userRankingRepository: UserRankingRepository,
+    private readonly mentorReviewCountService: MentorReviewChecklistCount,
+  ) {}
 
   async getUserRanking() {
     try {

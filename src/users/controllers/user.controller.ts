@@ -114,4 +114,9 @@ export class UserController {
   getUserBadge(@Param('userId') userId: number) {
     return this.userBadgeService.checkUserBadges(userId);
   }
+
+  @Post(':userId/rank')
+  getUserRank(@Param('userId') userId: number) {
+    return this.userRankingService.checkUserRank(userId);
+  }
 }
