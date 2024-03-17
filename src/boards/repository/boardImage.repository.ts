@@ -12,32 +12,52 @@ export class BoardImageRepository {
   async saveHelpMeBoardImage(
     boardImage: CreateHelpMeBoardImageDto,
   ): Promise<HelpMeBoardImage> {
-    const newBoardImage = new HelpMeBoardImage();
-    newBoardImage.helpMeBoardId = boardImage.helpMeBoardId;
-    newBoardImage.imageUrl = boardImage.imageUrl;
+    const newHelpMeBoardImage = new HelpMeBoardImage();
+    newHelpMeBoardImage.helpMeBoardId = boardImage.helpMeBoardId;
+    newHelpMeBoardImage.imageUrl = boardImage.imageUrl;
     const savedImage = await this.entityManager.save(
       HelpMeBoardImage,
-      newBoardImage,
+      newHelpMeBoardImage,
     );
     return savedImage;
   }
 
-  saveMentorBoardImage(
+  async saveMentorBoardImage(
     boardImage: CreateMentorBoardImageDto,
   ): Promise<MentorBoardImage> {
-    return this.entityManager.save(MentorBoardImage, {
-      ...boardImage,
-    });
+    const newMentorBoardImage = new MentorBoardImage();
+    newMentorBoardImage.mentorBoardId = boardImage.mentorBoardId;
+    newMentorBoardImage.imageUrl = boardImage.imageUrl;
+    const savedImage = await this.entityManager.save(
+      MentorBoardImage,
+      newMentorBoardImage,
+    );
+    return savedImage;
   }
 
-  async getBoardImages(boardId: number): Promise<HelpMeBoardImage[]> {
+  async getHelpMeBoardImages(boardId: number): Promise<HelpMeBoardImage[]> {
     return this.entityManager.find(HelpMeBoardImage, {
       where: { helpMeBoardId: boardId },
     });
   }
 
-  async deleteImages(imagesToDelete: HelpMeBoardImage[]): Promise<void> {
+  async getMentorBoardImages(boardId: number): Promise<MentorBoardImage[]> {
+    return this.entityManager.find(MentorBoardImage, {
+      where: { mentorBoardId: boardId },
+    });
+  }
+
+  async deleteHelpMeBoardImages(
+    imagesToDelete: HelpMeBoardImage[],
+  ): Promise<void> {
     const imageIds = imagesToDelete.map((image) => image.id);
     await this.entityManager.delete(HelpMeBoardImage, imageIds);
+  }
+
+  async deleteMentorBoardImages(
+    imagesToDelete: MentorBoardImage[],
+  ): Promise<void> {
+    const imageIds = imagesToDelete.map((image) => image.id);
+    await this.entityManager.delete(MentorBoardImage, imageIds);
   }
 }
