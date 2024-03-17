@@ -3,6 +3,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserRankingRepository } from '@src/users/repositories/user-ranking.repository';
 import { MentorReviewChecklistCountsService } from '@src/total-count/services/mentor-review-checklist-counts.service';
 import { TotalCountService } from '@src/total-count/services/total-count.service';
+import { UserRepository } from '../repositories/user.repository';
 
 @Injectable()
 export class UserRankingService {
@@ -10,6 +11,7 @@ export class UserRankingService {
     private readonly userRankingRepository: UserRankingRepository,
     private readonly mentorReviewCountService: MentorReviewChecklistCountsService,
     private readonly totalCountService: TotalCountService,
+    private readonly userRepository: UserRepository,
   ) {}
 
   async getUserRanking() {
@@ -131,7 +133,7 @@ export class UserRankingService {
     const totalCount =
       await this.totalCountService.getMentorBoardAndReviewAndBadgeCount(userId);
     //3. 유저 리뷰 카운트에 따라 랭크 +- 점수부여
-    const score =
+    const rank =
       mentorReviewCount.isGoodWorkCount * 1 +
       mentorReviewCount.isClearCount * 1 +
       mentorReviewCount.isQuickCount * 1 +
@@ -145,6 +147,8 @@ export class UserRankingService {
       totalCount.mentorBoardCount * 2 +
       totalCount.helpYouCommentCount * 1;
 
-    return [myRank];
+    const newRank = await this.userRepository.updateMyRank(userId, rank);
+
+    return [myRank, newRank];
   }
 }
