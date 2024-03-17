@@ -40,7 +40,7 @@ export class TotalCountService {
   }
 
   getMentorBoardAndReviewAndBadgeCount(userId: number) {
-    return this.totalCountRepository.getMentorBoardAndReivewAndBadgeCount(
+    return this.totalCountRepository.getMentorBoardAndReviewAndBadgeCount(
       userId,
     );
   }

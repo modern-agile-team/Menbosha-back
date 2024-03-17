@@ -127,8 +127,9 @@ export class UserRankingService {
       await this.mentorReviewCountService.findOneMentorReviewChecklistCountOrFail(
         userId,
       );
-    const totalCount = await this.
 
+    const totalCount =
+      await this.totalCountService.getMentorBoardAndReviewAndBadgeCount(userId);
     //3. 유저 리뷰 카운트에 따라 랭크 +- 점수부여
     const score =
       mentorReviewCount.isGoodWorkCount * 1 +
@@ -139,7 +140,10 @@ export class UserRankingService {
       mentorReviewCount.isInformativeCount * 1 +
       mentorReviewCount.isUnderstandWellCount * 1 -
       mentorReviewCount.isBadCount * 5 -
-      mentorReviewCount.isStuffyCount * 5;
+      mentorReviewCount.isStuffyCount * 5 +
+      totalCount.badgeCount * 2 +
+      totalCount.mentorBoardCount * 2 +
+      totalCount.helpYouCommentCount * 1;
 
     return [myRank];
   }
