@@ -1,5 +1,10 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 export function ApiUpdateHelpMeBoardImage() {
   return applyDecorators(
@@ -74,5 +79,6 @@ export function ApiUpdateHelpMeBoardImage() {
       },
     }),
     ApiBearerAuth('access-token'),
+    ApiParam({ name: 'helpMeBoardId', example: 1 }),
   );
 }

@@ -162,13 +162,13 @@ export class HelpMeBoardController {
     return this.helpMeBoardService.pullingUpHelpMeBoards(userId, boardId);
   }
 
-  @Patch('/images')
+  @Patch(':helpMeBoardId/images')
   @UseGuards(AccessTokenAuthGuard)
   @ApiUpdateHelpMeBoardImage()
   @UseInterceptors(FilesInterceptor('files', 3))
   async editBoardImages(
     @GetUserId() userId: number,
-    @Query('helpMeBoardId') boardId: number,
+    @Param('helpMeBoardId') boardId: number,
     @Query('deleteImageUrl') deleteImageUrl: string[],
     @UploadedFiles() files: Express.Multer.File[],
   ) {
