@@ -19,7 +19,7 @@ export class TypeOrmModuleOptionsFactory implements TypeOrmOptionsFactory {
       subscribers: ['dist/**/subscribers/*{.ts,.js}'],
       timezone: '+00:00',
       synchronize: false, // DB 동기화 여부 설정
-      logging: true, //DB 로깅 여부 설정
+      logging: false, //DB 로깅 여부 설정
     };
   }
 }
