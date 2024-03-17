@@ -1,10 +1,18 @@
 import { Cron } from '@nestjs/schedule';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserRankingRepository } from '@src/users/repositories/user-ranking.repository';
+import { MentorReviewChecklistCountsService } from '@src/total-count/services/mentor-review-checklist-counts.service';
+import { TotalCountService } from '@src/total-count/services/total-count.service';
+import { UserRepository } from '../repositories/user.repository';
 
 @Injectable()
 export class UserRankingService {
-  constructor(private readonly userRankingRepository: UserRankingRepository) {}
+  constructor(
+    private readonly userRankingRepository: UserRankingRepository,
+    private readonly mentorReviewCountService: MentorReviewChecklistCountsService,
+    private readonly totalCountService: TotalCountService,
+    private readonly userRepository: UserRepository,
+  ) {}
 
   async getUserRanking() {
     try {
@@ -107,5 +115,35 @@ export class UserRankingService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  async checkUserRank(userId: number): Promise<any> {
+    // 내 랭크 확인
+    const myRank = await this.userRepository.getUserRank(userId);
+
+    // 유저의 리뷰 카운트 불러오기
+    const mentorReviewCount =
+      await this.mentorReviewCountService.findOneMentorReviewChecklistCountOrFail(
+        userId,
+      );
+
+    const baseRank = 15; //기본 점수
+
+    //유저 리뷰 카운트에 따라 랭크 +- 점수부여
+    const rank =
+      mentorReviewCount.isGoodWorkCount * 8 +
+      mentorReviewCount.isClearCount * 8 +
+      mentorReviewCount.isQuickCount * 8 +
+      mentorReviewCount.isAccurateCount * 8 +
+      mentorReviewCount.isKindnessCount * 8 +
+      mentorReviewCount.isInformativeCount * 8 +
+      mentorReviewCount.isUnderstandWellCount * 8 -
+      mentorReviewCount.isBadCount * 5 -
+      mentorReviewCount.isStuffyCount * 5 +
+      baseRank;
+
+    const newRank = await this.userRepository.updateMyRank(userId, rank);
+
+    return [{ myRank: myRank }, { newRank: newRank }];
   }
 }

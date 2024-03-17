@@ -40,4 +40,11 @@ export class TotalCountRepository {
       },
     );
   }
+
+  getMentorBoardAndReviewAndBadgeCount(userId: number) {
+    return this.entityManager.findOne(TotalCount, {
+      where: { userId },
+      select: ['mentorBoardCount', 'reviewCount', 'badgeCount'],
+    });
+  }
 }

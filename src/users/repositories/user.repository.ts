@@ -158,4 +158,11 @@ export class UserRepository {
       .withDeleted()
       .getOne();
   }
+
+  async updateMyRank(userId: number, rank: number): Promise<number> {
+    const user = await this.getUser(userId);
+    user.rank = rank;
+    await this.entityManager.save(User, user);
+    return rank;
+  }
 }
