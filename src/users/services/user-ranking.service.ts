@@ -118,38 +118,32 @@ export class UserRankingService {
   }
 
   async checkUserRank(userId: number): Promise<any> {
-    // 내 랭크 확인하고, 내 리뷰 카운트 정보 불러오기.
-    // 카운트에 따른 +- 로직 수행하기
-
-    // 1. 내 랭크 확인
+    // 내 랭크 확인
     const myRank = await this.userRepository.getUserRank(userId);
 
-    // 2. 유저의 리뷰 카운트 불러오기
+    // 유저의 리뷰 카운트 불러오기
     const mentorReviewCount =
       await this.mentorReviewCountService.findOneMentorReviewChecklistCountOrFail(
         userId,
       );
 
-    // const totalCount =
-    //   await this.totalCountService.getMentorBoardAndReviewAndBadgeCount(userId);
-    //3. 유저 리뷰 카운트에 따라 랭크 +- 점수부여
+    const baseRank = 15; //기본 점수
+
+    //유저 리뷰 카운트에 따라 랭크 +- 점수부여
     const rank =
-      mentorReviewCount.isGoodWorkCount * 1 +
-      mentorReviewCount.isClearCount * 1 +
-      mentorReviewCount.isQuickCount * 1 +
-      mentorReviewCount.isAccurateCount * 1 +
-      mentorReviewCount.isKindnessCount * 1 +
-      mentorReviewCount.isInformativeCount * 1 +
-      mentorReviewCount.isUnderstandWellCount * 1 -
+      mentorReviewCount.isGoodWorkCount * 8 +
+      mentorReviewCount.isClearCount * 8 +
+      mentorReviewCount.isQuickCount * 8 +
+      mentorReviewCount.isAccurateCount * 8 +
+      mentorReviewCount.isKindnessCount * 8 +
+      mentorReviewCount.isInformativeCount * 8 +
+      mentorReviewCount.isUnderstandWellCount * 8 -
       mentorReviewCount.isBadCount * 5 -
-      mentorReviewCount.isStuffyCount * 5;
-    // totalCount.badgeCount * 2 +
-    // totalCount.mentorBoardCount * 2 +
-    // totalCount.helpYouCommentCount * 1;
-    console.log(rank);
+      mentorReviewCount.isStuffyCount * 5 +
+      baseRank;
 
     const newRank = await this.userRepository.updateMyRank(userId, rank);
 
-    return [myRank, { newRank }];
+    return [{ myRank: myRank }, { newRank: newRank }];
   }
 }
