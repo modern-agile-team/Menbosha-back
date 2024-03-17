@@ -122,7 +122,7 @@ export class UserRankingService {
     // 카운트에 따른 +- 로직 수행하기
 
     // 1. 내 랭크 확인
-    const myRank = await this.userRankingRepository.getMyRank(userId);
+    const myRank = await this.userRepository.getUserRank(userId);
 
     // 2. 유저의 리뷰 카운트 불러오기
     const mentorReviewCount =
@@ -130,8 +130,8 @@ export class UserRankingService {
         userId,
       );
 
-    const totalCount =
-      await this.totalCountService.getMentorBoardAndReviewAndBadgeCount(userId);
+    // const totalCount =
+    //   await this.totalCountService.getMentorBoardAndReviewAndBadgeCount(userId);
     //3. 유저 리뷰 카운트에 따라 랭크 +- 점수부여
     const rank =
       mentorReviewCount.isGoodWorkCount * 1 +
@@ -142,13 +142,14 @@ export class UserRankingService {
       mentorReviewCount.isInformativeCount * 1 +
       mentorReviewCount.isUnderstandWellCount * 1 -
       mentorReviewCount.isBadCount * 5 -
-      mentorReviewCount.isStuffyCount * 5 +
-      totalCount.badgeCount * 2 +
-      totalCount.mentorBoardCount * 2 +
-      totalCount.helpYouCommentCount * 1;
+      mentorReviewCount.isStuffyCount * 5;
+    // totalCount.badgeCount * 2 +
+    // totalCount.mentorBoardCount * 2 +
+    // totalCount.helpYouCommentCount * 1;
+    console.log(rank);
 
     const newRank = await this.userRepository.updateMyRank(userId, rank);
 
-    return [myRank, newRank];
+    return [myRank, { newRank }];
   }
 }

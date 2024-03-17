@@ -162,7 +162,6 @@ export class UserRepository {
   async updateMyRank(userId: number, rank: number): Promise<void> {
     const user = await this.getUser(userId);
     user.rank = rank;
-    user.id = userId;
     await this.entityManager.save(User, user);
   }
 }
