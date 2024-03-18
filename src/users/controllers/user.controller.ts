@@ -32,6 +32,7 @@ import { ApiUpdateUserIntro } from '@src/users/swagger-decorators/patch-user-int
 import { ApiPostUserIntro } from '@src/users/swagger-decorators/upload-user-Intro-decorators';
 import { UserIntro } from '@src/entities/UserIntro';
 import { ParsePositiveIntPipe } from '@src/common/pipes/parse-positive-int.pipe';
+import { ApiPostUserRank } from '../swagger-decorators/get-user-rank-decorator';
 
 @Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -113,5 +114,11 @@ export class UserController {
   @Post(':userId/badges')
   getUserBadge(@Param('userId') userId: number) {
     return this.userBadgeService.checkUserBadges(userId);
+  }
+
+  @ApiPostUserRank()
+  @Post(':userId/rank')
+  getUserRank(@Param('userId') userId: number) {
+    return this.userRankingService.checkUserRank(userId);
   }
 }
