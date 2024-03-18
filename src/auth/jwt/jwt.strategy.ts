@@ -60,7 +60,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
     private readonly appConfigService: AppConfigService,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: (req) => req.cookies['refreshToken'],
       ignoreExpiration: false,
       secretOrKey: appConfigService.get<string>(
         ENV_KEY.JWT_REFRESH_TOKEN_SECRET_KEY,
@@ -74,7 +74,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
       throw new HttpException('invalid token type', HttpStatus.BAD_REQUEST);
     }
 
-    const tokenFromRequest = request.headers.authorization.split(' ')[1];
+    const tokenFromRequest = request.cookies['refreshToken'];
     const tokenInRedis = await this.redisService.getToken(
       `${payload.userId}-refreshToken`,
     );
