@@ -7,11 +7,11 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 
-export function ApiUpdateHelpMeBoardImage() {
+export function ApiUpdateMentorBoardImage() {
   return applyDecorators(
     ApiOperation({
-      summary: '멘티게시판의 이미지를 수정하는 API',
-      description: '멘티게시판의 이미지를 수정하는 API',
+      summary: '멘토게시판의 이미지를 수정하는 API',
+      description: '멘토게시판의 이미지를 수정하는 API',
     }),
     ApiResponse({
       status: 200,
@@ -80,7 +80,7 @@ export function ApiUpdateHelpMeBoardImage() {
       },
     }),
     ApiBearerAuth('access-token'),
-    ApiParam({ name: 'helpMeBoardId', example: 1 }),
+    ApiParam({ name: 'mentorBoardId', example: 1 }),
     ApiBody({
       schema: {
         type: 'form-data',
