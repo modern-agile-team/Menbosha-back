@@ -26,7 +26,7 @@ export class CookieInterceptor implements NestInterceptor {
           });
         }
 
-        // delete data.refreshToken; // refreshToken을 응답에서 삭제
+        delete data.refreshToken; // refreshToken을 응답에서 삭제
         return data;
       }),
     );
