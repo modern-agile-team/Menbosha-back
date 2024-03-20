@@ -21,7 +21,7 @@ export class MentorBoardImage1709815530689 implements MigrationInterface {
           new TableColumn({
             name: 'image_url',
             type: 'varchar',
-            length: '100',
+            length: '255',
             isNullable: false,
             comment: '이미지 url',
           }),
