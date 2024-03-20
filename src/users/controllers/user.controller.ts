@@ -52,6 +52,9 @@ export class UserController {
     return this.userService.getMyProfile(userId);
   }
 
+  /**
+   * @deprecated 삭제 예정
+   */
   @ApiGetMyRank()
   @UseGuards(AccessTokenAuthGuard)
   @Get('my/rank')

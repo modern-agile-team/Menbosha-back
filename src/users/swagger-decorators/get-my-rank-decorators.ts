@@ -6,6 +6,7 @@ export function ApiGetMyRank() {
     ApiOperation({
       summary: '내 온도/칭호 조회 API',
       description: '내 온도/칭호 조회 API',
+      deprecated: true,
     }),
     ApiResponse({
       status: 200,
