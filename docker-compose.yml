@@ -20,13 +20,21 @@ services:
       - '6379:6379'
     restart: always
 
-  nginx-certbot:
-    image: 2swo/back-nginx-certbot
+  api-nginx-certbot:
+    image: 2swo/api-back-nginx-certbot
     ports:
       - '80:80'
       - '443:443'
     env_file:
       - .env.nginx-certbot
+
+  # dev-nginx-certbot: #dev서버 nginx파일
+  # image: 2swo/dev-back-nginx-certbot
+  # ports:
+  #   - '80:80'
+  #   - '443:443'
+  # env_file:
+  #   - .env.nginx-certbot
 
   # mysql 이미지는 따로 dockerfile로 빌드되진 않습니다.
   # version과 port,env파일명,command 참고하시면 될 것 같습니다.

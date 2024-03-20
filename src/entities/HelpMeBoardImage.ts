@@ -26,7 +26,7 @@ export class HelpMeBoardImage {
   })
   helpMeBoardId: number;
 
-  @Column('varchar', { name: 'image_url', comment: '이미지 url', length: 100 })
+  @Column('varchar', { name: 'image_url', comment: '이미지 url', length: 255 })
   imageUrl: string;
 
   @Column('timestamp', {
