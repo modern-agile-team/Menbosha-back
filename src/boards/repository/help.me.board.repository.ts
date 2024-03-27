@@ -77,7 +77,7 @@ export class HelpMeBoardRepository {
       .leftJoin(
         'helpMeBoard.helpMeBoardImages',
         'helpMeBoardImages',
-        'helpMeBoardImages.id = (SELECT id FROM help_me_board_image WHERE help_me_board_id = helpMeBoard.id ORDER BY id DESC LIMIT 1)',
+        'helpMeBoardImages.id = (SELECT id FROM help_me_board_image WHERE help_me_board_id = helpMeBoard.id ORDER BY id ASC LIMIT 1)',
       )
       .innerJoin('helpMeBoard.user', 'user')
       .innerJoin('user.userImage', 'userImage')
