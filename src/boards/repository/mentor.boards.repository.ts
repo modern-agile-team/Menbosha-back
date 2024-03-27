@@ -69,7 +69,7 @@ export class MentorBoardRepository {
       .leftJoin(
         'mentorBoard.mentorBoardImages',
         'mentorBoardImages',
-        'mentorBoardImages.id = (SELECT id FROM mentor_board_image WHERE mentor_board_id = mentorBoard.id ORDER BY id DESC LIMIT 1)',
+        'mentorBoardImages.id = (SELECT id FROM mentor_board_image WHERE mentor_board_id = mentorBoard.id ORDER BY id ASC LIMIT 1)',
       )
       .leftJoin('mentorBoard.mentorBoardLikes', 'mentorBoardLikes')
       .innerJoin('mentorBoard.user', 'user')
