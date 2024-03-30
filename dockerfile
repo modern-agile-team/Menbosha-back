@@ -43,11 +43,20 @@ EXPOSE 3000
 # #nginx 이미지 사용
 # FROM nginx:latest
 
-# #nignx와 certbot 설치
-# RUN apt-get update && apt-get install -y certbot python3-certbot-nginx
+# #nignx와 certbot 설치 -(+인증서 갱신을 위한 cron)
+# RUN apt-get update && apt-get install -y certbot python3-certbot-nginx cron
 
 # #nginx.conf(설정파일 복사)
 # COPY nginx.conf /etc/nginx/nginx.conf
+
+# #SSL 인증서 갱신을 위한 cron 스크립트 복사
+# COPY renew_ssl_cert.sh /renew_ssl_cert.sh
+
+# #스크립트 권한 부여
+# RUN chmod +x /renew_ssl_cert.sh
+
+# #cron 작업 추가
+# RUN echo "0 0 1 * * root /renew_ssl_cert.sh" >> /etc/crontab
 
 # #port
 # EXPOSE 80
