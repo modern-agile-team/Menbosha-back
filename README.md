@@ -71,10 +71,7 @@
 <img src="https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=Socket.io&logoColor=white" height="30"/>
 <img src="https://img.shields.io/badge/Mongoose-880000?style=for-the-badge&logo=Mongoose&logoColor=white" height="30"/>
 <br>
-<img src="https://img.shields.io/badge/JSON Web Tokens-000000?style=for-the-badge&logo=JSON Web Tokens&logoColor=white" height="30"/>
-<img src="https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=Prettier&logoColor=white" height="30"/>
-<br>
-<img src="https://img.shields.io/badge/TypeORM-F60803?style=for-the-badge&logo=TypeORM&logoColor=white" height="30"/>
+<img src="https://img.shields.io/badge/JSON Web Tokens-000000?style=for-the-badge&logo=JSON Web Tokens&logoColor=white" height="30"/> <img src="https://img.shields.io/badge/TypeORM-F60803?style=for-the-badge&logo=TypeORM&logoColor=white" height="30"/>
 </p>
 
 
@@ -118,25 +115,3 @@
 
 
 ---
-
-# Funny CRAB
-
-## 프로젝트 소개
-
-- 1 : 1 채팅을 기반으로 한 게시판 만들기 프로젝트 입니다.
-- 모던애자일6기 메인프로젝트 입니다.
-
-## 개발기간
-
-- 23.08.21 ~ 23.11.30
-- [개발사이트](http://13.125.225.229:3000/)
-
-### 멤버구성
-
-- 백엔드
-  - [이승우](https://github.com/2swo)
-  - [정비호](https://github.com/hobiJeong)
-  - [박준혁](https://github.com/NicoDora)
-- 프론트엔드
-  - [이재진](https://github.com/zzzRYT)
-  - [원동건](https://github.com/CBWDG)
