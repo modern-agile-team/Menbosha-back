@@ -135,11 +135,13 @@ a> **_“멘보샤처럼 맛있게, 당신만의 멘토링”_**
 
 ## 프로젝트 아키텍처
 
-![alt text](<스크린샷 2024-05-13 오후 1.51.01.png>)
+<img width="868" alt="아키텍처" src="https://github.com/modern-agile-team/Menbosha-back/assets/128793959/1dda685c-ef9e-4e18-8322-d8e9dcdc6b94">
+
 
 ## API 명세서
 
-<img src="/image/swagger.png" width="100%" height="100%"/>
+<img width="1429" alt="swagger" src="https://github.com/modern-agile-team/Menbosha-back/assets/128793959/e86c83a8-9217-4ad2-bded-da474ffaaec6">
+
 
 - [API 명세서 바로가기](https://dev.menbosha.kr/swagger)
 
@@ -148,7 +150,7 @@ a> **_“멘보샤처럼 맛있게, 당신만의 멘토링”_**
 ## 팀 협업방식
 
 - 스크럼: 하루마다 당일 해야 할 일을 적어서 서로 공유합니다.<br>
-  <img src="/image/스크럼.png">
+  <img src="https://github.com/modern-agile-team/Menbosha-back/assets/128793959/2aba9bc9-05c2-46f5-acec-e379ec17aa68">
 
 - 스프린트: 2주마다 매주 금요일 회고와 팀 진행도를 파악합니다.<br>
-  <img src="/image/스프린트.png">
+  <img src="https://github.com/modern-agile-team/Menbosha-back/assets/128793959/2758af44-49d8-4dc3-8a09-91f7778973da">
