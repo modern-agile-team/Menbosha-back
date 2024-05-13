@@ -7,7 +7,7 @@
 
 1대1 실시간 채팅과 리뷰 시스템을 기반으로 쾌적한 멘토링 서비스를 제공합니다 😀
 
-<img width="503" alt="스크린샷 2024-03-21 오후 10 07 48" src="https://github.com/modern-agile-team/6term-main-back/assets/76510679/60de43fe-2fc3-4b33-ba2b-33539ad5ea86">
+<img width="503" alt="멘보샤 로고" src="https://cdn.jsdelivr.net/gh/modern-agile-team/6term-main-back@assets/76510679/60de43fe-2fc3-4b33-ba2b-33539ad5ea86">
 
 <br>
 
