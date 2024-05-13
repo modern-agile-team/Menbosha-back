@@ -120,7 +120,8 @@ a> **_“멘보샤처럼 맛있게, 당신만의 멘토링”_**
 ## 개발 논의 문서 및 컨벤션
 
 - 커밋 전략<br>
-  <img src="/image/commit.png" width="200" height="200"/>
+<img alt="commit" src="https://github.com/modern-agile-team/Menbosha-back/assets/128793959/823e016b-50aa-4049-a610-068aa64f2d54" width="200" height="200">
+
 
 - git flow
   - main : Production 서버 베포 브렌치
@@ -129,7 +130,8 @@ a> **_“멘보샤처럼 맛있게, 당신만의 멘토링”_**
 
 ## ERD
 
-<img src="/image/commit.png" width="100%" height="100%"/>
+![ERD](https://github.com/modern-agile-team/Menbosha-back/assets/128793959/bc3d81e5-ed45-4954-ac45-b3fa2fb5e7c7)
+
 
 - [ERD 자세히 보기](https://www.erdcloud.com/d/SNQ5Fr65zd7FSWydk)
 
