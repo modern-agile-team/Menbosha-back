@@ -179,14 +179,17 @@ ex ) `feat(#이슈번호): 커밋 내용`
 
 ## 팀 협업방식
 
-- 스크럼: 하루마다 당일 해야 할 일을 적어서 서로 공유합니다.<br>
+- 스크럼: 하루마다 당일 해야 할 일을 적어서 서로 공유합니다.
+<br>
 <img src="https://github.com/modern-agile-team/Menbosha-back/assets/128793959/2aba9bc9-05c2-46f5-acec-e379ec17aa68">
+<br>
 <br>
 <br>
 
 - 스프린트: 2주마다 매주 금요일 회고와 팀 진행도를 파악합니다.
 <br>
 <img src="https://github.com/modern-agile-team/Menbosha-back/assets/128793959/2758af44-49d8-4dc3-8a09-91f7778973da">
+<br>
 <br>
 <br>
 
