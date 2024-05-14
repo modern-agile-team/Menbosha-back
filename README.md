@@ -200,7 +200,7 @@ ex ) `feat(#이슈번호): 커밋 내용`
 
 #### 회고
 - 스프린트가 끝난 후 팀원들과 함께 회고를 진행합니다. \
-  3L (Liked, Learned, Lacked) 방식으로 회고를 진행하며 스프린트를 통해 좋았던 점, 배운 점, 부족했던 점을 기록하고 공유합니다.
+  3L (Liked, Learned, Lacked) 방식으로 회고를 진행하며 스프린트 기간동안 좋았던 점, 배운 점, 부족했던 점을 기록하고 공유합니다.
 
 <img src="https://github.com/modern-agile-team/Menbosha-back/assets/76510679/b68bebaa-4ad1-4300-8e29-7f6333b4ebec">
 <br>
