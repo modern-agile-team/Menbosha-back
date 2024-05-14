@@ -170,7 +170,10 @@ ex ) `feat(#이슈번호): 커밋 내용`
 
 ## 📋 API 명세서
 
-<img width="1429" alt="swagger" src="https://github.com/modern-agile-team/Menbosha-back/assets/128793959/e86c83a8-9217-4ad2-bded-da474ffaaec6">
+<img width="1428" alt="swagger" src="https://github.com/modern-agile-team/Menbosha-back/assets/128793959/e86c83a8-9217-4ad2-bded-da474ffaaec6">
+<br>
+<br>
+<img width="1428" alt="swagger" src="https://github.com/modern-agile-team/Menbosha-back/assets/76510679/da4f07ce-7145-43de-8a13-6bd8a2792406">
 
 - [API 명세서 바로가기](https://dev.menbosha.kr/swagger)
 
