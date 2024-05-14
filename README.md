@@ -1,7 +1,6 @@
 
 
-> ***“멘보샤처럼 맛있게, 당신만의 멘토링”***
-
+> ***"멘보샤처럼 맛있게, 당신만의 멘토링”***
 
 멘보샤는 누구나 자유롭게 멘토링을 하거나 받을 수 있는 커뮤니티 입니다. <br>
 
@@ -10,17 +9,19 @@
 <img width="503" alt="멘보샤 로고" src="https://github.com/modern-agile-team/6term-main-back/assets/76510679/60de43fe-2fc3-4b33-ba2b-33539ad5ea86">
 
 <br>
+<br>
 
-## 개발 기간
+## 🗓️ 개발 기간
 
 - 23.12.01 ~ 24.03.17 - 개발
 - 24.03.18 ~ 24.01.01 - 베타테스트
 - 24.01.01 ~ 현재 베포중
-- [개발사이트](https://menbosha.kr)
+- [멘보샤 홈페이지](https://menbosha.kr)
 
 <br>
+<br>
 
-### 멤버구성
+## 🧑‍💻 멤버구성
 
 - Back-End
   <table>
@@ -48,15 +49,16 @@
 
 ---
 
+<br>
+<br>
+
 <a name='tech-stack'></a>
-## Technology Stack
+## 🕹️ Technology Stack
 
 ### Frontend
 
 <img src="https://img.shields.io/badge/Typescript-3178C6?style=for-the-badge&logo=Typescript&logoColor=white" height="30"/>
 <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white" height="30"/>
-
-
 
 
 ### Backend
@@ -113,5 +115,72 @@
 <img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=Swagger&logoColor=white" height="30"/>
 </p>
 
-
 ---
+
+<br>
+<br>
+
+## 📝 개발 논의 문서 및 컨벤션
+
+#### 커밋 전략
+
+| 커밋 메시지 | 설명 |
+|:---|:---|
+| `feat` | 새로운 기능 추가 |
+| `modify` | 기능 수정 |
+| `fix` | 버그 수정 |
+| `docs` | 문서 수정 |
+| `style` | 코드 포맷팅, 세미콜론 누락, 코드 변경이 없는 경우 |
+| `refactor` | 코드 리팩토링 |
+| `test` | 테스트 코드, 리팩토링 테스트 코드 추가 |
+| `chore` | 빌드 업무 수정, 패키지 매니저 수정 |
+| `conflict` | 충돌 해결 |
+| `publisher` | 페이지 퍼블리싱 |
+
+<br>
+
+ex ) `feat(#이슈번호): 커밋 내용`
+
+<br>
+
+#### git flow
+
+- `main` : Production 서버 배포 브랜치
+- `develop` : Development 서버 배포 브랜치
+- `feat/#(이슈번호)/기능이름` : 새로운 기능 개발 브랜치
+
+<br>
+<br>
+
+## 🖼️ ERD (Entity Relationship Diagram)
+
+![ERD](https://github.com/modern-agile-team/Menbosha-back/assets/128793959/bc3d81e5-ed45-4954-ac45-b3fa2fb5e7c7)
+
+- [ERD 자세히 보기](https://www.erdcloud.com/d/SNQ5Fr65zd7FSWydk)
+
+<br>
+<br>
+
+## 🛠️ 프로젝트 아키텍처
+
+<img width="868" alt="아키텍처" src="https://github.com/modern-agile-team/Menbosha-back/assets/128793959/1dda685c-ef9e-4e18-8322-d8e9dcdc6b94">
+
+<br>
+<br>
+
+## 📋 API 명세서
+
+<img width="1429" alt="swagger" src="https://github.com/modern-agile-team/Menbosha-back/assets/128793959/e86c83a8-9217-4ad2-bded-da474ffaaec6">
+
+- [API 명세서 바로가기](https://dev.menbosha.kr/swagger)
+
+<br>
+<br>
+
+## 팀 협업방식
+
+- 스크럼: 하루마다 당일 해야 할 일을 적어서 서로 공유합니다.<br>
+  <img src="https://github.com/modern-agile-team/Menbosha-back/assets/128793959/2aba9bc9-05c2-46f5-acec-e379ec17aa68">
+
+- 스프린트: 2주마다 매주 금요일 회고와 팀 진행도를 파악합니다.<br>
+  <img src="https://github.com/modern-agile-team/Menbosha-back/assets/128793959/2758af44-49d8-4dc3-8a09-91f7778973da">
