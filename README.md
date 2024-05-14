@@ -183,11 +183,13 @@ ex ) `feat(#이슈번호): 커밋 내용`
 <img src="https://github.com/modern-agile-team/Menbosha-back/assets/128793959/2aba9bc9-05c2-46f5-acec-e379ec17aa68">
 <br>
 <br>
+
 - 스프린트: 2주마다 매주 금요일 회고와 팀 진행도를 파악합니다.
 <br>
 <img src="https://github.com/modern-agile-team/Menbosha-back/assets/128793959/2758af44-49d8-4dc3-8a09-91f7778973da">
 <br>
 <br>
+
 - 회고: 스프린트가 끝난 후 팀원들과 함께 회고를 진행합니다.
 <br>
 <img src="https://github.com/modern-agile-team/Menbosha-back/assets/76510679/b68bebaa-4ad1-4300-8e29-7f6333b4ebec">
