@@ -190,5 +190,5 @@ ex ) `feat(#이슈번호): 커밋 내용`
 <br>
 - 회고: 스프린트가 끝난 후 팀원들과 함께 회고를 진행합니다.
 <br>
-![스프린트 회고](https://github.com/modern-agile-team/Menbosha-back/assets/76510679/b68bebaa-4ad1-4300-8e29-7f6333b4ebec)
+<img src="https://github.com/modern-agile-team/Menbosha-back/assets/76510679/b68bebaa-4ad1-4300-8e29-7f6333b4ebec">
 
