@@ -211,3 +211,26 @@ ex ) `feat(#이슈번호): 커밋 내용`
 - 2주에 한번, 각자 공부했던 내용을 팀원들과 공유합니다.
 
 <img src="https://github.com/modern-agile-team/Menbosha-back/assets/76510679/f0820a1b-8b31-47f5-8c7f-ea0f552c6f39">
+
+#### 기여
+
+##### 정비호
+
+- `RDBMS` 에 비해 Scale-out이 용이한 `NoSQL(MongoDB)`을 채팅 데이터 저장을 위한 DB로 도입
+- `Socket.io`를 이용한 1:1 실시간 채팅 기능 구현
+- `SSE`를 이용한 실시간 채팅 알람 구현
+- [기존의 `RESTful` 하지 못한 `Pagination` 형식의 리소스 전체 조회 API들 수정](https://velog.io/@jjb2643/API-3개를-하나로-통합시킨-이유feat.-REST-API)
+- `MySQL`의 `FullText Search`를 이용한 검색 기능 구현
+- `Docker`와 `GitHub Actions`를 이용한 `CI/CD` 구축
+- [`TypeORM`을 이용한 DB Migration 시스템화](https://velog.io/@jjb2643/TypeORM-Migrations-사용해보기)
+- development 환경 서버 인프라 구성
+- [...more](https://wandering-temple-d95.notion.site/324d12448d3145f9b65195bea4f968d5?pvs=74)
+
+- Troubleshooting
+  - [개발 환경 서버 ec2 내부에 mysql 컨테이너를 띄울 시 메모리 부족으로 프로세스가 중지되던 문제 swap 메모리 할당을 통해 해결](https://velog.io/@jjb2643/EC2-Swap-memory-설정)
+  - [https 적용 후 wss로 연결이 안되던 문제 nginx.conf에 WebSocket 프로토콜 연결을 위한 핸드쉐이크 및 프록시 설정 추가](https://velog.io/@jjb2643/WSS-연결을-위한-nginx.conf-수정)
+  - [DB의 정합성이 깨지는 레거시 코드 `Transaction`을 묶어서 정합성 보장](https://velog.io/@jjb2643/Transaction-관리하기with-NestJS-TypeORM)
+
+##### 이승우
+
+##### 박준혁
