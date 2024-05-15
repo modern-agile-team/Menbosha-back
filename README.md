@@ -237,7 +237,7 @@ ex ) `feat(#이슈번호): 커밋 내용`
 - 웹 서버 베포 및 `Docker`와 `GitHub Action`을 이용한 CI/CD 구현
 - hostingKR 을 통한 도메인 구매, `Nginx`와 `Certbot`, `AWS Route 53`을 이용한 https 적용
 - `AWS S3`를 이용한 이미지 저장,처리. 다중 이미지 업로드와 단일 이미지 업로드, 수정 기능 구현
-- 게시판 API와 댓글 API에 `PageNation`을 이용하여 정렬
+- 게시판 API와 댓글 API에 `Pagenation`을 이용하여 정렬
 - 개발 소스코드 이미지 `Docker`를 통한 이미지화, `Docker-compose`를 이용한 소스코드 이미지, `nginx-certbot`이미지, `redis`이미지 등 컨테이너 관리
 
 ##### 박준혁
