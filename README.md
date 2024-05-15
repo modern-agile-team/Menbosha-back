@@ -212,7 +212,7 @@ ex ) `feat(#이슈번호): 커밋 내용`
 
 <img src="https://github.com/modern-agile-team/Menbosha-back/assets/76510679/f0820a1b-8b31-47f5-8c7f-ea0f552c6f39">
 
-#### 기여
+### 기여
 
 ##### 정비호
 
@@ -238,6 +238,14 @@ ex ) `feat(#이슈번호): 커밋 내용`
 - hostingKR 을 통한 도메인 구매, `Nginx`와 `Certbot`, `AWS Route 53`을 이용한 https 적용
 - `AWS S3`를 이용한 이미지 저장,처리. 다중 이미지 업로드와 단일 이미지 업로드, 수정 기능 구현
 - 게시판 API와 댓글 API에 `Pagenation`을 이용하여 정렬
-- 개발 소스코드 이미지 `Docker`를 통한 이미지화, `Docker-compose`를 이용한 소스코드 이미지, `nginx-certbot`이미지, `redis`이미지 등 컨테이너 관리
+- 개발 소스코드 이미지 `Docker`를 통한 이미지화, `Docker-compose`를 이용한 소스코드 이미지, `nginx-certbot`이미지, `Redis`이미지 등 컨테이너 관리
 
 ##### 박준혁
+
+- 간편한 회원가입 및 로그인을 위해 `OAuth`를 이용한 소셜 로그인 구현 (Naver, Kakao, Google)
+- 사용자 인증/인가를 위한 `JWT` 토큰 발급 및 검증 로직 구현
+- 사용자 인증/인가 처리를 간단하게 하기 위해 `Passport` 라이브러리를 이용하여 `Custom AuthGuard` 구현
+- 유저 관련 API 개발 (회원가입, 로그인, 회원정보 수정, 회원탈퇴)
+- 토큰에서 유저의 userId를 추출하여 유저 정보를 가져오는 커스텀 데코레이터 구현
+- 유저 JWT 토큰의 인증/인가 처리 속도 향상을 위해 Redis를 Docker에서 실행하기 때문에 Docker가 종료되면 데이터가 사라지는 문제를 해결하기 위해 `RDB (snapshot)`방식을 이용해 데이터 영속성을 확보
+- count API를 통해 유저의 사이트 내 기여도를 측정하고, 1주일마다 인기 멘토를 선정하는 기능 구현 (`@nestjs/schedule` 라이브러리를 이용해 자동화)
