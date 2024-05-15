@@ -221,15 +221,13 @@ ex ) `feat(#이슈번호): 커밋 내용`
 - `SSE`를 이용한 실시간 채팅 알람 구현
 - [기존의 `RESTful` 하지 못한 `Pagination` 형식의 리소스 전체 조회 API들 수정](https://velog.io/@jjb2643/API-3개를-하나로-통합시킨-이유feat.-REST-API)
 - `MySQL`의 `FullText Search`를 이용한 검색 기능 구현
-- `Docker`와 `GitHub Actions`를 이용한 `CI/CD` 구축
 - [`TypeORM`을 이용한 DB Migration 시스템화](https://velog.io/@jjb2643/TypeORM-Migrations-사용해보기)
 - development 환경 서버 인프라 구성
-- [...more](https://wandering-temple-d95.notion.site/324d12448d3145f9b65195bea4f968d5?pvs=74)
-
-- Troubleshooting
-  - [개발 환경 서버 ec2 내부에 mysql 컨테이너를 띄울 시 메모리 부족으로 프로세스가 중지되던 문제 swap 메모리 할당을 통해 해결](https://velog.io/@jjb2643/EC2-Swap-memory-설정)
-  - [https 적용 후 wss로 연결이 안되던 문제 nginx.conf에 WebSocket 프로토콜 연결을 위한 핸드쉐이크 및 프록시 설정 추가](https://velog.io/@jjb2643/WSS-연결을-위한-nginx.conf-수정)
-  - [DB의 정합성이 깨지는 레거시 코드 `Transaction`을 묶어서 정합성 보장](https://velog.io/@jjb2643/Transaction-관리하기with-NestJS-TypeORM)
+- [Admin 전용 API 개발](https://velog.io/@jjb2643/NestJS%EC%97%90%EC%84%9C-%ED%8A%B9%EC%A0%95-%EC%9C%A0%EC%A0%80%EB%A7%8C-%EC%A0%91%EA%B7%BC-%EA%B0%80%EB%8A%A5%ED%95%9C-API-%EB%A7%8C%EB%93%A4%EA%B8%B0)
+- 멘토 리뷰 엔티티 설계 및 API 개발
+- Event 패턴을 이용한 `TypeORM`의 `Subscriber` 기능을 적용해 기존에 서비스 레이어에서 처리하던 API에 대한 추가 로직들을 분리 시켜서 코드의 가독성 상승
+- 기존 `jsonwebtoken` 라이브러리만을 이용하여 처리하던 `authorization` 로직을 `NestJS`에서 제공하는 `@nestjs/passport`, `@nestjs/passport` 라이브러리를 도입 시켜 코드 길이 감소
+- 게시글 좋아요 API 및 좋아요를 이용한 인기 게시글 기능 구현
 
 ##### 이승우
 
